@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>people</title>
+    <link rel="stylesheet" href="css/nav.css" />
+    <link rel="stylesheet" href="css/staff.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" />
+  </head>
+  <body>
+    <div id="navbar-container"></div>
+    <div class="people-banner">
+      <img src="images/people.png" alt="People logo" />
+      <div class="banner-text">PEOPLE</div>
+    </div>
+
+    <section class="main-container">
+      <div
+        id="mission-statement"
+        style="background-color: white; font-size: 13px">
+        <p>
+          Pellentesque habitant morbi tristique senectus et netus et malesuada
+          fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae,
+          ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam
+          egestas semper. Aenean ultricies mi vitae est. Mauris placerat
+          eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra.
+          Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet,
+          wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum
+          rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in
+          turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus
+          faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat.
+          Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor,
+          facilisis luctus, metus
+        </p>
+      </div>
+
+      <section>
+        <ul class="horizontal-list">
+          <li>
+            <a class="btn-link" href="/people.html">Directors</a>
+          </li>
+          <li><a class="btn-link" href="/people-staff.html">Staff</a></li>
+          <li>
+            <a class="btn-link" href="/people-board.html">Board of Trustees</a>
+          </li>
+        </ul>
+      </section>
+
+      <section tag="list of staff" style="margin-top: 15px">
+        <div class="content">
+          <div class="row m-0 staff-content">
+            <div class="col-sm-3">
+              <img
+                src="images/people/claudia-draft.jpg"
+                alt="image here"
+                style="width: 230px; height: 230px" />
+            </div>
+            <div class="col-sm-9">
+              <div class="row">
+                <h3 class="col-sm-3 m-0">Claudia Rodriguez-Solorio</h3>
+                <a href="" class="col">more info</a>
+              </div>
+              <div class="position-tag">
+                Community Outreach and Program Evaluation Specialist
+              </div>
+              <p>
+                Dr. Rodriguez-Solorio holds a Ph.D. in Public Policy Analysis
+                from Pardee RAND Graduate School and a Master of Science in
+                Applied Mathematics from Arizona State University. Her research
+                interests include STEM education policy, program evaluation, and
+                retention strategies for historically underrepresented minority
+                students in STEM. At AIM, she supports special projects and
+                outreach initiatives.
+              </p>
+            </div>
+          </div>
+          <!-- new staff -->
+          <div class="row m-0 staff-content">
+            <div class="col-sm-3">
+              <img
+                src="images/people/terry-draft.jpg"
+                alt="image here"
+                style="width: 230px; height: 230px" />
+            </div>
+            <div class="col-sm-9">
+              <h3 class="col-sm-3 m-0">Terry Busk</h3>
+              <a href="" class="col">more info</a>
+
+              <div class="clearfix"></div>
+              <div class="position-tag">Operations Manager</div>
+              <span>
+                Terry Busk joined the American Institute of Mathematics in mid
+                2017 as a logistics specialist supporting AIM’s math research
+                goals. As a former handyman and martial arts instructor, he’s a
+                multifaceted jack-of-all trades helping to manage day-to-day
+                operations, such as lecture recording and production, as well as
+                web development of both the Math Circles Network and AIM’s
+                general research goals. In 2020, he assisted in the development
+                of the MathCommunities.org initiative and continues to support
+                the development of new technical projects.
+              </span>
+            </div>
+          </div>
+          <!-- end staff -->
+          <!-- new staff -->
+          <div class="row m-0 staff-content">
+            <div class="col-sm-3">
+              <img
+                src="images/people/harpreet-draft.jpg"
+                alt="image here"
+                style="width: 230px; height: 230px" />
+            </div>
+            <div class="col-sm-9">
+              <div class="row">
+                <h3 class="col-sm-3 m-0">Harpreet Kaur</h3>
+                <a href="" class="col">more info</a>
+              </div>
+              <div class="position-tag">Executive Assistant</div>
+              <p>
+                Harpreet Kaur is assistant to the Director and Deputy Director
+                and is responsible for most of the logistical aspects of the AIM
+                workshop and SQuaREs programs. She has a bachelor’s degree in
+                economics and some additional graduate work from Panjab
+                University in India.
+              </p>
+            </div>
+          </div>
+          <!-- end staff -->
+        </div>
+      </section>
+    </section>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(function () {
+        $("#navbar-container").load("/navbar.html");
+      });
+
+      $(document).ready(function () {
+        // Get the current page URL
+        var currentPageUrl = window.location.pathname;
+
+        // Loop through each link and check if its href matches the current page URL
+        $(".btn-link").each(function () {
+          var linkUrl = $(this).attr("href");
+          if (linkUrl === currentPageUrl) {
+            $(this).addClass("active");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
