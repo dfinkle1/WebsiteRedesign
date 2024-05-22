@@ -1,5 +1,5 @@
 from django.db import models
-from workshops.models import OldWorkshop
+from apps.workshops.models import OldWorkshop
 
 
 class Participant(models.Model):

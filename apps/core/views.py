@@ -1,6 +1,6 @@
 from django.shortcuts import HttpResponse
 from datetime import date
-from .models import OldWorkshop
+from apps.workshops.models import OldWorkshop
 from participants.models import Participant
 from django.shortcuts import render
 from django.http import JsonResponse
@@ -15,22 +15,7 @@ def home(request):
     context = {"old_workshops_after_today": old_workshops_after_today}
     print([workshop.workshopstartdate for workshop in old_workshops_after_today[:5]])
 
-    return render(request, "base_index.html", context)
-
-
-def home2(request):
-    current_date = date.today()
-    old_workshops_after_today = OldWorkshop.objects.filter(
-        workshopstartdate__date__gt=current_date
-    ).order_by("workshopstartdate")
-    # template = loader.get_template("workshop/index.html")
-    context = {"old_workshops_after_today": old_workshops_after_today}
-    print([workshop.workshopstartdate for workshop in old_workshops_after_today[:5]])
-    return render(request, "base.html", context)
-
-
-def about(request):
-    return render(request, "about.html")
+    return render(request, "core/home.html", context)
 
 
 def filter_workshops(request):
@@ -51,20 +36,51 @@ def filter_workshops(request):
     return JsonResponse(data, safe=False)
 
 
-def template1(request):
-    return render(request, "template1.html")
+def home2(request):
+    current_date = date.today()
+    old_workshops_after_today = OldWorkshop.objects.filter(
+        workshopstartdate__date__gt=current_date
+    ).order_by("workshopstartdate")
+    # template = loader.get_template("workshop/index.html")
+    context = {"old_workshops_after_today": old_workshops_after_today}
+    print([workshop.workshopstartdate for workshop in old_workshops_after_today[:5]])
+    return render(request, "home.html", context)
 
 
-def visiting(request):
-    return render(request, "visiting.html")
+# navbar/joyfulmath
+def joyfulmath_view(request):
+    return render(request, "navbar/joyfulmath/landing.html")
+
+
+#
+
+
+# navbar/about
+def about_view(request):
+    return render(request, "navbar/about/about.html")
 
 
 def codeofconduct(request):
-    return render(request, "code.html")
+    return render(request, "navbar/visiting/codeofconduct.html")
+
+
+#
+
+
+# navbar/visiting
+def visiting_view(request):
+    return render(request, "navbar/visiting/visiting.html")
 
 
 def visitingtemplate(request):
     return render(request, "visitingtemplate.html")
+
+
+#
+
+
+def template1(request):
+    return render(request, "template1.html")
 
 
 def template2(request):

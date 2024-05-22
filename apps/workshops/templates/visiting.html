@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}
      Visiting
 {% endblock title %}
@@ -38,7 +39,7 @@
           </div>
           <div class="row mt-5 justify-content-around">
                <div class="col-8 bg-body-tertiary">
-                    <img src="/images/pasadena.jpg" alt="" class="img-fluid" />
+                    <img src="{% static 'images/pasadena.jpg' %}" alt="" class="img-fluid" />
                </div>
                <div class="col-auto">
                     <div class="d-flex align-items-start">

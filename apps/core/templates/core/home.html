@@ -86,20 +86,8 @@
             <button id="upcoming-button">Upcoming Workshops</button>
             <button id="filter-button">Old Workshops</button>
             <ul class="list-unstyled" id="workshops-list">
-              {% if old_workshops_after_today %}
-                {% for workshop in old_workshops_after_today %}
-                  <li>
-                    <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-bottom"
-                       href="#">
-                      <div class="col-lg-12">
-                        <h5 class="mb-1 text-primary-emphasis">{{ workshop.workshopname }}</h5>
-                        <small class="text-body-secondary">{{ workshop.workshopstartdate }} - {{ workshop.workshopenddate }}</small>
-                      </div>
-                    </a>
-                  </li>
-                {% endfor %}
-              {% endif %}
-            </div>
+              {% include "core/upcoming.html" %}
+            </ul>
           </div>
         </div>
       </section>
@@ -110,14 +98,14 @@
               <path d="M256 504C119 504 8 393 8 256S119 8 256 8s248 111 248 248-111 248-248 248zM142.1 273l135.5 135.5c9.4 9.4 24.6 9.4 33.9 0l17-17c9.4-9.4 9.4-24.6 0-33.9L226.9 256l101.6-101.6c9.4-9.4 9.4-24.6 0-33.9l-17-17c-9.4-9.4-24.6-9.4-33.9 0L142.1 239c-9.4 9.4-9.4 24.6 0 34z" />
             </svg>
           </button>
-          <div class="scrolling-wrapper-flexbox" id="horizontal-container">
+          <div class="scrolling-wrapper-flexbox p-2" id="horizontal-container">
             <div class="card p-3">
               <li class="list-unstyled" style="height: 100%">
                 <h6 class="mb-0 text-primary-emphasis">AIM moved to Pasadena!</h6>
                 <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
                    href="#"
                    style="height: 100%">
-                  <img src="/images/news/milikianpond.jpg"
+                  <img src="{% static 'images/news/milikianpond.jpg' %}"
                        class="img-fluid"
                        aria-hidden="true"
                        style="height: 100%" />
@@ -131,7 +119,7 @@
                 <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
                    href="#"
                    style="height: 100%">
-                  <img src="/images/news/alexandersonAward.jpg"
+                  <img src="{% static 'images/news/alexandersonAward.jpg' %}"
                        class="img-fluid"
                        width="100%"
                        aria-hidden="true"
@@ -146,7 +134,7 @@
                 <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
                    href="#"
                    style="height: 100%">
-                  <img src="/images/news/milikianpond.jpg"
+                  <img src="{% static 'images/news/milikianpond.jpg' %}"
                        class="img-fluid"
                        aria-hidden="true"
                        style="height: 100%" />
@@ -160,7 +148,7 @@
                 <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
                    href="#"
                    style="height: 100%">
-                  <img src="/images/news/alexandersonAward.jpg"
+                  <img src="{% static 'images/news/alexandersonAward.jpg' %}"
                        class="img-fluid"
                        width="100%"
                        aria-hidden="true"
@@ -175,7 +163,7 @@
                 <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
                    href="#"
                    style="height: 100%">
-                  <img src="/images/news/milikianpond.jpg"
+                  <img src="{% static 'images/news/milikianpond.jpg' %}"
                        class="img-fluid"
                        aria-hidden="true"
                        style="height: 100%" />
@@ -189,7 +177,7 @@
                 <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
                    href="#"
                    style="height: 100%">
-                  <img src="/images/news/alexandersonAward.jpg"
+                  <img src="{% static 'images/news/alexandersonAward.jpg' %}"
                        class="img-fluid"
                        width="100%"
                        aria-hidden="true"

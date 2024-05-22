@@ -19,7 +19,7 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
           crossorigin="anonymous" />
     {% load static %}
-    <link rel="stylesheet" href="{% static 'workshops/index.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
   </head>
   <body class="d-flex flex-column min-vh-100">
     <header>
@@ -96,10 +96,10 @@
                     </ul>
                   </div>
                   <div class="dropdown">
-                    <a class="nav-link dropdown-toggle" href="visiting">Visiting</a>
+                    <a class="nav-link dropdown-toggle" href="/visiting">Visiting</a>
                     <ul class="dropdown-menu" aria-labelledby="programsDropdown">
                       <a class="dropdown-item" href="">Code of Conduct</a>
-                      <a class="dropdown-item" href="#">Travel</a>
+                      <a class="dropdown-item" href="/visiting/codeofconduct#travel">Travel</a>
                       <a class="dropdown-item" href="#">Local Info</a>
                       <a class="dropdown-item" href="#">Facilities</a>
                       <a class="dropdown-item" href="#">Accessibility</a>
@@ -267,7 +267,7 @@
       <footer class="mt-auto">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 p-2 border-top p-3">
           <div class="col">
-            <img src="/images/NSFlogo.png" class="img-fluid" alt="..." />
+            <img src="{% static 'images/NSFlogo.png' %}" class="img-fluid" alt="..." />
           </div>
           <div class="col">
             <address>
@@ -344,6 +344,9 @@
           </div>
         </div>
       </footer>
-      <script src="{% static 'workshops/base.js' %}"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+              integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+              crossorigin="anonymous"></script>
+      <script src="{% static 'js/base.js' %}"></script>
     </body>
   </html>
