@@ -25,12 +25,31 @@ body {
   min-height: 100vh;
 }
 
+.banner-home {
+  position: relative;
+  display: inline-block;
+}
+
 .banner-container {
   position: relative;
   max-height: 350px;
   width: 100%;
 }
 
+#propose-activity-banner {
+  background-color: #17324c;
+  width: 100%;
+  color: white;
+}
+
+#workshops-container {
+  height: 700px;
+  overflow-y: auto;
+}
+
+.h-100 {
+  height: 100%;
+}
 .prev-btn {
   background: none;
   cursor: pointer;
