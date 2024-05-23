@@ -12,8 +12,9 @@ def home(request):
         workshopstartdate__date__gte=current_date
     ).order_by("workshopstartdate")
     # template = loader.get_template("workshop/index.html")
-    context = {"old_workshops_after_today": old_workshops_after_today}
-    print([workshop.workshopstartdate for workshop in old_workshops_after_today[:5]])
+    context = {
+        "old_workshops_after_today": old_workshops_after_today,
+    }
 
     return render(request, "core/home.html", context)
 
