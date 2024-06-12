@@ -94,10 +94,5 @@ class UniqueuserAdmin(admin.ModelAdmin):
         "lastname",
     ]  # Enable search functionality based on first name and last name
 
-    def get_queryset(self, request):
-        queryset = super().get_queryset(request)
-        queryset = queryset.prefetch_related("particpant_set")
-        return queryset
-
 
 admin.site.register(Uniqueuser, UniqueuserAdmin)

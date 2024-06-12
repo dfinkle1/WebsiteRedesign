@@ -32,14 +32,27 @@ body {
 
 .banner-container {
   position: relative;
-  max-height: 350px;
+  max-height: 185px;
   width: 100%;
+}
+.banner-text {
+  position: absolute;
+  top: 20%;
+  /* right: 40%; */
+  color: #0b0b0b;
+  font-size: max(5vw);
+  text-shadow: 1px 1px 2px #a8a8a8;
 }
 
 #propose-activity-banner {
   background-color: #17324c;
   width: 100%;
   color: white;
+  min-height: 85px;
+}
+
+.dropdown-menu {
+  font-size: 20px;
 }
 
 #workshops-container {
@@ -83,16 +96,14 @@ body {
   position: inherit;
 }
 .dropdown-menu {
-  left: 0;
-  width: 100%;
+  padding: 0;
+  width: auto;
 }
 .navbar-nav .dropdown:hover .dropdown-menu {
   display: block;
   border-bottom: 1px solid gray;
 }
-.dropdown-menu {
-  padding: 0;
-}
+
 .navbar .nav-link {
   color: var(--bs-link-color);
 }
@@ -175,11 +186,6 @@ footer {
   position: relative;
 }
 
-.dropdown-menu {
-  left: 0;
-  width: 100%;
-}
-
 .card {
   margin-bottom: 10px;
   border-radius: 10px;
@@ -194,16 +200,6 @@ footer {
 .people-banner img {
   height: 100%;
   width: 100%;
-}
-
-.banner-text {
-  position: absolute;
-  top: 30%;
-  right: 40%;
-  color: white;
-  font-size: max(7vw);
-  text-shadow: 2px black;
-  text-shadow: 1px 1px 2px #110205;
 }
 
 .horizontal-list {
@@ -259,7 +255,7 @@ footer {
 }
 
 .nav-link:hover {
-  color: green;
+  color: var(--aimblue);
 }
 
 .banner {

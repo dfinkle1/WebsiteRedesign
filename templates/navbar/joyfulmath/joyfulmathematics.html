@@ -5,14 +5,10 @@
 {% endblock title %}
 {% block content %}
     <section tag="banner">
-        <div class="banner-container">
-            <img src="{% static 'images/testbanner.png' %}"
-                 alt=""
-                 class="banner-container img-fluid" />
-            {#
-    <p class="banner-text">Code Of Conduct</p>
-    #}
-        </div>
+        <div class="banner-container text-center"
+             style="background-color:#90adc6;
+                    min-height:150px"
+             width="100%">banner text some place</div>
     </section>
     <div class="container">
         <div class="row mt-5 mb-4">
@@ -23,71 +19,85 @@
                          role="tablist"
                          aria-orientation="vertical">
                         <button class="nav-link active"
-                                id="home-tab"
+                                id="joyful-tab"
                                 data-bs-toggle="pill"
-                                data-bs-target="#home"
+                                data-bs-target="#landing"
                                 type="button"
                                 role="tab"
-                                href="#codeofconduct"
-                                aria-controls="home">Code of Conduct</button>
+                                aria-controls="joyful_mathematics">Joyful Mathematics For All</button>
                         <button class="nav-link"
-                                id="directions-tab"
+                                id="aimc-tab"
                                 data-bs-toggle="pill"
-                                data-bs-target="#directions"
+                                data-bs-target="#aimc"
                                 type="button"
                                 role="tab"
-                                href="#directions"
-                                aria-controls="directions">Directions</button>
+                                aria-controls="code-of-conduct">AIMC</button>
                         <button class="nav-link"
-                                id="travel-tab"
+                                id="match-tab"
                                 data-bs-toggle="pill"
-                                data-bs-target="#travel"
+                                data-bs-target="#match"
+                                type="button"
+                                role="tab"
+                                aria-controls="aimc">MATCH</button>
+                        <button class="nav-link"
+                                id="global-math-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#global-math"
                                 type="button"
                                 role="pill"
-                                aria-controls="travel"
-                                aria-selected="false"
-                                aria-current="about/codeofconduct">Travel</button>
+                                aria-controls="match"
+                                aria-selected="false">Global Math Project</button>
                         <button class="nav-link"
-                                id="v-pills-messages-tab"
+                                id="math-monday-tab"
                                 data-bs-toggle="pill"
-                                data-bs-target="#v-pills-messages"
+                                data-bs-target="#math-monday"
                                 type="button"
                                 role="tab"
-                                aria-controls="v-pills-messages"
-                                aria-selected="false">Local Info</button>
+                                aria-controls="math-monday"
+                                aria-selected="false">Math Monday</button>
                         <button class="nav-link"
-                                id="v-pills-settings-tab"
+                                id="math-border-tab"
                                 data-bs-toggle="pill"
-                                data-bs-target="#v-pills-settings"
+                                data-bs-target="#math-border"
                                 type="button"
                                 role="tab"
-                                aria-controls="v-pills-settings"
-                                aria-selected="false">Facilities</button>
+                                aria-controls="math-border"
+                                aria-selected="false">Math On The Border</button>
                         <button class="nav-link"
-                                id="v-pills-settings-tab"
+                                id="morgan-hill-tab"
                                 data-bs-toggle="pill"
-                                data-bs-target="#v-pills-settings"
+                                data-bs-target="#morgan-hill"
                                 type="button"
                                 role="tab"
-                                aria-controls="v-pills-settings"
-                                aria-selected="false">Accessibility</button>
-                        <button class="nav-link"
-                                id="v-pills-settings-tab"
-                                data-bs-toggle="pill"
-                                data-bs-target="#v-pills-settings"
-                                type="button"
-                                role="tab"
-                                aria-controls="v-pills-settings"
-                                aria-selected="false">FAQ</button>
+                                aria-controls="morgan-hill"
+                                aria-selected="false">Morgan Hill Math</button>
                     </div>
                 </div>
             </div>
             <div class="col">
                 <div class="tab-content" id="v-pills-tabContent">
                     <div class="tab-pane fade show active"
-                         id="home"
+                         id="landing"
                          role="tabpanel"
-                         aria-labelledby="v-pills-codeofconduct"
+                         aria-labelledby="v-pills-landing"
+                         tabindex="0">
+                        <h2 class="text-center">Joyful Math</h2>
+                        <span class="fs-5">
+                            <img src="{% static 'images/news/alexandersonAward.jpg' %}"
+                                 alt="Alexanderson Award"
+                                 class="img-fluid float-end me-3 mb-3"
+                                 width="310px"
+                                 height="auto" />
+                            The open exchange of ideas, the freedom of thought and expression,
+                            and respectful scientific debate are central to the mission of the
+                            American Institute of Mathematics. This requires a community that
+                            recognizes and respects the inherent worth of every person.
+                        </span>
+                    </div>
+                    <div class="tab-pane fade"
+                         id="aimc"
+                         role="tabpanel"
+                         aria-labelledby="v-pills-aimc"
                          tabindex="0">
                         <h2>Code Of Conduct</h2>
                         <span class="fs-6">Reports can be made to any member of the AIM staff, to
@@ -143,9 +153,9 @@
                         </span>
                     </div>
                     <div class="tab-pane fade"
-                         id="directions"
+                         id="match"
                          role="tabpanel"
-                         aria-labelledby="directions-tab"
+                         aria-labelledby="match-tab"
                          tabindex="0">
                         <h2>Directions</h2>
                         <span class="fs-6">Reports can be made to any member of the AIM staff, to
@@ -201,9 +211,9 @@
                         </span>
                     </div>
                     <div class="tab-pane fade"
-                         id="travel"
+                         id="global-math"
                          role="tabpanel"
-                         aria-labelledby="travel-tab"
+                         aria-labelledby="global-math-tab"
                          tabindex="0">
                         <h2>Travel Restrictions for Workshop and SQuaRE Participants</h2>
                         <br />
@@ -261,19 +271,24 @@
                         </span>
                     </div>
                     <div class="tab-pane fade"
-                         id="v-pills-disabled"
+                         id="math-monday"
                          role="tabpanel"
-                         aria-labelledby="v-pills-disabled-tab"
-                         tabindex="0">...</div>
+                         aria-labelledby="math-monday-info"
+                         tabindex="0">math monday wooohooo!</div>
                     <div class="tab-pane fade"
-                         id="v-pills-messages"
+                         id="math-border"
                          role="tabpanel"
-                         aria-labelledby="v-pills-messages-tab"
-                         tabindex="0">...</div>
+                         aria-labelledby="v-pills-facilities"
+                         tabindex="0">math border woohooo</div>
                     <div class="tab-pane fade"
-                         id="v-pills-settings"
+                         id="morgan-hill"
                          role="tabpanel"
-                         aria-labelledby="v-pills-settings-tab"
+                         aria-labelledby="v-pills-accessibility"
+                         tabindex="0">Morgan hill wooohooo</div>
+                    <div class="tab-pane fade"
+                         id="faq"
+                         role="tabpanel"
+                         aria-labelledby="v-pills-faq"
                          tabindex="0">...</div>
                 </div>
             </div>
@@ -289,11 +304,27 @@
       tabTrigger.show();
     });
   });
-  
-  if(window.location.hash){
-    let targetHash = window.location.hash
-    const triggerEl = document.querySelector(`#v-pills-tab button[data-bs-target= "${targetHash}"]`);
-    bootstrap.Tab.getInstance(triggerEl).show() 
+
+  const activateTabFromHash = () => {
+  if (window.location.hash) {
+    let targetHash = window.location.hash;
+    console.log(targetHash)
+    const triggerEl = document.querySelector(`#v-pills-tab button[data-bs-target="${targetHash}"]`);
+    console.log(triggerEl)
+    if (triggerEl) {
+      let tabInstance = bootstrap.Tab.getInstance(triggerEl);
+      if (!tabInstance) {
+        tabInstance = new bootstrap.Tab(triggerEl);
+      }
+      tabInstance.show();
+    } else {
+      console.log(`No tab found for hash: ${targetHash}`);
     }
+  }
+};
+
+activateTabFromHash();
+
+window.addEventListener("hashchange", activateTabFromHash, false);
     </script>
 {% endblock content %}
