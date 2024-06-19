@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+    code of conduct
+{% endblock title %}
+{% block content %}
+    <section tag="banner">
+        <div class="banner-container"
+             style="background-color: #90adc6;
+                    min-height:185px">
+            <p class="banner-text ps-4">Focused Collaborative Research</p>
+        </div>
+    </section>
+    <div class="container">
+        <div class="row mt-5 mb-4">
+            <div class="col-auto">
+                <div class="d-flex align-items-start">
+                    <div class="nav flex-column nav-pills me-3"
+                         id="v-pills-tab"
+                         role="tablist"
+                         aria-orientation="vertical">
+                        <button class="nav-link active"
+                                id="home-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#home"
+                                type="button"
+                                role="tab"
+                                href="#codeofconduct"
+                                aria-controls="home">Workshops</button>
+                        <button class="nav-link"
+                                id="directions-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#directions"
+                                type="button"
+                                role="tab"
+                                href="#directions"
+                                aria-controls="directions">SQuaREs</button>
+                        <button class="nav-link"
+                                id="travel-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#travel"
+                                type="button"
+                                role="pill"
+                                aria-controls="travel"
+                                aria-selected="false"
+                                aria-current="about/codeofconduct">Research Communities</button>
+                        <button class="nav-link"
+                                id="v-pills-messages-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#v-pills-messages"
+                                type="button"
+                                role="tab"
+                                aria-controls="v-pills-messages"
+                                aria-selected="false">REUF</button>
+                        <button class="nav-link"
+                                id="v-pills-settings-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#v-pills-settings"
+                                type="button"
+                                role="tab"
+                                aria-controls="v-pills-settings"
+                                aria-selected="false">Alexanderson Award</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="tab-content" id="v-pills-tabContent">
+                    <div class="tab-pane fade show active"
+                         id="home"
+                         role="tabpanel"
+                         aria-labelledby="v-pills-codeofconduct"
+                         tabindex="0">
+                        <h2>Workshops</h2>
+                        <span class="fs-6">AIM hosts focused workshops in all areas of the mathematical sciences. AIM focused workshops are distinguished by their emphasis on a specific mathematical goal, such as making progress on a significant unsolved problem, understanding the proof of an important new result, or examining the convergence of two distinct areas of mathematics.
+                            <br>
+                            <br>
+                            AIM focused workshops provide an ideal forum for a team of researchers working together to map out strategies, set priorities, work toward a solution, and set in place a framework for progress on important mathematical problems. The leaders in each field are involved in the planning of the workshops, and junior scientists and graduate students are active participants. Special attention is devoted to facilitate collaborations which include women, minorities, and researchers at primarily undergraduate institutions.
+                            <br>
+                            <br>
+                        </span>
+                    </div>
+                    <div class="tab-pane fade"
+                         id="directions"
+                         role="tabpanel"
+                         aria-labelledby="directions-tab"
+                         tabindex="0">
+                        <h2>Directions</h2>
+                        <span class="fs-6">Reports can be made to any member of the AIM staff, to codeofconduct@aimath.org, or by using this anonymous form.
+                            <br>
+                            <br>
+                            The open exchange of ideas, the freedom of thought and expression, and respectful scientific debate are central to the mission of the American Institute of Mathematics. This requires a community that recognizes and respects the inherent worth of every person.
+                            <br>
+                            <br>
+                            We are committed to providing an environment that is free from harassment, bullying, discrimination, and retaliation. This includes offensive comments related to gender, gender identity and expression, age, sexual orientation, disability, physical appearance, race, ethnicity, religious (or nonreligious) affiliation, politics, or any other personal characteristics.
+                            <br>
+                            <br>
+                            We do not tolerate:
+                            <br>
+                            <ul>
+                                <li>Bullying, intimidation, personal attacks, harassment, vulgar exchanges;</li>
+                                <li>Repeated and/or sustained disruption of talks or other events;</li>
+                                <li>Behavior that interferes with another person’s full participation;</li>
+                                <li>
+                                    Sexual harassment, unwelcome sexual attention, stalking, harassing photographs or recordings, or inappropriate physical contact.
+                                </li>
+                            </ul>
+                            Those in violation of the code of conduct may be subject to disciplinary action ranging from dismissal from a meeting or event to permanent barring from the Institute, as determined on a case-by-case basis by our leadership or representatives.
+                            Adherence to this code of conduct is expected of all staff, visitors, and program participants. This code applies both to in-person behaviors and when using any communication channels, including social media. In addition, the code requires all staff, visitors, and participants to respect requests for confidentiality during scientific talks.
+                            We believe our code of conduct is essential to the success of our mission. Mutual respect for one another will truly stimulate our best performance.
+                            If you have any questions, or want to report a violation of this code, please email: codeofconduct@aimath.org or complete this anonymous form.
+                        </span>
+                    </div>
+                    <div class="tab-pane fade"
+                         id="travel"
+                         role="tabpanel"
+                         aria-labelledby="travel-tab"
+                         tabindex="0">
+                        <h2>Travel Restrictions for Workshop and SQuaRE Participants</h2>
+                        <br>
+                        <h4>In July 2023 AIM began operating in its new location on the Caltech campus in Pasadena, CA.</h4>
+                        <span class="fs-6">
+                            For fully funded participants AIM arranges hotel lodging and pays the hotel directly. AIM also provides a per diem meal allowance and a travel allowance for airfare and ground transportation from participants’ home institutions. Because funding comes from the National Science Foundation, there are travel requirements that must be met in order to qualify for the travel allowance. Participants must use the most cost-effective means of travel, which means economy class tickets for air travel. Guidelines do not allow reimbursement for insurance, priority boarding, seat selection, economy plus, business class, or first class tickets.
+                            <br>
+                            <br>
+                            If your travel plans are unusual for some reason (you are not traveling to and from your home institution, you require an open-jaw or open-return ticket, etc.) or if your travel expenses will exceed the guidelines below, please document the expenses and send the information to Harpreet Kaur (kaur@aimath.org) for approval before completing the purchase. If your expenses are significantly higher than these guidelines and you have not received approval in advance, AIM may not be able to reimburse the full cost of your trip. Our FAQ for AIM Participants has some additional information.
+                            <br>
+                            <br>
+                            Airfare: The closest airports to Pasadena are Burbank Airport (BUR) and Los Angeles International (LAX). BUR is much closer and ground transportation is much easier, but there are fewer flights and destinations available compared to LAX. Other airports in the area are Long Beach (LGB), Ontario (ONT), and John Wayne (SNA). If you find a cheaper airfare to one of those airports, be sure to estimate the higher ground transportation costs before finalizing your booking.
+                            <br>
+                            <br>
+                            Please purchase economy class tickets for air travel at least 30 days in advance. AIM cannot reimburse the cost of travel insurance, priority boarding, seat selection, economy plus, business class, or first class tickets. Guidelines for airfare (including checked bag fees):
+                            <br>
+                            <br>
+                            <ol>
+                                <li>within California – $350</li>
+                                <li>within North America - $750</li>
+                                <li>from Europe - $1400</li>
+                                <li>other overseas travel - $1800</li>
+                            </ol>
+                        </span>
+                    </div>
+                    <div class="tab-pane fade"
+                         id="v-pills-disabled"
+                         role="tabpanel"
+                         aria-labelledby="v-pills-disabled-tab"
+                         tabindex="0">...</div>
+                    <div class="tab-pane fade"
+                         id="v-pills-messages"
+                         role="tabpanel"
+                         aria-labelledby="v-pills-messages-tab"
+                         tabindex="0">...</div>
+                    <div class="tab-pane fade"
+                         id="v-pills-settings"
+                         role="tabpanel"
+                         aria-labelledby="v-pills-settings-tab"
+                         tabindex="0">...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

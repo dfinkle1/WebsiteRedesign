@@ -23,42 +23,136 @@
   </head>
   <body class="d-flex flex-column min-vh-100">
     <header>
-      <div class="container">
-        <nav class="navbar fixed-top navbar-expand-lg">
-          <div class="container-fluid">
-            <button class="navbar-toggler"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarNavDropdown"
-                    aria-controls="navbarNavDropdown"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse ms-5" id="navbarNavDropdown">
-              <ul class="navbar-nav mb-2 mb-lg-0">
-                <div class="dropdown">
-                  <a class="nav-link dropdown-toggle"
-                     href="#"
-                     role="button"
-                     id="programsDropdown"
-                     data-bs-toggle="dropdown"
-                     aria-expanded="false">Focused Collaborative Research</a>
-                  <ul class="dropdown-menu" aria-labelledby="programsDropdown">
-                    <div class="d-flex">
-                      <div class="flex-fill">
-                        <h6 class="dropdown-header">Workshops</h6>
-                        <a class="dropdown-item" href="#">Workshops</a>
-                        <a class="dropdown-item" href="#">SQuaREs</a>
-                      </div>
-                      <div class="flex-fill">
-                        <h6 class="dropdown-header">Category 2</h6>
-                        <a class="dropdown-item" href="#">Research Communities</a>
-                        <a class="dropdown-item" href="#">REUF</a>
+      <nav class="navbar fixed-top navbar-expand-lg">
+        <div class="container-fluid">
+          <button class="navbar-toggler"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#navbarNavDropdown"
+                  aria-controls="navbarNavDropdown"
+                  aria-expanded="false"
+                  aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav mb-2 mb-lg-0">
+              <a href="{% url 'index' %}" class="nav-link">Home</a>
+              <div class="dropdown">
+                <a class="nav-link dropdown-toggle"
+                   href="{% url 'focused' %}"
+                   aria-expanded="false">Focused Collaborative Research</a>
+                <ul class="dropdown-menu" aria-labelledby="programsDropdown">
+                  <div class="d-flex">
+                    <div class="flex-fill">
+                      <h6 class="dropdown-header">Workshops</h6>
+                      <a class="dropdown-item" href="#">Workshops</a>
+                      <a class="dropdown-item" href="#">SQuaREs</a>
+                    </div>
+                    <div class="flex-fill">
+                      <h6 class="dropdown-header">Category 2</h6>
+                      <a class="dropdown-item" href="#">Research Communities</a>
+                      <a class="dropdown-item" href="#">REUF</a>
+                    </div>
+                    <div class="flex-fill">
+                      <h6 class="dropdown-header">Other</h6>
+                      <a class="dropdown-item" href="#">Alexanderson Award</a>
+                    </div>
+                  </div>
+                </ul>
+              </div>
+              <div class="dropdown">
+                <a class="nav-link dropdown-toggle"
+                   href="{% url 'joyful' %}"
+                   aria-expanded="false">Joyful Mathematics For All</a>
+                <ul class="dropdown-menu" aria-labelledby="programsDropdown">
+                  <div class="d-flex">
+                    <div class="flex-fill">
+                      <h6 class="dropdown-header">Partnerships</h6>
+                      <a class="dropdown-item"
+                         href="https://mathcommunities.org/"
+                         target="_blank">Math Communities</a>
+                      <a class="dropdown-item"
+                         href="https://mathcircles.org/"
+                         target="_blank"
+                         rel="noopener noreferrer">Math Circle Network</a>
+                    </div>
+                    <div class="flex-fill">
+                      <h6 class="dropdown-header">Category 2</h6>
+                      <a class="dropdown-item" href="#">AIMC</a>
+                      <a class="dropdown-item" href="#">MATCH
+                        <span style="font-size: 0.85rem">
+                          <br />
+                        This is a description about MATCH</span></a>
+                        <a class="dropdown-item" href="#">Global Math Project</a>
+                        <a class="dropdown-item" href="#">Math Monday</a>
                       </div>
                       <div class="flex-fill">
                         <h6 class="dropdown-header">Other</h6>
-                        <a class="dropdown-item" href="#">Alexanderson Award</a>
+                        <a class="dropdown-item" href="#">Math On The Border</a>
+                        <a class="dropdown-item" href="#">Morgan Hill Math</a>
+                      </div>
+                    </div>
+                  </ul>
+                </div>
+                <div class="dropdown">
+                  <a class="nav-link dropdown-toggle" href="{% url 'visiting' %}">Visiting</a>
+                  <ul class="dropdown-menu" aria-labelledby="programsDropdown">
+                    <a class="dropdown-item" href="{% url 'visiting' %}#code-of-conduct">Code of Conduct</a>
+                    <a class="dropdown-item" href="{% url 'visiting' %}#travel">Travel</a>
+                    <a class="dropdown-item" href="{% url 'visiting' %}#localinfo">Local Info</a>
+                    <a class="dropdown-item" href="{% url 'visiting' %}#facilities">Facilities</a>
+                    <a class="dropdown-item" href="{% url 'visiting' %}#accessibility">Accessibility</a>
+                    <a class="dropdown-item" href="{% url 'visiting' %}#faq">FAQ</a>
+                  </ul>
+                </div>
+                <div class="dropdown">
+                  <a class="nav-link dropdown-toggle"
+                     href="{% url 'resources' %}"
+                     aria-expanded="false">Resources</a>
+                  <ul class="dropdown-menu" aria-labelledby="resourcesDropdown">
+                    <div class="d-flex">
+                      <div class="flex-fill">
+                        <h6 class="dropdown-header">Resources</h6>
+                        <a class="dropdown-item" href="">Math Careers Advice</a>
+                        <a class="dropdown-item" href="">Open Textbook Initiative</a>
+                        <a class="dropdown-item" href="">Videos</a>
+                        <a class="dropdown-item" href="">Problem List</a>
+                        <a class="dropdown-item" href="">Preprint Series</a>
+                        <a class="dropdown-item" href="">Published Paper</a>
+                      </div>
+                      <div class="flex-fill">
+                        <h6 class="dropdown-header">Seminars</h6>
+                        <a class="dropdown-item" href="#">Hidden Norms</a>
+                        <a class="dropdown-item" href="#">FRG</a>
+                      </div>
+                      <div class="flex-fill">
+                        <h6 class="dropdown-header">Library</h6>
+                        <a class="dropdown-item" href="#">Reprints</a>
+                      </div>
+                    </div>
+                  </ul>
+                </div>
+                <div class="dropdown">
+                  <a class="nav-link dropdown-toggle"
+                     href="{% url 'about' %}"
+                     aria-expanded="false">About</a>
+                  <ul class="dropdown-menu" aria-labelledby="aboutDropdown">
+                    <div class="d-flex">
+                      <div class="flex-fill">
+                        <h6 class="dropdown-header">About</h6>
+                        <a class="dropdown-item" href="">Contact</a>
+                        <a class="dropdown-item" href="">Staff</a>
+                        <a class="dropdown-item" href="">Governance</a>
+                        <a class="dropdown-item" href="">Diversity</a>
+                        <a class="dropdown-item" href="">Mission & History</a>
+                      </div>
+                      <div class="flex-fill">
+                        <h6 class="dropdown-header">Past Programs</h6>
+                        <a class="dropdown-item" href="#">Five Year Fellows</a>
+                        <a class="dropdown-item" href="#">Math of Planet Earth</a>
+                        <a class="dropdown-item" href="#">Knowls</a>
+                        <a class="dropdown-item" href="#">UTMOST</a>
+                        <a class="dropdown-item" href="#">Post Docs</a>
                       </div>
                     </div>
                   </ul>
@@ -67,207 +161,193 @@
                   <a class="nav-link dropdown-toggle"
                      href="#"
                      role="button"
-                     id="programsDropdown"
                      data-bs-toggle="dropdown"
-                     aria-expanded="false">Joyful Mathematics For All</a>
+                     aria-expanded="false">News</a>
                   <ul class="dropdown-menu" aria-labelledby="programsDropdown">
-                    <div class="d-flex">
-                      <div class="flex-fill">
-                        <h6 class="dropdown-header">Partnerships</h6>
-                        <a class="dropdown-item" href="#">Math Communities</a>
-                        <a class="dropdown-item" href="https://mathcircles.org/">Math Circle Network</a>
-                      </div>
-                      <div class="flex-fill">
-                        <h6 class="dropdown-header">Category 2</h6>
-                        <a class="dropdown-item" href="#">AIMC</a>
-                        <a class="dropdown-item" href="#">MATCH
-                          <span style="font-size: 0.85rem">
-                            <br />
-                          blah blah blah</span></a>
-                          <a class="dropdown-item" href="#">Global Math Project</a>
-                          <a class="dropdown-item" href="#">Math Monday</a>
-                        </div>
-                        <div class="flex-fill">
-                          <h6 class="dropdown-header">Other</h6>
-                          <a class="dropdown-item" href="#">Math On The Border</a>
-                          <a class="dropdown-item" href="#">Morgan Hill Math</a>
-                        </div>
-                      </div>
-                    </ul>
-                  </div>
-                  <div class="dropdown">
-                    <a class="nav-link dropdown-toggle" href="/visiting">Visiting</a>
-                    <ul class="dropdown-menu" aria-labelledby="programsDropdown">
-                      <a class="dropdown-item" href="">Code of Conduct</a>
-                      <a class="dropdown-item" href="/visiting/codeofconduct#travel">Travel</a>
-                      <a class="dropdown-item" href="#">Local Info</a>
-                      <a class="dropdown-item" href="#">Facilities</a>
-                      <a class="dropdown-item" href="#">Accessibility</a>
-                      <a class="dropdown-item" href="#">FAQ</a>
-                    </ul>
-                  </div>
-                  <div class="dropdown">
-                    <a class="nav-link dropdown-toggle" href="#">Resources</a>
-                    <ul class="dropdown-menu" aria-labelledby="projectDropdown">
-                      <div class="d-flex">
-                        <div class="flex-fill">
-                          <h6 class="dropdown-header">Resources</h6>
-                          <a class="dropdown-item" href="">Math careers advice</a>
-                          <a class="dropdown-item" href="">Open textbook initiative</a>
-                          <a class="dropdown-item" href="">Videos</a>
-                          <a class="dropdown-item" href="">Problem list</a>
-                          <a class="dropdown-item" href="">Preprint series</a>
-                          <a class="dropdown-item" href="">Published paper</a>
-                        </div>
-                        <div class="flex-fill">
-                          <h6 class="dropdown-header">Seminars</h6>
-                          <a class="dropdown-item" href="#">Hidden norms</a>
-                          <a class="dropdown-item" href="#">FRG</a>
-                        </div>
-                        <div class="flex-fill">
-                          <h6 class="dropdown-header">Library</h6>
-                          <a class="dropdown-item" href="#">Reprints</a>
-                        </div>
-                      </div>
-                    </ul>
-                  </div>
-                  <div class="dropdown">
-                    <a class="nav-link dropdown-toggle"
-                       href="#"
-                       role="button"
-                       data-bs-toggle="dropdown"
-                       aria-expanded="false">About</a>
-                    <ul class="dropdown-menu" aria-labelledby="programsDropdown">
-                      <div class="d-flex">
-                        <div class="flex-fill">
-                          <h6 class="dropdown-header">About</h6>
-                          <a class="dropdown-item" href="">Contact</a>
-                          <a class="dropdown-item" href="">Staff</a>
-                          <a class="dropdown-item" href="">Governance</a>
-                          <a class="dropdown-item" href="">Diversity</a>
-                          <a class="dropdown-item" href="">Mission & History</a>
-                        </div>
-                        <div class="flex-fill">
-                          <h6 class="dropdown-header">Past programs</h6>
-                          <a class="dropdown-item" href="#">Five year fellows</a>
-                          <a class="dropdown-item" href="#">Math of planet earth</a>
-                          <a class="dropdown-item" href="#">Knowls</a>
-                          <a class="dropdown-item" href="#">UTMOST</a>
-                          <a class="dropdown-item" href="#">Post Docs</a>
-                        </div>
-                      </div>
-                    </ul>
-                  </div>
-                  <div class="dropdown">
-                    <a class="nav-link dropdown-toggle"
-                       href="#"
-                       role="button"
-                       data-bs-toggle="dropdown"
-                       aria-expanded="false">News</a>
-                    <ul class="dropdown-menu" aria-labelledby="programsDropdown">
-                      <div class="d-flex">
-                        <div class="flex-fill">
-                          <h6 class="dropdown-header">News</h6>
-                          <a class="dropdown-item" href="">Newsletter</a>
-                          <a class="dropdown-item" href="">News stories</a>
-                        </div>
-                      </div>
-                    </ul>
-                  </div>
-                  <div class="dropdown">
-                    <button class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle"
-                            style="background: 0, 0"
-                            id="bd-theme"
-                            type="button"
-                            aria-expanded="false"
-                            data-bs-toggle="dropdown"
-                            data-bs-display="static">
-                      <svg xmlns="http://www.w3.org/2000/svg"
-                           width="16"
-                           height="16"
-                           fill="currentColor"
-                           class="bi bi-moon-stars-fill theme-icon-active"
-                           viewBox="0 0 16 16">
-                        <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278" />
-                        <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.73 1.73 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.73 1.73 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.73 1.73 0 0 0 1.097-1.097zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z" />
-                        <use href="#circle-half"></use>
-                      </svg>
-                      <span id="bd-theme-text"></span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                      <li>
-                        <button type="button"
-                                class="dropdown-item d-flex align-items-center"
-                                data-bs-theme-value="light">
-                          <svg xmlns="http://www.w3.org/2000/svg"
-                               width="16"
-                               height="16"
-                               fill="currentColor"
-                               class="bi bi-brightness-high theme-icon"
-                               viewBox="0 0 16 16">
-                            <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708" />
-                            <use href="#sun-fill"></use>
-                          </svg>
-                          Light
-                          <svg class="bi ms-auto d-none">
-                            <use href="#check2"></use>
-                          </svg>
-                        </button>
-                      </li>
-                      <li>
-                        <button type="button"
-                                class="dropdown-item d-flex align-items-center"
-                                data-bs-theme-value="dark">
-                          <svg xmlns="http://www.w3.org/2000/svg"
-                               width="16"
-                               height="16"
-                               fill="currentColor"
-                               class="bi bi-moon-stars-fill theme-icon-active"
-                               viewBox="0 0 16 16">
-                            <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278" />
-                            <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.73 1.73 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.73 1.73 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.73 1.73 0 0 0 1.097-1.097zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z" />
-                            <use href="#moon-stars-fill"></use>
-                          </svg>
-                          Dark
-                          <svg class="bi ms-auto d-none">
-                            <use href="#check2"></use>
-                          </svg>
-                        </button>
-                      </li>
-                      <li>
-                        <button type="button"
-                                class="dropdown-item d-flex align-items-center active"
-                                data-bs-theme-value="auto"
-                                aria-pressed="true">
-                          <svg xmlns="http://www.w3.org/2000/svg"
-                               width="16"
-                               height="16"
-                               fill="currentColor"
-                               class="bi bi-circle-half theme-icon"
-                               viewBox="0 0 16 16">
-                            <path d="M8 15A7 7 0 1 0 8 1zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16" />
-                            <use href="circle-half"></use>
-                          </svg>
-                          Auto
-                          <svg class="bi ms-auto d-none">
-                            <use href="#check2"></use>
-                          </svg>
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
-                </ul>
-              </div>
+                    <a class="dropdown-item" href="">Newsletter</a>
+                    <a class="dropdown-item" href="">News Stories</a>
+                  </ul>
+                </div>
+                <div class="dropdown">
+                  <button class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle"
+                          style="background: 0, 0"
+                          id="bd-theme"
+                          type="button"
+                          aria-expanded="false"
+                          data-bs-toggle="dropdown"
+                          data-bs-display="static">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="16"
+                         height="16"
+                         fill="currentColor"
+                         class="bi bi-moon-stars-fill theme-icon-active"
+                         viewBox="0 0 16 16">
+                      <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278" />
+                      <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.73 1.73 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.73 1.73 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.73 1.73 0 0 0 1.097-1.097zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z" />
+                      <use href="#circle-half"></use>
+                    </svg>
+                    <span id="bd-theme-text"></span>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <button type="button"
+                              class="dropdown-item d-flex align-items-center"
+                              data-bs-theme-value="light">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             width="16"
+                             height="16"
+                             fill="currentColor"
+                             class="bi bi-brightness-high theme-icon"
+                             viewBox="0 0 16 16">
+                          <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708" />
+                          <use href="#sun-fill"></use>
+                        </svg>
+                        Light
+                        <svg class="bi ms-auto d-none">
+                          <use href="#check2"></use>
+                        </svg>
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button"
+                              class="dropdown-item d-flex align-items-center"
+                              data-bs-theme-value="dark">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             width="16"
+                             height="16"
+                             fill="currentColor"
+                             class="bi bi-moon-stars-fill theme-icon-active"
+                             viewBox="0 0 16 16">
+                          <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278" />
+                          <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.73 1.73 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.73 1.73 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.73 1.73 0 0 0 1.097-1.097zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z" />
+                          <use href="#moon-stars-fill"></use>
+                        </svg>
+                        Dark
+                        <svg class="bi ms-auto d-none">
+                          <use href="#check2"></use>
+                        </svg>
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button"
+                              class="dropdown-item d-flex align-items-center active"
+                              data-bs-theme-value="auto"
+                              aria-pressed="true">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             width="16"
+                             height="16"
+                             fill="currentColor"
+                             class="bi bi-circle-half theme-icon"
+                             viewBox="0 0 16 16">
+                          <path d="M8 15A7 7 0 1 0 8 1zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16" />
+                          <use href="circle-half"></use>
+                        </svg>
+                        Auto
+                        <svg class="bi ms-auto d-none">
+                          <use href="#check2"></use>
+                        </svg>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </ul>
             </div>
-          </nav>
-        </div>
+          </div>
+        </nav>
       </header>
       {% block content %}
       {% endblock content %}
+      <div class="btn-group me-3 mb-2 btn-group position-fixed bottom-0 end-0"
+           style="background-color: blue">
+        <button class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle"
+                style="background: 0, 0"
+                id="bd-theme"
+                type="button"
+                aria-expanded="false"
+                data-bs-toggle="dropdown"
+                data-bs-display="static">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               fill="currentColor"
+               class="bi bi-moon-stars-fill theme-icon-active"
+               viewBox="0 0 16 16">
+            <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278" />
+            <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.73 1.73 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.73 1.73 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.73 1.73 0 0 0 1.097-1.097zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z" />
+            <use href="#circle-half"></use>
+          </svg>
+          <span id="bd-theme-text"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end corner-position"
+            style="inset: auto 0px 0px auto">
+          <li>
+            <button type="button"
+                    class="dropdown-item d-flex align-items-center"
+                    data-bs-theme-value="light">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   fill="currentColor"
+                   class="bi bi-brightness-high theme-icon"
+                   viewBox="0 0 16 16">
+                <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708" />
+                <use href="#sun-fill"></use>
+              </svg>
+              Light
+              <svg class="bi ms-auto d-none">
+                <use href="#check2"></use>
+              </svg>
+            </button>
+          </li>
+          <li>
+            <button type="button"
+                    class="dropdown-item d-flex align-items-center"
+                    data-bs-theme-value="dark">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   fill="currentColor"
+                   class="bi bi-moon-stars-fill theme-icon-active"
+                   viewBox="0 0 16 16">
+                <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278" />
+                <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.73 1.73 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.73 1.73 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.73 1.73 0 0 0 1.097-1.097zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z" />
+                <use href="#moon-stars-fill"></use>
+              </svg>
+              Dark
+              <svg class="bi ms-auto d-none">
+                <use href="#check2"></use>
+              </svg>
+            </button>
+          </li>
+          <li>
+            <button type="button"
+                    class="dropdown-item d-flex align-items-center active"
+                    data-bs-theme-value="auto"
+                    aria-pressed="true">
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   fill="currentColor"
+                   class="bi bi-circle-half theme-icon"
+                   viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 0 8 1zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16" />
+                <use href="circle-half"></use>
+              </svg>
+              Auto
+              <svg class="bi ms-auto d-none">
+                <use href="#check2"></use>
+              </svg>
+            </button>
+          </li>
+        </ul>
+      </div>
       <footer class="mt-auto">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 p-2 border-top p-3">
           <div class="col">
-            <img src="{% static 'images/NSFlogo.png' %}" class="img-fluid" alt="..." />
+            <img src="{% static 'images/NSFlogo.png' %}"
+                 class="img-fluid"
+                 alt="..."
+                 style="max-height:200px" />
           </div>
           <div class="col">
             <address>
@@ -344,7 +424,7 @@
           </div>
         </div>
       </footer>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.js"
               integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
               crossorigin="anonymous"></script>
       <script src="{% static 'js/base.js' %}"></script>

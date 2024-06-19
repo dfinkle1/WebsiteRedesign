@@ -48,9 +48,13 @@ def home2(request):
     return render(request, "home.html", context)
 
 
+def focused_collaborative_research(request):
+    return render(request, "navbar/focusedcollaborativeresearch/focused-landing.html")
+
+
 # navbar/joyfulmath
 def joyfulmath_view(request):
-    return render(request, "navbar/joyfulmath/landing.html")
+    return render(request, "navbar/joyfulmath/joyfulmathematics.html")
 
 
 #
@@ -61,8 +65,11 @@ def about_view(request):
     return render(request, "navbar/about/about.html")
 
 
+# navbar/visiting
+
+
 def codeofconduct(request):
-    return render(request, "navbar/visiting/codeofconduct.html")
+    return render(request, "navbar/visiting/#codeofconduct")
 
 
 #
@@ -71,6 +78,10 @@ def codeofconduct(request):
 # navbar/visiting
 def visiting_view(request):
     return render(request, "navbar/visiting/visiting.html")
+
+
+def resources_view(request):
+    return render(request, "navbar/resources/resources.html")
 
 
 def visitingtemplate(request):
