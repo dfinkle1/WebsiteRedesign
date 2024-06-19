@@ -91,7 +91,7 @@ const list = document.getElementById("horizontal-container");
 const itemWidth = 300;
 const padding = 10;
 
-if (prev & next & list) {
+if (prev !== null) {
   prev.addEventListener("click", () => {
     list.scrollLeft -= itemWidth + padding;
     console.log(list.scrollLeft);

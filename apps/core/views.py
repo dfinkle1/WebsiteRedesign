@@ -80,6 +80,10 @@ def visiting_view(request):
     return render(request, "navbar/visiting/visiting.html")
 
 
+def resources_view(request):
+    return render(request, "navbar/resources/resources.html")
+
+
 def visitingtemplate(request):
     return render(request, "visitingtemplate.html")
 
