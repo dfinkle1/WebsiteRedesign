@@ -6,7 +6,7 @@
 {% block content %}
     <section tag="banner">
         <div class="banner-container"
-             style="background-color: #90adc6;
+             style="background-color: var(--aimblue);
                     min-height:185px">
             <p class="banner-text ps-4">Focused Collaborative Research</p>
         </div>
@@ -20,55 +20,109 @@
                          role="tablist"
                          aria-orientation="vertical">
                         <button class="nav-link active"
-                                id="home-tab"
+                                id="focused-landing-tab"
                                 data-bs-toggle="pill"
-                                data-bs-target="#home"
+                                data-bs-target="#focused-landing"
                                 type="button"
                                 role="tab"
-                                href="#codeofconduct"
-                                aria-controls="home">Workshops</button>
+                                aria-controls="focused-collaborative-research">Focused Collaborative Research</button>
                         <button class="nav-link"
-                                id="directions-tab"
+                                id="workshops-tab"
                                 data-bs-toggle="pill"
-                                data-bs-target="#directions"
+                                data-bs-target="#workshops"
                                 type="button"
                                 role="tab"
-                                href="#directions"
-                                aria-controls="directions">SQuaREs</button>
+                                aria-controls="workshops">Workshops</button>
                         <button class="nav-link"
-                                id="travel-tab"
+                                id="squares-tab"
                                 data-bs-toggle="pill"
-                                data-bs-target="#travel"
-                                type="button"
-                                role="pill"
-                                aria-controls="travel"
-                                aria-selected="false"
-                                aria-current="about/codeofconduct">Research Communities</button>
-                        <button class="nav-link"
-                                id="v-pills-messages-tab"
-                                data-bs-toggle="pill"
-                                data-bs-target="#v-pills-messages"
+                                data-bs-target="#squares"
                                 type="button"
                                 role="tab"
-                                aria-controls="v-pills-messages"
-                                aria-selected="false">REUF</button>
+                                aria-controls="squares">SQuaREs</button>
                         <button class="nav-link"
-                                id="v-pills-settings-tab"
+                                id="research-communities-tab"
                                 data-bs-toggle="pill"
-                                data-bs-target="#v-pills-settings"
+                                data-bs-target="#research-communities"
                                 type="button"
                                 role="tab"
-                                aria-controls="v-pills-settings"
-                                aria-selected="false">Alexanderson Award</button>
+                                aria-controls="research-communities">Research Communities</button>
+                        <button class="nav-link"
+                                id="reuf-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#reuf"
+                                type="button"
+                                role="tab"
+                                aria-controls="reuf">REUF</button>
+                        <button class="nav-link"
+                                id="roots-of-unity-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#roots-of-unity"
+                                type="button"
+                                role="tab"
+                                aria-controls="roots-of-unity">Roots of Unity</button>
+                        <button class="nav-link"
+                                id="alexanderson-award-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#alexanderson-award"
+                                type="button"
+                                role="tab"
+                                aria-controls="alexanderson-award">Alexanderson Award</button>
                     </div>
                 </div>
             </div>
-            <div class="col">
-                <div class="tab-content" id="v-pills-tabContent">
+            <div class="col theme-bg">
+                <div class="tab-content p-3" id="v-pills-tabContent">
                     <div class="tab-pane fade show active"
-                         id="home"
+                         id="focused-landing"
                          role="tabpanel"
-                         aria-labelledby="v-pills-codeofconduct"
+                         aria-labelledby="focused-landing-tab"
+                         tabindex="0">
+                        <h1>Focused Collaborative Research</h1>
+                        <span class="fs-5">
+                            <img src="{% static 'images/news/milikianpond.jpg' %}"
+                                 alt="Alexanderson Award"
+                                 class="img-fluid float-end ms-5 mb-3 custom-img"
+                                 width="310px"
+                                 height="auto" />
+                            <p>
+                                The open exchange of ideas, the freedom of thought and expression,
+                                and respectful scientific debate are central to the mission of the
+                                American Institute of Mathematics. This requires a community that
+                                recognizes and respects the inherent worth of every person.The open exchange of ideas, the freedom of thought and expression,
+                                and respectful scientific debate are central to the mission of the
+                                American Institute of Mathematics. This requires a community that
+                                recognizes and respects the inherent worth of every person.The open exchange of ideas, the freedom of thought and expression,
+                                and respectful scientific debate are central to the mission of the
+                                American Institute of Mathematics. This requires a community that
+                                recognizes and respects the inherent worth of every person.The open exchange of ideas, the freedom of thought and expression,
+                                and respectful scientific debate are central to the mission of the
+                                American Institute of Mathematics. This requires a community that
+                                recognizes and respects the inherent worth of every person.
+                            </p>
+                            <p>
+                                he open exchange of ideas, the freedom of thought and expression,
+                                and respectful scientific debate are central to the mission of the
+                                American Institute of Mathematics. This requires a community that
+                                recognizes and respects the inherent worth of every person.The open exchange of ideas, the freedom of thought and expression,
+                                and respectful scientific debate are central to the mission of the
+                                American Institute of Mathematics. This requires a community that
+                                recognizes and respects the inherent worth of every person.
+                            </p>
+                            The open exchange of ideas, the freedom of thought and expression,
+                            and respectful scientific debate are central to the mission of the
+                            American Institute of Mathematics. This requires a community that
+                            recognizes and respects the inherent worth of every person.
+                            The open exchange of ideas, the freedom of thought and expression,
+                            and respectful scientific debate are central to the mission of the
+                            American Institute of Mathematics. This requires a community that
+                            recognizes and respects the inherent worth of every person.
+                        </span>
+                    </div>
+                    <div class="tab-pane fade"
+                         id="workshops"
+                         role="tabpanel"
+                         aria-labelledby="workshops-tab"
                          tabindex="0">
                         <h2>Workshops</h2>
                         <span class="fs-6">AIM hosts focused workshops in all areas of the mathematical sciences. AIM focused workshops are distinguished by their emphasis on a specific mathematical goal, such as making progress on a significant unsolved problem, understanding the proof of an important new result, or examining the convergence of two distinct areas of mathematics.
@@ -80,11 +134,11 @@
                         </span>
                     </div>
                     <div class="tab-pane fade"
-                         id="directions"
+                         id="squares"
                          role="tabpanel"
-                         aria-labelledby="directions-tab"
+                         aria-labelledby="squares-tab"
                          tabindex="0">
-                        <h2>Directions</h2>
+                        <h2>SQuaREs</h2>
                         <span class="fs-6">Reports can be made to any member of the AIM staff, to codeofconduct@aimath.org, or by using this anonymous form.
                             <br>
                             <br>
@@ -111,11 +165,11 @@
                         </span>
                     </div>
                     <div class="tab-pane fade"
-                         id="travel"
+                         id="research-communities"
                          role="tabpanel"
-                         aria-labelledby="travel-tab"
+                         aria-labelledby="research-communities-tab"
                          tabindex="0">
-                        <h2>Travel Restrictions for Workshop and SQuaRE Participants</h2>
+                        <h2>Research Communities</h2>
                         <br>
                         <h4>In July 2023 AIM began operating in its new location on the Caltech campus in Pasadena, CA.</h4>
                         <span class="fs-6">
@@ -140,22 +194,55 @@
                         </span>
                     </div>
                     <div class="tab-pane fade"
-                         id="v-pills-disabled"
+                         id="reuf"
                          role="tabpanel"
-                         aria-labelledby="v-pills-disabled-tab"
+                         aria-labelledby="reuf-tab"
                          tabindex="0">...</div>
                     <div class="tab-pane fade"
-                         id="v-pills-messages"
+                         id="roots-of-unity"
                          role="tabpanel"
-                         aria-labelledby="v-pills-messages-tab"
-                         tabindex="0">...</div>
+                         aria-labelledby="roots-of-unity-tab"
+                         tabindex="0">raise the ROOTS</div>
                     <div class="tab-pane fade"
-                         id="v-pills-settings"
+                         id="alexanderson-award"
                          role="tabpanel"
-                         aria-labelledby="v-pills-settings-tab"
+                         aria-labelledby="alexanderson-award-tab"
                          tabindex="0">...</div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+  const triggerTabList = document.querySelectorAll("#v-pills-tab button");
+  triggerTabList.forEach((triggerEl) => {
+    const tabTrigger = new bootstrap.Tab(triggerEl);
+
+    triggerEl.addEventListener("click", (event) => {
+      event.preventDefault();
+      tabTrigger.show();
+    });
+  });
+
+  const activateTabFromHash = () => {
+  if (window.location.hash) {
+    let targetHash = window.location.hash;
+    console.log(targetHash)
+    const triggerEl = document.querySelector(`#v-pills-tab button[data-bs-target="${targetHash}"]`);
+    console.log(triggerEl)
+    if (triggerEl) {
+      let tabInstance = bootstrap.Tab.getInstance(triggerEl);
+      if (!tabInstance) {
+        tabInstance = new bootstrap.Tab(triggerEl);
+      }
+      tabInstance.show();
+    } else {
+      console.log(`No tab found for hash: ${targetHash}`);
+    }
+  }
+};
+
+activateTabFromHash();
+
+window.addEventListener("hashchange", activateTabFromHash, false);
+    </script>
 {% endblock content %}
