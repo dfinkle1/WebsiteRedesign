@@ -1,3 +1,4 @@
+{% load cms_tags sekizai_tags %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -20,8 +21,10 @@
           crossorigin="anonymous" />
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+    {% render_block "css" %}
   </head>
   <body class="d-flex flex-column min-vh-100">
+    {% cms_toolbar %}
     <header>
       <nav class="navbar fixed-top navbar-expand-lg">
         <div class="container-fluid">
@@ -39,23 +42,26 @@
               <a href="{% url 'index' %}" class="nav-link">Home</a>
               <div class="dropdown">
                 <a class="nav-link dropdown-toggle"
-                   href="{% url 'focused' %}"
+                   href="{% url 'collaborative' %}"
                    aria-expanded="false">Focused Collaborative Research</a>
                 <ul class="dropdown-menu" aria-labelledby="programsDropdown">
                   <div class="d-flex">
                     <div class="flex-fill">
                       <h6 class="dropdown-header">Workshops</h6>
-                      <a class="dropdown-item" href="#">Workshops</a>
-                      <a class="dropdown-item" href="#">SQuaREs</a>
+                      <a class="dropdown-item" href="{% url 'collaborative' %}#workshops">Workshops</a>
+                      <a class="dropdown-item" href="{% url 'collaborative' %}#squares">SQuaREs</a>
                     </div>
                     <div class="flex-fill">
-                      <h6 class="dropdown-header">Category 2</h6>
-                      <a class="dropdown-item" href="#">Research Communities</a>
-                      <a class="dropdown-item" href="#">REUF</a>
+                      <h6 class="dropdown-header">Diversity</h6>
+                      <a class="dropdown-item"
+                         href="{% url 'collaborative' %}#research-communities">Research Communities</a>
+                      <a class="dropdown-item" href="{% url 'collaborative' %}#reuf">REUF</a>
+                      <a class="dropdown-item" href="{% url 'collaborative' %}#roots-of-unity">Roots of Unity</a>
                     </div>
                     <div class="flex-fill">
                       <h6 class="dropdown-header">Other</h6>
-                      <a class="dropdown-item" href="#">Alexanderson Award</a>
+                      <a class="dropdown-item"
+                         href="{% url 'collaborative' %}#alexanderson-award">Alexanderson Award</a>
                     </div>
                   </div>
                 </ul>
@@ -113,12 +119,13 @@
                     <div class="d-flex">
                       <div class="flex-fill">
                         <h6 class="dropdown-header">Resources</h6>
-                        <a class="dropdown-item" href="">Math Careers Advice</a>
-                        <a class="dropdown-item" href="">Open Textbook Initiative</a>
-                        <a class="dropdown-item" href="">Videos</a>
-                        <a class="dropdown-item" href="">Problem List</a>
-                        <a class="dropdown-item" href="">Preprint Series</a>
-                        <a class="dropdown-item" href="">Published Paper</a>
+                        <a class="dropdown-item" href="{% url 'resources' %}#careers-advice">Math Careers Advice</a>
+                        <a class="dropdown-item"
+                           href="{% url 'resources' %}#open-textbook-initiative">Open Textbook Initiative</a>
+                        <a class="dropdown-item" href="{% url 'resources' %}#videos">Videos</a>
+                        <a class="dropdown-item" href="{% url 'resources' %}#problem-list">Problem List</a>
+                        <a class="dropdown-item" href="{% url 'resources' %}#preprint-series">Preprint Series</a>
+                        <a class="dropdown-item" href="{% url 'resources' %}#published-paper">Published Paper</a>
                       </div>
                       <div class="flex-fill">
                         <h6 class="dropdown-header">Seminars</h6>
@@ -140,11 +147,11 @@
                     <div class="d-flex">
                       <div class="flex-fill">
                         <h6 class="dropdown-header">About</h6>
-                        <a class="dropdown-item" href="">Contact</a>
-                        <a class="dropdown-item" href="">Staff</a>
-                        <a class="dropdown-item" href="">Governance</a>
-                        <a class="dropdown-item" href="">Diversity</a>
-                        <a class="dropdown-item" href="">Mission & History</a>
+                        <a class="dropdown-item" href="{% url 'about' %}#contact">Contact</a>
+                        <a class="dropdown-item" href="{% url 'about' %}#staff">Staff</a>
+                        <a class="dropdown-item" href="{% url 'about' %}#governance">Governance</a>
+                        <a class="dropdown-item" href="{% url 'about' %}#diversity">Diversity</a>
+                        <a class="dropdown-item" href="{% url 'about' %}#mission-history">Mission & History</a>
                       </div>
                       <div class="flex-fill">
                         <h6 class="dropdown-header">Past Programs</h6>
@@ -159,9 +166,7 @@
                 </div>
                 <div class="dropdown">
                   <a class="nav-link dropdown-toggle"
-                     href="#"
-                     role="button"
-                     data-bs-toggle="dropdown"
+                     href="{% url 'news' %}"
                      aria-expanded="false">News</a>
                   <ul class="dropdown-menu" aria-labelledby="programsDropdown">
                     <a class="dropdown-item" href="">Newsletter</a>
@@ -428,5 +433,6 @@
               integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
               crossorigin="anonymous"></script>
       <script src="{% static 'js/base.js' %}"></script>
+      {% render_block "js" %}
     </body>
   </html>
