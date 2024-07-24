@@ -27,6 +27,7 @@ djangocms-versioning==2.0.2
 djlint==1.34.1
 easy-thumbnails==2.8.5
 EditorConfig==0.12.4
+gunicorn==22.0.0
 html-tag-names==0.1.2
 html-void-elements==0.1.0
 html5lib==1.1
