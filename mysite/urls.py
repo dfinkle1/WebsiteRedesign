@@ -10,7 +10,7 @@ urlpatterns = (
     path("admin/", admin.site.urls),
     path("", include("apps.core.urls")),  # Your existing app's URLs
     path("", include("cms.urls")),  # Include Django CMS URLs
-)
+) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 if settings.DEBUG:
     urlpatterns += tuple(static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))
     urlpatterns += tuple(
