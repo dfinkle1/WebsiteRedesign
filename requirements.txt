@@ -18,6 +18,8 @@ django-sekizai==4.1.0
 django-treebeard==4.7.1
 djangocms-admin-style==3.3.1
 djangocms-alias==2.0.1
+djangocms-attributes-field==3.0.0
+djangocms-picture==4.1.1
 djangocms-text-ckeditor==5.1.5
 djangocms-versioning==2.0.2
 djlint==1.34.1

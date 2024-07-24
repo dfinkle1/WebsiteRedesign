@@ -32,7 +32,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-SITE_ID = 2
 
 # Application definition
 
@@ -59,6 +58,7 @@ INSTALLED_APPS = [
     "filer",
     "easy_thumbnails",
     "djangocms_text_ckeditor",
+    "djangocms_picture",
 ]
 
 THUMBNAIL_HIGH_RESOLUTION = True
@@ -111,11 +111,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "mysite.wsgi.application"
 
-CMS_TEMPLATES = [
-    ("template1.html", "Basic Template"),
-    ("testtemplate.html", "customcms"),
-    ("about.html", "about"),
-]
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -154,18 +149,43 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-CMS_CONFIRM_VERSION4 = True
-
 
 LANGUAGES = [("en", "English"), ("de", "German"), ("it", "Italian")]
 LANGUAGE_CODE = "en"
 
 TIME_ZONE = "America/Vancouver"
 
-USE_I18N = True
 
 USE_TZ = True
 
+
+##### DJANGO CMS #######
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+CMS_CONFIRM_VERSION4 = True
+USE_I18N = False
+DJANGOCMS_VERSIONING_ALLOW_DELETING_VERSIONS = True
+
+X_FRAME_OPTIONS = "SAMEORIGIN"
+SITE_ID = 2
+FILER_ENABLE_PERMISSIONS = True
+FILER_ENABLE_SUBDIRECTORIES = True
+
+
+CMS_TEMPLATES = [
+    ("template1.html", "Basic Template"),
+    ("testtemplate.html", "customcms"),
+    ("about.html", "about"),
+    ("focused-landing.html", "focused collaborative research"),
+    ("joyfulmathematics.html", "joyful mathematics template"),
+    ("visiting.html", "visiting template"),
+    ("resources.html", "resources template"),
+    ("news.html", "news template"),
+    ("staff_member_plugin.html", "update staff template"),
+]
+
+###########
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/

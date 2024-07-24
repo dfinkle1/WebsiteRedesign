@@ -1,9 +1,8 @@
 {% extends "base.html" %}
-{% load djangocms_alias_tags %}
-{% load cms_tags %}
+{% load cms_tags djangocms_alias_tags %}
 {% load static %}
 {% block title %}
-    About
+    {% page_attribute "page_title" %}
 {% endblock title %}
 {% block content %}
     <section tag="banner">
@@ -79,7 +78,6 @@
                                  class="img-fluid float-end ms-5 mb-3 custom-img"
                                  width="310px"
                                  height="auto" />
-                            <p>{% static_alias "about-content" %}</p>
                             {% placeholder "about-content" %}
                         </span>
                     </div>
@@ -89,59 +87,7 @@
                          aria-labelledby="contact-tab"
                          tabindex="0">
                         <h2>Contact</h2>
-                        <span class="fs-6">
-                            {% placeholder "contact-content" %}
-                            Reports can be made to any member of the AIM staff, to
-                            codeofconduct@aimath.org, or by using this anonymous form.
-                            <br />
-                            <br />
-                            The open exchange of ideas, the freedom of thought and expression,
-                            and respectful scientific debate are central to the mission of the
-                            American Institute of Mathematics. This requires a community that
-                            recognizes and respects the inherent worth of every person.
-                            <br />
-                            <br />
-                            We are committed to providing an environment that is free from
-                            harassment, bullying, discrimination, and retaliation. This includes
-                            offensive comments related to gender, gender identity and
-                            expression, age, sexual orientation, disability, physical
-                            appearance, race, ethnicity, religious (or nonreligious)
-                            affiliation, politics, or any other personal characteristics.
-                            <br />
-                            <br />
-                            We do not tolerate:
-                            <br />
-                            <ul>
-                                <li>
-                                    Bullying, intimidation, personal attacks, harassment, vulgar
-                                    exchanges;
-                                </li>
-                                <li>Repeated and/or sustained disruption of talks or other events;</li>
-                                <li>
-                                    Behavior that interferes with another person’s full
-                                    participation;
-                                </li>
-                                <li>
-                                    Sexual harassment, unwelcome sexual attention, stalking,
-                                    harassing photographs or recordings, or inappropriate physical
-                                    contact.
-                                </li>
-                            </ul>
-                            Those in violation of the code of conduct may be subject to
-                            disciplinary action ranging from dismissal from a meeting or event
-                            to permanent barring from the Institute, as determined on a
-                            case-by-case basis by our leadership or representatives. Adherence
-                            to this code of conduct is expected of all staff, visitors, and
-                            program participants. This code applies both to in-person behaviors
-                            and when using any communication channels, including social media.
-                            In addition, the code requires all staff, visitors, and participants
-                            to respect requests for confidentiality during scientific talks. We
-                            believe our code of conduct is essential to the success of our
-                            mission. Mutual respect for one another will truly stimulate our
-                            best performance. If you have any questions, or want to report a
-                            violation of this code, please email: codeofconduct@aimath.org or
-                            complete this anonymous form.
-                        </span>
+                        <span class="fs-6">{% placeholder "contact-content" %}</span>
                     </div>
                     <div class="tab-pane fade"
                          id="staff"
@@ -189,6 +135,7 @@
                                  aria-labelledby="pills-home-tab"
                                  tabindex="0">
                                 <div class="content">
+                                    {% placeholder "staff_directory" %}
                                     <div class="row mb-2 staff-content">
                                         <div class="col-sm-3">
                                             <img src="{% static 'images/people/claudia-draft.jpg' %}"
@@ -218,6 +165,7 @@
                                         <div class="col-sm-3">
                                             <img src="{% static 'images/people/terry-draft.jpg' %}"
                                                  alt="image here"
+                                                 class="img-fluid"
                                                  style="width: 230px;
                                                         height: 230px" />
                                         </div>
@@ -441,7 +389,7 @@
                          aria-labelledby="governance-tab"
                          tabindex="0">
                         <h2>Governance</h2>
-                        <span class="fs-6">Governance information...</span>
+                        <span class="fs-6">{% placeholder "governance-content" %}</span>
                     </div>
                     <div class="tab-pane fade"
                          id="diversity"
@@ -449,7 +397,7 @@
                          aria-labelledby="diversity-tab"
                          tabindex="0">
                         <h2>Diversity</h2>
-                        <span class="fs-6">Diversity information...</span>
+                        <span class="fs-6">{% placeholder "diversity-content" %}</span>
                     </div>
                     <div class="tab-pane fade"
                          id="mission-history"
@@ -457,7 +405,7 @@
                          aria-labelledby="mission-history-tab"
                          tabindex="0">
                         <h2>Mission & History</h2>
-                        <span class="fs-6">Mission & history information...</span>
+                        <span class="fs-6">{% placeholder "mission-content" %}</span>
                     </div>
                 </div>
             </div>
