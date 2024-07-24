@@ -119,27 +119,27 @@ WSGI_APPLICATION = "mysite.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": "aim",
-#         "USER": "daniel",
-#         "PASSWORD": "",
-#         "HOST": "localhost",
-#         "PORT": "",
-#     }
-# }
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("PGDATABASE", "default_db_name"),
-        "USER": os.getenv("PGUSER", "default_user"),
-        "PASSWORD": os.getenv("PGPASSWORD", "default_password"),
-        "HOST": os.getenv("PGHOST", "localhost"),
-        "PORT": os.getenv("PGPORT", "5432"),
+        "NAME": "aim",
+        "USER": "daniel",
+        "PASSWORD": "",
+        "HOST": "localhost",
+        "PORT": "",
     }
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": os.getenv("PGDATABASE", "default_db_name"),
+#         "USER": os.getenv("PGUSER", "default_user"),
+#         "PASSWORD": os.getenv("PGPASSWORD", "default_password"),
+#         "HOST": os.getenv("PGHOST", "localhost"),
+#         "PORT": os.getenv("PGPORT", "5432"),
+#     }
+# }
 
 
 # Password validation
