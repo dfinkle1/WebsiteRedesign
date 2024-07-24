@@ -1,10 +1,12 @@
 from dotenv import load_dotenv
 from pathlib import Path
 import environ
+import dj_database_url
 import os
 
 
 load_dotenv()
+
 """
 Django settings for mysite project.
 
@@ -29,7 +31,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = str(os.getenv("SECRET_KEY"))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
