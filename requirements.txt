@@ -2,6 +2,7 @@ asgiref==3.8.1
 beautifulsoup4==4.12.3
 chardet==5.2.0
 click==8.1.7
+cms==0.0.2
 colorama==0.4.6
 cssbeautifier==1.15.1
 cssselect2==0.7.0
