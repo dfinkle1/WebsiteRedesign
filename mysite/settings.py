@@ -1,10 +1,12 @@
 from dotenv import load_dotenv
 from pathlib import Path
 import environ
+import dj_database_url
 import os
 
 
 load_dotenv()
+
 """
 Django settings for mysite project.
 
