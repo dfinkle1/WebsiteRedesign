@@ -1,9 +1,25 @@
-from django.shortcuts import HttpResponse
+from django.shortcuts import HttpResponse, render, get_object_or_404
 from datetime import date
 from apps.workshops.models import OldWorkshop
 from participants.models import Participant
-from django.shortcuts import render
 from django.http import JsonResponse
+from apps.core.models import *
+
+
+def render_my_model(request, obj):
+    return render(
+        request,
+        "about.html",
+        {
+            "object": obj,
+        },
+    )
+
+
+def my_model_detail(request, id):
+    obj = get_object_or_404(MyModel)  # Get the object (here by id)
+    request.toolbar.set_object(obj)  # Announce the object to the toolbar
+    return render_my_model(request, MyModel)  # Same as preview rendering
 
 
 def home(request):
@@ -60,9 +76,13 @@ def joyfulmath_view(request):
 #
 
 
+def template_view(request):
+    return render(request, "template1.html")
+
+
 # navbar/about
 def about_view(request):
-    return render(request, "navbar/about/about.html")
+    return render(request, "about.html")
 
 
 # navbar/visiting
@@ -84,16 +104,11 @@ def resources_view(request):
     return render(request, "navbar/resources/resources.html")
 
 
-def visitingtemplate(request):
-    return render(request, "visitingtemplate.html")
+# navbar/news
+
+
+def news_view(request):
+    return render(request, "navbar/news/news.html")
 
 
 #
-
-
-def template1(request):
-    return render(request, "template1.html")
-
-
-def template2(request):
-    return render(request, "template2.html")

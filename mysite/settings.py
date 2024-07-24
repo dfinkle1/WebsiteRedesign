@@ -3,6 +3,7 @@ from pathlib import Path
 import environ
 import os
 
+
 load_dotenv()
 """
 Django settings for mysite project.
@@ -37,17 +38,39 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 # Application definition
 
 INSTALLED_APPS = [
+    "mysite",
     "participants.apps.ParticipantsConfig",
     "apps.workshops.apps.WorkshopsConfig",
     "apps.core.apps.CoreConfig",
+    "djangocms_admin_style",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "cms",
+    "menus",
+    "django.contrib.sites",
+    "treebeard",
     "bootstrap5",
+    "djangocms_versioning",
+    "djangocms_alias",
+    "sekizai",
+    "filer",
+    "easy_thumbnails",
+    "djangocms_text_ckeditor",
+    "djangocms_picture",
 ]
+
+THUMBNAIL_HIGH_RESOLUTION = True
+
+THUMBNAIL_PROCESSORS = (
+    "easy_thumbnails.processors.colorspace",
+    "easy_thumbnails.processors.autocrop",
+    "filer.thumbnail_processors.scale_and_crop_with_subject_location",
+    "easy_thumbnails.processors.filters",
+)
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -57,7 +80,15 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django.middleware.locale.LocaleMiddleware",  # not installed by default
+    "cms.middleware.user.CurrentUserMiddleware",
+    "cms.middleware.page.CurrentPageMiddleware",
+    "cms.middleware.toolbar.ToolbarMiddleware",
+    "cms.middleware.language.LanguageCookieMiddleware",
+    "cms.middleware.utils.ApphookReloadMiddleware",
 ]
+
+X_FRAME_OPTIONS = "SAMEORIGIN"
 
 ROOT_URLCONF = "mysite.urls"
 
@@ -68,10 +99,13 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
+                "django.template.context_processors.i18n",
+                "sekizai.context_processors.sekizai",
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "cms.context_processors.cms_settings",
             ],
         },
     },
@@ -128,14 +162,43 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+
+LANGUAGES = [("en", "English"), ("de", "German"), ("it", "Italian")]
+LANGUAGE_CODE = "en"
 
 TIME_ZONE = "America/Vancouver"
 
-USE_I18N = True
 
 USE_TZ = True
 
+
+##### DJANGO CMS #######
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+CMS_CONFIRM_VERSION4 = True
+USE_I18N = False
+DJANGOCMS_VERSIONING_ALLOW_DELETING_VERSIONS = True
+
+X_FRAME_OPTIONS = "SAMEORIGIN"
+SITE_ID = 2
+FILER_ENABLE_PERMISSIONS = True
+FILER_ENABLE_SUBDIRECTORIES = True
+
+
+CMS_TEMPLATES = [
+    ("template1.html", "Basic Template"),
+    ("testtemplate.html", "customcms"),
+    ("about.html", "about"),
+    ("focused-landing.html", "focused collaborative research"),
+    ("joyfulmathematics.html", "joyful mathematics template"),
+    ("visiting.html", "visiting template"),
+    ("resources.html", "resources template"),
+    ("news.html", "news template"),
+    ("staff_member_plugin.html", "update staff template"),
+]
+
+###########
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/

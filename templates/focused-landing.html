@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% load cms_tags djangocms_alias_tags %}
+{% load static %}
+{% block title %}
+    {% page_attribute "page_title" %}
+{% endblock title %}
+{% block content %}
+    <section tag="banner">
+        <div class="banner-container"
+             style="background-color: var(--aimblue);
+                    min-height:185px">
+            <p class="banner-text ps-4">Focused Collaborative Research</p>
+        </div>
+    </section>
+    <div class="container">
+        <div class="row mt-5 mb-4">
+            <div class="col-auto">
+                <div class="d-flex align-items-start">
+                    <div class="nav flex-column nav-pills me-3"
+                         id="v-pills-tab"
+                         role="tablist"
+                         aria-orientation="vertical">
+                        <button class="nav-link active"
+                                id="focused-landing-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#focused-landing"
+                                type="button"
+                                role="tab"
+                                aria-controls="focused-collaborative-research">Focused Collaborative Research</button>
+                        <button class="nav-link"
+                                id="workshops-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#workshops"
+                                type="button"
+                                role="tab"
+                                aria-controls="workshops">Workshops</button>
+                        <button class="nav-link"
+                                id="squares-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#squares"
+                                type="button"
+                                role="tab"
+                                aria-controls="squares">SQuaREs</button>
+                        <button class="nav-link"
+                                id="research-communities-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#research-communities"
+                                type="button"
+                                role="tab"
+                                aria-controls="research-communities">Research Communities</button>
+                        <button class="nav-link"
+                                id="reuf-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#reuf"
+                                type="button"
+                                role="tab"
+                                aria-controls="reuf">REUF</button>
+                        <button class="nav-link"
+                                id="roots-of-unity-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#roots-of-unity"
+                                type="button"
+                                role="tab"
+                                aria-controls="roots-of-unity">Roots of Unity</button>
+                        <button class="nav-link"
+                                id="alexanderson-award-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#alexanderson-award"
+                                type="button"
+                                role="tab"
+                                aria-controls="alexanderson-award">Alexanderson Award</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col theme-bg">
+                <div class="tab-content p-3" id="v-pills-tabContent">
+                    <div class="tab-pane fade show active"
+                         id="focused-landing"
+                         role="tabpanel"
+                         aria-labelledby="focused-landing-tab"
+                         tabindex="0">
+                        <h1>Focused Collaborative Research</h1>
+                        <span class="fs-5">
+                            <img src="{% static 'images/news/milikianpond.jpg' %}"
+                                 alt="Alexanderson Award"
+                                 class="img-fluid float-end ms-5 mb-3 custom-img"
+                                 width="310px"
+                                 height="auto" />
+                            {% placeholder "focused-landing-content" %}
+                        </span>
+                    </div>
+                    <div class="tab-pane fade"
+                         id="workshops"
+                         role="tabpanel"
+                         aria-labelledby="workshops-tab"
+                         tabindex="0">
+                        <h1>Workshops</h1>
+                        <span class="fs-6">{% placeholder "workshops-content" %}</span>
+                    </div>
+                    <div class="tab-pane fade"
+                         id="squares"
+                         role="tabpanel"
+                         aria-labelledby="squares-tab"
+                         tabindex="0">
+                        <h1>SQuaREs</h1>
+                        <span class="fs-6">{% placeholder "squares-content" %}</span>
+                    </div>
+                    <div class="tab-pane fade"
+                         id="research-communities"
+                         role="tabpanel"
+                         aria-labelledby="research-communities-tab"
+                         tabindex="0">
+                        <h1>Research Communities</h1>
+                        <span>{% placeholder "research-communities-content" %}</span>
+                    </div>
+                    <div class="tab-pane fade"
+                         id="reuf"
+                         role="tabpanel"
+                         aria-labelledby="reuf-tab"
+                         tabindex="0">
+                        <h1>REUF</h1>
+                        <span>{% placeholder "reuf-content" %}</span>
+                    </div>
+                    <div class="tab-pane fade"
+                         id="roots-of-unity"
+                         role="tabpanel"
+                         aria-labelledby="roots-of-unity-tab"
+                         tabindex="0">
+                        <h1>Roots of Unity</h1>
+                        <span>{% placeholder "roots-content" %}</span>
+                    </div>
+                    <div class="tab-pane fade"
+                         id="alexanderson-award"
+                         role="tabpanel"
+                         aria-labelledby="alexanderson-award-tab"
+                         tabindex="0">
+                        <h1>Alexanderson Award</h1>
+                        <span>{% placeholder "alexanderson-content" %}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+  const triggerTabList = document.querySelectorAll("#v-pills-tab button");
+  triggerTabList.forEach((triggerEl) => {
+    const tabTrigger = new bootstrap.Tab(triggerEl);
+
+    triggerEl.addEventListener("click", (event) => {
+      event.preventDefault();
+      tabTrigger.show();
+    });
+  });
+
+  const activateTabFromHash = () => {
+  if (window.location.hash) {
+    let targetHash = window.location.hash;
+    console.log(targetHash)
+    const triggerEl = document.querySelector(`#v-pills-tab button[data-bs-target="${targetHash}"]`);
+    console.log(triggerEl)
+    if (triggerEl) {
+      let tabInstance = bootstrap.Tab.getInstance(triggerEl);
+      if (!tabInstance) {
+        tabInstance = new bootstrap.Tab(triggerEl);
+      }
+      tabInstance.show();
+    } else {
+      console.log(`No tab found for hash: ${targetHash}`);
+    }
+  }
+};
+
+activateTabFromHash();
+
+window.addEventListener("hashchange", activateTabFromHash, false);
+    </script>
+{% endblock content %}

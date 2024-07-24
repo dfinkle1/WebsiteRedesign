@@ -10,12 +10,12 @@
     background-color: #ffff;
   }
 }
-[data-bs-theme="dark"] .bg-body-dark {
+[data-bs-theme="dark"] .theme-bg {
   background-color: #1f1f1f; /* Dark gray background for dark theme */
   color: white;
 }
-[data-bs-theme="light"] .bg-body-dark {
-  background-color: #ffffff; /* Dark gray background for dark theme */
+[data-bs-theme="light"] .theme-bg {
+  background-color: #ffffff;
 }
 
 [data-bs-theme="light"] .card {
@@ -23,6 +23,12 @@
 }
 body {
   min-height: 100vh;
+}
+
+.custom-img {
+  min-width: 500px;
+  width: auto; /* Adjust as needed */
+  height: auto; /* Adjust as needed */
 }
 
 .banner-home {
@@ -91,18 +97,43 @@ body {
 
 .navbar {
   position: relative;
+  font-size: 1.1rem;
 }
-.dropdown {
-  position: inherit;
+
+nav {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-variation-settings: "slnt" 0;
 }
-.dropdown-menu {
-  padding: 0;
-  width: auto;
+@media (min-width: 1180px) {
+  .navbar-nav .dropdown:hover .dropdown-menu {
+    display: block;
+    border-bottom: 1px solid gray;
+  }
+  .dropdown {
+    position: inherit;
+  }
+  .dropdown-menu {
+    padding: 0;
+    width: auto;
+  }
+}
+@media (max-width: 1179px) {
+  .d-flex {
+    display: block !important;
+  }
+  .dropdown-menu .d-flex {
+    display: block;
+  }
 }
 .navbar-nav .dropdown:hover .dropdown-menu {
   display: block;
-  border-bottom: 1px solid gray;
 }
+/* #navbarNavDropdown {
+  position: relative;
+} */
 
 .navbar .nav-link {
   color: var(--bs-link-color);
@@ -151,14 +182,6 @@ body {
   font-style: normal;
 }
 
-nav {
-  font-family: "Inter", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 600;
-  font-style: normal;
-  font-variation-settings: "slnt" 0;
-}
-
 :root {
   --aimgreen: #8bbf57;
   --aimblue: #578bbf;
@@ -175,15 +198,6 @@ nav {
 }
 footer {
   background-color: gray;
-}
-.navbar {
-  position: relative;
-}
-.dropdown {
-  position: inherit;
-}
-#navbarNavDropdown {
-  position: relative;
 }
 
 .card {
@@ -299,4 +313,8 @@ footer .nav-link {
     width: 33%;
     background-color: none;
   }
+}
+
+.tab-content {
+  background-color: ;
 }
