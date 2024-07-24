@@ -90,7 +90,7 @@ MIDDLEWARE = [
     "cms.middleware.utils.ApphookReloadMiddleware",
 ]
 
-X_FRAME_OPTIONS = "SAMEORIGIN"
+X_FRAME_OPTIONS = "DENY"
 
 ROOT_URLCONF = "mysite.urls"
 
@@ -195,10 +195,9 @@ CMS_TEMPLATES = [
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
+STATIC_ROOT = "/Users/daniel/Code/WebsiteRedesign/static"
 STATIC_URL = "static/"
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
