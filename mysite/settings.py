@@ -125,7 +125,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "mysite.wsgi.application"
 
-
+CSRF_TRUSTED_ORIGINS = ["https://websiteredesign-production.up.railway.app"]
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
