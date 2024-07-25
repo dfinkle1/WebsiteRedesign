@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>
       {% block title %}
-        Home
       {% endblock title %}
     </title>
     {% load bootstrap5 %}
@@ -23,8 +22,8 @@
     <link rel="stylesheet" href="{% static 'css/index.css' %}" />
     {% render_block "css" %}
   </head>
+  {% cms_toolbar %}
   <body class="d-flex flex-column min-vh-100">
-    {% cms_toolbar %}
     <header>
       <nav class="navbar fixed-top navbar-expand-lg">
         <div class="container-fluid">
