@@ -1,5 +1,4 @@
 {% load cms_tags sekizai_tags %}
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -11,6 +10,7 @@
       {% endblock title %}
     </title>
     {% load bootstrap5 %}
+    {% load static %}
     {% bootstrap_javascript %}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,7 +20,7 @@
           rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
           crossorigin="anonymous" />
-    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+    <link rel="stylesheet" href="{% static '/css/index.css' %}" />
     {% render_block "css" %}
   </head>
   <body class="d-flex flex-column min-vh-100">

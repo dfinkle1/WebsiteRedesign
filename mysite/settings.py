@@ -119,17 +119,17 @@ WSGI_APPLICATION = "mysite.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": "aim",
-#         "USER": "daniel",
-#         "PASSWORD": "",
-#         "HOST": "localhost",
-#         "PORT": "",
-#     }
-# }
-DATABASES = {"default": dj_database_url.config(default=DATABASE_URL, conn_max_age=600)}
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "aim",
+        "USER": "daniel",
+        "PASSWORD": "",
+        "HOST": "localhost",
+        "PORT": "",
+    }
+}
+# DATABASES = {"default": dj_database_url.config(default=DATABASE_URL, conn_max_age=600)}
 
 
 # Password validation
@@ -199,9 +199,19 @@ CMS_TEMPLATES = [
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, "static"),
 # ]
-STATIC_URL = "/static/"
+
+# STATIC_URL = "/static/"
+# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# print(STATIC_ROOT)
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_DIR = [os.path.join(BASE_DIR, "static")]
+# STATICFILES_DIR = [
+#     BASE_DIR / "static",
+# ]
+STATIC_URL = "static/"
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
