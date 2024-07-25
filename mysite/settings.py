@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
     "cms",
     "menus",
@@ -88,8 +89,17 @@ MIDDLEWARE = [
     "cms.middleware.toolbar.ToolbarMiddleware",
     "cms.middleware.language.LanguageCookieMiddleware",
     "cms.middleware.utils.ApphookReloadMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
+##white noise
+# STORAGES = {
+#     "staticfiles": {
+#         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+#     },
+# }
+
+##
 X_FRAME_OPTIONS = "DENY"
 
 ROOT_URLCONF = "mysite.urls"
