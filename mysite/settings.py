@@ -88,7 +88,6 @@ MIDDLEWARE = [
     "cms.middleware.page.CurrentPageMiddleware",
     "cms.middleware.toolbar.ToolbarMiddleware",
     "cms.middleware.language.LanguageCookieMiddleware",
-    "cms.middleware.utils.ApphookReloadMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
@@ -100,7 +99,7 @@ MIDDLEWARE = [
 # }
 
 ##
-X_FRAME_OPTIONS = "DENY"
+X_FRAME_OPTIONS = "SAMEORIGIN"
 
 ROOT_URLCONF = "mysite.urls"
 
