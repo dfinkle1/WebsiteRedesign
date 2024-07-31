@@ -21,13 +21,13 @@ class MyModel(models.Model):
 
 
 class StaffMember(CMSPlugin):
-    name = models.CharField(max_length=255)
-    role = models.CharField(max_length=255)
-    bio = models.TextField()
+    name = models.CharField(max_length=255, blank=True, null=True)
+    role = models.CharField(max_length=255, blank=True, null=True)
+    bio = models.TextField(blank=True, null=True)
     staff_photo = FilerImageField(
         null=True, blank=True, related_name="profile_picture", on_delete=models.CASCADE
     )
     more_info_link = models.URLField(blank=True, null=True)
 
     def __str__(self):
-        return self.name
+        return self.name or "Unnamed Staff Member"

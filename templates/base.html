@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>
       {% block title %}
-        Home
       {% endblock title %}
     </title>
     {% load bootstrap5 %}
+    {% load static %}
     {% bootstrap_javascript %}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,12 +19,11 @@
           rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
           crossorigin="anonymous" />
-    {% load static %}
     <link rel="stylesheet" href="{% static 'css/index.css' %}" />
     {% render_block "css" %}
   </head>
+  {% cms_toolbar %}
   <body class="d-flex flex-column min-vh-100">
-    {% cms_toolbar %}
     <header>
       <nav class="navbar fixed-top navbar-expand-lg">
         <div class="container-fluid">
@@ -149,11 +148,11 @@
                   <div class="d-flex">
                     <div class="flex-fill">
                       <h6 class="dropdown-header">About</h6>
-                      <a class="dropdown-item" href="">Contact</a>
-                      <a class="dropdown-item" href="">Staff</a>
-                      <a class="dropdown-item" href="">Governance</a>
-                      <a class="dropdown-item" href="">Diversity</a>
-                      <a class="dropdown-item" href="">Mission & History</a>
+                      <a class="dropdown-item" href="{% page_url 'about' %}#contact">Contact</a>
+                      <a class="dropdown-item" href="{% page_url 'about' %}#staff">Staff</a>
+                      <a class="dropdown-item" href="{% page_url 'about' %}#governance">Governance</a>
+                      <a class="dropdown-item" href="{% page_url 'about' %}#diversity">Diversity</a>
+                      <a class="dropdown-item" href="{% page_url 'about' %}#mission-history">Mission & History</a>
                     </div>
                     <div class="flex-fill">
                       <h6 class="dropdown-header">Past Programs</h6>
