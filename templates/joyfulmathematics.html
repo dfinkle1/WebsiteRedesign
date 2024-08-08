@@ -114,37 +114,36 @@
                tabindex="0">
             <h2>Global Math Project</h2>
             {% placeholder "global-math-project-content" %}
-          </span>
-        </div>
-        <div class="tab-pane fade"
-             id="math-monday"
-             role="tabpanel"
-             aria-labelledby="math-monday-info"
-             tabindex="0">
-          <h2>Math Monday</h2>
-          <span>{% placeholder "math-monday-content" %}</span>
-        </div>
-        <div class="tab-pane fade"
-             id="math-border"
-             role="tabpanel"
-             aria-labelledby="v-pills-facilities"
-             tabindex="0">
-          <h2>Math on The Border</h2>
-          <span>{% placeholder "math-on-the-border-content" %}</span>
-        </div>
-        <div class="tab-pane fade"
-             id="morgan-hill"
-             role="tabpanel"
-             aria-labelledby="v-pills-accessibility"
-             tabindex="0">
-          <h2>Morgan Hill Math</h2>
-          <span>{% placeholder "morgan-hill-content" %}</span>
+          </div>
+          <div class="tab-pane fade"
+               id="math-monday"
+               role="tabpanel"
+               aria-labelledby="math-monday-info"
+               tabindex="0">
+            <h2>Math Monday</h2>
+            <span>{% placeholder "math-monday-content" %}</span>
+          </div>
+          <div class="tab-pane fade"
+               id="math-border"
+               role="tabpanel"
+               aria-labelledby="v-pills-facilities"
+               tabindex="0">
+            <h2>Math on The Border</h2>
+            <span>{% placeholder "math-on-the-border-content" %}</span>
+          </div>
+          <div class="tab-pane fade"
+               id="morgan-hill"
+               role="tabpanel"
+               aria-labelledby="v-pills-accessibility"
+               tabindex="0">
+            <h2>Morgan Hill Math</h2>
+            <span>{% placeholder "morgan-hill-content" %}</span>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-<script>
+  <script>
   const triggerTabList = document.querySelectorAll("#v-pills-tab button");
   triggerTabList.forEach((triggerEl) => {
     const tabTrigger = new bootstrap.Tab(triggerEl);
@@ -176,5 +175,5 @@
 activateTabFromHash();
 
 window.addEventListener("hashchange", activateTabFromHash, false);
-</script>
+  </script>
 {% endblock content %}
