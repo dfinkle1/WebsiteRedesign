@@ -57,7 +57,6 @@ INSTALLED_APPS = [
     "menus",
     "django.contrib.sites",
     "treebeard",
-    "bootstrap5",
     "djangocms_versioning",
     "djangocms_alias",
     "sekizai",
