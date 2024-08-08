@@ -32,7 +32,7 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 SECRET_KEY = str(os.getenv("SECRET_KEY"))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -67,6 +67,13 @@ INSTALLED_APPS = [
     "djangocms_picture",
 ]
 
+##django pictures##
+DJANGOCMS_PICTURE_ALIGN = [
+    ("left", ("Align left")),
+    ("start", ("Float left")),
+    ("end", ("Float right")),
+]
+##
 THUMBNAIL_HIGH_RESOLUTION = True
 
 THUMBNAIL_PROCESSORS = (
