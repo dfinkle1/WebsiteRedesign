@@ -8,7 +8,6 @@ cssbeautifier==1.15.1
 cssselect2==0.7.0
 dj-database-url==2.2.0
 Django==5.0.8
-django-bootstrap-v5==1.0.11
 django-classy-tags==4.1.0
 django-cms==4.1.2
 django-environ==0.11.2
