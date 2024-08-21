@@ -61,6 +61,13 @@
                                 type="button"
                                 role="tab"
                                 aria-controls="mission-history">Mission & History</button>
+                        <button class="nav-link"
+                                id="past-programs-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#past-programs"
+                                type="button"
+                                role="tab"
+                                aria-controls="mission-history">Past Programs</button>
                     </div>
                 </div>
             </div>
@@ -406,6 +413,14 @@
                          tabindex="0">
                         <h2>Mission & History</h2>
                         <span class="fs-6">{% placeholder "mission-content" %}</span>
+                    </div>
+                    <div class="tab-pane fade"
+                         id="past-programs"
+                         role="tabpanel"
+                         aria-labelledby="past-programs-tab"
+                         tabindex="0">
+                        <h2>Past Programs</h2>
+                        <span class="fs-6">{% placeholder "past-programs-content" %}</span>
                     </div>
                 </div>
             </div>
