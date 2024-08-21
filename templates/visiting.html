@@ -50,6 +50,14 @@
                                       aria-controls="travel"
                                       aria-selected="false">Travel</button>
                               <button class="nav-link"
+                                      id="child-care-tab"
+                                      data-bs-toggle="pill"
+                                      data-bs-target="#child-care"
+                                      type="button"
+                                      role="pill"
+                                      aria-controls="travel"
+                                      aria-selected="false">Child Care</button>
+                              <button class="nav-link"
                                       id="v-pills-local-info"
                                       data-bs-toggle="pill"
                                       data-bs-target="#localinfo"
@@ -124,6 +132,14 @@
                               tabindex="0">
                               <h2>Travel</h2>
                               <span>{% placeholder 'travel-content' %}</span>
+                         </div>
+                         <div class="tab-pane fade"
+                              id="child-care"
+                              role="tabpanel"
+                              aria-labelledby="child-care-tab"
+                              tabindex="0">
+                              <h2>Child Care</h2>
+                              <span>{% placeholder 'child-care-content' %}</span>
                          </div>
                          <div class="tab-pane fade"
                               id="localinfo"
