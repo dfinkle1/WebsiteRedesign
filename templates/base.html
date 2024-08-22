@@ -21,6 +21,93 @@
     {% render_block "css" %}
   </head>
   {% cms_toolbar %}
+  <script>(() => {
+  "use strict";
+
+  const getStoredTheme = () => localStorage.getItem("theme");
+  const setStoredTheme = (theme) => localStorage.setItem("theme", theme);
+
+  const getPreferredTheme = () => {
+    const storedTheme = getStoredTheme();
+    if (storedTheme) {
+      return storedTheme;
+    }
+
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  };
+
+  const setTheme = (theme) => {
+    if (theme === "auto") {
+      document.documentElement.setAttribute(
+        "data-bs-theme",
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light"
+      );
+    } else {
+      document.documentElement.setAttribute("data-bs-theme", theme);
+    }
+  };
+
+  setTheme(getPreferredTheme());
+
+  const showActiveTheme = (theme, focus = false) => {
+    const themeSwitcher = document.querySelector("#bd-theme");
+
+    if (!themeSwitcher) {
+      return;
+    }
+
+    const themeSwitcherText = document.querySelector("#bd-theme-text");
+    const activeThemeIcon = document.querySelector(".theme-icon-active use");
+    const btnToActive = document.querySelector(
+      `[data-bs-theme-value="${theme}"]`
+    );
+    const svgOfActiveBtn = btnToActive
+      .querySelector("svg use")
+      .getAttribute("href");
+
+    document.querySelectorAll("[data-bs-theme-value]").forEach((element) => {
+      element.classList.remove("active");
+      element.setAttribute("aria-pressed", "false");
+    });
+
+    btnToActive.classList.add("active");
+    btnToActive.setAttribute("aria-pressed", "true");
+    activeThemeIcon.setAttribute("href", svgOfActiveBtn);
+    const themeSwitcherLabel = `${themeSwitcherText.textContent} (${btnToActive.dataset.bsThemeValue})`;
+    themeSwitcher.setAttribute("aria-label", themeSwitcherLabel);
+
+    if (focus) {
+      themeSwitcher.focus();
+    }
+  };
+
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", () => {
+      const storedTheme = getStoredTheme();
+      if (storedTheme !== "light" && storedTheme !== "dark") {
+        setTheme(getPreferredTheme());
+      }
+    });
+
+  window.addEventListener("DOMContentLoaded", () => {
+    showActiveTheme(getPreferredTheme());
+
+    document.querySelectorAll("[data-bs-theme-value]").forEach((toggle) => {
+      toggle.addEventListener("click", () => {
+        const theme = toggle.getAttribute("data-bs-theme-value");
+        setStoredTheme(theme);
+        setTheme(theme);
+        showActiveTheme(theme, true);
+      });
+    });
+  });
+})();
+  </script>
   <body class="d-flex flex-column min-vh-100">
     <header>
       <nav class="navbar fixed-top navbar-expand-lg">
@@ -73,21 +160,18 @@
                     <div class="flex-fill">
                       <h6 class="dropdown-header">Partnerships</h6>
                       <a class="dropdown-item" href="{% page_url 'joyful' %}#math-circles">Math Circle Network</a>
-                      <a class="dropdown-item"
-                         href="{% page_url 'joyful' %}#math-communities"
-                         rel="noopener noreferrer">Math Communities</a>
+                      <a class="dropdown-item" href="{% page_url 'joyful' %}#math-communities">Math Communities</a>
                     </div>
                     <div class="flex-fill">
                       <h6 class="dropdown-header">Category 2</h6>
-                      <a class="dropdown-item" href="{% page_url 'joyful' %}#aimc">AIMC</a>
                       <a class="dropdown-item" href="{% page_url 'joyful' %}#match">MATCH</a>
-                      <a class="dropdown-item" href="{% page_url 'joyful' %}#global-math">Global Math Project</a>
-                      <a class="dropdown-item" href="{% page_url 'joyful' %}#math-monday">Math Monday</a>
+                      <a class="dropdown-item" href="{% page_url 'joyful' %}#math-border">Math on the Border</a>
+                      <a class="dropdown-item" href="{% page_url 'joyful' %}#morgan-hill">Morgan Hill Math</a>
                     </div>
                     <div class="flex-fill">
                       <h6 class="dropdown-header">Other</h6>
-                      <a class="dropdown-item" href="{% page_url 'joyful' %}#math-border">Math On The Border</a>
-                      <a class="dropdown-item" href="{% page_url 'joyful' %}#morgan-hill">Morgan Hill Math</a>
+                      <a class="dropdown-item"
+                         href="{% page_url 'joyful' %}#affiliated-programs">Affiliated Programs</a>
                     </div>
                   </div>
                 </ul>

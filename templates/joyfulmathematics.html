@@ -13,7 +13,7 @@
   </section>
   <div class="container">
     <div class="row mt-5 mb-4">
-      <div class="col-auto">
+      <div class="col-lg-3">
         <div class="d-flex align-items-start">
           <div class="nav flex-column nav-pills me-3"
                id="v-pills-tab"
@@ -32,7 +32,7 @@
                     data-bs-target="#math-circles"
                     type="button"
                     role="tab"
-                    aria-controls="math circles">Math Circles</button>
+                    aria-controls="math circles">Math Circle Network</button>
             <button class="nav-link"
                     id="math-communities-tab"
                     data-bs-toggle="pill"
@@ -41,34 +41,12 @@
                     role="tab"
                     aria-controls="math communities">Math Communities</button>
             <button class="nav-link"
-                    id="aimc-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#aimc"
-                    type="button"
-                    role="tab"
-                    aria-controls="aimc">AIMC</button>
-            <button class="nav-link"
                     id="match-tab"
                     data-bs-toggle="pill"
                     data-bs-target="#match"
                     type="button"
                     role="tab"
                     aria-controls="match">MATCH</button>
-            <button class="nav-link"
-                    id="global-math-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#global-math"
-                    type="button"
-                    role="pill"
-                    aria-controls="global">Global Math Project</button>
-            <button class="nav-link"
-                    id="math-monday-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#math-monday"
-                    type="button"
-                    role="tab"
-                    aria-controls="math-monday"
-                    aria-selected="false">Math Monday</button>
             <button class="nav-link"
                     id="math-border-tab"
                     data-bs-toggle="pill"
@@ -85,6 +63,14 @@
                     role="tab"
                     aria-controls="morgan-hill"
                     aria-selected="false">Morgan Hill Math</button>
+            <button class="nav-link"
+                    id="affiliated-programs-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#affiliated-programs"
+                    type="button"
+                    role="tab"
+                    aria-controls="affiliated-programs"
+                    aria-selected="false">Affiliated Programs</button>
           </div>
         </div>
       </div>
@@ -95,7 +81,6 @@
                role="tabpanel"
                aria-labelledby="v-pills-landing"
                tabindex="0">
-            <h1>Joyful Math</h1>
             <span class="fs-5">
               <img src="{% static 'images/landing/JFMA-landing.jpg' %}"
                    alt="People playing with tiles from AIMs Math Fair"
@@ -110,7 +95,6 @@
                role="tabpanel"
                aria-labelledby="v-pills-math-circles"
                tabindex="0">
-            <h2>Math Circles</h2>
             <span class="fs-6">{% placeholder "math-circles-content" %}</span>
           </div>
           <div class="tab-pane fade"
@@ -118,47 +102,20 @@
                role="tabpanel"
                aria-labelledby="v-pills-math-communities"
                tabindex="0">
-            <h2>Math Communities</h2>
             <span class="fs-6">{% placeholder "math-communities-content" %}</span>
-          </div>
-          <div class="tab-pane fade"
-               id="aimc"
-               role="tabpanel"
-               aria-labelledby="v-pills-aimc"
-               tabindex="0">
-            <h2>AIMC</h2>
-            <span class="fs-6">{% placeholder "aimc-content" %}</span>
           </div>
           <div class="tab-pane fade"
                id="match"
                role="tabpanel"
                aria-labelledby="match-tab"
                tabindex="0">
-            <h2>MATCH</h2>
             <span class="fs-6">{% placeholder "match-content" %}</span>
-          </div>
-          <div class="tab-pane fade"
-               id="global-math"
-               role="tabpanel"
-               aria-labelledby="global-math-tab"
-               tabindex="0">
-            <h2>Global Math Project</h2>
-            {% placeholder "global-math-project-content" %}
-          </div>
-          <div class="tab-pane fade"
-               id="math-monday"
-               role="tabpanel"
-               aria-labelledby="math-monday-info"
-               tabindex="0">
-            <h2>Math Monday</h2>
-            <span>{% placeholder "math-monday-content" %}</span>
           </div>
           <div class="tab-pane fade"
                id="math-border"
                role="tabpanel"
                aria-labelledby="v-pills-facilities"
                tabindex="0">
-            <h2>Math on The Border</h2>
             <span>{% placeholder "math-on-the-border-content" %}</span>
           </div>
           <div class="tab-pane fade"
@@ -166,8 +123,14 @@
                role="tabpanel"
                aria-labelledby="v-pills-accessibility"
                tabindex="0">
-            <h2>Morgan Hill Math</h2>
             <span>{% placeholder "morgan-hill-content" %}</span>
+          </div>
+          <div class="tab-pane fade"
+               id="affiliated-programs"
+               role="tabpanel"
+               aria-labelledby="v-pills-accessibility"
+               tabindex="0">
+            <span>{% placeholder "affiliated-programs-content" %}</span>
           </div>
         </div>
       </div>
