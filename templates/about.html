@@ -61,6 +61,13 @@
                                 type="button"
                                 role="tab"
                                 aria-controls="mission-history">Mission & History</button>
+                        <button class="nav-link"
+                                id="past-programs-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#past-programs"
+                                type="button"
+                                role="tab"
+                                aria-controls="mission-history">Past Programs</button>
                     </div>
                 </div>
             </div>
@@ -73,11 +80,11 @@
                          tabindex="0">
                         <h1>About</h1>
                         <span class="fs-5">
-                            <img src="{% static 'images/news/milikianpond.jpg' %}"
-                                 alt="Alexanderson Award"
-                                 class="img-fluid float-end ms-5 mb-3 custom-img"
-                                 width="310px"
-                                 height="auto" />
+                            <img src="{% static 'images/landing/about-merkin.jpeg' %}"
+                                 alt="View of the mountains from the merkin center"
+                                 class="img-fluid float-end ms-2 mb-2"
+                                 width="450px"
+                                 height="" />
                             {% placeholder "about-content" %}
                         </span>
                     </div>
@@ -87,7 +94,7 @@
                          aria-labelledby="contact-tab"
                          tabindex="0">
                         <h2>Contact</h2>
-                        <span class="fs-6">{% placeholder "contact-content" %}</span>
+                        <span class="fs-5">{% placeholder "contact-content" %}</span>
                     </div>
                     <div class="tab-pane fade"
                          id="staff"
@@ -381,7 +388,7 @@
                                 </div>
                             </div>
                         </div>
-                        <span class="fs-6">Information about staff members...</span>
+                        <span class="fs-5">Information about staff members...</span>
                     </div>
                     <div class="tab-pane fade"
                          id="governance"
@@ -389,7 +396,7 @@
                          aria-labelledby="governance-tab"
                          tabindex="0">
                         <h2>Governance</h2>
-                        <span class="fs-6">{% placeholder "governance-content" %}</span>
+                        <span class="fs-5">{% placeholder "governance-content" %}</span>
                     </div>
                     <div class="tab-pane fade"
                          id="diversity"
@@ -397,7 +404,7 @@
                          aria-labelledby="diversity-tab"
                          tabindex="0">
                         <h2>Diversity</h2>
-                        <span class="fs-6">{% placeholder "diversity-content" %}</span>
+                        <span class="fs-5">{% placeholder "diversity-content" %}</span>
                     </div>
                     <div class="tab-pane fade"
                          id="mission-history"
@@ -405,43 +412,18 @@
                          aria-labelledby="mission-history-tab"
                          tabindex="0">
                         <h2>Mission & History</h2>
-                        <span class="fs-6">{% placeholder "mission-content" %}</span>
+                        <span class="fs-5">{% placeholder "mission-content" %}</span>
+                    </div>
+                    <div class="tab-pane fade"
+                         id="past-programs"
+                         role="tabpanel"
+                         aria-labelledby="past-programs-tab"
+                         tabindex="0">
+                        <h2>Past Programs</h2>
+                        <span class="fs-5">{% placeholder "past-programs-content" %}</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script>
-  const triggerTabList = document.querySelectorAll("#v-pills-tab button");
-  triggerTabList.forEach((triggerEl) => {
-    const tabTrigger = new bootstrap.Tab(triggerEl);
-
-    triggerEl.addEventListener("click", (event) => {
-      event.preventDefault();
-      tabTrigger.show();
-    });
-  });
-
-  const activateTabFromHash = () => {
-  if (window.location.hash) {
-    let targetHash = window.location.hash;
-    console.log(targetHash)
-    const triggerEl = document.querySelector(`#v-pills-tab button[data-bs-target="${targetHash}"]`);
-    console.log(triggerEl)
-    if (triggerEl) {
-      let tabInstance = bootstrap.Tab.getInstance(triggerEl);
-      if (!tabInstance) {
-        tabInstance = new bootstrap.Tab(triggerEl);
-      }
-      tabInstance.show();
-    } else {
-      console.log(`No tab found for hash: ${targetHash}`);
-    }
-  }
-};
-
-activateTabFromHash();
-
-window.addEventListener("hashchange", activateTabFromHash, false);
-    </script>
 {% endblock content %}

@@ -14,7 +14,7 @@
     </section>
     <div class="container">
         <div class="row mt-5 mb-4">
-            <div class="col-auto">
+            <div class="col-lg-3">
                 <div class="d-flex align-items-start">
                     <div class="nav flex-column nav-pills me-3"
                          id="v-pills-tab"
@@ -54,14 +54,14 @@
                                 data-bs-target="#reuf"
                                 type="button"
                                 role="tab"
-                                aria-controls="reuf">REUF</button>
+                                aria-controls="reuf">Research Experiences for Undergraduate Faculty</button>
                         <button class="nav-link"
                                 id="roots-of-unity-tab"
                                 data-bs-toggle="pill"
                                 data-bs-target="#roots-of-unity"
                                 type="button"
                                 role="tab"
-                                aria-controls="roots-of-unity">Roots of Unity</button>
+                                aria-controls="roots-of-unity">Diversity Initiative</button>
                         <button class="nav-link"
                                 id="alexanderson-award-tab"
                                 data-bs-toggle="pill"
@@ -81,11 +81,11 @@
                          tabindex="0">
                         <h1>Focused Collaborative Research</h1>
                         <span class="fs-5">
-                            <img src="{% static 'images/news/milikianpond.jpg' %}"
-                                 alt="Alexanderson Award"
-                                 class="img-fluid float-end ms-5 mb-3 custom-img"
-                                 width="310px"
-                                 height="auto" />
+                            <img src="{% static 'images/landing/FCR-lecture1.jpg' %}"
+                                 alt="People working on problems in the lecture room at AIM"
+                                 class="img-fluid float-end ms-2 mb-2"
+                                 width="450px"
+                                 height="" />
                             {% placeholder "focused-landing-content" %}
                         </span>
                     </div>
@@ -95,7 +95,7 @@
                          aria-labelledby="workshops-tab"
                          tabindex="0">
                         <h1>Workshops</h1>
-                        <span class="fs-6">{% placeholder "workshops-content" %}</span>
+                        <span class="fs-5">{% placeholder "workshops-content" %}</span>
                     </div>
                     <div class="tab-pane fade"
                          id="squares"
@@ -103,7 +103,7 @@
                          aria-labelledby="squares-tab"
                          tabindex="0">
                         <h1>SQuaREs</h1>
-                        <span class="fs-6">{% placeholder "squares-content" %}</span>
+                        <span class="fs-5">{% placeholder "squares-content" %}</span>
                     </div>
                     <div class="tab-pane fade"
                          id="research-communities"
@@ -111,7 +111,7 @@
                          aria-labelledby="research-communities-tab"
                          tabindex="0">
                         <h1>Research Communities</h1>
-                        <span>{% placeholder "research-communities-content" %}</span>
+                        <span class="fs-5">{% placeholder "research-communities-content" %}</span>
                     </div>
                     <div class="tab-pane fade"
                          id="reuf"
@@ -119,15 +119,15 @@
                          aria-labelledby="reuf-tab"
                          tabindex="0">
                         <h1>REUF</h1>
-                        <span>{% placeholder "reuf-content" %}</span>
+                        <span class="fs-5">{% placeholder "reuf-content" %}</span>
                     </div>
                     <div class="tab-pane fade"
                          id="roots-of-unity"
                          role="tabpanel"
                          aria-labelledby="roots-of-unity-tab"
                          tabindex="0">
-                        <h1>Roots of Unity</h1>
-                        <span>{% placeholder "roots-content" %}</span>
+                        <h1>Mathematical Sciences Institutes Diversity Initiative</h1>
+                        <span class="fs-5">{% placeholder "roots-content" %}</span>
                     </div>
                     <div class="tab-pane fade"
                          id="alexanderson-award"
@@ -135,43 +135,10 @@
                          aria-labelledby="alexanderson-award-tab"
                          tabindex="0">
                         <h1>Alexanderson Award</h1>
-                        <span>{% placeholder "alexanderson-content" %}</span>
+                        <span class="fs-5">{% placeholder "alexanderson-content" %}</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script>
-  const triggerTabList = document.querySelectorAll("#v-pills-tab button");
-  triggerTabList.forEach((triggerEl) => {
-    const tabTrigger = new bootstrap.Tab(triggerEl);
-
-    triggerEl.addEventListener("click", (event) => {
-      event.preventDefault();
-      tabTrigger.show();
-    });
-  });
-
-  const activateTabFromHash = () => {
-  if (window.location.hash) {
-    let targetHash = window.location.hash;
-    console.log(targetHash)
-    const triggerEl = document.querySelector(`#v-pills-tab button[data-bs-target="${targetHash}"]`);
-    console.log(triggerEl)
-    if (triggerEl) {
-      let tabInstance = bootstrap.Tab.getInstance(triggerEl);
-      if (!tabInstance) {
-        tabInstance = new bootstrap.Tab(triggerEl);
-      }
-      tabInstance.show();
-    } else {
-      console.log(`No tab found for hash: ${targetHash}`);
-    }
-  }
-};
-
-activateTabFromHash();
-
-window.addEventListener("hashchange", activateTabFromHash, false);
-    </script>
 {% endblock content %}

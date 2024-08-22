@@ -14,7 +14,7 @@
      </section>
      <div class="container">
           <div class="row mt-5 mb-4">
-               <div class="col-auto">
+               <div class="col-lg-3">
                     <div class="d-flex align-items-start">
                          <div class="nav flex-column nav-pills me-3"
                               id="v-pills-tab"
@@ -35,28 +35,36 @@
                                       role="tab"
                                       aria-controls="code-of-conduct">Code of Conduct</button>
                               <button class="nav-link"
-                                      id="directions-tab"
+                                      id="local-information-tab"
                                       data-bs-toggle="pill"
-                                      data-bs-target="#directions"
+                                      data-bs-target="#local-information"
                                       type="button"
                                       role="tab"
-                                      aria-controls="directions">Directions</button>
+                                      aria-controls="directions">Local Information</button>
                               <button class="nav-link"
-                                      id="travel-tab"
+                                      id="travel-guidelines-tab"
                                       data-bs-toggle="pill"
-                                      data-bs-target="#travel"
+                                      data-bs-target="#travel-guidelines"
                                       type="button"
                                       role="pill"
-                                      aria-controls="travel"
-                                      aria-selected="false">Travel</button>
+                                      aria-controls="travel-guidelines"
+                                      aria-selected="false">Travel Guidelines</button>
                               <button class="nav-link"
-                                      id="v-pills-local-info"
+                                      id="child-care-tab"
                                       data-bs-toggle="pill"
-                                      data-bs-target="#localinfo"
+                                      data-bs-target="#child-care"
+                                      type="button"
+                                      role="pill"
+                                      aria-controls="child-care"
+                                      aria-selected="false">Child Care</button>
+                              <button class="nav-link"
+                                      id="v-pills-explore-pasadena"
+                                      data-bs-toggle="pill"
+                                      data-bs-target="#explore-pasadena"
                                       type="button"
                                       role="tab"
-                                      aria-controls="localinfo"
-                                      aria-selected="false">Local Info</button>
+                                      aria-controls="explore-pasadena"
+                                      aria-selected="false">Explore Pasadena</button>
                               <button class="nav-link"
                                       id="v-pills-facilities"
                                       data-bs-toggle="pill"
@@ -93,11 +101,11 @@
                               tabindex="0">
                               <h1>Welcome to AIM</h1>
                               <span class="fs-5">
-                                   <img src="{% static 'images/news/milikianpond.jpg' %}"
-                                        alt="Alexanderson Award"
-                                        class="img-fluid float-end ms-5 mb-3 custom-img"
-                                        width="310px"
-                                        height="auto" />
+                                   <img src="{% static 'images/landing/visiting-caltechhall.jpg' %}"
+                                        alt="CalTech Hall"
+                                        class="img-fluid float-end ms-2 mb-2"
+                                        width="450px"
+                                        height="" />
                                    {% placeholder 'visiting-landing-content' %}
                               </span>
                          </div>
@@ -107,91 +115,60 @@
                               aria-labelledby="v-pills-codeofconduct"
                               tabindex="0">
                               <h2>Code Of Conduct</h2>
-                              <span class="fs-6">{% placeholder 'code-of-conduct-content' %}</span>
+                              <span class="fs-5">{% placeholder 'code-of-conduct-content' %}</span>
                          </div>
                          <div class="tab-pane fade"
-                              id="directions"
+                              id="local-information"
                               role="tabpanel"
-                              aria-labelledby="directions-tab"
+                              aria-labelledby="location-information-tab"
                               tabindex="0">
-                              <h2>Directions</h2>
-                              <span class="fs-6">{% placeholder 'directions-content' %}</span>
+                              <span class="fs-5">{% placeholder 'directions-content' %}</span>
                          </div>
                          <div class="tab-pane fade"
-                              id="travel"
+                              id="travel-guidelines"
                               role="tabpanel"
-                              aria-labelledby="travel-tab"
+                              aria-labelledby="travel-guidelines-tab"
                               tabindex="0">
-                              <h2>Travel</h2>
-                              <span>{% placeholder 'travel-content' %}</span>
+                              <span class="fs-5">{% placeholder 'travel-content' %}</span>
                          </div>
                          <div class="tab-pane fade"
-                              id="localinfo"
+                              id="child-care"
                               role="tabpanel"
-                              aria-labelledby="v-pills-local-info"
+                              aria-labelledby="child-care-tab"
                               tabindex="0">
-                              <h2>Local Information</h2>
-                              <span>{% placeholder 'local-info-content' %}</span>
+                              <h2>Child Care</h2>
+                              <span class="fs-5">{% placeholder 'child-care-content' %}</span>
+                         </div>
+                         <div class="tab-pane fade"
+                              id="explore-pasadena"
+                              role="tabpanel"
+                              aria-labelledby="v-pills-explore-pasadena"
+                              tabindex="0">
+                              <span class="fs-5">{% placeholder 'local-info-content' %}</span>
                          </div>
                          <div class="tab-pane fade"
                               id="facilities"
                               role="tabpanel"
                               aria-labelledby="v-pills-facilities"
                               tabindex="0">
-                              <h2>Facilities</h2>
-                              <span>{% placeholder 'facilities-content' %}</span>
+                              <span class="fs-5">{% placeholder 'facilities-content' %}</span>
                          </div>
                          <div class="tab-pane fade"
                               id="accessibility"
                               role="tabpanel"
                               aria-labelledby="v-pills-accessibility"
                               tabindex="0">
-                              <h2>Accessibility</h2>
-                              <span>{% placeholder 'accessibility-content' %}</span>
+                              <span class="fs-5">{% placeholder 'accessibility-content' %}</span>
                          </div>
                          <div class="tab-pane fade"
                               id="faq"
                               role="tabpanel"
                               aria-labelledby="v-pills-faq"
                               tabindex="0">
-                              <h2>FAQ</h2>
-                              <span>{% placeholder 'faq-content' %}</span>
+                              <span class="fs-5">{% placeholder 'faq-content' %}</span>
                          </div>
                     </div>
                </div>
           </div>
      </div>
-     <script>
-  const triggerTabList = document.querySelectorAll("#v-pills-tab button");
-  triggerTabList.forEach((triggerEl) => {
-    const tabTrigger = new bootstrap.Tab(triggerEl);
-
-    triggerEl.addEventListener("click", (event) => {
-      event.preventDefault();
-      tabTrigger.show();
-    });
-  });
-
-  const activateTabFromHash = () => {
-  if (window.location.hash) {
-    let targetHash = window.location.hash;
-    console.log(targetHash)
-    const triggerEl = document.querySelector(`#v-pills-tab button[data-bs-target="${targetHash}"]`);
-    console.log(triggerEl)
-    if (triggerEl) {
-      let tabInstance = bootstrap.Tab.getInstance(triggerEl);
-      if (!tabInstance) {
-        tabInstance = new bootstrap.Tab(triggerEl);
-      }
-      tabInstance.show();
-    } else {
-      console.log(`No tab found for hash: ${targetHash}`);
-    }
-  }
-};
-
-activateTabFromHash();
-
-window.addEventListener("hashchange", activateTabFromHash, false);
-     </script>
 {% endblock content %}

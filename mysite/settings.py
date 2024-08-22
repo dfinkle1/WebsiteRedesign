@@ -57,7 +57,6 @@ INSTALLED_APPS = [
     "menus",
     "django.contrib.sites",
     "treebeard",
-    "bootstrap5",
     "djangocms_versioning",
     "djangocms_alias",
     "sekizai",
@@ -65,8 +64,20 @@ INSTALLED_APPS = [
     "easy_thumbnails",
     "djangocms_text_ckeditor",
     "djangocms_picture",
+    "djangocms_file",
+    "djangocms_video",
+    "djangocms_googlemap",
+    "djangocms_snippet",
+    "djangocms_style",
 ]
 
+##django pictures##
+DJANGOCMS_PICTURE_ALIGN = [
+    ("left", ("Align left")),
+    ("start", ("Float left")),
+    ("end", ("Float right")),
+]
+##
 THUMBNAIL_HIGH_RESOLUTION = True
 
 THUMBNAIL_PROCESSORS = (

@@ -2,179 +2,146 @@
 {% load cms_tags djangocms_alias_tags %}
 {% load static %}
 {% block title %}
-    {% page_attribute "page_title" %}
+  {% page_attribute "page_title" %}
 {% endblock title %}
 {% block content %}
-    <section tag="banner">
-        <div class="banner-container text-center"
-             style="background-color:#90adc6;
-                    min-height:150px"
-             width="100%">banner text some place</div>
-    </section>
-    <div class="container">
-        <div class="row mt-5 mb-4">
-            <div class="col-auto">
-                <div class="d-flex">
-                    <div class="nav flex-column nav-pills me-3"
-                         id="v-pills-tab"
-                         role="tablist"
-                         aria-orientation="vertical">
-                        <button class="nav-link active"
-                                id="resources-tab"
-                                data-bs-toggle="pill"
-                                data-bs-target="#resources"
-                                type="button"
-                                role="tab"
-                                aria-controls="resources">Resources</button>
-                        <button class="nav-link"
-                                id="careers-advice-tab"
-                                data-bs-toggle="pill"
-                                data-bs-target="#careers-advice"
-                                type="button"
-                                role="tab"
-                                aria-controls="careers-advice"
-                                aria-selected="false">Math Careers Advice</button>
-                        <button class="nav-link"
-                                id="open-textbook-initiative-tab"
-                                data-bs-toggle="pill"
-                                data-bs-target="#open-textbook-initiative"
-                                type="button"
-                                role="tab"
-                                aria-controls="open-textbook-initiative">Open Textbook Initiative</button>
-                        <button class="nav-link"
-                                id="videos-tab"
-                                data-bs-toggle="pill"
-                                data-bs-target="#videos"
-                                type="button"
-                                role="tab"
-                                aria-controls="videos">Videos</button>
-                        <button class="nav-link"
-                                id="problem-list-tab"
-                                data-bs-toggle="pill"
-                                data-bs-target="#problem-list"
-                                type="button"
-                                role="pill"
-                                aria-controls="problem-list"
-                                aria-selected="false">Problem List</button>
-                        <button class="nav-link"
-                                id="preprint-series-tab"
-                                data-bs-toggle="pill"
-                                data-bs-target="#preprint-series"
-                                type="button"
-                                role="tab"
-                                aria-controls="math-monday"
-                                aria-selected="false">Preprint Series</button>
-                        <button class="nav-link"
-                                id="published-paper-tab"
-                                data-bs-toggle="pill"
-                                data-bs-target="#published-paper"
-                                type="button"
-                                role="tab"
-                                aria-controls="math-border"
-                                aria-selected="false">Published Paper</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col theme-bg">
-                <div class="tab-content p-3" id="v-pills-tabContent">
-                    <div class="tab-pane fade show active"
-                         id="resources"
-                         role="tabpanel"
-                         aria-labelledby="v-pills-resources"
-                         tabindex="0">
-                        <h2>Resources Landing</h2>
-                        <span class="fs-5">
-                            <img src="{% static 'images/news/milikianpond.jpg' %}"
-                                 alt="Alexanderson Award"
-                                 class="img-fluid float-end ms-5 mb-3 custom-img"
-                                 width="310px"
-                                 height="auto" />
-                            {% placeholder 'Resources-landing-content' %}
-                        </span>
-                    </div>
-                    <div class="tab-pane fade"
-                         id="careers-advice"
-                         role="tabpanel"
-                         aria-labelledby="careers-advice"
-                         tabindex="0">
-                        <h2>Careers Advice</h2>
-                        <span class="fs-6">{% placeholder 'careers-advice-content' %}</span>
-                    </div>
-                    <div class="tab-pane fade"
-                         id="open-textbook-initiative"
-                         role="tabpanel"
-                         aria-labelledby="v-pills-open-textbook"
-                         tabindex="0">
-                        <h2>Open Textbook Initative</h2>
-                        <span class="fs-6">{% placeholder 'open-textbook-content' %}</span>
-                    </div>
-                    <div class="tab-pane fade"
-                         id="videos"
-                         role="tabpanel"
-                         aria-labelledby="videos-tab"
-                         tabindex="0">
-                        <h2>Videos</h2>
-                        <span class="fs-6">{% placeholder 'videos-content' %}</span>
-                    </div>
-                    <div class="tab-pane fade"
-                         id="problem-list"
-                         role="tabpanel"
-                         aria-labelledby="problem-list"
-                         tabindex="0">
-                        <h2>Problem List</h2>
-                        <span class="fs-6">{% placeholder 'problem-list-content' %}</span>
-                    </div>
-                    <div class="tab-pane fade"
-                         id="preprint-series"
-                         role="tabpanel"
-                         aria-labelledby="v-pills-preprint"
-                         tabindex="0">
-                        <h2>Preprint Series</h2>
-                        <span class="fs-6">{% placeholder 'preprint-series-content' %}</span>
-                    </div>
-                    <div class="tab-pane fade"
-                         id="published-paper"
-                         role="tabpanel"
-                         aria-labelledby="v-pills-published-paper"
-                         tabindex="0">
-                        <h2>Published Paper</h2>
-                        <span class="fs-6">{% placeholder 'Published-paper-content' %}</span>
-                    </div>
-                </div>
-            </div>
+  <section tag="banner">
+    <div class="banner-container text-center"
+         style="background-color:#90adc6;
+                min-height:150px"
+         width="100%">banner text some place</div>
+  </section>
+  <div class="container">
+    <div class="row mt-5 mb-4">
+      <div class="col-auto">
+        <div class="d-flex">
+          <div class="nav flex-column nav-pills me-3"
+               id="v-pills-tab"
+               role="tablist"
+               aria-orientation="vertical">
+            <button class="nav-link active"
+                    id="resources-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#resources"
+                    type="button"
+                    role="tab"
+                    aria-controls="resources">Resources</button>
+            <button class="nav-link"
+                    id="careers-advice-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#careers-advice"
+                    type="button"
+                    role="tab"
+                    aria-controls="careers-advice"
+                    aria-selected="false">Math Careers Advice</button>
+            <button class="nav-link"
+                    id="open-textbook-initiative-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#open-textbook-initiative"
+                    type="button"
+                    role="tab"
+                    aria-controls="open-textbook-initiative">Open Textbook Initiative</button>
+            <button class="nav-link"
+                    id="videos-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#videos"
+                    type="button"
+                    role="tab"
+                    aria-controls="videos">Videos</button>
+            <button class="nav-link"
+                    id="problem-list-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#problem-list"
+                    type="button"
+                    role="pill"
+                    aria-controls="problem-list"
+                    aria-selected="false">Problem Lists</button>
+            <button class="nav-link"
+                    id="preprint-series-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#preprint-series"
+                    type="button"
+                    role="tab"
+                    aria-controls="math-monday"
+                    aria-selected="false">Preprint Series</button>
+            <button class="nav-link"
+                    id="published-paper-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#published-paper"
+                    type="button"
+                    role="tab"
+                    aria-controls="math-border"
+                    aria-selected="false">Published Papers</button>
+          </div>
         </div>
+      </div>
+      <div class="col theme-bg">
+        <div class="tab-content p-3" id="v-pills-tabContent">
+          <div class="tab-pane fade show active"
+               id="resources"
+               role="tabpanel"
+               aria-labelledby="v-pills-resources"
+               tabindex="0">
+            <h2>Resources Landing</h2>
+            <span class="fs-5">
+              <img src="{% static 'images/landing/resources-braille.png' %}"
+                   alt="Braille"
+                   class="img-fluid float-end ms-2 mb-2"
+                   width="450px"
+                   height="" />
+              {% placeholder 'Resources-landing-content' %}
+            </span>
+          </div>
+          <div class="tab-pane fade"
+               id="careers-advice"
+               role="tabpanel"
+               aria-labelledby="careers-advice"
+               tabindex="0">
+            <h2>Careers Advice</h2>
+            <span class="fs-5">{% placeholder 'careers-advice-content' %}</span>
+          </div>
+          <div class="tab-pane fade"
+               id="open-textbook-initiative"
+               role="tabpanel"
+               aria-labelledby="v-pills-open-textbook"
+               tabindex="0">
+            <h2>Open Textbook Initative</h2>
+            <span class="fs-5">{% placeholder 'open-textbook-content' %}</span>
+          </div>
+          <div class="tab-pane fade"
+               id="videos"
+               role="tabpanel"
+               aria-labelledby="videos-tab"
+               tabindex="0">
+            <h2>Videos</h2>
+            <span class="fs-5">{% placeholder 'videos-content' %}</span>
+          </div>
+          <div class="tab-pane fade"
+               id="problem-list"
+               role="tabpanel"
+               aria-labelledby="problem-list"
+               tabindex="0">
+            <h2>Problem Lists</h2>
+            <span class="fs-5">{% placeholder 'problem-list-content' %}</span>
+          </div>
+          <div class="tab-pane fade"
+               id="preprint-series"
+               role="tabpanel"
+               aria-labelledby="v-pills-preprint"
+               tabindex="0">
+            <h2>Preprint Series</h2>
+            <span class="fs-5">{% placeholder 'preprint-series-content' %}</span>
+          </div>
+          <div class="tab-pane fade"
+               id="published-paper"
+               role="tabpanel"
+               aria-labelledby="v-pills-published-paper"
+               tabindex="0">
+            <h2>Published Paper</h2>
+            <span class="fs-5">{% placeholder 'Published-paper-content' %}</span>
+          </div>
+        </div>
+      </div>
     </div>
-    <script>
-  const triggerTabList = document.querySelectorAll("#v-pills-tab button");
-  triggerTabList.forEach((triggerEl) => {
-    const tabTrigger = new bootstrap.Tab(triggerEl);
-
-    triggerEl.addEventListener("click", (event) => {
-      event.preventDefault();
-      tabTrigger.show();
-    });
-  });
-
-  const activateTabFromHash = () => {
-  if (window.location.hash) {
-    let targetHash = window.location.hash;
-    console.log(targetHash)
-    const triggerEl = document.querySelector(`#v-pills-tab button[data-bs-target="${targetHash}"]`);
-    console.log(triggerEl)
-    if (triggerEl) {
-      let tabInstance = bootstrap.Tab.getInstance(triggerEl);
-      if (!tabInstance) {
-        tabInstance = new bootstrap.Tab(triggerEl);
-      }
-      tabInstance.show();
-    } else {
-      console.log(`No tab found for hash: ${targetHash}`);
-    }
-  }
-};
-
-activateTabFromHash();
-
-window.addEventListener("hashchange", activateTabFromHash, false);
-    </script>
+  </div>
 {% endblock content %}
