@@ -64,6 +64,11 @@ INSTALLED_APPS = [
     "easy_thumbnails",
     "djangocms_text_ckeditor",
     "djangocms_picture",
+    "djangocms_file",
+    "djangocms_video",
+    "djangocms_googlemap",
+    "djangocms_snippet",
+    "djangocms_style",
 ]
 
 ##django pictures##
