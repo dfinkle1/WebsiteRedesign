@@ -111,7 +111,7 @@ nav {
   font-style: normal;
   font-variation-settings: "slnt" 0;
 }
-@media (min-width: 1180px) {
+@media (min-width: 1400px) {
   .navbar-nav .dropdown:hover .dropdown-menu {
     display: block;
     border-bottom: 1px solid gray;
@@ -124,7 +124,7 @@ nav {
     width: auto;
   }
 }
-@media (max-width: 1400px) {
+@media (max-width: 1179px) {
   .d-flex {
     display: block !important;
   }

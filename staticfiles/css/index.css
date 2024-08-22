@@ -100,6 +100,10 @@ body {
   font-size: 1.3rem;
 }
 
+.navbar-nav .dropdown {
+  padding-left: 5px;
+}
+
 nav {
   font-family: "Inter", sans-serif;
   font-optical-sizing: auto;
@@ -120,7 +124,7 @@ nav {
     width: auto;
   }
 }
-@media (max-width: 1179px) {
+@media (max-width: 1400px) {
   .d-flex {
     display: block !important;
   }
