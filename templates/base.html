@@ -123,7 +123,7 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav mb-2 mb-lg-0">
-              <a href="{% url 'index' %}" class="nav-link">Home</a>
+              <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
               <div class="dropdown">
                 <a class="nav-link dropdown-toggle"
                    href="{% page_url 'collaborative' %}"
@@ -332,6 +332,7 @@
         </div>
       </nav>
     </header>
+    
     {% block content %}
     {% endblock content %}
     <div class="btn-group me-3 mb-2 btn-group position-fixed bottom-0 end-0"
