@@ -276,6 +276,12 @@ footer {
   color: var(--aimblue);
 }
 
+.header-banner {
+  background-color: #1f4467;
+  color: #fff;
+  padding: 2.5rem;
+}
+
 .banner {
   background-color: #5757bf; /* Background color */
   color: #ffffff; /* Text color */
