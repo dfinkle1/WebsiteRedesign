@@ -80,6 +80,7 @@ body {
   align-items: center;
   justify-content: center;
   border: 0;
+  left: -50px;
 }
 
 .next-btn {
@@ -92,7 +93,7 @@ body {
   align-items: center;
   justify-content: center;
   border: 0;
-  right: 0;
+  right: -50px;
 }
 
 .navbar {
