@@ -14,9 +14,6 @@ class MyModel(models.Model):
     def my_placeholder(self):
         return get_placeholder_from_slot(self.placeholders, "slot_name")
 
-    def get_template(self):
-        return "templates/testtemplate.html"
-
     # your methods
 
 
@@ -31,3 +28,14 @@ class StaffMember(CMSPlugin):
 
     def __str__(self):
         return self.name or "Unnamed Staff Member"
+
+
+class NewsArticle(CMSPlugin):
+    title = models.CharField(max_length=255, blank=True, null=True)
+    text = models.TextField(blank=True, null=True)
+    news_image = FilerImageField(null=True, blank=True, on_delete=models.CASCADE)
+    published_date = models.DateTimeField(auto_now_add=True)
+    featured = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title or "Unnamed News Article"

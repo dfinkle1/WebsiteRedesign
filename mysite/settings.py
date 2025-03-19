@@ -203,7 +203,7 @@ USE_TZ = True
 ##### DJANGO CMS #######
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = BASE_DIR / "media"
 CMS_CONFIRM_VERSION4 = True
 USE_I18N = False
 DJANGOCMS_VERSIONING_ALLOW_DELETING_VERSIONS = True
@@ -212,7 +212,6 @@ X_FRAME_OPTIONS = "SAMEORIGIN"
 SITE_ID = 2
 FILER_ENABLE_PERMISSIONS = True
 FILER_ENABLE_SUBDIRECTORIES = True
-
 
 CMS_TEMPLATES = [
     ("template1.html", "Basic Template"),
@@ -224,6 +223,9 @@ CMS_TEMPLATES = [
     ("resources.html", "resources template"),
     ("news.html", "news template"),
     ("staff_member_plugin.html", "update staff template"),
+    ("FRG/frg-landing.html", "frg landing page"),
+    ("FRG/frg-activities.html", "frg activities"),
+    ("FRG/frg-papers.html", "frg papers"),
 ]
 
 ###########

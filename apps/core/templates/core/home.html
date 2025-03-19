@@ -65,30 +65,19 @@
         <div class="col-md-8 p-1">
           <div class="theme-bg p-3 rounded h-100">
             <h3 class="pb-4 mb-4 fst-italic border-bottom">Recent News</h3>
-            <img src="{% static 'images/news/alexandersonAward.jpg' %}"
-                 alt="Alexanderson Award"
-                 class="img-fluid float-start me-3 mb-3"
-                 width="350px"
-                 height="auto" />
-            <div>
-              <h5 class="text-primary-emphasis">Alexanderson Award</h5>
-              <p class="fs-5">
-                The American Institute of Mathematics has announced the fifth
-                Alexanderson Award. The award is given in honor of Gerald
-                Alexanderson, Professor of Mathematics at Santa Clara
-                University and founding chair of AIM’s Board of Trustees. The
-                Alexanderson Award recognizes outstanding research articles
-                arising from AIM research activities that have been published
-                within the past three years. The recipients of this year’s
-                Alexanderson Award are Kaisa Matomäki, Maksym Radziwiłł,
-                Terence Tao, Joni Teräväinen, and Tamar Ziegler for their
-                paper “Higher uniformity of bounded multiplicative functions
-                in short intervals on average” published in the Annals of
-                Mathematics in 2023. The research originated from a working
-                group at the AIM workshop “Sarnak’s conjecture” in December,
-                2018
-              </p>
-            </div>
+            {% if featured_article %}
+              <img src="{{ featured_article.news_image.url }}"
+                   alt="{{ featured_article.title }}"
+                   class="img-fluid float-start me-3 mb-3"
+                   width="350px"
+                   height="auto" />
+              <div>
+                <h5 class="text-primary-emphasis">{{ featured_article.title }}</h5>
+                <p class="fs-5">{{ featured_article.text }}</p>
+              </div>
+            {% else %}
+              <p>no current article</p>
+            {% endif %}
           </div>
         </div>
         <div class="col-md-4 col-sm-12 p-1">
@@ -143,8 +132,13 @@
     <section tag="carousel of images">
       <div class="mb-3 position-relative">
         <button id="prev-btn" class="prev-btn">
-          <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-chevron-compact-left" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223"/>
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="50"
+               height="50"
+               fill="currentColor"
+               class="bi bi-chevron-compact-left"
+               viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223" />
           </svg>
         </button>
         <div class="scrolling-wrapper-flexbox" id="horizontal-container">
@@ -237,8 +231,13 @@
           </div>
         </div>
         <button id="next-btn" class="next-btn">
-          <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-chevron-compact-right" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671"/>
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="50"
+               height="50"
+               fill="currentColor"
+               class="bi bi-chevron-compact-right"
+               viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671" />
           </svg>
         </button>
       </div>
