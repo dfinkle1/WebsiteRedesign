@@ -23,6 +23,10 @@ def my_model_detail(request, id):
 
 
 def home(request):
+    featured_article = (
+        NewsArticle.objects.filter(featured=True).order_by("-published_date").first()
+    )
+    recent_articles = NewsArticle.objects.order_by("-published_date")[:5]
     current_date = date.today()
     old_workshops_after_today = OldWorkshop.objects.filter(
         workshopstartdate__date__gte=current_date
@@ -30,6 +34,8 @@ def home(request):
     # template = loader.get_template("workshop/index.html")
     context = {
         "old_workshops_after_today": old_workshops_after_today,
+        "featured_article": featured_article,
+        "recent_articles": recent_articles,
     }
 
     return render(request, "core/home.html", context)
@@ -96,12 +102,6 @@ def codeofconduct(request):
 
 
 # navbar/visiting
-def visiting_view(request):
-    return render(request, "navbar/visiting/visiting.html")
-
-
-def resources_view(request):
-    return render(request, "navbar/resources/resources.html")
 
 
 # navbar/news
@@ -111,4 +111,14 @@ def news_view(request):
     return render(request, "navbar/news/news.html")
 
 
-#
+# FRG
+def frg1_view(request):
+    return render(request, "FRG/aimfrg.html")
+
+
+def frg2_view(request):
+    return render(request, "FRG/papers.html")
+
+
+def frg3_view(request):
+    return render(request, "FRG/activities.html")
