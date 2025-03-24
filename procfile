@@ -1,1 +1,0 @@
-web : gunicorn websiteredesign.wsgi --log-file -
