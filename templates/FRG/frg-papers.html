@@ -1,3 +1,4 @@
+{% load cms_tags sekizai_tags %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 {% load static %}
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
@@ -23,16 +24,16 @@ MathJax.Hub.Config({
         <td id="layout-menu">
           <div class="menu-category">AIM FRG</div>
           <div class="menu-item">
-            <a href="aimfrg.html">Home</a>
+            <a href="{% page_url 'frg' %}">Home</a>
           </div>
           <div class="menu-item">
             <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1854398">NSF&nbsp;Grant</a>
           </div>
           <div class="menu-item">
-            <a href="papers.html" class="current">Publications</a>
+            <a href="{% page_url 'frg' %}papers" class="current">Publications</a>
           </div>
           <div class="menu-item">
-            <a href="activities.html">Activities</a>
+            <a href="{% page_url 'frg' %}activities">Activities</a>
           </div>
           <div class="menu-item">
             <a href="https://vimeo.com/showcase/7398886">Videos</a>

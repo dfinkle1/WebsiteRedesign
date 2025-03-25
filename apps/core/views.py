@@ -38,7 +38,7 @@ def home(request):
         "recent_articles": recent_articles,
     }
 
-    return render(request, "core/home.html", context)
+    return render(request, "home.html", context)
 
 
 def filter_workshops(request):

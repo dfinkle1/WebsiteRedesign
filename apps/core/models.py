@@ -4,6 +4,8 @@ from cms.utils.placeholder import get_placeholder_from_slot
 from functools import cached_property
 from cms.models import CMSPlugin
 from filer.fields.image import FilerImageField
+from cms.models.pluginmodel import CMSPlugin
+from djangocms_text_ckeditor.fields import HTMLField
 
 
 class MyModel(models.Model):
@@ -32,7 +34,7 @@ class StaffMember(CMSPlugin):
 
 class NewsArticle(CMSPlugin):
     title = models.CharField(max_length=255, blank=True, null=True)
-    text = models.TextField(blank=True, null=True)
+    text = HTMLField(blank=True, null=True)
     news_image = FilerImageField(null=True, blank=True, on_delete=models.CASCADE)
     published_date = models.DateTimeField(auto_now_add=True)
     featured = models.BooleanField(default=False)
