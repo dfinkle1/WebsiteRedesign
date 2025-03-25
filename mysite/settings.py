@@ -20,6 +20,13 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 
+ALLOWED_HOSTS = ["localhost"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost:8000"]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8080",
+    "http://127.0.0.1:8000",
+]
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -44,6 +51,7 @@ INSTALLED_APPS = [
     "mysite",
     "participants.apps.ParticipantsConfig",
     "apps.workshops.apps.WorkshopsConfig",
+    "apps.frg.apps.FrgConfig",
     "apps.core.apps.CoreConfig",
     "djangocms_admin_style",
     "django.contrib.admin",
@@ -59,6 +67,7 @@ INSTALLED_APPS = [
     "treebeard",
     "djangocms_versioning",
     "djangocms_alias",
+    "corsheaders",
     "sekizai",
     "filer",
     "easy_thumbnails",
@@ -91,6 +100,7 @@ THUMBNAIL_PROCESSORS = (
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -104,19 +114,17 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
-##white noise
-# STORAGES = {
-#     "staticfiles": {
-#         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-#     },
-# }
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+TEXT_INLINE_EDITING = True
+
 
 ##
 X_FRAME_OPTIONS = "SAMEORIGIN"
 
 ROOT_URLCONF = "mysite.urls"
+
 
 TEMPLATES = [
     {
@@ -153,21 +161,7 @@ TEXT_ADDITIONAL_ATTRIBUTES = (
 )
 
 
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": "aim",
-#         "USER": "daniel",
-#         "PASSWORD": "",
-#         "HOST": "localhost",
-#         "PORT": "",
-#     }
-# }
 DATABASES = {"default": dj_database_url.config(default=DATABASE_URL, conn_max_age=600)}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -203,13 +197,13 @@ USE_TZ = True
 
 ##### DJANGO CMS #######
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+# MEDIA_URL = "/media/"
+# MEDIA_ROOT = BASE_DIR / "media"
 CMS_CONFIRM_VERSION4 = True
 USE_I18N = False
 DJANGOCMS_VERSIONING_ALLOW_DELETING_VERSIONS = True
 
-X_FRAME_OPTIONS = "SAMEORIGIN"
+
 SITE_ID = 2
 FILER_ENABLE_PERMISSIONS = True
 FILER_ENABLE_SUBDIRECTORIES = True
@@ -217,6 +211,7 @@ FILER_ENABLE_SUBDIRECTORIES = True
 CMS_TEMPLATES = [
     ("template1.html", "Basic Template"),
     ("testtemplate.html", "customcms"),
+    ("home.html", "home"),
     ("about.html", "about"),
     ("focused-landing.html", "focused collaborative research"),
     ("joyfulmathematics.html", "joyful mathematics template"),
@@ -245,28 +240,66 @@ CMS_TEMPLATES = [
 
 USE_S3 = os.getenv("USE_S3") == "TRUE"
 
+# DEFAULT_FILE_STORAGE = "utils.storages_backends.MediaStorage"
+
+USE_S3 = os.getenv("USE_S3") == "TRUE"
+
 if USE_S3:
-    # aws settings
+    # AWS Credentials
     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
     AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
     AWS_DEFAULT_ACL = "public-read"
-    # AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
     AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
-    # aws cloudfront
-    AWS_CLOUDFRONT_DOMAIN = "https://dk87yvhh7cphv.cloudfront.net"
-    # s3 static settings
+
+    # Static files
     AWS_LOCATION = "static"
-    STATIC_URL = f"https://{AWS_CLOUDFRONT_DOMAIN}/{AWS_LOCATION}/"
+    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/"
     STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+    # Media files
+    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
+
 else:
     STATIC_URL = "/static/"
     STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+# Ensure static files directory is detected
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
+
+# USE_S3 = os.getenv('USE_S3') == 'TRUE'
+
+# if USE_S3:
+#     # aws settings
+#     AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+#     AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+#     AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+#     AWS_DEFAULT_ACL = 'public-read'
+#     AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+#     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+#     # s3 static settings
+#     AWS_LOCATION = 'static'
+#     STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
+#     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# else:
+#     STATIC_URL = '/static/'
+#     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+# STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 MEDIA_URL = "/mediafiles/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
+
+
+# MEDIA_URL = "/media/"
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 
 # Default primary key field type
