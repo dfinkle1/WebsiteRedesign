@@ -20,17 +20,18 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 
-ALLOWED_HOSTS = ["localhost"]
-CSRF_TRUSTED_ORIGINS = ["http://localhost:8000"]
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8080",
-    "http://127.0.0.1:8000",
-]
+# ALLOWED_HOSTS = ["localhost"]
+# CSRF_TRUSTED_ORIGINS = ["http://localhost:8000"]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:8080",
+#     "http://127.0.0.1:8000",
+# ]
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 DATABASE_URL = os.getenv("DATABASE_URL")
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -39,7 +40,7 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 SECRET_KEY = str(os.getenv("SECRET_KEY"))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -67,7 +68,6 @@ INSTALLED_APPS = [
     "treebeard",
     "djangocms_versioning",
     "djangocms_alias",
-    "corsheaders",
     "sekizai",
     "filer",
     "easy_thumbnails",
@@ -100,7 +100,6 @@ THUMBNAIL_PROCESSORS = (
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -115,7 +114,7 @@ MIDDLEWARE = [
 ]
 
 
-# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 TEXT_INLINE_EDITING = True
 
@@ -238,9 +237,6 @@ CMS_TEMPLATES = [
 #     BASE_DIR / "static",
 # ]
 
-USE_S3 = os.getenv("USE_S3") == "TRUE"
-
-# DEFAULT_FILE_STORAGE = "utils.storages_backends.MediaStorage"
 
 USE_S3 = os.getenv("USE_S3") == "TRUE"
 
