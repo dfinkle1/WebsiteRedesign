@@ -1,7 +1,6 @@
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 from django.utils.translation import gettext as _
-from .forms import StaffMemberForm
 from .models import StaffMember
 
 

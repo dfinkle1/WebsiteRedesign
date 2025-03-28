@@ -23,7 +23,7 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 SECRET_KEY = str(os.getenv("SECRET_KEY"))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
@@ -188,6 +188,7 @@ FILER_ENABLE_SUBDIRECTORIES = True
 
 CMS_TEMPLATES = [
     ("template1.html", "Basic Template"),
+    ("FRG/frg-resources.html", "frg resources"),
     ("testtemplate.html", "customcms"),
     ("home.html", "home"),
     ("about.html", "about"),

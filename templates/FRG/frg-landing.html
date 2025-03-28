@@ -1,5 +1,5 @@
+{% extends "base.html" %}
 {% load cms_tags sekizai_tags %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 {% load static %}
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
   <head>
@@ -17,36 +17,40 @@ MathJax.Hub.Config({
     </script>
     <!-- End MathJax -->
   </head>
-  <body>
-    <table summary="Table for page layout." id="tlayout">
-      <tr valign="top">
-        <td id="layout-menu">
-          <div class="menu-category">AIM FRG</div>
-          <div class="menu-item">
-            <a href="{% page_url 'frg' %}" class="current">Home</a>
-          </div>
-          <div class="menu-item">
-            <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1854398">NSF&nbsp;Grant</a>
-          </div>
-          <div class="menu-item">
-            <a href="{% page_url 'frg' %}papers">Publications</a>
-          </div>
-          <div class="menu-item">
-            <a href="{% page_url 'frg' %}activities">Activities</a>
-          </div>
-          <div class="menu-item">
-            <a href="https://vimeo.com/showcase/7398886">Videos</a>
-          </div>
-          <div class="menu-item">
-            <a href="./references/">References</a>
-          </div>
-        </td>
-        <td id="layout-content">
-          <div id="toptitle">
-            <h1>FRG: Averages of L-functions and Arithmetic Stratification</h1>
-          </div>
-          <p>
-            This is the archive for the NSF-funded <a href="https://new.nsf.gov/funding/opportunities/focused-research-groups-mathematical-sciences"
+  {% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/jemdoc.css' %}" />
+  {% endblock extra_css %}
+  {% block content %}
+    <body>
+      <table summary="Table for page layout." id="tlayout">
+        <tr valign="top">
+          <td id="layout-menu">
+            <div class="menu-category">AIM FRG</div>
+            <div class="menu-item">
+              <a href="{% page_url 'frg' %}" class="current">Home</a>
+            </div>
+            <div class="menu-item">
+              <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1854398">NSF&nbsp;Grant</a>
+            </div>
+            <div class="menu-item">
+              <a href="{% page_url 'frg' %}papers">Publications</a>
+            </div>
+            <div class="menu-item">
+              <a href="{% page_url 'frg' %}activities">Activities</a>
+            </div>
+            <div class="menu-item">
+              <a href="https://vimeo.com/showcase/7398886">Videos</a>
+            </div>
+            <div class="menu-item">
+              <a href="./references/">References</a>
+            </div>
+          </td>
+          <td id="layout-content">
+            <div id="toptitle">
+              <h1>FRG: Averages of L-functions and Arithmetic Stratification</h1>
+            </div>
+            <p>
+              This is the archive for the NSF-funded <a href="https://new.nsf.gov/funding/opportunities/focused-research-groups-mathematical-sciences"
     target
     ldquo
     blank
@@ -55,119 +59,120 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>NSF grant DMS-1854398</a> and were centered at the <a href="https://aimath.org/" target=&ldquo;blank&rdquo;>American Institute of Mathematics</a>.
-          </p>
-          <p>
-            For a detailed record of the FRG's activities, a list of publications, videos of events, and other information, please see the links on the sidebar.
-          </p>
-          <h2>Personnel</h2>
-          <h3>Principal Investigators</h3>
-          <ul>
-            <li>
-              <p>PI: Brian Conrey (AIM)</p>
-            </li>
-            <li>
-              <p>co-PIs: Henryk Iwaniec (Rutgers), Jonathan Keating (Oxford), K. Soundararajan (Stanford), Trevor Wooley (Purdue)</p>
-            </li>
-          </ul>
-          <h3>Research Scientists</h3>
-          <ul>
-            <li>
-              <p>Brad Rodgers (Queen's)</p>
-            </li>
-            <li>
-              <p>Caroline Turnage-Butterbaugh (Carleton)</p>
-            </li>
-          </ul>
-          <h3>Postdoctoral Staff</h3>
-          <ol>
-            <li>
-              <p>Siegfred Baluyot (2020-2023; currently tenure-track faculty at East Carolina University)</p>
-            </li>
-            <li>
-              <p>Alessandro Fazzari (2022-2023; currently postdoc at Université de Montréal)</p>
-            </li>
-            <li>
-              <p>Amita Malik (2020-2021; currently tenure-track faculty at Penn State University)</p>
-            </li>
-            <li>
-              <p>Alessandro Masullo (2019-2020)</p>
-            </li>
-            <li>
-              <p>David Nguyen (2021-2022; currently postdoc at Queen's University, Kingston)</p>
-            </li>
-            <li>
-              <p>Fei Wei (2023-2024; currently postdoc at University of Sussex)</p>
-            </li>
-          </ol>
-          <h3>Event Organization</h3>
-          <ul>
-            <li>
-              <p>Research Seminar: Brian Conrey (AIM)</p>
-            </li>
-            <li>
-              <p>Grad Seminar: Anurag Sahay (Purdue)</p>
-            </li>
-            <li>
-              <p>2020 Zoom Workshop: Brian Conrey (AIM)</p>
-            </li>
-            <li>
-              <p>2021 In-Person Workshop: Emilia Alvarez (Bristol) and Brian Conrey (AIM)</p>
-            </li>
-            <li>
-              <p>Happy Hours: Ayla Gafni (Mississippi)</p>
-            </li>
-            <li>
-              <p>Special Icebreaker Happy Hour: Emilia Alvarez (Bristol)</p>
-            </li>
-          </ul>
-          <h3>Tech and Logistics Support</h3>
-          <ul>
-            <li>
-              <p>Terry Busk (AIM)</p>
-            </li>
-          </ul>
-          <h2>List of Participants</h2>
-          <p>
-            Emilia Alvarez (Bristol), Julio Andrade (Exeter), Rodrigo Angelo (Stanford), Olga Balkanova (Steklov), Siegfred Baluyot (East Carolina), Sandro Bettin (Genova), Hung Bui (Manchester), Martin Čech (Charles), Andrés Chirre (PUCP Lima), Fatma Çiçek (UNBC), Vorrapan Chandee (Kansas State), Brian Conrey (AIM), Agniva Dasgupta (UT Dallas), Chantal David (Concordia), Patrik Demjan (Bristol), Ertan Elma (Lethbridge), David Farmer (AIM), Alessandro Fazzari (Montréal), Alexandra Florea (UC Irvine), Johannes Forkel (Oxford), Ayla Gafni (Mississippi), Louis Gaudet (UMass Amherst), Dan Goldston (SJSU), Steve Gonek (Rochester), Ofir Gorodetsky (Technion), Alia Hamieh (UNBC), Seth Hardy (Warwick), Adam Harper (Warwick), Roman Holowinsky (Ohio State), Henryk Iwaniec (Rutgers), Jonathan Keating (Oxford), Sally Koutsoliotas (Bucknell), Emmanuel Kowalski (ETH Zürich), Vivian Kuperberg (ETH Zürich), Chung-Hang Kwan (UCL), Matilde Lalín (Montréal), Steve Lester (KCL), Xiannan Li (Kansas State), Hua Lin (Northwestern), Amita Malik (Penn State), Alessandro Masullo (AIM), Andean Medjedovic (Waterloo), Micah Milinovich (Mississippi), Paul Nelson (Aarhus), Nathan Ng (Lethbridge), David Nguyen (Queen's), Jaime Palacios (Mississippi), Javier Pliego (Genova), Brad Rodgers (Queen's), Michael Rubinstein (Waterloo), Anurag Sahay (Purdue), Will Sawin (Princeton), Quanli Shen (Shandong, Weihai), Nina Snaith (Bristol), K. Soundararajan (Stanford), Jakob Streipel (Buffalo), Josh Stucky (GeorgiaTech), Caroline Turnage-Butterbaugh (Carleton), Matt Tyler (Stanford), Fei Wei (Sussex), Trevor Wooley (Purdue), Max Wenqiang Xu (NYU Courant), Daodao Yang (Montréal), Matt Young (Rutgers)
-          </p>
-          <p>
-            The affiliations listed above are the last academic institutions that the participants were with at the time of the FRG ending.
-          </p>
-          <h2>Scientific Goals</h2>
-          <p>
-            Some of the most difficult challenges in all of mathematics, such as the Riemann Hypothesis and the Birch and Swinnerton-Dyer conjecture, are naturally phrased in terms of L-functions. These functions encode information such as how many primes there are up to a given magnitude, or the frequency of rational number solutions to certain equations, or the distribution of special points on a surface, all of which are important in number theory. L-functions are often studied in collections called families.
-          </p>
-          <p>
-            In recent years, researchers have found very precise conjectures about the statistics of values and zeros of the Riemann zeta function and other families of L-functions. The &ldquo;recipe&rdquo; of Conrey, Farmer, Keating, Rubinstein and Snaith, and the multiple Dirichlet series approach of Diaconu, Hoffstein and Goldfeld, both in the late 90's and early 2000's, opened the door to a deeper understanding of moments in families of L-functions. Since then there have been hundreds of papers about moments of L-functions. The deeper but analogous &ldquo;ratios&rdquo; conjectures of Conrey, Farmer and Zirnbauer have had a corresponding effect on studies of zeros of L-functions in families. Motivated by work of Bogomolny and Keating, seven papers by Conrey and Keating have elaborated an arithmetic approach to understanding these conjectures in the case of the Riemann zeta-function by understanding explicit estimates for (generalized) divisor correlations. The main aim of this FRG grant was to understand this mechanism in the case of other families of L-functions.
-          </p>
-          <p>
-            The basic goal of the FRG was to better understand, from a number theoretic perspective, the recipe for moments of families of L-functions, and possibly implement that understanding to make some inroads into actually proving the moments. Another goal was to link the underlying mechanism to Manin's conjectures about point counting on complicated varieties. A third goal was to understand exponential sums that govern such computations. And finally, to establish a rigorous random matrix theory analogue of the methods.
-          </p>
-          <p>
-            As the project progressed some new themes emerged. One was the ubiquitous appearance of Painlevé equations in the statistics of L-functions and charactersitic polynomials. Another was the central importance of \(\gamma_k(c)\) which is an indicator function of the changing shape of the main term in shifted divisor problems. Finally, there was the ever-increasing value of recognizing the structure of what we were doing in random matrix theory. An intrinsic difficulty in the latter is that it was unclear what the analogue of &ldquo;twisting&rdquo; by a Dirichlet polynomial was in the setting of random matrix theory.
-          </p>
-          <h2>Broader Impact</h2>
-          <p>
-            The FRG was partially successful on a number of its scientific goals. Going beyond that, one of the most important outcomes of the FRG project was the creation of the FRG Sococo community with close to 50 members. Regular weekly meetings, seminars, problem groups and social hours were held during the COVID pandemic. This community provided a blueprint for what is now the <a href="https://aimath.org/programs/researchcommunities/"
+            </p>
+            <p>
+              For a detailed record of the FRG's activities, a list of publications, videos of events, and other information, please see the links on the sidebar.
+            </p>
+            <h2>Personnel</h2>
+            <h3>Principal Investigators</h3>
+            <ul>
+              <li>
+                <p>PI: Brian Conrey (AIM)</p>
+              </li>
+              <li>
+                <p>co-PIs: Henryk Iwaniec (Rutgers), Jonathan Keating (Oxford), K. Soundararajan (Stanford), Trevor Wooley (Purdue)</p>
+              </li>
+            </ul>
+            <h3>Research Scientists</h3>
+            <ul>
+              <li>
+                <p>Brad Rodgers (Queen's)</p>
+              </li>
+              <li>
+                <p>Caroline Turnage-Butterbaugh (Carleton)</p>
+              </li>
+            </ul>
+            <h3>Postdoctoral Staff</h3>
+            <ol>
+              <li>
+                <p>Siegfred Baluyot (2020-2023; currently tenure-track faculty at East Carolina University)</p>
+              </li>
+              <li>
+                <p>Alessandro Fazzari (2022-2023; currently postdoc at Université de Montréal)</p>
+              </li>
+              <li>
+                <p>Amita Malik (2020-2021; currently tenure-track faculty at Penn State University)</p>
+              </li>
+              <li>
+                <p>Alessandro Masullo (2019-2020)</p>
+              </li>
+              <li>
+                <p>David Nguyen (2021-2022; currently postdoc at Queen's University, Kingston)</p>
+              </li>
+              <li>
+                <p>Fei Wei (2023-2024; currently postdoc at University of Sussex)</p>
+              </li>
+            </ol>
+            <h3>Event Organization</h3>
+            <ul>
+              <li>
+                <p>Research Seminar: Brian Conrey (AIM)</p>
+              </li>
+              <li>
+                <p>Grad Seminar: Anurag Sahay (Purdue)</p>
+              </li>
+              <li>
+                <p>2020 Zoom Workshop: Brian Conrey (AIM)</p>
+              </li>
+              <li>
+                <p>2021 In-Person Workshop: Emilia Alvarez (Bristol) and Brian Conrey (AIM)</p>
+              </li>
+              <li>
+                <p>Happy Hours: Ayla Gafni (Mississippi)</p>
+              </li>
+              <li>
+                <p>Special Icebreaker Happy Hour: Emilia Alvarez (Bristol)</p>
+              </li>
+            </ul>
+            <h3>Tech and Logistics Support</h3>
+            <ul>
+              <li>
+                <p>Terry Busk (AIM)</p>
+              </li>
+            </ul>
+            <h2>List of Participants</h2>
+            <p>
+              Emilia Alvarez (Bristol), Julio Andrade (Exeter), Rodrigo Angelo (Stanford), Olga Balkanova (Steklov), Siegfred Baluyot (East Carolina), Sandro Bettin (Genova), Hung Bui (Manchester), Martin Čech (Charles), Andrés Chirre (PUCP Lima), Fatma Çiçek (UNBC), Vorrapan Chandee (Kansas State), Brian Conrey (AIM), Agniva Dasgupta (UT Dallas), Chantal David (Concordia), Patrik Demjan (Bristol), Ertan Elma (Lethbridge), David Farmer (AIM), Alessandro Fazzari (Montréal), Alexandra Florea (UC Irvine), Johannes Forkel (Oxford), Ayla Gafni (Mississippi), Louis Gaudet (UMass Amherst), Dan Goldston (SJSU), Steve Gonek (Rochester), Ofir Gorodetsky (Technion), Alia Hamieh (UNBC), Seth Hardy (Warwick), Adam Harper (Warwick), Roman Holowinsky (Ohio State), Henryk Iwaniec (Rutgers), Jonathan Keating (Oxford), Sally Koutsoliotas (Bucknell), Emmanuel Kowalski (ETH Zürich), Vivian Kuperberg (ETH Zürich), Chung-Hang Kwan (UCL), Matilde Lalín (Montréal), Steve Lester (KCL), Xiannan Li (Kansas State), Hua Lin (Northwestern), Amita Malik (Penn State), Alessandro Masullo (AIM), Andean Medjedovic (Waterloo), Micah Milinovich (Mississippi), Paul Nelson (Aarhus), Nathan Ng (Lethbridge), David Nguyen (Queen's), Jaime Palacios (Mississippi), Javier Pliego (Genova), Brad Rodgers (Queen's), Michael Rubinstein (Waterloo), Anurag Sahay (Purdue), Will Sawin (Princeton), Quanli Shen (Shandong, Weihai), Nina Snaith (Bristol), K. Soundararajan (Stanford), Jakob Streipel (Buffalo), Josh Stucky (GeorgiaTech), Caroline Turnage-Butterbaugh (Carleton), Matt Tyler (Stanford), Fei Wei (Sussex), Trevor Wooley (Purdue), Max Wenqiang Xu (NYU Courant), Daodao Yang (Montréal), Matt Young (Rutgers)
+            </p>
+            <p>
+              The affiliations listed above are the last academic institutions that the participants were with at the time of the FRG ending.
+            </p>
+            <h2>Scientific Goals</h2>
+            <p>
+              Some of the most difficult challenges in all of mathematics, such as the Riemann Hypothesis and the Birch and Swinnerton-Dyer conjecture, are naturally phrased in terms of L-functions. These functions encode information such as how many primes there are up to a given magnitude, or the frequency of rational number solutions to certain equations, or the distribution of special points on a surface, all of which are important in number theory. L-functions are often studied in collections called families.
+            </p>
+            <p>
+              In recent years, researchers have found very precise conjectures about the statistics of values and zeros of the Riemann zeta function and other families of L-functions. The &ldquo;recipe&rdquo; of Conrey, Farmer, Keating, Rubinstein and Snaith, and the multiple Dirichlet series approach of Diaconu, Hoffstein and Goldfeld, both in the late 90's and early 2000's, opened the door to a deeper understanding of moments in families of L-functions. Since then there have been hundreds of papers about moments of L-functions. The deeper but analogous &ldquo;ratios&rdquo; conjectures of Conrey, Farmer and Zirnbauer have had a corresponding effect on studies of zeros of L-functions in families. Motivated by work of Bogomolny and Keating, seven papers by Conrey and Keating have elaborated an arithmetic approach to understanding these conjectures in the case of the Riemann zeta-function by understanding explicit estimates for (generalized) divisor correlations. The main aim of this FRG grant was to understand this mechanism in the case of other families of L-functions.
+            </p>
+            <p>
+              The basic goal of the FRG was to better understand, from a number theoretic perspective, the recipe for moments of families of L-functions, and possibly implement that understanding to make some inroads into actually proving the moments. Another goal was to link the underlying mechanism to Manin's conjectures about point counting on complicated varieties. A third goal was to understand exponential sums that govern such computations. And finally, to establish a rigorous random matrix theory analogue of the methods.
+            </p>
+            <p>
+              As the project progressed some new themes emerged. One was the ubiquitous appearance of Painlevé equations in the statistics of L-functions and charactersitic polynomials. Another was the central importance of \(\gamma_k(c)\) which is an indicator function of the changing shape of the main term in shifted divisor problems. Finally, there was the ever-increasing value of recognizing the structure of what we were doing in random matrix theory. An intrinsic difficulty in the latter is that it was unclear what the analogue of &ldquo;twisting&rdquo; by a Dirichlet polynomial was in the setting of random matrix theory.
+            </p>
+            <h2>Broader Impact</h2>
+            <p>
+              The FRG was partially successful on a number of its scientific goals. Going beyond that, one of the most important outcomes of the FRG project was the creation of the FRG Sococo community with close to 50 members. Regular weekly meetings, seminars, problem groups and social hours were held during the COVID pandemic. This community provided a blueprint for what is now the <a href="https://aimath.org/programs/researchcommunities/"
     target
     ldquo
     blank
     rdquo>AIM Research Communities</a> program.
-          </p>
-          <p>
-            When the threat of COVID had largely subsided many of the group met in person for a month long program at AIM. Two particular focus topics of this meeting were Painlevé equations and the \(\gamma_k(c)\) function.
-          </p>
-          <p>
-            Two Zoom seminars were run under the ambit of the FRG. The first was the FRG research seminar (organized by Brian Conrey) from 2020 to 2021 and second was the FRG graduate seminar (organized by Anurag Sahay) from 2021 to 2024.
-          </p>
-          <div id="footer">
-            <div id="footer-text">
-              Page generated 2024-12-13 20:46:36 EST, by <a href="https://github.com/wsshin/jemdoc_mathjax" target="blank">jemdoc+MathJax</a>.
-              (<a href="aimfrg.jemdoc">source</a>)
+            </p>
+            <p>
+              When the threat of COVID had largely subsided many of the group met in person for a month long program at AIM. Two particular focus topics of this meeting were Painlevé equations and the \(\gamma_k(c)\) function.
+            </p>
+            <p>
+              Two Zoom seminars were run under the ambit of the FRG. The first was the FRG research seminar (organized by Brian Conrey) from 2020 to 2021 and second was the FRG graduate seminar (organized by Anurag Sahay) from 2021 to 2024.
+            </p>
+            <div id="footer">
+              <div id="footer-text">
+                Page generated 2024-12-13 20:46:36 EST, by <a href="https://github.com/wsshin/jemdoc_mathjax" target="blank">jemdoc+MathJax</a>.
+                (<a href="aimfrg.jemdoc">source</a>)
+              </div>
             </div>
-          </div>
-        </td>
-      </tr>
-    </table>
-  </body>
+          </td>
+        </tr>
+      </table>
+    </body>
+  {% endblock content %}
 </html>

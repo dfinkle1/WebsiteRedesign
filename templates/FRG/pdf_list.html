@@ -1,0 +1,15 @@
+{# {% extends "base.html" %} #}
+{% load cms_tags sekizai_tags %}
+{% block content %}
+    <h2>PDF Files in FRG</h2>
+    <ul>
+        {% for pdf in pdf_files %}
+            <li>
+                <a href="{{ pdf.url }}" target="_blank">{{ pdf.original_filename }}</a>
+            </li>
+        {% empty %}
+            <li>No PDFs available.</li>
+            <p>Files: {{ pdf_files }}</p>
+        {% endfor %}
+    </ul>
+{% endblock content %}
