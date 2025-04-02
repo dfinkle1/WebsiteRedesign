@@ -22,11 +22,16 @@ class MyModel(models.Model):
 class StaffMember(CMSPlugin):
     name = models.CharField(max_length=255, blank=True, null=True)
     role = models.CharField(max_length=255, blank=True, null=True)
-    bio = models.TextField(blank=True, null=True)
+    bio = HTMLField(blank=True, null=True)
     staff_photo = FilerImageField(
         null=True, blank=True, related_name="profile_picture", on_delete=models.CASCADE
     )
+    email = models.CharField(max_length=255, blank=True, null=True)
     more_info_link = models.URLField(blank=True, null=True)
+
+    # ✅ Visibility field
+    is_visible = models.BooleanField(default=True)
+    order = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.name or "Unnamed Staff Member"
