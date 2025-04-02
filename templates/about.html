@@ -7,8 +7,17 @@
 {% block content %}
     <section class="header-banner" tag="banner">
         <div class="container">
-            <h2>About AIM</h2>
-            <h3 class="fst-italic">The American Institute of Mathematics</h3>
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <img src="{% static 'images/aim_white.png' %}"
+                         alt="AIM Logo"
+                         class="fluid"
+                         height="100px">
+                </div>
+                <div class="col">
+                    <h2>About AIM</h2>
+                </div>
+            </div>
         </div>
     </section>
     <div class="container">
@@ -101,294 +110,15 @@
                          role="tabpanel"
                          aria-labelledby="staff-tab"
                          tabindex="0">
-                        <ul class="nav nav-pills mb-3 justify-content-center"
-                            id="pills-tab"
-                            role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active"
-                                        id="pills-home-tab"
-                                        data-bs-toggle="pill"
-                                        data-bs-target="#pills-home"
-                                        type="button"
-                                        role="tab"
-                                        aria-controls="pills-home"
-                                        aria-selected="true">Staff</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link"
-                                        id="pills-profile-tab"
-                                        data-bs-toggle="pill"
-                                        data-bs-target="#pills-profile"
-                                        type="button"
-                                        role="tab"
-                                        aria-controls="pills-profile"
-                                        aria-selected="false">Board of Trustees</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link"
-                                        id="pills-contact-tab"
-                                        data-bs-toggle="pill"
-                                        data-bs-target="#pills-contact"
-                                        type="button"
-                                        role="tab"
-                                        aria-controls="pills-contact"
-                                        aria-selected="false">Advisory Board</button>
-                            </li>
-                        </ul>
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show active"
                                  id="pills-home"
                                  role="tabpanel"
                                  aria-labelledby="pills-home-tab"
                                  tabindex="0">
-                                <div class="content">
-                                    {% placeholder "staff_directory" %}
-                                    <div class="row mb-2 staff-content">
-                                        <div class="col-sm-3">
-                                            <img src="{% static 'images/people/claudia-draft.jpg' %}"
-                                                 alt="image here"
-                                                 style="width: 230px;
-                                                        height: 230px" />
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <div class="row">
-                                                <h3 class="col-sm-3 m-0">Claudia Rodriguez-Solorio</h3>
-                                                <a href="" class="col">more info</a>
-                                            </div>
-                                            <div class="position-tag">Community Outreach and Program Evaluation Specialist</div>
-                                            <p>
-                                                Dr. Rodriguez-Solorio holds a Ph.D. in Public Policy Analysis
-                                                from Pardee RAND Graduate School and a Master of Science in
-                                                Applied Mathematics from Arizona State University. Her research
-                                                interests include STEM education policy, program evaluation, and
-                                                retention strategies for historically underrepresented minority
-                                                students in STEM. At AIM, she supports special projects and
-                                                outreach initiatives.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <!-- new staff -->
-                                    <div class="row mb-2 staff-content">
-                                        <div class="col-sm-3">
-                                            <img src="{% static 'images/people/terry-draft.jpg' %}"
-                                                 alt="image here"
-                                                 class="img-fluid"
-                                                 style="width: 230px;
-                                                        height: 230px" />
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <h3 class="col-sm-3 m-0">Terry Busk</h3>
-                                            <a href="" class="col">more info</a>
-                                            <div class="clearfix"></div>
-                                            <div class="position-tag">Operations Manager</div>
-                                            <span>
-                                                Terry Busk joined the American Institute of Mathematics in mid
-                                                2017 as a logistics specialist supporting AIM’s math research
-                                                goals. As a former handyman and martial arts instructor, he’s a
-                                                multifaceted jack-of-all trades helping to manage day-to-day
-                                                operations, such as lecture recording and production, as well as
-                                                web development of both the Math Circles Network and AIM’s
-                                                general research goals. In 2020, he assisted in the development
-                                                of the MathCommunities.org initiative and continues to support
-                                                the development of new technical projects.
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <!-- end staff -->
-                                    <!-- new staff -->
-                                    <div class="row mb-2 staff-content">
-                                        <div class="col-sm-3">
-                                            <img src="{% static 'images/people/harpreet-draft.jpg' %}"
-                                                 alt="image here"
-                                                 style="width: 230px;
-                                                        height: 230px" />
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <div class="row">
-                                                <h3 class="col-sm-3 m-0">Harpreet Kaur</h3>
-                                                <a href="" class="col">more info</a>
-                                            </div>
-                                            <div class="position-tag">Executive Assistant</div>
-                                            <p>
-                                                Harpreet Kaur is assistant to the Director and Deputy Director
-                                                and is responsible for most of the logistical aspects of the AIM
-                                                workshop and SQuaREs programs. She has a bachelor’s degree in
-                                                economics and some additional graduate work from Panjab
-                                                University in India.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <!-- end staff -->
-                                </div>
-                            </div>
-                            <div class="tab-pane fade"
-                                 id="pills-profile"
-                                 role="tabpanel"
-                                 aria-labelledby="pills-profile-tab"
-                                 tabindex="0">
-                                <div class="content">
-                                    <div class="row mb-2 staff-content">
-                                        <div class="col-sm-3">
-                                            <img src="{% static 'images/people/claudia-draft.jpg' %}"
-                                                 alt="image here"
-                                                 style="width: 230px;
-                                                        height: 230px" />
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <div class="row">
-                                                <h3 class="col-sm-3 m-0">Not Daniel Finkle</h3>
-                                                <a href="" class="col">more info</a>
-                                            </div>
-                                            <div class="position-tag">Community Outreach and Program Evaluation Specialist</div>
-                                            <p>
-                                                Dr. Rodriguez-Solorio holds a Ph.D. in Public Policy Analysis
-                                                from Pardee RAND Graduate School and a Master of Science in
-                                                Applied Mathematics from Arizona State University. Her research
-                                                interests include STEM education policy, program evaluation, and
-                                                retention strategies for historically underrepresented minority
-                                                students in STEM. At AIM, she supports special projects and
-                                                outreach initiatives.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <!-- new staff -->
-                                    <div class="row mb-2 staff-content">
-                                        <div class="col-sm-3">
-                                            <img src="{% static 'images/people/terry-draft.jpg' %}"
-                                                 alt="image here"
-                                                 style="width: 230px;
-                                                        height: 230px" />
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <h3 class="col-sm-3 m-0">Maybe Daniel Finkle?</h3>
-                                            <a href="" class="col">more info</a>
-                                            <div class="clearfix"></div>
-                                            <div class="position-tag">Operations Manager</div>
-                                            <span>
-                                                Terry Busk joined the American Institute of Mathematics in mid
-                                                2017 as a logistics specialist supporting AIM’s math research
-                                                goals. As a former handyman and martial arts instructor, he’s a
-                                                multifaceted jack-of-all trades helping to manage day-to-day
-                                                operations, such as lecture recording and production, as well as
-                                                web development of both the Math Circles Network and AIM’s
-                                                general research goals. In 2020, he assisted in the development
-                                                of the MathCommunities.org initiative and continues to support
-                                                the development of new technical projects.
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <!-- end staff -->
-                                    <!-- new staff -->
-                                    <div class="row mb-2 staff-content">
-                                        <div class="col-sm-3">
-                                            <img src="{% static 'images/people/harpreet-draft.jpg' %}"
-                                                 alt="image here"
-                                                 style="width: 230px;
-                                                        height: 230px" />
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <div class="row">
-                                                <h3 class="col-sm-3 m-0">Harpreet Kaur</h3>
-                                                <a href="" class="col">more info</a>
-                                            </div>
-                                            <div class="position-tag">Executive Assistant</div>
-                                            <p>
-                                                Harpreet Kaur is assistant to the Director and Deputy Director
-                                                and is responsible for most of the logistical aspects of the AIM
-                                                workshop and SQuaREs programs. She has a bachelor’s degree in
-                                                economics and some additional graduate work from Panjab
-                                                University in India.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <!-- end staff -->
-                                </div>
-                            </div>
-                            <div class="tab-pane fade"
-                                 id="pills-contact"
-                                 role="tabpanel"
-                                 aria-labelledby="pills-contact-tab"
-                                 tabindex="0">
-                                <div class="content">
-                                    <div class="row mb-2 staff-content">
-                                        <div class="col-sm-3">
-                                            <img src="{% static 'images/people/claudia-draft.jpg' %}"
-                                                 alt="image here"
-                                                 style="width: 230px;
-                                                        height: 230px" />
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <div class="row">
-                                                <h3 class="col-sm-3 m-0">Claudia Rodriguez-Solorio</h3>
-                                                <a href="" class="col">more info</a>
-                                            </div>
-                                            <div class="position-tag">Community Outreach and Program Evaluation Specialist</div>
-                                            <p>
-                                                Dr. Rodriguez-Solorio holds a Ph.D. in Public Policy Analysis
-                                                from Pardee RAND Graduate School and a Master of Science in
-                                                Applied Mathematics from Arizona State University. Her research
-                                                interests include STEM education policy, program evaluation, and
-                                                retention strategies for historically underrepresented minority
-                                                students in STEM. At AIM, she supports special projects and
-                                                outreach initiatives.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <!-- new staff -->
-                                    <div class="row mb-2 staff-content">
-                                        <div class="col-sm-3">
-                                            <img src="{% static 'images/people/terry-draft.jpg' %}"
-                                                 alt="image here"
-                                                 style="width: 230px;
-                                                        height: 230px" />
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <h3 class="col-sm-3 m-0">Terry Busk</h3>
-                                            <a href="" class="col">more info</a>
-                                            <div class="clearfix"></div>
-                                            <div class="position-tag">Operations Manager</div>
-                                            <span>
-                                                Terry Busk joined the American Institute of Mathematics in mid
-                                                2017 as a logistics specialist supporting AIM’s math research
-                                                goals. As a former handyman and martial arts instructor, he’s a
-                                                multifaceted jack-of-all trades helping to manage day-to-day
-                                                operations, such as lecture recording and production, as well as
-                                                web development of both the Math Circles Network and AIM’s
-                                                general research goals. In 2020, he assisted in the development
-                                                of the MathCommunities.org initiative and continues to support
-                                                the development of new technical projects.
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <!-- end staff -->
-                                    <!-- new staff -->
-                                    <div class="row mb-2 staff-content">
-                                        <div class="col-sm-3">
-                                            <img src="{% static 'images/people/harpreet-draft.jpg' %}"
-                                                 alt="image here"
-                                                 style="width: 230px;
-                                                        height: 230px" />
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <div class="row">
-                                                <h3 class="col-sm-3 m-0">Harpreet Kaur</h3>
-                                                <a href="" class="col">more info</a>
-                                            </div>
-                                            <div class="position-tag">Executive Assistant</div>
-                                            <p>
-                                                Harpreet Kaur is assistant to the Director and Deputy Director
-                                                and is responsible for most of the logistical aspects of the AIM
-                                                workshop and SQuaREs programs. She has a bachelor’s degree in
-                                                economics and some additional graduate work from Panjab
-                                                University in India.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <!-- end staff -->
-                                </div>
+                                <div class="content">{% placeholder "staff_directory" %}</div>
                             </div>
                         </div>
-                        <span class="fs-5">Information about staff members...</span>
                     </div>
                     <div class="tab-pane fade"
                          id="governance"

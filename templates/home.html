@@ -61,9 +61,9 @@
       </div>
     </section>
     <section tag="Split-columns News and Workshops">
-      <div class="row mb-4">
-        <div class="col-md-8 p-1">
-          <div class="theme-bg p-3 rounded h-100">
+      <div class="row g-3 mb-3">
+        <div class="col-md-8">
+          <div class="p-3 theme-bg">
             <h3 class="pb-4 mb-4 fst-italic border-bottom">Recent News</h3>
             {% if featured_article %}
               <img src="{{ featured_article.news_image.url }}"
@@ -80,8 +80,8 @@
             {% endif %}
           </div>
         </div>
-        <div class="col-md-4 col-sm-12 p-1">
-          <div class="theme-bg p-3 rounded" id="workshops-container">
+        <div class="col-md-4 col-sm-12 p-1 theme-bg">
+          <div class="p-3 rounded" id="workshops-container">
             <h3 class="fst-italic pb-4 mb-4 border-bottom">Workshops</h3>
             <nav>
               <div class="nav nav-tabs" id="nav-tab" role="tablist">
