@@ -13,6 +13,6 @@ class StaffMemberPlugin(CMSPluginBase):
     cache = False
 
     def render(self, context, instance, placeholder):
-        staff_members = StaffMember.objects.all()
+        staff_members = StaffMember.objects.filter(is_visible=True).order_by("order")
         context.update({"staff_members": staff_members})
         return context

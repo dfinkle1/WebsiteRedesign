@@ -26,7 +26,9 @@ def home(request):
     featured_article = (
         NewsArticle.objects.filter(featured=True).order_by("-published_date").first()
     )
-    recent_articles = NewsArticle.objects.order_by("-published_date")[:5]
+    recent_articles = NewsArticle.objects.filter(featured=False).order_by(
+        "-published_date"
+    )[:3]
     current_date = date.today()
     old_workshops_after_today = OldWorkshop.objects.filter(
         workshopstartdate__date__gte=current_date
@@ -104,11 +106,15 @@ def codeofconduct(request):
 # navbar/visiting
 
 
-# navbar/news
+def news_detail(request, slug):
+    article = get_object_or_404(NewsArticle, slug=slug)
+    return render(request, "article_detail.html", {"article": article})
 
 
 def news_view(request):
-    return render(request, "navbar/news/news.html")
+    news_articles = NewsArticle.objects.all()
+    context = {"news_articles": news_articles}
+    return render(request, "news.html", context)
 
 
 # FRG

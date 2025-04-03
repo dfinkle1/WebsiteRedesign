@@ -81,7 +81,7 @@
           </div>
         </div>
         <div class="col-md-4 col-sm-12 p-1 theme-bg">
-          <div class="p-3 rounded" id="workshops-container">
+          <div class="p-3 rounded theme-bg" id="workshops-container">
             <h3 class="fst-italic pb-4 mb-4 border-bottom">Workshops</h3>
             <nav>
               <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -142,93 +142,24 @@
           </svg>
         </button>
         <div class="scrolling-wrapper-flexbox" id="horizontal-container">
-          <div class="card p-3">
-            <li class="list-unstyled h-100">
-              <h6 class="mb-0 text-primary-emphasis">AIM moved to Pasadena!</h6>
-              <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top h-100"
-                 href="#">
-                <img src="{% static 'images/news/milikianpond.jpg' %}"
-                     class="img-fluid"
-                     aria-hidden="true"
-                     style="height:100%"
-                     alt="pond" />
-              </a>
-            </li>
-            <small class="text-body-secondary">January 15, 2024</small>
-          </div>
-          <div class="card p-3">
-            <li class="list-unstyled" style="height: 100%">
-              <h6 class="mb-0">Alexanderson Award</h6>
-              <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
-                 href="#"
-                 style="height: 100%">
-                <img src="{% static 'images/news/alexandersonAward.jpg' %}"
-                     class="img-fluid"
-                     width="100%"
-                     aria-hidden="true"
-                     style="height: 100%" />
-              </a>
-            </li>
-            <small class="text-body-secondary">January 15, 2024</small>
-          </div>
-          <div class="card p-3">
-            <li class="list-unstyled" style="height: 100%">
-              <h6 class="mb-0 text-primary-emphasis">AIM moved to Pasadena!</h6>
-              <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
-                 href="#"
-                 style="height: 100%">
-                <img src="{% static 'images/news/milikianpond.jpg' %}"
-                     class="img-fluid"
-                     aria-hidden="true"
-                     style="height: 100%" />
-              </a>
-            </li>
-            <small class="text-body-secondary">January 15, 2024</small>
-          </div>
-          <div class="card p-3">
-            <li class="list-unstyled" style="height: 100%">
-              <h6 class="mb-0">Alexanderson Award</h6>
-              <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
-                 href="#"
-                 style="height: 100%">
-                <img src="{% static 'images/news/alexandersonAward.jpg' %}"
-                     class="img-fluid"
-                     width="100%"
-                     aria-hidden="true"
-                     style="height: 100%" />
-              </a>
-            </li>
-            <small class="text-body-secondary">January 15, 2024</small>
-          </div>
-          <div class="card p-3">
-            <li class="list-unstyled" style="height: 100%">
-              <h6 class="mb-0 text-primary-emphasis">AIM moved to Pasadena!</h6>
-              <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
-                 href="#"
-                 style="height: 100%">
-                <img src="{% static 'images/news/milikianpond.jpg' %}"
-                     class="img-fluid"
-                     aria-hidden="true"
-                     style="height: 100%" />
-              </a>
-            </li>
-            <small class="text-body-secondary">January 15, 2024</small>
-          </div>
-          <div class="card p-3">
-            <li class="list-unstyled" style="height: 100%">
-              <h6 class="mb-0">Alexanderson Award</h6>
-              <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
-                 href="#"
-                 style="height: 100%">
-                <img src="{% static 'images/news/alexandersonAward.jpg' %}"
-                     class="img-fluid"
-                     width="100%"
-                     aria-hidden="true"
-                     style="height: 100%" />
-              </a>
-            </li>
-            <small class="text-body-secondary">January 15, 2024</small>
-          </div>
+          {% for article in recent_articles %}
+            <div class="card p-3 mb-3">
+              <li class="list-unstyled h-100">
+                <h6 class="mb-0 text-primary-emphasis">{{ article.title }}</h6>
+                <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top h-100"
+                   href="#">
+                  {% if article.news_image %}
+                    <img src="{{ article.news_image.url }}"
+                         class="img-fluid"
+                         aria-hidden="true"
+                         style="height:100%"
+                         alt="{{ article.title }}" />
+                  {% endif %}
+                </a>
+              </li>
+              <small class="text-body-secondary">{{ article.published_date|date:"F d, Y" }}</small>
+            </div>
+          {% endfor %}
         </div>
         <button id="next-btn" class="next-btn">
           <svg xmlns="http://www.w3.org/2000/svg"
