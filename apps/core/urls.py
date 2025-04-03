@@ -10,6 +10,6 @@ urlpatterns = [
     # path("joyfulmathmatics/", views.joyfulmath_view, name="joyful"),
     # path("about/", views.about_view, name="about"),
     # path("resources/", views.resources_view, name="resources"),
-    # path("news/", views.news_view, name="news"),s
-    path("template1/", views.template_view, name="template"),
+    # path("news/", views.news_view, name="news"),
+    path("news/story/<slug:slug>", views.news_detail, name="news-article-detail"),
 ]

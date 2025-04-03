@@ -1,21 +1,20 @@
 {% for staff in staff_members %}
-    {% if staff.is_visible %}
-        <div class="row mb-2 staff-content">
-            <div class="col-sm-3">
-                <img src="{{ staff.staff_photo.url }}"
-                     alt="image here"
-                     class="img-fluid"
-                     style="width: 230px;
-                            height: 230px" />
-            </div>
-            <div class="col-sm-9">
-                <div class="row">
-                    <h3 class="col-sm-3 m-0">{{ staff.name }}</h3>
-                    <a href="{{ staff.more_info_link }}" class="col">more info</a>
-                </div>
-                <div class="position-tag">{{ staff.role }}</div>
-                <p>{{ staff.bio }}</p>
-            </div>
+    <div class="row mb-4">
+        <div class="col-sm-3">
+            <img src="{{ staff.staff_photo.url }}"
+                 alt="image here"
+                 class="img-fluid"
+                 style="width: 230px;
+                        height: 230px" />
         </div>
-    {% endif %}
+        <div class="col-sm-9">
+            <h3 class="">{{ staff.name }}</h3>
+            {% if staff.more_info_link is not defined %}
+                <a href="{{ staff.more_info_link }}" target="_blank" class="col">more info</a>
+            {% endif %}
+            <div class="position-tag">{{ staff.role }}</div>
+            <p>{{ staff.bio }}</p>
+        </div>
+    </div>
+    <div class="clearfix"></div>
 {% endfor %}

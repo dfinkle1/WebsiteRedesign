@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load cms_tags djangocms_alias_tags %}
+{% load static %}
+{% block content %}
+    <div class="container">
+        <h1>{{ article.title }}</h1>
+        <img src="{{ article.news_image.url }}"
+             alt="{{ article.title }}"
+             height="500px"
+             width="500px">
+        <p>{{ article.text }}</p>
+        <small>{{ article.published_date }}</small>
+    </div>
+{% endblock content %}

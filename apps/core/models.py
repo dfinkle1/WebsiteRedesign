@@ -6,6 +6,7 @@ from cms.models import CMSPlugin
 from filer.fields.image import FilerImageField
 from cms.models.pluginmodel import CMSPlugin
 from djangocms_text_ckeditor.fields import HTMLField
+from django.utils.text import slugify
 
 
 class MyModel(models.Model):
@@ -37,12 +38,21 @@ class StaffMember(CMSPlugin):
         return self.name or "Unnamed Staff Member"
 
 
-class NewsArticle(CMSPlugin):
+class NewsArticle(models.Model):
+    id = models.AutoField(
+        primary_key=True,
+    )
     title = models.CharField(max_length=255, blank=True, null=True)
     text = HTMLField(blank=True, null=True)
     news_image = FilerImageField(null=True, blank=True, on_delete=models.CASCADE)
-    published_date = models.DateTimeField(auto_now_add=True)
+    published_date = models.DateTimeField()
     featured = models.BooleanField(default=False)
+    slug = models.SlugField(unique=True, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:  # Automatically generate slug if it's empty
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title or "Unnamed News Article"

@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "djangocms_snippet",
     "djangocms_style",
     "storages",
+    "adminsortable2",
 ]
 
 ##django pictures##
