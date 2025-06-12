@@ -28,7 +28,7 @@ def home(request):
     )
     recent_articles = NewsArticle.objects.filter(featured=False).order_by(
         "-published_date"
-    )[:3]
+    )[:5]
     current_date = date.today()
     old_workshops_after_today = OldWorkshop.objects.filter(
         workshopstartdate__date__gte=current_date
@@ -101,8 +101,6 @@ def codeofconduct(request):
 
 
 #
-
-
 # navbar/visiting
 
 

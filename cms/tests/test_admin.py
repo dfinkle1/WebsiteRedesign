@@ -758,7 +758,7 @@ class AdminFormsTests(AdminTestsBase):
             self.assertEqual(403, self.client.get(page_url).status_code)
 
             self.assertEqual(
-                200, self.client.get(page_url, HTTP_X_REQUESTED_WITH='XMLHttpRequest').status_code
+                200, self.client.get(page_url, headers={"x-requested-with": 'XMLHttpRequest'}).status_code
             )
 
             # Test that the query param is working as expected.
@@ -766,7 +766,7 @@ class AdminFormsTests(AdminTestsBase):
                 1, len(json.loads(
                     self.client.get(
                         page_url, {'q': 'main_title'},
-                        HTTP_X_REQUESTED_WITH='XMLHttpRequest'
+                        headers={"x-requested-with": 'XMLHttpRequest'}
                     ).content.decode("utf-8")
                 ))
             )
@@ -775,7 +775,7 @@ class AdminFormsTests(AdminTestsBase):
                 1, len(json.loads(
                     self.client.get(
                         page_url, {'q': 'menu_title'},
-                        HTTP_X_REQUESTED_WITH='XMLHttpRequest'
+                        headers={"x-requested-with": 'XMLHttpRequest'}
                     ).content.decode("utf-8")
                 ))
             )
@@ -784,7 +784,7 @@ class AdminFormsTests(AdminTestsBase):
                 1, len(json.loads(
                     self.client.get(
                         page_url, {'q': 'overwritten_url'},
-                        HTTP_X_REQUESTED_WITH='XMLHttpRequest'
+                        headers={"x-requested-with": 'XMLHttpRequest'}
                     ).content.decode("utf-8")
                 ))
             )
@@ -793,7 +793,7 @@ class AdminFormsTests(AdminTestsBase):
                 1, len(json.loads(
                     self.client.get(
                         page_url, {'q': 'page_title'},
-                        HTTP_X_REQUESTED_WITH='XMLHttpRequest'
+                        headers={"x-requested-with": 'XMLHttpRequest'}
                     ).content.decode("utf-8")
                 ))
             )

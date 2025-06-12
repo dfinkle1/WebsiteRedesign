@@ -1,0 +1,6 @@
+repos:
+  - repo: https://github.com/adamchainz/django-upgrade
+    rev: 779b1ca7b3680799b0febc98070409b94f1841c1
+    hooks:
+      - id: django-upgrade
+        args: [--target-version, "5.2"] # Optional: set to your target Django version

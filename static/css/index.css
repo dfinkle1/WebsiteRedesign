@@ -321,15 +321,7 @@ footer .nav-link {
 
   .card {
     flex: 0 0 auto;
-    width: 33%;
+    width: 300px;
     background-color: none;
   }
-}
-
-.tab-content {
-  background-color: ;
-}
-
-h1 {
-  font-size: x-large;
 }

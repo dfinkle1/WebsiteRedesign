@@ -41,6 +41,7 @@ class ParticipantChoiceField(admin.TabularInline):
     can_delete = False
 
 
+@admin.register(OldWorkshop)
 class OldWorkshopAdmin(admin.ModelAdmin):
 
     list_display = [
@@ -78,9 +79,9 @@ class OldWorkshopAdmin(admin.ModelAdmin):
     # actions = [view_participants]
 
 
-admin.site.register(OldWorkshop, OldWorkshopAdmin)
 
 
+@admin.register(Uniqueuser)
 class UniqueuserAdmin(admin.ModelAdmin):
     list_display = [
         "personid",
@@ -95,4 +96,3 @@ class UniqueuserAdmin(admin.ModelAdmin):
     ]  # Enable search functionality based on first name and last name
 
 
-admin.site.register(Uniqueuser, UniqueuserAdmin)

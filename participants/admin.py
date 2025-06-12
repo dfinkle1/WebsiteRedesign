@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import Participant
 
 
+@admin.register(Participant)
 class ParticipantAdmin(admin.ModelAdmin):
     def display_is_organizer(self):
         if self.isorganizer == True:
@@ -24,4 +25,3 @@ class ParticipantAdmin(admin.ModelAdmin):
     ]
 
 
-admin.site.register(Participant, ParticipantAdmin)
