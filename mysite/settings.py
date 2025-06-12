@@ -15,9 +15,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = str(os.getenv("SECRET_KEY"))
@@ -96,7 +93,7 @@ MIDDLEWARE = [
 ]
 
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 TEXT_INLINE_EDITING = True
 
@@ -222,23 +219,38 @@ CMS_TEMPLATES = [
 USE_S3 = os.getenv("USE_S3") == "TRUE"
 
 if USE_S3:
-    # AWS Credentials
     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
     AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
     AWS_DEFAULT_ACL = "public-read"
-    AWS_S3_CUSTOM_DOMAIN = "dk87yvhh7cphv.cloudfront.net"
     AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
-    AWS_CLOUDFRONT_DOMAIN = "https://dk87yvhh7cphv.cloudfront.net"
-    # Static files
+    AWS_S3_CUSTOM_DOMAIN = "dk87yvhh7cphv.cloudfront.net"
+    AWS_CLOUDFRONT_DOMAIN = f"{AWS_S3_CUSTOM_DOMAIN}"
+
     AWS_LOCATION = "static"
-    STATIC_URL = f"https://{AWS_CLOUDFRONT_DOMAIN}/{AWS_LOCATION}/"
-    STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
-    # Media files
-    DEFAULT_FILE_STORAGE = "utils.storages_backends.MediaStorage"
-    MEDIA_URL = f"https://{AWS_CLOUDFRONT_DOMAIN}/media/"
+    STORAGES = {
+        "default": {
+            "BACKEND": "utils.storages_backends.MediaStorage",  # Your custom media storage
+            "OPTIONS": {
+                "bucket_name": AWS_STORAGE_BUCKET_NAME,
+                "custom_domain": AWS_CLOUDFRONT_DOMAIN,
+                # add other boto3 options you use here
+            },
+        },
+        "staticfiles": {
+            "BACKEND": "storages.backends.s3.S3Storage",
+            "OPTIONS": {
+                "bucket_name": AWS_STORAGE_BUCKET_NAME,
+                "location": AWS_LOCATION,
+                "custom_domain": AWS_CLOUDFRONT_DOMAIN,
+                # other options like ACL or CacheControl can be added here
+            },
+        },
+    }
 
+    STATIC_URL = f"{AWS_CLOUDFRONT_DOMAIN}/{AWS_LOCATION}/"
+    MEDIA_URL = f"{AWS_CLOUDFRONT_DOMAIN}/media/"
 else:
     STATIC_URL = "/static/"
     STATIC_ROOT = os.path.join(BASE_DIR, "static")
@@ -246,13 +258,13 @@ else:
     MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+# MEDIA_URL = "/media/"
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Ensure static files directory is detected
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, "static"),
+# ]
 
 
 # USE_S3 = os.getenv('USE_S3') == 'TRUE'

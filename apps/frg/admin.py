@@ -13,9 +13,9 @@ class PDFFileAdminForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
 
+@admin.register(PDFFile)
 class PDFFileAdmin(admin.ModelAdmin):
     list_display = ["name", "file_url", "uploaded_at"]
     form = PDFFileAdminForm
 
 
-admin.site.register(PDFFile, PDFFileAdmin)

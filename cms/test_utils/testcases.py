@@ -692,4 +692,4 @@ class CMSTestCase(BaseCMSTestCase, testcases.TestCase):
 class TransactionCMSTestCase(CMSTestCase, testcases.TransactionTestCase):
     if DJANGO_4_1:
         def assertQuerySetEqual(self, *args, **kwargs):
-            return self.assertQuerysetEqual(*args, **kwargs)
+            return self.assertQuerySetEqual(*args, **kwargs)
