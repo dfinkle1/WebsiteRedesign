@@ -7,11 +7,7 @@ import os
 
 load_dotenv()
 
-
-ALLOWED_HOSTS = ["*"]
-
-
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
@@ -20,7 +16,7 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 SECRET_KEY = str(os.getenv("SECRET_KEY"))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+
 
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
@@ -187,6 +183,7 @@ FILER_ENABLE_SUBDIRECTORIES = True
 CMS_TEMPLATES = [
     ("template1.html", "Basic Template"),
     ("FRG/frg-resources.html", "frg resources"),
+    ("FRG/frg-activities.html", "frg activities"),
     ("testtemplate.html", "customcms"),
     ("home.html", "home"),
     ("about.html", "about"),
@@ -197,7 +194,6 @@ CMS_TEMPLATES = [
     ("news.html", "news template"),
     ("staff_member_plugin.html", "update staff template"),
     ("FRG/frg-landing.html", "frg landing page"),
-    ("FRG/frg-activities.html", "frg activities"),
     ("FRG/frg-papers.html", "frg papers"),
 ]
 
