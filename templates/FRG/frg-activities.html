@@ -1,515 +1,1370 @@
 {% extends "base.html" %}
 {% load cms_tags sekizai_tags %}
 {% load static %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-  "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-
-<head>
-<meta name="generator" content="jemdoc, see http://jemdoc.jaboc.net/" />
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<link rel="stylesheet" href="{% static 'css/jemdoc.css' %}" />
-<title>FRG Activities</title>
-<!-- MathJax -->
-<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async>
-</script>
-<script type="text/x-mathjax-config">
+  <head>
+    <meta name="generator" content="jemdoc, see http://jemdoc.jaboc.net/" />
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <link rel="stylesheet" href="{% static 'css/jemdoc.css' %}" />
+    <title>FRG Activities</title>
+    <!-- MathJax -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+    <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
 	  TeX: { equationNumbers: { autoNumber: "AMS" } }
 });
-</script>
-<!-- End MathJax -->
-</head>
-<body>
-<table summary="Table for page layout." id="tlayout">
-<tr valign="top">
-<td id="layout-menu">
-<div class="menu-category">AIM FRG</div>
-<div class="menu-item"><a href="{% page_url 'frg' %}">Home</a></div>
-<div class="menu-item"><a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1854398">NSF&nbsp;Grant</a></div>
-<div class="menu-item"><a href="{% page_url 'frg' %}papers">Publications</a></div>
-<div class="menu-item"><a href="{% page_url 'frg' %}activities" class="current">Activities</a></div>
-<div class="menu-item"><a href="https://vimeo.com/showcase/7398886">Videos</a></div>
-<div class="menu-item"><a href="./references/">References</a></div>
-</td>
-<td id="layout-content">
-<div id="toptitle">
-<h1>FRG Activities</h1>
-</div>
-<p>The following activities were organized as part of the <a href="aimfrg.html" target=&ldquo;blank&rdquo;>AIM FRG</a>:
-</p>
-<ul>
-<li><p>A zoom workshop in summer 2020 organized by Brian Conrey (AIM) over Sococo and Zoom.
-</p>
-</li>
-<li><p>A research seminar (2020-2021) organized by Brian Conrey (AIM) over Sococo and Zoom. 
-</p>
-</li>
-<li><p>A graduate seminar (2021-2024) organized by Anurag Sahay (Purdue) over Zoom.
-</p>
-</li>
-<li><p>An in-person workshop in summer 2021 organized by Emilia Alvarez (Bristol) at the AIM location in San Jose.
-</p>
-</li>
-<li><p>Two problem sessions over zoom; the first on March 23rd, 2021 moderated by Brian Conrey (AIM) and the second on April 22nd, 2024 moderated by Ofir Gorodetsky (Oxford).
-</p>
-</li>
-<li><p>Several working groups on themes related to the FRG, such as the \(\gamma_k(c)\) working group.
-</p>
-</li>
-</ul>
-<p>The following activities were not officially part of the FRG, but were organized by individuals associated with the FRG and/or dealt with related themes:
-</p>
-<ul>
-<li><p><a href="https://www.ias.edu/math/events/50yntrmt" target=&ldquo;blank&rdquo;>50 Years of Number Theory and Random Matrix Theory Conference</a>, held at the Institute of Advanced Study, Princeton in June 2022.  
-</p>
-</li>
-<li><p><a href="https://heilbronn.ac.uk/2022/07/25/jpk-60/" target=&ldquo;blank&rdquo;>Random matrices from quantum chaos to the Riemann zeta function</a>, held at the University of Bristol in July 2023.
-</p>
-</li>
-<li><p><a href="https://sites.google.com/view/crgl-functions/crg-news" target=&ldquo;blank&rdquo;>PIMS CRG on L-functions in Analytic Number Theory</a> (2022-2025).
-</p>
-</li>
-</ul>
-<p>A detailed record of the activities, including video links, can be found below.
-</p>
-<h1>2020 Workshop</h1>
-<p>This was a summer workshop organized by Brian Conrey; it was originally meant to be held in person, but was moved to Sococo and Zoom due to the COVID-19 pandemic. The workshop kicked off the activities of the FRG with several talks on the themes of the FRG, namely moments of L-functions and point-counting on varieties and helped familiarize the FRG members with the Sococo workspace.
-</p>
-<h2>Summer 2020</h2>
-<h3>[28-Jul-2020] Henryk Iwaniec (Rutgers)</h3>
-<p>&ldquo;The sixth power moment of partial zeta series&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/442540271" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[28-Jul-2020] Brad Rodgers (Queen's)</h3>
-<p>&ldquo;Some expansions of the \(\gamma_k\) integral&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/442532123" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[29-Jul-2020] Alexandra Florea (Columbia)</h3>
-<p>&ldquo;Divisor convolutions over function fields&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/442870345" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[29-Jul-2020] Trevor Wooley (Purdue)</h3>
-<p>&ldquo;Arithmetic stratification: a cubic example&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/443154294" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[30-Jul-2020] K. Soundararajan (Stanford)</h3>
-<p>&ldquo;Bounds for moments of zeta & L-functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/443118570" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[30-Jul-2020] Emilia Alvarez (Bristol)</h3>
-<p>&ldquo;Moments of logarithmic derivatives in RMT&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/443174272" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[31-Jul-2020] Jonathan Keating (Oxford)</h3>
-<p>&ldquo;Joint Moments&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/443491868" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h1>Research Seminar</h1>
-<p>Originally called the &ldquo;virtual FRG seminar&rdquo;, this Zoom seminar was organized by Brian Conrey and was held on Tuesdays. It ran from August 2020 to June 2021 and served as the main weekly activity of the FRG at the time, usually featuring a 1.5 hour talk given by an FRG member on their research (or by a non-member on their own work related to the themes of the FRG). For a brief period, this was called the &ldquo;Tuesday seminar&rdquo; or the &ldquo;adult seminar&rdquo; to distinguish it from the graduate seminar (see below).
-</p>
-<h2>Fall 2020</h2>
-<h3>[04-Aug-2020] Siegfred Baluyot (AIM)</h3>
-<p>&ldquo;Dirichlet L-functions of quadratic characters of prime conductor at the central point&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/444728926" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[11-Aug-2020] Matilde Lalín (Montréal)</h3>
-<p>&ldquo;Non-vanishing for cubic L-functions over function fields&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/446890820" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[18-Aug-2020] Alia Hamieh (UNBC)</h3>
-<p>&ldquo;Mean values of long Dirichlet polynomials with higher divisor coefficients&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/448994606" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[25-Aug-2020] Ofir Gorodetsky (Tel Aviv)</h3>
-<p>&ldquo;Correlations of von Mangoldt and \(k\)th divisor functions in \(\mathbb{F}_q[T]\)&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/451605443" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[01-Sep-2020] Micah Milinovich (Mississippi)</h3>
-<p>&ldquo;Irregularities of Dirichlet \(L\)-functions and a Chebyshev-type bias for zeros&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/453775221" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[08-Sep-2020] Sandro Bettin (Genova)</h3>
-<p>&ldquo;Value distribution of quantum modular forms&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/456264792" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[15-Sep-2020] Olga Balkanova (Steklov)</h3>
-<p>&ldquo;Moments of symmetric square L-functions and averages of Zagier L-series&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/458307770" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[22-Sep-2020] Steve Lester (KCL)</h3>
-<p>&ldquo;Quantum variance for dihedral Maass forms&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/460673194" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[29-Sep-2020] Hung Bui (Manchester)</h3>
-<p>&ldquo;Analytic ranks of automorphic \(L\)-functions and Landau-Siegel zeros&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/460673194" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[06-Oct-2020] Henryk Iwaniec (Rutgers)</h3>
-<p>&ldquo;The large sieve for prime moduli&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/465890638" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[13-Oct-2020] Emmanuel Kowalski (ETH Zürich)</h3>
-<p>&ldquo;Equidistribution of L-functions over function fields twisted by Dirichlet characters modulo squarefree polynomials, and applications&rdquo;
-</p>
-<h3>[20-Oct-2020] Alessandro Fazzari (Genova)</h3>
-<p>&ldquo;Weighted value distributions of the Riemann zeta function on the critical line&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/470301813" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[26-Oct-2020] Quanli Shen (Lethbridge)</h3>
-<p>&ldquo;The fourth moment of quadratic Dirichlet \(L\)-functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/472678864" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[10-Nov-2020] Adrian Diaconu (Lethbridge)</h3>
-<p>&ldquo;Secondary terms in the asymptotics of moments of \(L\)-functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/477699691" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[17-Nov-2020] David Farmer (AIM)</h3>
-<p>&ldquo;The Riemann Hypothesis is not an analysis problem&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/480488658" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[24-Nov-2020] Michael Rubinstein (Waterloo)</h3>
-<p>&ldquo;Moments of quadratic L-functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/483248612" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[08-Dec-2020] Vorappan (Fai) Chandee (Kansas State)</h3>
-<p>&ldquo;The sixth moment of Dirichlet L-functions without average in the t-aspect&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/492164925" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[15-Dec-2020] Yacine Barhoumi-Andréani (Bochum)</h3>
-<p>&ldquo;A new approach to the characteristic polynomial of a random unitary matrix&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/491285797" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[12-Jan-2021] Paul Nelson (ETH Zürich)</h3>
-<p>&ldquo;Some analysis of L-functions in higher rank&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/500148068" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[19-Jan-2021] Dmitriy Frolenkov (Steklov)</h3>
-<p>&ldquo;On the average length of finite continued fractions with a fixed denominator&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/502265001" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[26-Jan-2021] Xiannan Li (Kansas State)</h3>
-<p>&ldquo;The eighth moment of Dirichlet \(L\)-functions and of \(\Gamma_1(q)\) \(L\)-functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/504900036" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[02-Feb-2021] Henryk Iwaniec (Rutgers)</h3>
-<p>&ldquo;Large sieve for determinants&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/507643727" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[11-Feb-2021] Matt Young (Texas A&M)</h3>
-<p>&ldquo;The \(SL_3(Z)\) spectral large sieve&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/511323855" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[16-Feb-2021] Will Sawin (Columbia)</h3>
-<p>&ldquo;(Almost) square-root cancellation for sums to squarefree moduli in \(\mathbb{F}_q[t]\), with applications to Dirichlet \(L\)-functions of squarefree conductor&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/513109616" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[25-Feb-2021] Chantal David (Concordia)</h3>
-<p>&ldquo;One-level density for cubic Dirichlet L-functions&rdquo; 
-</p>
-<h3>[02-Mar-2021]  Javier Pliego (Bristol/Purdue)</h3>
-<p>&ldquo;Mixed moments of the Riemann zeta-function&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/518718318" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[09-Mar-2021]  Kyle Pratt (Oxford)</h3>
-<p>&ldquo;Low lying zeros of Dirichlet \(L\)-functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/521540924" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[16-Mar-2021]  Caroline Turnage-Butterbaugh (Carleton)</h3>
-<p>&ldquo;Gaps between zeros of the Riemann zeta-function&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/524423486" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[30-Mar-2021]  Adam J. Harper (Warwick)</h3>
-<p>&ldquo;Gaps between zeros of the Riemann zeta-function&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/530898563" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[06-Apr-2021]  Estelle Basor (AIM)</h3>
-<p>&ldquo;Identities in random matrix theory&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/533694472" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[27-Apr-2021]  Zhi Qi (Zhejiang)</h3>
-<p>&ldquo;Beyond the Weyl barrier for \(GL(2)\) exponential sums&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/542263376" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[04-May-2021]  Dan Goldston (SJSU)</h3>
-<p>&ldquo;Goldbach conjecture and Landau-Siegel zeros&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/545726824" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[21-June-2021]  Natalie Evans (King's College)</h3>
-<p>&ldquo;Correlations of almost primes&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/564336983" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h1>2021 Workshop</h1>
-<p>This was a summer workshop organized by Emilia Alvarez and held in the San Jose location of AIM. The primary focus of the workshop was the connection between moments of characteristic polynomials of random matrices and the Painlevé equations, though other topics (including the \(\gamma_k(c)\) function) were also discussed. Informal talks were given by Emilia Alvarez (Bristol), Siegfred Baluyot (AIM), Estelle Basor (AIM), Brian Conrey (AIM), Alexandra Florea (UC Irvine), Johannes Forkel (Oxford), Dan Goldston (SJSU), Matilde Lalín (Montréal), Andean Medjedovic (Waterloo), Brad Rodgers (Queen's), Michael Rubinstein (Waterloo), and others. Recordings of some talks are listed below.
-</p>
-<h3>Emilia Alvarez (Bristol)</h3>
-<p>&ldquo;Random matrix theory & number theory&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/585558703" target=&ldquo;blank&rdquo;>video1</a>, <a href="https://vimeo.com/showcase/7398886/video/586546390" target=&ldquo;blank&rdquo;>video2</a>)
-</p>
-<h3>Siegfred Baluyot (AIM)</h3>
-<p>&ldquo;Brief introduction to Painlevé equations&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/585560480" target=&ldquo;blank&rdquo;>video</a>) <br />
-&ldquo;Moments of the derivative of characteristic polynomials and Painlevé V and III&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/586934024" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>Estelle Basor (AIM)</h3>
-<p>&ldquo;Density for eigenvalues for CUE and the sine kernel&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/585566164" target=&ldquo;blank&rdquo;>video</a>) <br />
-&ldquo;Painlevé for gap probabilities&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/589483045" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>Brian Conrey (AIM)</h3>
-<p>&ldquo;Differential equation for \(E_2\)&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/588911042" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>Johannes Forkel (Oxford)</h3>
-<p>&ldquo;Introduction to Riemann-Hilbert problems&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/585560480" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>Michael Rubinstein (Waterloo)</h3>
-<p>&ldquo;Autocorrelation of random matrix polynomials&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/586876920" target=&ldquo;blank&rdquo;>video</a>) <br />
-&ldquo;Differential equations&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/589474845" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h1>Grad Seminar</h1>
-<p>This Zoom seminar was organized by Anurag Sahay and was held on Mondays. The seminar was originally meant to complement the &ldquo;adult&rdquo; or research seminar (see above) by providing the graduate students in the FRG a space to give expository talks on papers they were reading; during this period it was also called the &ldquo;Monday seminar&rdquo;. When the research seminar wound down, the scope of the seminar was expanded to include research talks by FRG members, and then later also to talks by external speakers, with the caveat that speakers were asked to make the talks accessible to graduate students and other early career researchers. The seminar ran from February 2021 to April 2024, and served as the main weekly activity of the FRG after October 2021. Notes and slides for talks (when available) are collected <a href="./references/" target=&ldquo;blank&rdquo;>here</a>.
-</p>
-<h2>Spring 2021</h2>
-<h3>[01-Feb-2021] Alessandro Fazzari (Genova)</h3>
-<p>&ldquo;A survey on the central limit theorem for the Riemann zeta function&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/507651852" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[08-Feb-2021] Emilia Alvarez (Bristol)</h3>
-<p>&ldquo;An overview of random matrix theory for number theorists&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/509922272" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[15-Feb-2021] Quanli Shen (Lethbridge)</h3>
-<p>&ldquo;The first moment of quadratic twists of modular L-functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/512662139" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[22-Feb-2021] Chung-Hang (Kevin) Kwan (Columbia)</h3>
-<p>&ldquo;Averages of Fourier coefficients&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/515483518" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[08-Mar-2021] Max Wenqiang Xu (Stanford)</h3>
-<p>&ldquo;Distribution and moments of random multiplicative functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/521541564" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[12-Apr-2021] Ofir Gorodetsky (Oxford)</h3>
-<p>&ldquo;The variance of the sum of an arithmetic function over random short intervals&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/536211587" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[19-Apr-2021] Vivian Kuperberg (Stanford)</h3>
-<p>&ldquo;The second moment of quadratic twists of modular L-functions (after Soundararajan and Young)&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/539761967" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[17-May-2021] Jared Duker Lichtman (Oxford)</h3>
-<p>&ldquo;The Riemann hypothesis for curves&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/551635827" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[07-Jun-2021] Winston Heap (Shandong)</h3>
-<p>&ldquo;Mean values of long Euler products&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/560279471" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[14-Jun-2021] Amita Malik (AIM/MPIM)</h3>
-<p>&ldquo;Equidistribution of \(\alpha p^{\theta}\) with a Chebotarev condition and applications to extremal primes&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/562977230" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[21-Jun-2021] Akshat Mudgal (Bristol/Purdue)</h3>
-<p>&ldquo;An introduction to Vinogradov’s mean value theorem&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/565809711" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h2>Fall 2021</h2>
-<h3>[04-Oct-2021] Caroline Turnage-Butterbaugh (Carleton)</h3>
-<p>&ldquo;Gaps between zeros of the Riemann zeta-function&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/622777253" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[11-Oct-2021] Louis Gaudet (Rutgers)</h3>
-<p>&ldquo;The Kloosterman Circle Method&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/629375888" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[25-Oct-2021] Max Wenqiang Xu (Stanford)</h3>
-<p>&ldquo;Limiting distributions of sums of random multiplicative functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/638819860" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[02-Nov-2021] Shehzad Hathi (UNSW Canberra)</h3>
-<p>&ldquo;The LLL algorithm and its applications to Mertens conjecture&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/642449320" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[08-Nov-2021] Emilia Alvarez (Bristol)</h3>
-<p>&ldquo;Random matrices and Painlevé equations&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/647041851" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[15-Nov-2021] Fatma Çiçek (IIT Gandhinagar)</h3>
-<p>&ldquo;Value distribution of the Riemann zeta-function on the half-line&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/647472398" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[22-Nov-2021] Fan Ge (William & Mary)</h3>
-<p>&ldquo;Critical points of the Riemann zeta-function&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/651707698" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[29-Nov-2021] Chung-Hang (Kevin) Kwan (Columbia)</h3>
-<p>&ldquo;Some aspects of \(\Gamma\)-functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/651707707" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[13-Dec-2021] Brad Rodgers (Queen's)</h3>
-<p>&ldquo;Averages of products and ratios of L-functions and characteristic polynomials&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/659857736" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h2>Spring 2022</h2>
-<h3>[14-Feb-2022] Siegfred Baluyot (AIM)</h3>
-<p>&ldquo;The shifted convolution of divisor functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/677871640" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[28-Feb-2022] Peter Humphries (Virginia)</h3>
-<p>&ldquo;Spectral reciprocity and applications&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/682999140" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[07-Mar-2022] Vivian Kuperberg (Stanford)</h3>
-<p>&ldquo;The Hardy&ndash;Littlewood \(k\)-tuple conjecture and intervals with many primes&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/686796577" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[14-Mar-2022] Ofir Gorodetsky (Oxford)</h3>
-<p>&ldquo;Chebyshev's bias for primes and for sums of two squares&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/688074044" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[21-Mar-2022] Kunjakanan Nath (UIUC)</h3>
-<p>&ldquo;Primes with restricted digits&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/691923304" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[28-Mar-2022] Joshua Stucky (Kansas State)</h3>
-<p>&ldquo;Smooth numbers in arithmetic progressions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/694644014" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[04-Apr-2022] Victor Wang (Princeton)</h3>
-<p>&ldquo;Special subvarieties over finite and infinite fields&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/695962472" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[11-Apr-2022] Ayla Gafni (Mississippi)</h3>
-<p>&ldquo;Uniform distribution and geometric incidence theory&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/698691542" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[18-Apr-2022] Alia Hamieh (UNBC)</h3>
-<p>&ldquo;Distribution of values of logarithmic derivatives of L-functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/701035097" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[25-Apr-2022] Kevin Hughes (Bristol)</h3>
-<p>&ldquo;A primer on Discrete Restriction Theory&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/702978189" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[02-May-2022] Alexandra Florea (UC Irvine)</h3>
-<p>&ldquo;Upper bounds for positive and negative moments of the Riemann zeta function&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/705514604" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[16-May-2022] Martin Čech (Concordia)</h3>
-<p>&ldquo;Two ways to compute moments in the family of real Dirichlet L-functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/710586401" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[23-May-2022] Jori Merikoski (Oxford)</h3>
-<p>&ldquo;Primes in sparse polynomials sets&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/713047040" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[30-May-2022] Micah Milinovich (Mississippi)</h3>
-<p>&ldquo;Estimates for zeta and L-functions via Fourier optimization&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/715424003" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h2>Fall 2022</h2>
-<h3>[22-Sep-2022] Caroline Turnage-Butterbaugh (Carleton)</h3>
-<p>&ldquo;Moments of Dirichlet L-functions&rdquo; 
-</p>
-<h3>[26-Sep-2022] Hua Lin (UC Irvine)</h3>
-<p>&ldquo;One-level density of zeros of Dirichlet L-function over function fields&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/754057926" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[03-Oct-2022] Louis Gaudet (Rutgers)</h3>
-<p>&ldquo;The least Euler prime via a sieve approach&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/756571411" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[10-Oct-2022] Lasse Grimmelt (Oxford)</h3>
-<p>&ldquo;Primes in large arithmetic progressions and applications to additive problems&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/758809710" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[17-Oct-2022] Dan Goldston (SJSU)</h3>
-<p>&ldquo;Small gaps and spacings between Riemann zeta-function zeros&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1Sq-GZWHamh4btvNK4BeSE7d4Ld8E-LDn" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/762420915" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[31-Oct-2022] Emma Bailey (CUNY)</h3>
-<p>&ldquo;Large values of \(\zeta\) on the critical line&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/765975595" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[07-Nov-2022] Daodao Yang (TU Graz)</h3>
-<p>&ldquo;Large values of derivatives of the Riemann zeta function and related problems&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1Oo6U_i6ql-Q2Tdn-NYPrI_AO_xksnkGy" target=&ldquo;blank&rdquo;>notes</a>)
-</p>
-<h3>[14-Nov-2022] Jakob Streipel (Maine)</h3>
-<p>&ldquo;Using second moments to count zeros&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1KxGLOprPIaB7Bi289gclWu8tPPqt6DBU" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/773448249" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[21-Nov-2022] Alexander Dunn (Caltech)</h3>
-<p>&ldquo;Bias in cubic Gauss sums: Patterson's conjecture&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/773488432" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[28-Nov-2022] Aled Walker (KCL)</h3>
-<p>&ldquo;Correlations of sieve weights and distributions of zeros&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1s76UJbzr8riSGVYWjdSeBrJd7uPlnDqY" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/776746878" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[05-Dec-2022] Asif Zaman (Toronto)</h3>
-<p>&ldquo;Random multiplicative functions and a simplified model&rdquo;
-</p>
-<h3>[12-Dec-2022] Alexander Dobner (Michigan)</h3>
-<p>&ldquo;Optimization and moment methods in number theory&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1n2dSjTQPa--KiI4VBL2D9pDltD1ogEzI" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/780504272" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[19-Dec-2022] George Dickinson (Manchester)</h3>
-<p>&ldquo;Second moments of Dirichlet L-functions&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1RwN7HrA4T2mnolrqNxFEk8kl-vRkLdzv" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/782636948" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h2>Spring 2023</h2>
-<h3>[23-Jan-2023] Nathan Ng (Lethbridge)</h3>
-<p>&ldquo;The eighth moment of the Riemann zeta function&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1aCEk-8lwNigHJQyqZOx2sQ6POYcF5CBs" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/792304269" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[30-Jan-2023] David Farmer (AIM)</h3>
-<p>&ldquo;The zeta function when it is particularly large&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1PtjNIs367dSSb7ERivDsJ-CoLvH48GTJ" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/794243669" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[06-Feb-2023] Keshav Aggarwal (Rényi Institute)</h3>
-<p>&ldquo;Bound for the existence of prime gap graphs&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1NylmaLvch-L4NnHJqcg_2xQh3oiiL95k" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/796453783" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[13-Feb-2023] Rizwanur Khan (Mississippi)</h3>
-<p>&ldquo;The fourth moment of Dirichlet L-functions and related problems&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1TiGd3hXCSRHiDvGAjrHh-i2hCAum7Nbh" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/798484545" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[20-Feb-2023] Katy Woo (Princeton)</h3>
-<p>&ldquo;Small scale distribution of primes in four-term arithmetic progressions&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1Z4UqG7e--H1dLfOiKlDXUi1hJXueWiOy" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/801374903" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[27-Feb-2023] Xiannan Li (Kansas State)</h3>
-<p>&ldquo;Quadratic Twists of Modular L-functions&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1o1Fvr7RWf39hFveVa4leZ41g46utjuyL" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/802828559" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[10-Mar-2023] Ofir Gorodetsky (Oxford)</h3>
-<p>&ldquo;How many smooth numbers and smooth polynomials are there?&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1B-nthUn8PlJm4v766L-nDitJfltJPWJ4" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/807624224" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[13-Mar-2023] Ian Whitehead (Swarthmore)</h3>
-<p>&ldquo;Multiple Dirichlet Series and Moments of L-functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/808076317" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[20-Mar-2023] Peter Zenz (Brown)</h3>
-<p>&ldquo;On the distribution of holomorphic cusp forms and applications&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/10PM8pfGGmjAGZZ4E-NS_LtcPI54bYlV3" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/809942031" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[10-Apr-2023] Aleksander Simonič (UNSW Canberra)</h3>
-<p>&ldquo;Some conditional estimates for functions in the Selberg class&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1Zjiwg8AaR1Wnztu-ZVhVwxhND44mfh47" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/816975703" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[17-Apr-2023] Matilde Lalín (Montréal)</h3>
-<p>&ldquo;The distribution of values of cubic \(L\)-functions at \(s=1\)&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1UMNZchhenccg9QlMr8ZMEnfopTJqfk4f" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/818508210" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[24-Apr-2023] Eun Hye Lee (Stony Brook)</h3>
-<p>&ldquo;The Shintani zeta functions&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1rItUD3PtN4k-FtSm7eLhWbAQTSKdlUoy" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/824999140" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[01-May-2023] Kiseok Yeon (Purdue)</h3>
-<p>&ldquo;The Hasse principle for random projective hypersurfaces via the circle method&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1v51p2knfNLBVapmcmZr26bSHZQ2a-zEH" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/823419211" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[08-May-2023] Alessandro Fazzari (AIM)</h3>
-<p>&ldquo;Averages of long Dirichlet polynomials with modular coefficients&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1Skun6RKksR08E1JL_4qVUyuF1MBA7I8k" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/827830298" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[15-May-2023] Vorappan (Fai) Chandee (Kansas State)</h3>
-<p>&ldquo;The eighth moment of \(\Gamma_1(q)\) \(L\)-functions&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1kaRg1Zw7A_cZ47ZGMG639ds5s5sctR1A" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/827830309" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[22-May-2023] Igor Shparlinski (UNSW)</h3>
-<p>&ldquo;Bilinear forms with Kloosterman and Salié Sums and Moments of L-functions&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1w0vv4BaDTgVs4_dWCfa6LkcyLgPYlYOl" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/829640978" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[29-May-2023] Jaime Hernandez Palacios (Mississippi)</h3>
-<p>&ldquo;Gaps between zeros of zeta and L-functions of high degree&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/17vqj7lgI6_rDPCW9Q3mkNnoO6O8seMV3" target=&ldquo;blank&rdquo;>notes</a>)
-</p>
-<h3>[05-Jun-2023] Emily Quesada-Herrera (TU Graz)</h3>
-<p>&ldquo;On the vertical distribution of the zeros of the Riemann zeta-function&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/15lchre7XepMoPsEp9izrgPRHgQMaW2Ke" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/833417088" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h2>Fall 2023</h2>
-<h3>[18-Sep-2023] Mayank Pandey (Princeton)</h3>
-<p>&ldquo;\(L^1\) means of exponential sums with multiplicative coefficients&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/865727679" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[25-Sep-2023] Henryk Iwaniec (Rutgers)</h3>
-<p>&ldquo;Integer Parts Mutually Coprime&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1O92SDeaQq-CjZE4DWhdVDlQ6UFy06fbF" target=&ldquo;blank&rdquo;>notes</a>)
-</p>
-<h3>[02-Oct-2023] Agniva Dasgupta (Texas A&M)</h3>
-<p>&ldquo;Short second moment bound for \(GL(2)\) \(L\)-functions in the level aspect&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1KfoaBZDkw07q2cS8X012ZsAipwVmFWl2" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/870736114" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[23-Oct-2023] Winston Heap (NTNU)</h3>
-<p>&ldquo;Simultaneous extreme values of zeta and L-functions&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1b4M5XDCDRyN-2I3weZinS56GBD38cHK7" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/877232196" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[30-Oct-2023] Sacha Mangerel (Durham)</h3>
-<p>&ldquo;Large order Dirichlet characters and an analogue of a conjecture of Vinogradov&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1wdV2n1MTmKo1nUl55s-sLYgcGBlLNQzv" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/880210095" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[06-Nov-2023] Michael Curran (Oxford)</h3>
-<p>&ldquo;Correlations of the Riemann zeta function&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1Cf0R485DwkDEXhSBHP2PApsJJX0p0NTz" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/882248522" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[13-Nov-2023] Julia Stadlmann (Oxford)</h3>
-<p>&ldquo;Primes in arithmetic progressions to smooth moduli&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1VdbPk-5IkM_Ic2IiKdQ1W_kq_zmaZqat" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/884090590" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[20-Nov-2023] Steve Lester (KCL)</h3>
-<p>&ldquo;Around the Gauss circle problem&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1-Mm2KzLSRtzw-5WEnIEA56B2hpcknoyL" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/886554314" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[27-Nov-2023] Michael Yiasemides (LSE)</h3>
-<p>&ldquo;Lattice points in function fields and Hankel matrices&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1XoOSdbeWAkpD1hf8e4ghjv1Tr9wkUn3-" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/888800687" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[11-Dec-2023] Andrés Chirre (PUCP Lima)</h3>
-<p>&ldquo;Remarks on a formula of Ramanujan&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1ISQaUzttjAsIzDwGhyWhALrkqNqr3HCK" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/906109025" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[18-Dec-2023] Maxim Gerspach (KTH)</h3>
-<p>&ldquo;Heuristics and random models for quadratic character sums&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/19KB9yYoqfgADQ3qyhod9D0A9nttAXBgk" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/896572919" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h2>Spring 2024</h2>
-<h3>[29-Jan-2024] Trevor Wooley (Purdue)</h3>
-<p>&ldquo;Primes as sums of \(k\)-th powers, and Freiman's theorem&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/907900934" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[05-Feb-2024] Siegfred Baluyot (AIM)</h3>
-<p>&ldquo;Twisted moments of characteristic polynomials of random matrices&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/910212119" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[12-Feb-2024] Alexandre de Faveri (Stanford)</h3>
-<p>&ldquo;An inequality for \(GL(3)\) Fourier coefficients&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/17npduOwm5IPuP6MnhGE-Q59Wo1VjNgho" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/912854882" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[19-Feb-2024] Jackie Voros (Bristol)</h3>
-<p>&ldquo;On the average least negative Hecke eigenvalue&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/914960284" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[26-Feb-2024] Vivian Kuperberg (ETH Zürich)</h3>
-<p>&ldquo;Sums of odd-ly many fractions&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1k1XPGLoCYjQdUtMOpcrBg5Sj2EGuVGBe" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/916881169" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[04-Mar-2024] Seth Hardy (Warwick)</h3>
-<p>&ldquo;Bounds for exponential sums with random multiplicative coefficients&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1XsugcG1S1cly1OyzqNvBRBPG_nFu6sdL" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/919692170" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[18-Mar-2024] Prahlad Sharma (MPIM)</h3>
-<p>&ldquo;Counting special points on quadratic surfaces&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1grj9EXr-lQv1OkK1kKgSSkVhL7GeKuOc" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/925511704" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[25-Mar-2024] Quanli Shen (Shandong, Weihai)</h3>
-<p>&ldquo;The fourth moment of quadratic Dirichlet L-functions II&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1N3rjP5G24JDX5DBDbFLcA3fEEgRZXAlT" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/927209386" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[01-Apr-2024] Ertan Elma (Lethbridge)</h3>
-<p>&ldquo;A discrete mean value of the Riemann zeta function and its derivatives&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1ER2d9I1eUdXuhho_epMLYD89gADGRsID" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/930142105" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[09-Apr-2024] Steve Gonek (Rochester)</h3>
-<p>&ldquo;Universality of \(L\)-Functions over finite function fields&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/933079141" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[16-Apr-2024]  Jonathan Keating (Oxford)</h3>
-<p>&ldquo;Joint Moments&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1sCQfz3jsMBs_AxUuuvesiou3BOmc5xOo" target=&ldquo;blank&rdquo;>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/935918637" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<h3>[22-Apr-2024] Problem Session</h3>
-<p>Moderator: Ofir Gorodetsky (<a href="frg-problem-session.pdf" target=&ldquo;blank&rdquo;>problem list</a>)
-</p>
-<h3>[29-Apr-2024] Brian Conrey (AIM)</h3>
-<p>&ldquo;Averages of L-functions and arithmetic stratification: a report on the FRG&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/940927700" target=&ldquo;blank&rdquo;>video</a>)
-</p>
-<div id="footer">
-<div id="footer-text">
-Page generated 2024-12-12 02:47:08 EST, by <a href="https://github.com/wsshin/jemdoc_mathjax" target="blank">jemdoc+MathJax</a>.
-(<a href="activities.jemdoc">source</a>)
-</div>
-</div>
-</td>
-</tr>
-</table>
-</body>
-</html>
+    </script>
+    <!-- End MathJax -->
+  </head>
+  {% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/jemdoc.css' %}" />
+  {% endblock extra_css %}
+  {% block content %}
+    <body>
+      <table summary="Table for page layout." id="tlayout">
+        <tr valign="top">
+          <td id="layout-menu">
+            <div class="menu-category">AIM FRG</div>
+            <div class="menu-item">
+              <a href="{% page_url 'frg' %}">Home</a>
+            </div>
+            <div class="menu-item">
+              <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1854398">NSF&nbsp;Grant</a>
+            </div>
+            <div class="menu-item">
+              <a href="{% page_url 'frg' %}papers">Publications</a>
+            </div>
+            <div class="menu-item">
+              <a href="{% page_url 'frg' %}activities" class="current">Activities</a>
+            </div>
+            <div class="menu-item">
+              <a href="https://vimeo.com/showcase/7398886">Videos</a>
+            </div>
+            <div class="menu-item">
+              <a href="./references/">References</a>
+            </div>
+          </td>
+          <td id="layout-content">
+            <div id="toptitle">
+              <h1>FRG Activities</h1>
+            </div>
+            <p>
+              The following activities were organized as part of the <a href="aimfrg.html" target=&ldquo;blank&rdquo;>AIM FRG</a>:
+            </p>
+            <ul>
+              <li>
+                <p>A zoom workshop in summer 2020 organized by Brian Conrey (AIM) over Sococo and Zoom.</p>
+              </li>
+              <li>
+                <p>A research seminar (2020-2021) organized by Brian Conrey (AIM) over Sococo and Zoom.</p>
+              </li>
+              <li>
+                <p>A graduate seminar (2021-2024) organized by Anurag Sahay (Purdue) over Zoom.</p>
+              </li>
+              <li>
+                <p>An in-person workshop in summer 2021 organized by Emilia Alvarez (Bristol) at the AIM location in San Jose.</p>
+              </li>
+              <li>
+                <p>
+                  Two problem sessions over zoom; the first on March 23rd, 2021 moderated by Brian Conrey (AIM) and the second on April 22nd, 2024 moderated by Ofir Gorodetsky (Oxford).
+                </p>
+              </li>
+              <li>
+                <p>Several working groups on themes related to the FRG, such as the \(\gamma_k(c)\) working group.</p>
+              </li>
+            </ul>
+            <p>
+              The following activities were not officially part of the FRG, but were organized by individuals associated with the FRG and/or dealt with related themes:
+            </p>
+            <ul>
+              <li>
+                <p>
+                  <a href="https://www.ias.edu/math/events/50yntrmt"
+                     target
+                     ldquo
+                     blank
+                     rdquo>50 Years of Number Theory and Random Matrix Theory Conference</a>, held at the Institute of Advanced Study, Princeton in June 2022.
+                </p>
+              </li>
+              <li>
+                <p>
+                  <a href="https://heilbronn.ac.uk/2022/07/25/jpk-60/"
+                     target
+                     ldquo
+                     blank
+                     rdquo>Random matrices from quantum chaos to the Riemann zeta function</a>, held at the University of Bristol in July 2023.
+                </p>
+              </li>
+              <li>
+                <p>
+                  <a href="https://sites.google.com/view/crgl-functions/crg-news"
+                     target
+                     ldquo
+                     blank
+                     rdquo>PIMS CRG on L-functions in Analytic Number Theory</a> (2022-2025).
+                </p>
+              </li>
+            </ul>
+            <p>A detailed record of the activities, including video links, can be found below.</p>
+            <h1>2020 Workshop</h1>
+            <p>
+              This was a summer workshop organized by Brian Conrey; it was originally meant to be held in person, but was moved to Sococo and Zoom due to the COVID-19 pandemic. The workshop kicked off the activities of the FRG with several talks on the themes of the FRG, namely moments of L-functions and point-counting on varieties and helped familiarize the FRG members with the Sococo workspace.
+            </p>
+            <h2>Summer 2020</h2>
+            <h3>[28-Jul-2020] Henryk Iwaniec (Rutgers)</h3>
+            <p>
+              &ldquo;The sixth power moment of partial zeta series&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/442540271"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[28-Jul-2020] Brad Rodgers (Queen's)</h3>
+            <p>
+              &ldquo;Some expansions of the \(\gamma_k\) integral&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/442532123"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[29-Jul-2020] Alexandra Florea (Columbia)</h3>
+            <p>
+              &ldquo;Divisor convolutions over function fields&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/442870345"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[29-Jul-2020] Trevor Wooley (Purdue)</h3>
+            <p>
+              &ldquo;Arithmetic stratification: a cubic example&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/443154294"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[30-Jul-2020] K. Soundararajan (Stanford)</h3>
+            <p>
+              &ldquo;Bounds for moments of zeta & L-functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/443118570"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[30-Jul-2020] Emilia Alvarez (Bristol)</h3>
+            <p>
+              &ldquo;Moments of logarithmic derivatives in RMT&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/443174272"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[31-Jul-2020] Jonathan Keating (Oxford)</h3>
+            <p>
+              &ldquo;Joint Moments&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/443491868"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h1>Research Seminar</h1>
+            <p>
+              Originally called the &ldquo;virtual FRG seminar&rdquo;, this Zoom seminar was organized by Brian Conrey and was held on Tuesdays. It ran from August 2020 to June 2021 and served as the main weekly activity of the FRG at the time, usually featuring a 1.5 hour talk given by an FRG member on their research (or by a non-member on their own work related to the themes of the FRG). For a brief period, this was called the &ldquo;Tuesday seminar&rdquo; or the &ldquo;adult seminar&rdquo; to distinguish it from the graduate seminar (see below).
+            </p>
+            <h2>Fall 2020</h2>
+            <h3>[04-Aug-2020] Siegfred Baluyot (AIM)</h3>
+            <p>
+              &ldquo;Dirichlet L-functions of quadratic characters of prime conductor at the central point&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/444728926"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[11-Aug-2020] Matilde Lalín (Montréal)</h3>
+            <p>
+              &ldquo;Non-vanishing for cubic L-functions over function fields&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/446890820"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[18-Aug-2020] Alia Hamieh (UNBC)</h3>
+            <p>
+              &ldquo;Mean values of long Dirichlet polynomials with higher divisor coefficients&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/448994606"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[25-Aug-2020] Ofir Gorodetsky (Tel Aviv)</h3>
+            <p>
+              &ldquo;Correlations of von Mangoldt and \(k\)th divisor functions in \(\mathbb{F}_q[T]\)&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/451605443"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[01-Sep-2020] Micah Milinovich (Mississippi)</h3>
+            <p>
+              &ldquo;Irregularities of Dirichlet \(L\)-functions and a Chebyshev-type bias for zeros&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/453775221"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[08-Sep-2020] Sandro Bettin (Genova)</h3>
+            <p>
+              &ldquo;Value distribution of quantum modular forms&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/456264792"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[15-Sep-2020] Olga Balkanova (Steklov)</h3>
+            <p>
+              &ldquo;Moments of symmetric square L-functions and averages of Zagier L-series&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/458307770"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[22-Sep-2020] Steve Lester (KCL)</h3>
+            <p>
+              &ldquo;Quantum variance for dihedral Maass forms&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/460673194"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[29-Sep-2020] Hung Bui (Manchester)</h3>
+            <p>
+              &ldquo;Analytic ranks of automorphic \(L\)-functions and Landau-Siegel zeros&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/460673194"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[06-Oct-2020] Henryk Iwaniec (Rutgers)</h3>
+            <p>
+              &ldquo;The large sieve for prime moduli&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/465890638"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[13-Oct-2020] Emmanuel Kowalski (ETH Zürich)</h3>
+            <p>
+              &ldquo;Equidistribution of L-functions over function fields twisted by Dirichlet characters modulo squarefree polynomials, and applications&rdquo;
+            </p>
+            <h3>[20-Oct-2020] Alessandro Fazzari (Genova)</h3>
+            <p>
+              &ldquo;Weighted value distributions of the Riemann zeta function on the critical line&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/470301813"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[26-Oct-2020] Quanli Shen (Lethbridge)</h3>
+            <p>
+              &ldquo;The fourth moment of quadratic Dirichlet \(L\)-functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/472678864"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[10-Nov-2020] Adrian Diaconu (Lethbridge)</h3>
+            <p>
+              &ldquo;Secondary terms in the asymptotics of moments of \(L\)-functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/477699691"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[17-Nov-2020] David Farmer (AIM)</h3>
+            <p>
+              &ldquo;The Riemann Hypothesis is not an analysis problem&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/480488658"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[24-Nov-2020] Michael Rubinstein (Waterloo)</h3>
+            <p>
+              &ldquo;Moments of quadratic L-functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/483248612"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[08-Dec-2020] Vorappan (Fai) Chandee (Kansas State)</h3>
+            <p>
+              &ldquo;The sixth moment of Dirichlet L-functions without average in the t-aspect&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/492164925"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[15-Dec-2020] Yacine Barhoumi-Andréani (Bochum)</h3>
+            <p>
+              &ldquo;A new approach to the characteristic polynomial of a random unitary matrix&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/491285797"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[12-Jan-2021] Paul Nelson (ETH Zürich)</h3>
+            <p>
+              &ldquo;Some analysis of L-functions in higher rank&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/500148068"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[19-Jan-2021] Dmitriy Frolenkov (Steklov)</h3>
+            <p>
+              &ldquo;On the average length of finite continued fractions with a fixed denominator&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/502265001"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[26-Jan-2021] Xiannan Li (Kansas State)</h3>
+            <p>
+              &ldquo;The eighth moment of Dirichlet \(L\)-functions and of \(\Gamma_1(q)\) \(L\)-functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/504900036"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[02-Feb-2021] Henryk Iwaniec (Rutgers)</h3>
+            <p>
+              &ldquo;Large sieve for determinants&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/507643727"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[11-Feb-2021] Matt Young (Texas A&M)</h3>
+            <p>
+              &ldquo;The \(SL_3(Z)\) spectral large sieve&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/511323855"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[16-Feb-2021] Will Sawin (Columbia)</h3>
+            <p>
+              &ldquo;(Almost) square-root cancellation for sums to squarefree moduli in \(\mathbb{F}_q[t]\), with applications to Dirichlet \(L\)-functions of squarefree conductor&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/513109616"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[25-Feb-2021] Chantal David (Concordia)</h3>
+            <p>&ldquo;One-level density for cubic Dirichlet L-functions&rdquo;</p>
+            <h3>[02-Mar-2021]  Javier Pliego (Bristol/Purdue)</h3>
+            <p>
+              &ldquo;Mixed moments of the Riemann zeta-function&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/518718318"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[09-Mar-2021]  Kyle Pratt (Oxford)</h3>
+            <p>
+              &ldquo;Low lying zeros of Dirichlet \(L\)-functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/521540924"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[16-Mar-2021]  Caroline Turnage-Butterbaugh (Carleton)</h3>
+            <p>
+              &ldquo;Gaps between zeros of the Riemann zeta-function&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/524423486"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[30-Mar-2021]  Adam J. Harper (Warwick)</h3>
+            <p>
+              &ldquo;Gaps between zeros of the Riemann zeta-function&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/530898563"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[06-Apr-2021]  Estelle Basor (AIM)</h3>
+            <p>
+              &ldquo;Identities in random matrix theory&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/533694472"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[27-Apr-2021]  Zhi Qi (Zhejiang)</h3>
+            <p>
+              &ldquo;Beyond the Weyl barrier for \(GL(2)\) exponential sums&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/542263376"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[04-May-2021]  Dan Goldston (SJSU)</h3>
+            <p>
+              &ldquo;Goldbach conjecture and Landau-Siegel zeros&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/545726824"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[21-June-2021]  Natalie Evans (King's College)</h3>
+            <p>
+              &ldquo;Correlations of almost primes&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/564336983"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h1>2021 Workshop</h1>
+            <p>
+              This was a summer workshop organized by Emilia Alvarez and held in the San Jose location of AIM. The primary focus of the workshop was the connection between moments of characteristic polynomials of random matrices and the Painlevé equations, though other topics (including the \(\gamma_k(c)\) function) were also discussed. Informal talks were given by Emilia Alvarez (Bristol), Siegfred Baluyot (AIM), Estelle Basor (AIM), Brian Conrey (AIM), Alexandra Florea (UC Irvine), Johannes Forkel (Oxford), Dan Goldston (SJSU), Matilde Lalín (Montréal), Andean Medjedovic (Waterloo), Brad Rodgers (Queen's), Michael Rubinstein (Waterloo), and others. Recordings of some talks are listed below.
+            </p>
+            <h3>Emilia Alvarez (Bristol)</h3>
+            <p>
+              &ldquo;Random matrix theory & number theory&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/585558703"
+   target
+   ldquo
+   blank
+   rdquo>video1</a>, <a href="https://vimeo.com/showcase/7398886/video/586546390"
+    target
+    ldquo
+    blank
+    rdquo>video2</a>)
+            </p>
+            <h3>Siegfred Baluyot (AIM)</h3>
+            <p>
+              &ldquo;Brief introduction to Painlevé equations&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/585560480"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+              <br />
+              &ldquo;Moments of the derivative of characteristic polynomials and Painlevé V and III&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/586934024"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>Estelle Basor (AIM)</h3>
+            <p>
+              &ldquo;Density for eigenvalues for CUE and the sine kernel&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/585566164"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+              <br />
+              &ldquo;Painlevé for gap probabilities&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/589483045"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>Brian Conrey (AIM)</h3>
+            <p>
+              &ldquo;Differential equation for \(E_2\)&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/588911042"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>Johannes Forkel (Oxford)</h3>
+            <p>
+              &ldquo;Introduction to Riemann-Hilbert problems&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/585560480"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>Michael Rubinstein (Waterloo)</h3>
+            <p>
+              &ldquo;Autocorrelation of random matrix polynomials&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/586876920"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+              <br />
+              &ldquo;Differential equations&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/589474845"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h1>Grad Seminar</h1>
+            <p>
+              This Zoom seminar was organized by Anurag Sahay and was held on Mondays. The seminar was originally meant to complement the &ldquo;adult&rdquo; or research seminar (see above) by providing the graduate students in the FRG a space to give expository talks on papers they were reading; during this period it was also called the &ldquo;Monday seminar&rdquo;. When the research seminar wound down, the scope of the seminar was expanded to include research talks by FRG members, and then later also to talks by external speakers, with the caveat that speakers were asked to make the talks accessible to graduate students and other early career researchers. The seminar ran from February 2021 to April 2024, and served as the main weekly activity of the FRG after October 2021. Notes and slides for talks (when available) are collected <a href="./references/" target=&ldquo;blank&rdquo;>here</a>.
+            </p>
+            <h2>Spring 2021</h2>
+            <h3>[01-Feb-2021] Alessandro Fazzari (Genova)</h3>
+            <p>
+              &ldquo;A survey on the central limit theorem for the Riemann zeta function&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/507651852"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[08-Feb-2021] Emilia Alvarez (Bristol)</h3>
+            <p>
+              &ldquo;An overview of random matrix theory for number theorists&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/509922272"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[15-Feb-2021] Quanli Shen (Lethbridge)</h3>
+            <p>
+              &ldquo;The first moment of quadratic twists of modular L-functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/512662139"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[22-Feb-2021] Chung-Hang (Kevin) Kwan (Columbia)</h3>
+            <p>
+              &ldquo;Averages of Fourier coefficients&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/515483518"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[08-Mar-2021] Max Wenqiang Xu (Stanford)</h3>
+            <p>
+              &ldquo;Distribution and moments of random multiplicative functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/521541564"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[12-Apr-2021] Ofir Gorodetsky (Oxford)</h3>
+            <p>
+              &ldquo;The variance of the sum of an arithmetic function over random short intervals&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/536211587"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[19-Apr-2021] Vivian Kuperberg (Stanford)</h3>
+            <p>
+              &ldquo;The second moment of quadratic twists of modular L-functions (after Soundararajan and Young)&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/539761967"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[17-May-2021] Jared Duker Lichtman (Oxford)</h3>
+            <p>
+              &ldquo;The Riemann hypothesis for curves&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/551635827"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[07-Jun-2021] Winston Heap (Shandong)</h3>
+            <p>
+              &ldquo;Mean values of long Euler products&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/560279471"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[14-Jun-2021] Amita Malik (AIM/MPIM)</h3>
+            <p>
+              &ldquo;Equidistribution of \(\alpha p^{\theta}\) with a Chebotarev condition and applications to extremal primes&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/562977230"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[21-Jun-2021] Akshat Mudgal (Bristol/Purdue)</h3>
+            <p>
+              &ldquo;An introduction to Vinogradov’s mean value theorem&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/565809711"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h2>Fall 2021</h2>
+            <h3>[04-Oct-2021] Caroline Turnage-Butterbaugh (Carleton)</h3>
+            <p>
+              &ldquo;Gaps between zeros of the Riemann zeta-function&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/622777253"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[11-Oct-2021] Louis Gaudet (Rutgers)</h3>
+            <p>
+              &ldquo;The Kloosterman Circle Method&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/629375888"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[25-Oct-2021] Max Wenqiang Xu (Stanford)</h3>
+            <p>
+              &ldquo;Limiting distributions of sums of random multiplicative functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/638819860"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[02-Nov-2021] Shehzad Hathi (UNSW Canberra)</h3>
+            <p>
+              &ldquo;The LLL algorithm and its applications to Mertens conjecture&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/642449320"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[08-Nov-2021] Emilia Alvarez (Bristol)</h3>
+            <p>
+              &ldquo;Random matrices and Painlevé equations&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/647041851"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[15-Nov-2021] Fatma Çiçek (IIT Gandhinagar)</h3>
+            <p>
+              &ldquo;Value distribution of the Riemann zeta-function on the half-line&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/647472398"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[22-Nov-2021] Fan Ge (William & Mary)</h3>
+            <p>
+              &ldquo;Critical points of the Riemann zeta-function&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/651707698"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[29-Nov-2021] Chung-Hang (Kevin) Kwan (Columbia)</h3>
+            <p>
+              &ldquo;Some aspects of \(\Gamma\)-functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/651707707"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[13-Dec-2021] Brad Rodgers (Queen's)</h3>
+            <p>
+              &ldquo;Averages of products and ratios of L-functions and characteristic polynomials&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/659857736"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h2>Spring 2022</h2>
+            <h3>[14-Feb-2022] Siegfred Baluyot (AIM)</h3>
+            <p>
+              &ldquo;The shifted convolution of divisor functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/677871640"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[28-Feb-2022] Peter Humphries (Virginia)</h3>
+            <p>
+              &ldquo;Spectral reciprocity and applications&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/682999140"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[07-Mar-2022] Vivian Kuperberg (Stanford)</h3>
+            <p>
+              &ldquo;The Hardy&ndash;Littlewood \(k\)-tuple conjecture and intervals with many primes&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/686796577"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[14-Mar-2022] Ofir Gorodetsky (Oxford)</h3>
+            <p>
+              &ldquo;Chebyshev's bias for primes and for sums of two squares&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/688074044"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[21-Mar-2022] Kunjakanan Nath (UIUC)</h3>
+            <p>
+              &ldquo;Primes with restricted digits&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/691923304"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[28-Mar-2022] Joshua Stucky (Kansas State)</h3>
+            <p>
+              &ldquo;Smooth numbers in arithmetic progressions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/694644014"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[04-Apr-2022] Victor Wang (Princeton)</h3>
+            <p>
+              &ldquo;Special subvarieties over finite and infinite fields&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/695962472"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[11-Apr-2022] Ayla Gafni (Mississippi)</h3>
+            <p>
+              &ldquo;Uniform distribution and geometric incidence theory&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/698691542"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[18-Apr-2022] Alia Hamieh (UNBC)</h3>
+            <p>
+              &ldquo;Distribution of values of logarithmic derivatives of L-functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/701035097"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[25-Apr-2022] Kevin Hughes (Bristol)</h3>
+            <p>
+              &ldquo;A primer on Discrete Restriction Theory&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/702978189"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[02-May-2022] Alexandra Florea (UC Irvine)</h3>
+            <p>
+              &ldquo;Upper bounds for positive and negative moments of the Riemann zeta function&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/705514604"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[16-May-2022] Martin Čech (Concordia)</h3>
+            <p>
+              &ldquo;Two ways to compute moments in the family of real Dirichlet L-functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/710586401"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[23-May-2022] Jori Merikoski (Oxford)</h3>
+            <p>
+              &ldquo;Primes in sparse polynomials sets&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/713047040"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[30-May-2022] Micah Milinovich (Mississippi)</h3>
+            <p>
+              &ldquo;Estimates for zeta and L-functions via Fourier optimization&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/715424003"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h2>Fall 2022</h2>
+            <h3>[22-Sep-2022] Caroline Turnage-Butterbaugh (Carleton)</h3>
+            <p>&ldquo;Moments of Dirichlet L-functions&rdquo;</p>
+            <h3>[26-Sep-2022] Hua Lin (UC Irvine)</h3>
+            <p>
+              &ldquo;One-level density of zeros of Dirichlet L-function over function fields&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/754057926"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[03-Oct-2022] Louis Gaudet (Rutgers)</h3>
+            <p>
+              &ldquo;The least Euler prime via a sieve approach&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/756571411"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[10-Oct-2022] Lasse Grimmelt (Oxford)</h3>
+            <p>
+              &ldquo;Primes in large arithmetic progressions and applications to additive problems&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/758809710"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[17-Oct-2022] Dan Goldston (SJSU)</h3>
+            <p>
+              &ldquo;Small gaps and spacings between Riemann zeta-function zeros&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1Sq-GZWHamh4btvNK4BeSE7d4Ld8E-LDn"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/762420915"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[31-Oct-2022] Emma Bailey (CUNY)</h3>
+            <p>
+              &ldquo;Large values of \(\zeta\) on the critical line&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/765975595"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[07-Nov-2022] Daodao Yang (TU Graz)</h3>
+            <p>
+              &ldquo;Large values of derivatives of the Riemann zeta function and related problems&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1Oo6U_i6ql-Q2Tdn-NYPrI_AO_xksnkGy"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>)
+            </p>
+            <h3>[14-Nov-2022] Jakob Streipel (Maine)</h3>
+            <p>
+              &ldquo;Using second moments to count zeros&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1KxGLOprPIaB7Bi289gclWu8tPPqt6DBU"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/773448249"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[21-Nov-2022] Alexander Dunn (Caltech)</h3>
+            <p>
+              &ldquo;Bias in cubic Gauss sums: Patterson's conjecture&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/773488432"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[28-Nov-2022] Aled Walker (KCL)</h3>
+            <p>
+              &ldquo;Correlations of sieve weights and distributions of zeros&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1s76UJbzr8riSGVYWjdSeBrJd7uPlnDqY"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/776746878"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[05-Dec-2022] Asif Zaman (Toronto)</h3>
+            <p>&ldquo;Random multiplicative functions and a simplified model&rdquo;</p>
+            <h3>[12-Dec-2022] Alexander Dobner (Michigan)</h3>
+            <p>
+              &ldquo;Optimization and moment methods in number theory&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1n2dSjTQPa--KiI4VBL2D9pDltD1ogEzI"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/780504272"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[19-Dec-2022] George Dickinson (Manchester)</h3>
+            <p>
+              &ldquo;Second moments of Dirichlet L-functions&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1RwN7HrA4T2mnolrqNxFEk8kl-vRkLdzv"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/782636948"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h2>Spring 2023</h2>
+            <h3>[23-Jan-2023] Nathan Ng (Lethbridge)</h3>
+            <p>
+              &ldquo;The eighth moment of the Riemann zeta function&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1aCEk-8lwNigHJQyqZOx2sQ6POYcF5CBs"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/792304269"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[30-Jan-2023] David Farmer (AIM)</h3>
+            <p>
+              &ldquo;The zeta function when it is particularly large&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1PtjNIs367dSSb7ERivDsJ-CoLvH48GTJ"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/794243669"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[06-Feb-2023] Keshav Aggarwal (Rényi Institute)</h3>
+            <p>
+              &ldquo;Bound for the existence of prime gap graphs&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1NylmaLvch-L4NnHJqcg_2xQh3oiiL95k"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/796453783"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[13-Feb-2023] Rizwanur Khan (Mississippi)</h3>
+            <p>
+              &ldquo;The fourth moment of Dirichlet L-functions and related problems&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1TiGd3hXCSRHiDvGAjrHh-i2hCAum7Nbh"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/798484545"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[20-Feb-2023] Katy Woo (Princeton)</h3>
+            <p>
+              &ldquo;Small scale distribution of primes in four-term arithmetic progressions&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1Z4UqG7e--H1dLfOiKlDXUi1hJXueWiOy"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/801374903"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[27-Feb-2023] Xiannan Li (Kansas State)</h3>
+            <p>
+              &ldquo;Quadratic Twists of Modular L-functions&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1o1Fvr7RWf39hFveVa4leZ41g46utjuyL"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/802828559"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[10-Mar-2023] Ofir Gorodetsky (Oxford)</h3>
+            <p>
+              &ldquo;How many smooth numbers and smooth polynomials are there?&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1B-nthUn8PlJm4v766L-nDitJfltJPWJ4"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/807624224"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[13-Mar-2023] Ian Whitehead (Swarthmore)</h3>
+            <p>
+              &ldquo;Multiple Dirichlet Series and Moments of L-functions&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/808076317"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[20-Mar-2023] Peter Zenz (Brown)</h3>
+            <p>
+              &ldquo;On the distribution of holomorphic cusp forms and applications&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/10PM8pfGGmjAGZZ4E-NS_LtcPI54bYlV3"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/809942031"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[10-Apr-2023] Aleksander Simonič (UNSW Canberra)</h3>
+            <p>
+              &ldquo;Some conditional estimates for functions in the Selberg class&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1Zjiwg8AaR1Wnztu-ZVhVwxhND44mfh47"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/816975703"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[17-Apr-2023] Matilde Lalín (Montréal)</h3>
+            <p>
+              &ldquo;The distribution of values of cubic \(L\)-functions at \(s=1\)&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1UMNZchhenccg9QlMr8ZMEnfopTJqfk4f"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/818508210"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[24-Apr-2023] Eun Hye Lee (Stony Brook)</h3>
+            <p>
+              &ldquo;The Shintani zeta functions&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1rItUD3PtN4k-FtSm7eLhWbAQTSKdlUoy"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/824999140"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[01-May-2023] Kiseok Yeon (Purdue)</h3>
+            <p>
+              &ldquo;The Hasse principle for random projective hypersurfaces via the circle method&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1v51p2knfNLBVapmcmZr26bSHZQ2a-zEH"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/823419211"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[08-May-2023] Alessandro Fazzari (AIM)</h3>
+            <p>
+              &ldquo;Averages of long Dirichlet polynomials with modular coefficients&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1Skun6RKksR08E1JL_4qVUyuF1MBA7I8k"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/827830298"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[15-May-2023] Vorappan (Fai) Chandee (Kansas State)</h3>
+            <p>
+              &ldquo;The eighth moment of \(\Gamma_1(q)\) \(L\)-functions&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1kaRg1Zw7A_cZ47ZGMG639ds5s5sctR1A"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/827830309"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[22-May-2023] Igor Shparlinski (UNSW)</h3>
+            <p>
+              &ldquo;Bilinear forms with Kloosterman and Salié Sums and Moments of L-functions&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1w0vv4BaDTgVs4_dWCfa6LkcyLgPYlYOl"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/829640978"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[29-May-2023] Jaime Hernandez Palacios (Mississippi)</h3>
+            <p>
+              &ldquo;Gaps between zeros of zeta and L-functions of high degree&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/17vqj7lgI6_rDPCW9Q3mkNnoO6O8seMV3"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>)
+            </p>
+            <h3>[05-Jun-2023] Emily Quesada-Herrera (TU Graz)</h3>
+            <p>
+              &ldquo;On the vertical distribution of the zeros of the Riemann zeta-function&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/15lchre7XepMoPsEp9izrgPRHgQMaW2Ke"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/833417088"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h2>Fall 2023</h2>
+            <h3>[18-Sep-2023] Mayank Pandey (Princeton)</h3>
+            <p>
+              &ldquo;\(L^1\) means of exponential sums with multiplicative coefficients&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/865727679"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[25-Sep-2023] Henryk Iwaniec (Rutgers)</h3>
+            <p>
+              &ldquo;Integer Parts Mutually Coprime&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1O92SDeaQq-CjZE4DWhdVDlQ6UFy06fbF"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>)
+            </p>
+            <h3>[02-Oct-2023] Agniva Dasgupta (Texas A&M)</h3>
+            <p>
+              &ldquo;Short second moment bound for \(GL(2)\) \(L\)-functions in the level aspect&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1KfoaBZDkw07q2cS8X012ZsAipwVmFWl2"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/870736114"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[23-Oct-2023] Winston Heap (NTNU)</h3>
+            <p>
+              &ldquo;Simultaneous extreme values of zeta and L-functions&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1b4M5XDCDRyN-2I3weZinS56GBD38cHK7"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/877232196"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[30-Oct-2023] Sacha Mangerel (Durham)</h3>
+            <p>
+              &ldquo;Large order Dirichlet characters and an analogue of a conjecture of Vinogradov&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1wdV2n1MTmKo1nUl55s-sLYgcGBlLNQzv"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/880210095"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[06-Nov-2023] Michael Curran (Oxford)</h3>
+            <p>
+              &ldquo;Correlations of the Riemann zeta function&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1Cf0R485DwkDEXhSBHP2PApsJJX0p0NTz"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/882248522"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[13-Nov-2023] Julia Stadlmann (Oxford)</h3>
+            <p>
+              &ldquo;Primes in arithmetic progressions to smooth moduli&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1VdbPk-5IkM_Ic2IiKdQ1W_kq_zmaZqat"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/884090590"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[20-Nov-2023] Steve Lester (KCL)</h3>
+            <p>
+              &ldquo;Around the Gauss circle problem&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1-Mm2KzLSRtzw-5WEnIEA56B2hpcknoyL"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/886554314"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[27-Nov-2023] Michael Yiasemides (LSE)</h3>
+            <p>
+              &ldquo;Lattice points in function fields and Hankel matrices&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1XoOSdbeWAkpD1hf8e4ghjv1Tr9wkUn3-"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/888800687"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[11-Dec-2023] Andrés Chirre (PUCP Lima)</h3>
+            <p>
+              &ldquo;Remarks on a formula of Ramanujan&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1ISQaUzttjAsIzDwGhyWhALrkqNqr3HCK"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/906109025"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[18-Dec-2023] Maxim Gerspach (KTH)</h3>
+            <p>
+              &ldquo;Heuristics and random models for quadratic character sums&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/19KB9yYoqfgADQ3qyhod9D0A9nttAXBgk"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/896572919"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h2>Spring 2024</h2>
+            <h3>[29-Jan-2024] Trevor Wooley (Purdue)</h3>
+            <p>
+              &ldquo;Primes as sums of \(k\)-th powers, and Freiman's theorem&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/907900934"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[05-Feb-2024] Siegfred Baluyot (AIM)</h3>
+            <p>
+              &ldquo;Twisted moments of characteristic polynomials of random matrices&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/910212119"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[12-Feb-2024] Alexandre de Faveri (Stanford)</h3>
+            <p>
+              &ldquo;An inequality for \(GL(3)\) Fourier coefficients&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/17npduOwm5IPuP6MnhGE-Q59Wo1VjNgho"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/912854882"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[19-Feb-2024] Jackie Voros (Bristol)</h3>
+            <p>
+              &ldquo;On the average least negative Hecke eigenvalue&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/914960284"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[26-Feb-2024] Vivian Kuperberg (ETH Zürich)</h3>
+            <p>
+              &ldquo;Sums of odd-ly many fractions&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1k1XPGLoCYjQdUtMOpcrBg5Sj2EGuVGBe"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/916881169"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[04-Mar-2024] Seth Hardy (Warwick)</h3>
+            <p>
+              &ldquo;Bounds for exponential sums with random multiplicative coefficients&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1XsugcG1S1cly1OyzqNvBRBPG_nFu6sdL"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/919692170"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[18-Mar-2024] Prahlad Sharma (MPIM)</h3>
+            <p>
+              &ldquo;Counting special points on quadratic surfaces&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1grj9EXr-lQv1OkK1kKgSSkVhL7GeKuOc"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/925511704"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[25-Mar-2024] Quanli Shen (Shandong, Weihai)</h3>
+            <p>
+              &ldquo;The fourth moment of quadratic Dirichlet L-functions II&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1N3rjP5G24JDX5DBDbFLcA3fEEgRZXAlT"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/927209386"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[01-Apr-2024] Ertan Elma (Lethbridge)</h3>
+            <p>
+              &ldquo;A discrete mean value of the Riemann zeta function and its derivatives&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1ER2d9I1eUdXuhho_epMLYD89gADGRsID"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/930142105"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[09-Apr-2024] Steve Gonek (Rochester)</h3>
+            <p>
+              &ldquo;Universality of \(L\)-Functions over finite function fields&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/933079141"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <h3>[16-Apr-2024]  Jonathan Keating (Oxford)</h3>
+            <p>
+              &ldquo;Joint Moments&rdquo; (<a href="https://drive.google.com/drive/u/0/folders/1sCQfz3jsMBs_AxUuuvesiou3BOmc5xOo"
+   target
+   ldquo
+   blank
+   rdquo>notes</a>, <a href="https://vimeo.com/showcase/7398886/video/935918637"
+    target
+    ldquo
+    blank
+    rdquo>video</a>)
+            </p>
+            <h3>[22-Apr-2024] Problem Session</h3>
+            <p>
+              Moderator: Ofir Gorodetsky (<a href="frg-problem-session.pdf" target=&ldquo;blank&rdquo;>problem list</a>)
+            </p>
+            <h3>[29-Apr-2024] Brian Conrey (AIM)</h3>
+            <p>
+              &ldquo;Averages of L-functions and arithmetic stratification: a report on the FRG&rdquo; (<a href="https://vimeo.com/showcase/7398886/video/940927700"
+   target
+   ldquo
+   blank
+   rdquo>video</a>)
+            </p>
+            <div id="footer">
+              <div id="footer-text">
+                Page generated 2024-12-12 02:47:08 EST, by <a href="https://github.com/wsshin/jemdoc_mathjax" target="blank">jemdoc+MathJax</a>.
+                (<a href="activities.jemdoc">source</a>)
+              </div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </body>
+  </html>
+{% endblock content %}

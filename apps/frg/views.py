@@ -13,7 +13,7 @@ def pdf_list_view(self, request):
         print("FRG folder not found")
 
     if frg_folder:
-        pdf_files = File.objects.filter(folder=frg_folder, file__endswith=".pdf")
+        pdf_files = frg_folder.all_files.filter(file__iendswith=".pdf")
         print(f"Found {pdf_files.count()} PDFs")  # Debugging output
         for pdf in pdf_files:
             print(f"PDF: {pdf.label}, URL: {pdf.file.url}")  # Debugging output
