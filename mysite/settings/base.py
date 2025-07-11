@@ -195,6 +195,7 @@ CMS_TEMPLATES = [
     ("staff_member_plugin.html", "update staff template"),
     ("FRG/frg-landing.html", "frg landing page"),
     ("FRG/frg-papers.html", "frg papers"),
+    ("new_page_template.html", "new_page_template"),
 ]
 
 ###########

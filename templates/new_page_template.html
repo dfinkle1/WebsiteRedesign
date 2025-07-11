@@ -1,9 +1,12 @@
 {% extends "base.html" %}
 {% load cms_tags djangocms_alias_tags %}
 {% load static %}
+{% block title %}
+    {% page_attribute "page_title" %}
+{% endblock title %}
 {% block content %}
     <section class="header-banner" tag="banner">
-        <div class="container">
+        <div class="container theme-bg">
             <div class="row align-items-center">
                 <div class="col-auto">
                     <img src="{% static 'images/aim_white.png' %}"
@@ -12,22 +15,12 @@
                          height="100px">
                 </div>
                 <div class="col">
-                    <h2>{{ article.title }}</h2>
+                    <h1>{% placeholder "page_title" %}</h1>
                 </div>
             </div>
         </div>
     </section>
     <div class="container">
-        <div class="m-2 p-4 theme-bg">
-            <div class="d-flex justify-content-between align-items-center">
-                <small class="text-muted">{{ article.published_date }}</small>
-            </div>
-            <img class="img-fluid float-end ms-2 mb-2"
-                 src="{{ article.news_image.url }}"
-                 alt="{{ article.title }}"
-                 height="500px"
-                 width="500px">
-            <p>{{ article.text }}</p>
-        </div>
+        <div class="m-2">{% placeholder "page_content" %}</div>
     </div>
 {% endblock content %}

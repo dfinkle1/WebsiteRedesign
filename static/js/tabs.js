@@ -11,11 +11,11 @@ triggerTabList.forEach((triggerEl) => {
 const activateTabFromHash = () => {
   if (window.location.hash) {
     let targetHash = window.location.hash;
-    console.log(targetHash);
+
     const triggerEl = document.querySelector(
       `#v-pills-tab button[data-bs-target="${targetHash}"]`
     );
-    console.log(triggerEl);
+
     if (triggerEl) {
       let tabInstance = bootstrap.Tab.getInstance(triggerEl);
       if (!tabInstance) {
@@ -27,6 +27,18 @@ const activateTabFromHash = () => {
     }
   }
 };
+
+document.querySelectorAll('[data-bs-toggle="pill"]').forEach((tabButton) => {
+  tabButton.addEventListener("shown.bs.tab", (event) => {
+    const targetSelector = event.target.getAttribute("data-bs-target");
+    if (targetSelector) {
+      // Remove the leading # to get clean ID
+      const cleanId = targetSelector.replace(/^#/, "");
+      // Update the URL hash without adding a new history entry
+      history.replaceState(null, null, "#" + cleanId);
+    }
+  });
+});
 
 activateTabFromHash();
 
