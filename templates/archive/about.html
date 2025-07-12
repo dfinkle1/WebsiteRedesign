@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load cms_tags djangocms_alias_tags %}
+{% load cms_tags djangocms_alias_tags staff_tags %}
 {% load static %}
 {% block title %}
     {% page_attribute "page_title" %}
@@ -117,7 +117,7 @@
                                  role="tabpanel"
                                  aria-labelledby="pills-home-tab"
                                  tabindex="0">
-                                <div class="content">{% placeholder "staff_directory" %}</div>
+                                <div class="content">{% render_staff %}</div>
                             </div>
                         </div>
                     </div>

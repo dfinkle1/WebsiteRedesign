@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load cms_tags djangocms_alias_tags %}
+{% load cms_tags djangocms_alias_tags article_tags newsletter_tags %}
 {% load static %}
 {% block title %}
   {% page_attribute "page_title" %}
@@ -28,14 +28,10 @@
                id="v-pills-tab"
                role="tablist"
                aria-orientation="vertical">
+            <!--
+            <button class="nav-link active" id="news-tab" data-bs-toggle="pill" data-bs-target="#news" type="button" role="tab" aria-controls="visiting">News</button>
+            -->
             <button class="nav-link active"
-                    id="news-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#news"
-                    type="button"
-                    role="tab"
-                    aria-controls="visiting">News</button>
-            <button class="nav-link"
                     id="news-letter-tab"
                     data-bs-toggle="pill"
                     data-bs-target="#news-letter"
@@ -54,28 +50,19 @@
       </div>
       <div class="col theme-bg">
         <div class="tab-content p-3" id="v-pills-tabContent">
-          <div class="tab-pane fade show active"
-               id="news"
-               role="tabpanel"
-               aria-labelledby="v-pills-visiting"
-               tabindex="0">
+          <!-- <div class="tab-pane fade show active" id="news" role="tabpanel" aria-labelledby="v-pills-visiting" tabindex="0">
             <h2>News</h2>
             <span class="fs-5">
-              <img src="{% static 'images/news/milikianpond.jpg' %}"
-                   alt="Alexanderson Award"
-                   class="img-fluid float-end ms-5 mb-3 custom-img"
-                   width="310px"
-                   height="auto" />
+              <img src="{% static 'images/news/milikianpond.jpg' %}" alt="Alexanderson Award" class="img-fluid float-end ms-5 mb-3 custom-img" width="310px" height="auto" />
               {# {% placeholder 'news-content' %} #}
             </span>
-          </div>
-          <div class="tab-pane fade"
+          </div> -->
+          <div class="tab-pane fade show active"
                id="news-letter"
                role="tabpanel"
                aria-labelledby="v-pills-codeofconduct"
                tabindex="0">
-            <h2>Newsletter</h2>
-            {# <span class="fs-5">{% placeholder 'news-letter-content' %}</span> #}
+            <span class="fs-5">{% render_newsletters %}</span>
           </div>
           <div class="tab-pane fade"
                id="news-stories"
@@ -88,7 +75,7 @@
                 <div class="row"></div>
               </div>
             </span>
-            <span class="fs-5">{% placeholder 'news-stories-content' %}</span>
+            <span class="fs-5">{% render_news_list %}</span>
           </div>
         </div>
       </div>

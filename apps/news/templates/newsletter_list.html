@@ -1,0 +1,25 @@
+<div class="container mt-4">
+    <h2>Newsletters</h2>
+    <div class="row">
+        {% for file in newsletter_files %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    {% if file.thumbnail %}
+                        <img src="{{ file.thumbnail.url }}"
+                             class="card-img-top"
+                             alt="{{ file.original_filename }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ file.original_filename }}</h5>
+                        <a href="{{ file.url }}" target="_blank" class="btn btn-primary">View PDF</a>
+                    </div>
+                </div>
+            </div>
+            <img src="{{ file.thumbnail.url }}"
+                 class="card-img-top"
+                 alt="{{ file.logo }}">
+        {% empty %}
+            <p>No newsletters found.</p>
+        {% endfor %}
+    </div>
+</div>

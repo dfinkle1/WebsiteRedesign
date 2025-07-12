@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% load cms_tags djangocms_alias_tags %}
+{% load static %}
+{% block title %}
+  Joyful Mathematics For All
+{% endblock title %}
+{% block content %}
+  <section class="header-banner" tag="banner">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-auto">
+          <img src="{% static 'images/aim_white.png' %}"
+               alt="AIM Logo"
+               class="fluid"
+               height="100px">
+        </div>
+        <div class="col">
+          <h2>Joyful Mathematics For All</h2>
+          <span class="fst-italic">The American Institute of Mathematics</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="container">
+    <div class="row mt-5 mb-4">
+      <div class="col-lg-3">
+        <div class="d-flex align-items-start">
+          <div class="nav flex-column nav-pills me-3"
+               id="v-pills-tab"
+               role="tablist"
+               aria-orientation="vertical">
+            <button class="nav-link active"
+                    id="joyful-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#landing"
+                    type="button"
+                    role="tab"
+                    aria-controls="joyful_mathematics">Joyful Mathematics For All</button>
+            <button class="nav-link"
+                    id="math-circles-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#math-circles"
+                    type="button"
+                    role="tab"
+                    aria-controls="math circles">Math Circle Network</button>
+            <button class="nav-link"
+                    id="math-communities-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#math-communities"
+                    type="button"
+                    role="tab"
+                    aria-controls="math communities">Math Communities</button>
+            <button class="nav-link"
+                    id="match-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#match"
+                    type="button"
+                    role="tab"
+                    aria-controls="match">MATCH</button>
+            <button class="nav-link"
+                    id="math-border-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#math-border"
+                    type="button"
+                    role="tab"
+                    aria-controls="math-border"
+                    aria-selected="false">Math On The Border</button>
+            <button class="nav-link"
+                    id="morgan-hill-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#morgan-hill"
+                    type="button"
+                    role="tab"
+                    aria-controls="morgan-hill"
+                    aria-selected="false">Morgan Hill Math</button>
+            <button class="nav-link"
+                    id="affiliated-programs-tab"
+                    data-bs-toggle="pill"
+                    data-bs-target="#affiliated-programs"
+                    type="button"
+                    role="tab"
+                    aria-controls="affiliated-programs"
+                    aria-selected="false">Affiliated Programs</button>
+          </div>
+        </div>
+      </div>
+      <div class="col theme-bg rounded">
+        <div class="tab-content p-3" id="v-pills-tabContent">
+          <div class="tab-pane fade show active"
+               id="landing"
+               role="tabpanel"
+               aria-labelledby="v-pills-landing"
+               tabindex="0">
+            <h1>Joyful Mathematics For All</h1>
+            <span class="fs-5">
+              <img src="{% static 'images/landing/JFMA-landing.jpg' %}"
+                   alt="People playing with tiles from AIMs Math Fair"
+                   class="img-fluid float-end ms-2 mb-2"
+                   width="450px"
+                   height="" />
+              {% placeholder "Joyful-Math-content" %}
+            </span>
+          </div>
+          <div class="tab-pane fade"
+               id="math-circles"
+               role="tabpanel"
+               aria-labelledby="v-pills-math-circles"
+               tabindex="0">
+            <span class="fs-5">{% placeholder "math-circles-content" %}</span>
+          </div>
+          <div class="tab-pane fade"
+               id="math-communities"
+               role="tabpanel"
+               aria-labelledby="v-pills-math-communities"
+               tabindex="0">
+            <span class="fs-5">{% placeholder "math-communities-content" %}</span>
+          </div>
+          <div class="tab-pane fade"
+               id="match"
+               role="tabpanel"
+               aria-labelledby="match-tab"
+               tabindex="0">
+            <span class="fs-5">{% placeholder "match-content" %}</span>
+          </div>
+          <div class="tab-pane fade"
+               id="math-border"
+               role="tabpanel"
+               aria-labelledby="v-pills-facilities"
+               tabindex="0">
+            <span class="fs-5">{% placeholder "math-on-the-border-content" %}</span>
+          </div>
+          <div class="tab-pane fade"
+               id="morgan-hill"
+               role="tabpanel"
+               aria-labelledby="v-pills-accessibility"
+               tabindex="0">
+            <span class="fs-5">{% placeholder "morgan-hill-content" %}</span>
+          </div>
+          <div class="tab-pane fade"
+               id="affiliated-programs"
+               role="tabpanel"
+               aria-labelledby="v-pills-accessibility"
+               tabindex="0">
+            <span class="fs-5">{% placeholder "affiliated-programs-content" %}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
