@@ -23,28 +23,36 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 # Application definition
 
 INSTALLED_APPS = [
+    # 🌱 Project Apps
     "mysite",
     "participants.apps.ParticipantsConfig",
     "apps.workshops.apps.WorkshopsConfig",
     "apps.frg.apps.FrgConfig",
     "apps.core.apps.CoreConfig",
-    "djangocms_admin_style",
+    "apps.staff.apps.StaffConfig",
+    "apps.news.apps.NewsConfig",
+    # 🌿 Django Core Apps
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
+    # ⚙️ Utilities / Support
+    "whitenoise.runserver_nostatic",
+    "treebeard",
+    "storages",
+    "sekizai",
+    "adminsortable2",
+    "easy_thumbnails",
+    # 🧩 django CMS Core
     "cms",
     "menus",
-    "django.contrib.sites",
-    "treebeard",
+    # 🧱 django CMS Addons
+    "djangocms_admin_style",
     "djangocms_versioning",
     "djangocms_alias",
-    "sekizai",
-    "filer",
-    "easy_thumbnails",
     "djangocms_text_ckeditor",
     "djangocms_picture",
     "djangocms_file",
@@ -52,8 +60,8 @@ INSTALLED_APPS = [
     "djangocms_googlemap",
     "djangocms_snippet",
     "djangocms_style",
-    "storages",
-    "adminsortable2",
+    # 🖼 Filer
+    "filer",
 ]
 
 ##django pictures##
@@ -180,21 +188,23 @@ SITE_ID = 2
 FILER_ENABLE_PERMISSIONS = True
 FILER_ENABLE_SUBDIRECTORIES = True
 
+
 CMS_TEMPLATES = [
-    ("template1.html", "Basic Template"),
+    # main template locations
+    ("cms_templates/home.html", "home"),
+    ("cms_templates/about.html", "about"),
+    ("cms_templates/focused-landing.html", "focused collaborative research"),
+    ("cms_templates/joyfulmathematics.html", "joyful mathematics template"),
+    ("cms_templates/visiting.html", "visiting template"),
+    ("cms_templates/resources.html", "resources template"),
+    ("cms_templates/news.html", "news template"),
+    ("home.html", "home"),
+    # FRG templates
     ("FRG/frg-resources.html", "frg resources"),
     ("FRG/frg-activities.html", "frg activities"),
-    ("testtemplate.html", "customcms"),
-    ("home.html", "home"),
-    ("about.html", "about"),
-    ("focused-landing.html", "focused collaborative research"),
-    ("joyfulmathematics.html", "joyful mathematics template"),
-    ("visiting.html", "visiting template"),
-    ("resources.html", "resources template"),
-    ("news.html", "news template"),
-    ("staff_member_plugin.html", "update staff template"),
     ("FRG/frg-landing.html", "frg landing page"),
     ("FRG/frg-papers.html", "frg papers"),
+    ("staff_member_plugin.html", "update staff template"),
     ("new_page_template.html", "new_page_template"),
 ]
 
@@ -208,12 +218,13 @@ CMS_TEMPLATES = [
 # STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # STATIC_URL = "static/"
-# STATICFILES_DIRS = [
-#     BASE_DIR / "static",
-# ]
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 
 USE_S3 = os.getenv("USE_S3") == "TRUE"
+
 
 if USE_S3:
     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
@@ -228,20 +239,18 @@ if USE_S3:
 
     STORAGES = {
         "default": {
-            "BACKEND": "utils.storages_backends.MediaStorage",  # Your custom media storage
+            "BACKEND": "utils.storages_backends.MediaStorage",
             "OPTIONS": {
                 "bucket_name": AWS_STORAGE_BUCKET_NAME,
                 "custom_domain": AWS_CLOUDFRONT_DOMAIN,
-                # add other boto3 options you use here
             },
         },
         "staticfiles": {
-            "BACKEND": "storages.backends.s3.S3Storage",
+            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
             "OPTIONS": {
                 "bucket_name": AWS_STORAGE_BUCKET_NAME,
-                "location": AWS_LOCATION,
+                "location": "static",
                 "custom_domain": AWS_CLOUDFRONT_DOMAIN,
-                # other options like ACL or CacheControl can be added here
             },
         },
     }

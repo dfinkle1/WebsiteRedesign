@@ -1,7 +1,6 @@
 from django.shortcuts import HttpResponse, render, get_object_or_404
 from datetime import date
 from apps.workshops.models import OldWorkshop
-from participants.models import Participant
 from django.http import JsonResponse
 from apps.core.models import *
 
@@ -23,12 +22,12 @@ def my_model_detail(request, id):
 
 
 def home(request):
-    featured_article = (
-        NewsArticle.objects.filter(featured=True).order_by("-published_date").first()
-    )
-    recent_articles = NewsArticle.objects.filter(featured=False).order_by(
-        "-published_date"
-    )[:5]
+    # featured_article = (
+    #     NewsArticle.objects.filter(featured=True).order_by("-published_date").first()
+    # )
+    # recent_articles = NewsArticle.objects.filter(featured=False).order_by(
+    #     "-published_date"
+    # )[:5]
     current_date = date.today()
     old_workshops_after_today = OldWorkshop.objects.filter(
         workshopstartdate__date__gte=current_date
@@ -36,8 +35,8 @@ def home(request):
     # template = loader.get_template("workshop/index.html")
     context = {
         "old_workshops_after_today": old_workshops_after_today,
-        "featured_article": featured_article,
-        "recent_articles": recent_articles,
+        # "featured_article": featured_article,
+        # "recent_articles": recent_articles,
     }
 
     return render(request, "home.html", context)
@@ -102,17 +101,6 @@ def codeofconduct(request):
 
 #
 # navbar/visiting
-
-
-def news_detail(request, slug):
-    article = get_object_or_404(NewsArticle, slug=slug)
-    return render(request, "article_detail.html", {"article": article})
-
-
-def news_view(request):
-    news_articles = NewsArticle.objects.all()
-    context = {"news_articles": news_articles}
-    return render(request, "news.html", context)
 
 
 # FRG

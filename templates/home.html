@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% load cms_tags %}
+{% load cms_tags article_tags %}
 {% block title %}
   Home
 {% endblock title %}
@@ -65,19 +65,7 @@
         <div class="col-md-8">
           <div class="p-3 theme-bg">
             <h3 class="pb-4 mb-4 fst-italic border-bottom">Recent News</h3>
-            {% if featured_article %}
-              <img src="{{ featured_article.news_image.url }}"
-                   alt="{{ featured_article.title }}"
-                   class="img-fluid float-start me-3 mb-3"
-                   width="350px"
-                   height="auto" />
-              <div>
-                <h5 class="text-primary-emphasis">{{ featured_article.title }}</h5>
-                <p class="fs-5">{{ featured_article.text }}</p>
-              </div>
-            {% else %}
-              <p>no current article</p>
-            {% endif %}
+            {% render_featured_article %}
           </div>
         </div>
         <div class="col-md-4 col-sm-12 p-1 theme-bg">
@@ -141,25 +129,7 @@
             <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223" />
           </svg>
         </button>
-        <div class="scrolling-wrapper-flexbox" id="horizontal-container">
-          {% for article in recent_articles %}
-            <a href="{% url 'news-article-detail' article.slug %}" target="_blank">
-              <div class="card p-3 mb-3">
-                <li class="list-unstyled">
-                  <h6 class="mb-0 text-primary-emphasis">{{ article.title }}</h6>
-                  <a class="" href="#">
-                    {% if article.news_image %}
-                      <img src="{{ article.news_image.url }}"
-                           class="img-fluid"
-                           aria-hidden="true"
-                           alt="{{ article.title }}" />
-                    {% endif %}
-                  </a>
-                </li>
-              </div>
-            </a>
-          {% endfor %}
-        </div>
+        <div class="scrolling-wrapper-flexbox" id="horizontal-container">{% render_news_carousel %}</div>
         <button id="next-btn" class="next-btn">
           <svg xmlns="http://www.w3.org/2000/svg"
                width="50"

@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% load cms_tags djangocms_alias_tags staff_tags %}
+{% load static %}
+{% block title %}
+    {% page_attribute "page_title" %}
+{% endblock title %}
+{% block content %}
+    <section class="header-banner" tag="banner">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <img src="{% static 'images/aim_white.png' %}"
+                         alt="AIM Logo"
+                         class="fluid"
+                         height="100px">
+                </div>
+                <div class="col">
+                    <h2>About AIM</h2>
+                    <span class="fst-italic">The American Institute of Mathematics</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="container">
+        <div class="row mt-5 mb-4">
+            <div class="col-auto">
+                <div class="d-flex align-items-start">
+                    <div class="nav flex-column nav-pills me-3"
+                         id="v-pills-tab"
+                         role="tablist"
+                         aria-orientation="vertical">
+                        <button class="nav-link active"
+                                id="about-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#about"
+                                type="button"
+                                role="tab"
+                                aria-controls="about">About</button>
+                        <button class="nav-link"
+                                id="contact-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#contact"
+                                type="button"
+                                role="tab"
+                                aria-controls="contact">Contact</button>
+                        <button class="nav-link"
+                                id="staff-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#staff"
+                                type="button"
+                                role="tab"
+                                aria-controls="staff">Staff</button>
+                        <button class="nav-link"
+                                id="governance-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#governance"
+                                type="button"
+                                role="tab"
+                                aria-controls="governance">Governance</button>
+                        <button class="nav-link"
+                                id="diversity-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#diversity"
+                                type="button"
+                                role="tab"
+                                aria-controls="diversity">Diversity</button>
+                        <button class="nav-link"
+                                id="mission-history-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#mission-history"
+                                type="button"
+                                role="tab"
+                                aria-controls="mission-history">Mission & History</button>
+                        <button class="nav-link"
+                                id="past-programs-tab"
+                                data-bs-toggle="pill"
+                                data-bs-target="#past-programs"
+                                type="button"
+                                role="tab"
+                                aria-controls="mission-history">Past Programs</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col theme-bg">
+                <div class="tab-content p-3" id="v-pills-tabContent">
+                    <div class="tab-pane fade show active"
+                         id="about"
+                         role="tabpanel"
+                         aria-labelledby="about-tab"
+                         tabindex="0">
+                        <h1>About</h1>
+                        <span class="fs-5">
+                            <img src="{% static 'images/landing/about-merkin.jpeg' %}"
+                                 alt="View of the mountains from the merkin center"
+                                 class="img-fluid float-end ms-2 mb-2 rounded"
+                                 width="450px"
+                                 height="" />
+                            {% placeholder "about-content" %}
+                        </span>
+                    </div>
+                    <div class="tab-pane fade"
+                         id="contact"
+                         role="tabpanel"
+                         aria-labelledby="contact-tab"
+                         tabindex="0">
+                        <h2>Contact</h2>
+                        <span class="fs-5">{% placeholder "contact-content" %}</span>
+                    </div>
+                    <div class="tab-pane fade"
+                         id="staff"
+                         role="tabpanel"
+                         aria-labelledby="staff-tab"
+                         tabindex="0">
+                        <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade show active"
+                                 id="pills-home"
+                                 role="tabpanel"
+                                 aria-labelledby="pills-home-tab"
+                                 tabindex="0">
+                                <div class="content">{% render_staff %}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade"
+                         id="governance"
+                         role="tabpanel"
+                         aria-labelledby="governance-tab"
+                         tabindex="0">
+                        <h2>Governance</h2>
+                        <span class="fs-5">{% placeholder "governance-content" %}</span>
+                    </div>
+                    <div class="tab-pane fade"
+                         id="diversity"
+                         role="tabpanel"
+                         aria-labelledby="diversity-tab"
+                         tabindex="0">
+                        <h2>Diversity</h2>
+                        <span class="fs-5">{% placeholder "diversity-content" %}</span>
+                    </div>
+                    <div class="tab-pane fade"
+                         id="mission-history"
+                         role="tabpanel"
+                         aria-labelledby="mission-history-tab"
+                         tabindex="0">
+                        <h2>Mission & History</h2>
+                        <span class="fs-5">{% placeholder "mission-content" %}</span>
+                    </div>
+                    <div class="tab-pane fade"
+                         id="past-programs"
+                         role="tabpanel"
+                         aria-labelledby="past-programs-tab"
+                         tabindex="0">
+                        <h2>Past Programs</h2>
+                        <span class="fs-5">{% placeholder "past-programs-content" %}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

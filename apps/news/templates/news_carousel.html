@@ -1,0 +1,17 @@
+{% for article in articles %}
+    <a href="{% url 'news-article-detail' article.slug %}" target="_blank">
+        <div class="card p-3 mb-3">
+            <li class="list-unstyled">
+                <h6 class="mb-0 text-primary-emphasis">{{ article.title }}</h6>
+                <a class="" href="#">
+                    {% if article.news_image %}
+                        <img src="{{ article.news_image.url }}"
+                             class="img-fluid"
+                             aria-hidden="true"
+                             alt="{{ article.title }}" />
+                    {% endif %}
+                </a>
+            </li>
+        </div>
+    </a>
+{% endfor %}

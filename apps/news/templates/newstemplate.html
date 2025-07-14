@@ -1,0 +1,18 @@
+{% load cms_tags djangocms_alias_tags %}
+<div class="row">
+    {% for article in articles %}
+        <div class="col-md-4">
+            <div class="card">
+                <img src="{{ article.news_image.url }}"
+                     alt="{{ article.title }}"
+                     class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title">{{ article.title }}</h5>
+                    <p class="card-text">{{ article.text|slice:":150" }}...</p>
+                    <a href="{% url 'news-article-detail' article.slug %}"
+                       class="btn btn-primary">Read more</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
