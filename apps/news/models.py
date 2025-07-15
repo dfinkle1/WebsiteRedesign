@@ -2,6 +2,7 @@ from django.db import models
 from filer.fields.image import FilerImageField
 from djangocms_text_ckeditor.fields import HTMLField
 from django.utils.text import slugify
+from filer.fields.file import FilerFileField
 
 
 class NewsArticle(models.Model):
@@ -25,3 +26,17 @@ class NewsArticle(models.Model):
 
     class Meta:
         verbose_name = "News Article"
+
+
+class Newsletter(models.Model):
+    title = models.CharField(max_length=255)
+    pdf_file = FilerFileField(on_delete=models.CASCADE, related_name="newsletter_pdf")
+    photo = FilerImageField(
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="newsletter_photo",
+    )
+
+    class Meta:
+        ordering = ["-title"]
