@@ -12,41 +12,90 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('cms', '0037_alter_cmsplugin_id_alter_globalpagepermission_id_and_more'),
-        migrations.swappable_dependency(settings.FILER_IMAGE_MODEL),
+        ("cms", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='MyModel',
+            name="MyModel",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='NewsArticle',
+            name="NewsArticle",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(blank=True, max_length=255, null=True)),
-                ('text', djangocms_text_ckeditor.fields.HTMLField(blank=True, null=True)),
-                ('published_date', models.DateTimeField()),
-                ('featured', models.BooleanField(default=False)),
-                ('news_image', filer.fields.image.FilerImageField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.FILER_IMAGE_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(blank=True, max_length=255, null=True)),
+                (
+                    "text",
+                    djangocms_text_ckeditor.fields.HTMLField(blank=True, null=True),
+                ),
+                ("published_date", models.DateTimeField()),
+                ("featured", models.BooleanField(default=False)),
+                (
+                    "news_image",
+                    filer.fields.image.FilerImageField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.FILER_IMAGE_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='StaffMember',
+            name="StaffMember",
             fields=[
-                ('cmsplugin_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, related_name='%(app_label)s_%(class)s', serialize=False, to='cms.cmsplugin')),
-                ('name', models.CharField(blank=True, max_length=255, null=True)),
-                ('role', models.CharField(blank=True, max_length=255, null=True)),
-                ('bio', djangocms_text_ckeditor.fields.HTMLField(blank=True, null=True)),
-                ('email', models.CharField(blank=True, max_length=255, null=True)),
-                ('more_info_link', models.URLField(blank=True, null=True)),
-                ('is_visible', models.BooleanField(default=True)),
-                ('order', models.PositiveIntegerField(default=0)),
-                ('staff_photo', filer.fields.image.FilerImageField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='profile_picture', to=settings.FILER_IMAGE_MODEL)),
+                (
+                    "cmsplugin_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        related_name="%(app_label)s_%(class)s",
+                        serialize=False,
+                        to="cms.cmsplugin",
+                    ),
+                ),
+                ("name", models.CharField(blank=True, max_length=255, null=True)),
+                ("role", models.CharField(blank=True, max_length=255, null=True)),
+                (
+                    "bio",
+                    djangocms_text_ckeditor.fields.HTMLField(blank=True, null=True),
+                ),
+                ("email", models.CharField(blank=True, max_length=255, null=True)),
+                ("more_info_link", models.URLField(blank=True, null=True)),
+                ("is_visible", models.BooleanField(default=True)),
+                ("order", models.PositiveIntegerField(default=0)),
+                (
+                    "staff_photo",
+                    filer.fields.image.FilerImageField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="profile_picture",
+                        to=settings.FILER_IMAGE_MODEL,
+                    ),
+                ),
             ],
-            bases=('cms.cmsplugin',),
+            bases=("cms.cmsplugin",),
         ),
     ]

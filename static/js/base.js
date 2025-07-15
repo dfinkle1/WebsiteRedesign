@@ -1,88 +1,50 @@
 (() => {
-  "use strict";
+  const root = document.documentElement;
+  const themeIcon = document.getElementById('theme-icon');
+  const themeLabel = document.getElementById('theme-label');
 
-  const getStoredTheme = () => localStorage.getItem("theme");
-  const setStoredTheme = (theme) => localStorage.setItem("theme", theme);
-
-  const getPreferredTheme = () => {
-    const storedTheme = getStoredTheme();
-    if (storedTheme) {
-      return storedTheme;
-    }
-
-    return window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light";
+  const themes = {
+    light: { icon: '🌞', label: 'Light' },
+    dark: { icon: '🌙', label: 'Dark' },
+    auto: { icon: '⚙️', label: 'Auto' }
   };
 
-  const setTheme = (theme) => {
-    if (theme === "auto") {
-      document.documentElement.setAttribute(
-        "data-bs-theme",
-        window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "dark"
-          : "light"
-      );
-    } else {
-      document.documentElement.setAttribute("data-bs-theme", theme);
+  const getStoredTheme = () => localStorage.getItem('theme') || 'auto';
+  const setStoredTheme = (theme) => localStorage.setItem('theme', theme);
+
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
+    root.setAttribute('data-bs-theme', theme);
   };
 
-  setTheme(getPreferredTheme());
-
-  const showActiveTheme = (theme, focus = false) => {
-    const themeSwitcher = document.querySelector("#bd-theme");
-
-    if (!themeSwitcher) {
-      return;
-    }
-
-    const themeSwitcherText = document.querySelector("#bd-theme-text");
-    const activeThemeIcon = document.querySelector(".theme-icon-active use");
-    const btnToActive = document.querySelector(
-      `[data-bs-theme-value="${theme}"]`
-    );
-    const svgOfActiveBtn = btnToActive
-      .querySelector("svg use")
-      .getAttribute("href");
-
-    document.querySelectorAll("[data-bs-theme-value]").forEach((element) => {
-      element.classList.remove("active");
-      element.setAttribute("aria-pressed", "false");
-    });
-
-    btnToActive.classList.add("active");
-    btnToActive.setAttribute("aria-pressed", "true");
-    activeThemeIcon.setAttribute("href", svgOfActiveBtn);
-    const themeSwitcherLabel = `${themeSwitcherText.textContent} (${btnToActive.dataset.bsThemeValue})`;
-    themeSwitcher.setAttribute("aria-label", themeSwitcherLabel);
-
-    if (focus) {
-      themeSwitcher.focus();
-    }
+  const updateUI = (theme) => {
+    themeIcon.textContent = themes[theme]?.icon || themes.auto.icon;
+    themeLabel.textContent = themes[theme]?.label || themes.auto.label;
   };
 
-  window
-    .matchMedia("(prefers-color-scheme: dark)")
-    .addEventListener("change", () => {
-      const storedTheme = getStoredTheme();
-      if (storedTheme !== "light" && storedTheme !== "dark") {
-        setTheme(getPreferredTheme());
-      }
-    });
+  const init = () => {
+    let theme = getStoredTheme();
+    applyTheme(theme);
+    updateUI(theme);
 
-  window.addEventListener("DOMContentLoaded", () => {
-    showActiveTheme(getPreferredTheme());
-
-    document.querySelectorAll("[data-bs-theme-value]").forEach((toggle) => {
-      toggle.addEventListener("click", () => {
-        const theme = toggle.getAttribute("data-bs-theme-value");
-        setStoredTheme(theme);
-        setTheme(theme);
-        showActiveTheme(theme, true);
+    document.querySelectorAll('[data-theme]').forEach(button => {
+      button.addEventListener('click', () => {
+        const newTheme = button.dataset.theme;
+        setStoredTheme(newTheme);
+        applyTheme(newTheme);
+        updateUI(newTheme);
       });
     });
-  });
+
+    // Auto update if system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      if (getStoredTheme() === 'auto') applyTheme('auto');
+    });
+  };
+
+  init();
 })();
 
 const prev = document.getElementById("prev-btn");

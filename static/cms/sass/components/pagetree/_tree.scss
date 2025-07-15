@@ -58,6 +58,12 @@
     padding: 0 !important;
     box-shadow: $pagetree-box-shadow !important;
 }
+#content-main .cms-pagetree.cms-pagetree.cms-pagetree a {
+    // Necessary since django admin adds a decoration to every link except some
+    // This is needed to get a higher specificity
+    text-decoration: none;
+}
+
 .cms-pagetree {
     border: $pagetree-border;
     // box-shadow: $pagetree-box-shadow;
@@ -704,7 +710,7 @@
     padding-inline: $pagetree-header-padding-inline;
     border-block-start: none;
     .addlink {
-        padding-inline-start: 0;
+        padding-inline-start: 16px;
     }
 }
 
@@ -871,7 +877,7 @@
         display: block;
         cursor: move;
         outline: none;
-        color: $gray;
+        color: $gray-darkest;
         // we need to add one pixel in to negate the negative margin
         // value to get the borders to work visually
         height: $pagetree-cell-height + 1;
@@ -895,6 +901,10 @@
         &:dir(rtl) {
             // no direct logical property for background-position
             background-position: calc(100% - 2px) center;
+        }
+
+        em {
+            color: $gray-light;
         }
     }
 

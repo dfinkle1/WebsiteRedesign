@@ -105,6 +105,8 @@ X_FRAME_OPTIONS = "SAMEORIGIN"
 
 ROOT_URLCONF = "mysite.urls"
 
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "admin@example.com"
 
 TEMPLATES = [
     {
@@ -218,10 +220,6 @@ CMS_TEMPLATES = [
 # STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # STATIC_URL = "static/"
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
-
 
 USE_S3 = os.getenv("USE_S3") == "TRUE"
 
@@ -259,9 +257,12 @@ if USE_S3:
     MEDIA_URL = f"{AWS_CLOUDFRONT_DOMAIN}/media/"
 else:
     STATIC_URL = "/static/"
-    STATIC_ROOT = os.path.join(BASE_DIR, "static")
+    STATIC_ROOT = BASE_DIR / "static"
     MEDIA_URL = "/media/"
     MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+    STATICFILES_DIRS = [
+        BASE_DIR / "assets",
+    ]
 
 
 # MEDIA_URL = "/media/"
