@@ -2,24 +2,38 @@
 <!-- Google Font -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
       rel="stylesheet">
-<!-- Styles -->
-<!-- Navbar -->
 <nav class="navbar navbar-expand-lg rounded" aria-label="Main navigation">
     <div class="container-fluid flex-column text-center py-2">
         <!-- Brand Name -->
-        <h1 class="navbar-brand">American Institute of Mathematics</h1>
-        <!-- Navigation -->
-        <div class="collapse navbar-collapse justify-content-center mt-2">
-            <ul class="navbar-nav d-flex flex-row gap-4">
+        <h1 class="navbar-brand mb-0">American Institute of Mathematics</h1>
+        <!-- Navbar Toggler for Mobile -->
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarContent"
+                aria-controls="navbarContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Collapsible Navigation -->
+        <div class="collapse navbar-collapse justify-content-center mt-3"
+             id="navbarContent">
+            <ul class="navbar-nav d-flex flex-column flex-lg-row gap-3">
+                <!-- Home -->
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'index' %}">Home</a>
                 </li>
-                <div class="dropdown">
+                <!-- Focused Collaborative Research -->
+                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle"
                        href="{% page_url 'collaborative' %}"
+                       id="collaborativeDropdown"
+                       role="button"
+                       data-bs-toggle="dropdown"
                        aria-expanded="false">Focused Collaborative Research</a>
-                    <ul class="dropdown-menu" aria-labelledby="programsDropdown">
-                        <div class="d-flex">
+                    <ul class="dropdown-menu" aria-labelledby="collaborativeDropdown">
+                        <div class="d-flex flex-wrap">
                             <div class="flex-fill">
                                 <h6 class="dropdown-header">Workshops</h6>
                                 <a class="dropdown-item" href="{% page_url 'collaborative' %}#workshops">Workshops</a>
@@ -41,35 +55,36 @@
                             </div>
                         </div>
                     </ul>
-                </div>
-                <div class="dropdown">
+                </li>
+                <!-- Joyful Mathematics -->
+                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle"
                        href="{% page_url 'joyful' %}"
-                       aria-expanded="false">Joyful Math</a>
-                    <ul class="dropdown-menu" aria-labelledby="programsDropdown">
-                        <div class="d-flex">
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">Joyful Mathematics For All</a>
+                    <ul class="dropdown-menu">
+                        <div class="d-flex flex-wrap">
                             <div class="flex-fill">
                                 <h6 class="dropdown-header">Partnerships</h6>
                                 <a class="dropdown-item" href="{% page_url 'joyful' %}#math-circles">Math Circle Network</a>
                                 <a class="dropdown-item" href="{% page_url 'joyful' %}#math-communities">Math Communities</a>
                             </div>
                             <div class="flex-fill">
-                                <h6 class="dropdown-header">Category 2</h6>
+                                <h6 class="dropdown-header">Other</h6>
                                 <a class="dropdown-item" href="{% page_url 'joyful' %}#match">MATCH</a>
                                 <a class="dropdown-item" href="{% page_url 'joyful' %}#math-border">Math on the Border</a>
                                 <a class="dropdown-item" href="{% page_url 'joyful' %}#morgan-hill">Morgan Hill Math</a>
                             </div>
-                            <div class="flex-fill">
-                                <h6 class="dropdown-header">Other</h6>
-                                <a class="dropdown-item"
-                                   href="{% page_url 'joyful' %}#affiliated-programs">Affiliated Programs</a>
-                            </div>
                         </div>
                     </ul>
-                </div>
-                <div class="dropdown">
-                    <a class="nav-link dropdown-toggle" href="{% page_url 'visiting' %}">Visiting</a>
-                    <ul class="dropdown-menu" aria-labelledby="programsDropdown">
+                </li>
+                <!-- Visiting -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle"
+                       href="{% page_url 'visiting' %}"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">Visiting</a>
+                    <ul class="dropdown-menu">
                         <a class="dropdown-item"
                            href="{% page_url 'visiting' %}#code-of-conduct">Code of Conduct</a>
                         <a class="dropdown-item"
@@ -77,31 +92,22 @@
                         <a class="dropdown-item"
                            href="{% page_url 'visiting' %}#travel-guidelines">Travel Guidelines</a>
                         <a class="dropdown-item" href="{% page_url 'visiting' %}#child-care">Child Care</a>
-                        <a class="dropdown-item"
-                           href="{% page_url 'visiting' %}#explore-pasadena">Explore Pasadena</a>
-                        <a class="dropdown-item" href="{% page_url 'visiting' %}#facilities">Facilities</a>
-                        <a class="dropdown-item" href="{% page_url 'visiting' %}#accessibility">Accessibility</a>
-                        <a class="dropdown-item" href="{% page_url 'visiting' %}#faq">FAQ</a>
                     </ul>
-                </div>
-                <div class="dropdown">
+                </li>
+                <!-- Resources -->
+                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle"
                        href="{% page_url 'resources' %}"
+                       data-bs-toggle="dropdown"
                        aria-expanded="false">Resources</a>
-                    <ul class="dropdown-menu" aria-labelledby="resourcesDropdown">
-                        <div class="d-flex">
+                    <ul class="dropdown-menu">
+                        <div class="d-flex flex-wrap">
                             <div class="flex-fill">
                                 <h6 class="dropdown-header">Resources</h6>
                                 <a class="dropdown-item"
                                    href="{% page_url 'resources' %}#careers-advice">Math Careers Advice</a>
                                 <a class="dropdown-item"
                                    href="{% page_url 'resources' %}#open-textbook-initiative">Open Textbook Initiative</a>
-                                <a class="dropdown-item" href="{% page_url 'resources' %}#videos">Videos</a>
-                                <a class="dropdown-item" href="{% page_url 'resources' %}#problem-list">Problem Lists</a>
-                                <a class="dropdown-item"
-                                   href="{% page_url 'resources' %}#preprint-series">Preprint Series</a>
-                                <a class="dropdown-item"
-                                   href="{% page_url 'resources' %}#published-paper">Published Papers</a>
                             </div>
                             <div class="flex-fill">
                                 <h6 class="dropdown-header">Library</h6>
@@ -109,35 +115,32 @@
                             </div>
                         </div>
                     </ul>
-                </div>
-                <div class="dropdown">
+                </li>
+                <!-- About -->
+                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle"
-                       aria-expanded="false"
-                       href="{% page_url 'about' %}">About</a>
-                    <ul class="dropdown-menu" aria-labelledby="aboutDropdown">
-                        <div class="d-flex">
-                            <div class="flex-fill">
-                                <h6 class="dropdown-header">About</h6>
-                                <a class="dropdown-item" href="{% page_url 'about' %}#contact">Contact</a>
-                                <a class="dropdown-item" href="{% page_url 'about' %}#staff">Staff</a>
-                                <a class="dropdown-item" href="{% page_url 'about' %}#governance">Governance</a>
-                                <a class="dropdown-item" href="{% page_url 'about' %}#diversity">Diversity</a>
-                                <a class="dropdown-item" href="{% page_url 'about' %}#mission-history">Mission & History</a>
-                            </div>
-                        </div>
+                       href="{% page_url 'about' %}"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">About</a>
+                    <ul class="dropdown-menu">
+                        <a class="dropdown-item" href="{% page_url 'about' %}#contact">Contact</a>
+                        <a class="dropdown-item" href="{% page_url 'about' %}#staff">Staff</a>
+                        <a class="dropdown-item" href="{% page_url 'about' %}#governance">Governance</a>
                     </ul>
-                </div>
-                <div class="dropdown">
+                </li>
+                <!-- News -->
+                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle"
                        href="{% page_url 'news' %}"
+                       data-bs-toggle="dropdown"
                        aria-expanded="false">News</a>
-                    <ul class="dropdown-menu" aria-labelledby="programsDropdown">
+                    <ul class="dropdown-menu">
                         <a class="dropdown-item" href="{% page_url 'news' %}#news-letter">Newsletter</a>
                         <a class="dropdown-item" href="{% page_url 'news' %}#news-stories">News Stories</a>
                     </ul>
-                </div>
-                <!-- Theme Switcher Dropdown -->
-                <div class="dropdown">
+                </li>
+                <!-- Theme Switcher -->
+                <li class="nav-item dropdown">
                     <button class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle"
                             id="bd-theme"
                             type="button"
@@ -219,7 +222,7 @@
                             </button>
                         </li>
                     </ul>
-                </div>
+                </li>
             </ul>
         </div>
     </div>
