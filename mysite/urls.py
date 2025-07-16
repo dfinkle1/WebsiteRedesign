@@ -1,11 +1,8 @@
-from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
-from django.shortcuts import redirect
-from django.views.i18n import JavaScriptCatalog
 from django.conf import settings
 from django.conf.urls.static import static
+import debug_toolbar
 
 
 urlpatterns = [
@@ -16,7 +13,7 @@ urlpatterns = [
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
-    urlpatterns += tuple(static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))
-    urlpatterns += tuple(
-        static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    )
+    import debug_toolbar
+
+    urlpatterns.insert(0, path("__debug__/", include(debug_toolbar.urls)))
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

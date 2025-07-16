@@ -1,20 +1,20 @@
 {% for person in staff %}
     <div class="row mb-4">
         <div class="col-sm-3">
-            <img src="{{ person.staff_photo.url }}"
-                 alt="image here"
-                 class="img-fluid"
-                 style="width: 230px;
-                        height: 230px" />
+            <img src="{{ person.staff_photo.url }}" alt="image here" class="img-fluid" />
         </div>
         <div class="col-sm-9">
-            <h3 class="">{{ person.name }}</h3>
+            <div class="d-flex align-items-center gap-3 mb-1">
+                <h3 class="mb-0 p-0">{{ person.name }}</h3>
+                -
+                <div class="position-tag m-0 p-0">{{ person.role }}</div>
+            </div>
+            <p class="p-0 m-0">{{ person.bio }}</p>
             {% if person.more_info_link is not defined %}
-                <a href="{{ person.more_info_link }}" target="_blank" class="col">more info</a>
+                <a href="{{ person.more_info_link }}"
+                   target="_blank"
+                   class="col text-decoration">more info</a>
             {% endif %}
-            <div class="position-tag">{{ person.role }}</div>
-            <p>{{ person.bio }}</p>
         </div>
     </div>
-    <div class="clearfix"></div>
 {% endfor %}

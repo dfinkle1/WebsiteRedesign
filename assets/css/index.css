@@ -1,28 +1,169 @@
-[data-bs-theme="dark"] body {
-  background-color: #292a2d; /* Your desired dark mode background color */
-  .card {
-    background-color: #1f1f1f;
+/* ======================================
+   1. VARIABLES & THEME
+====================================== */
+:root {
+  --font-primary: 'Inter', sans-serif;
+  --font-heading: 'Playfair Display', serif;
+
+  /* LIGHT THEME */
+  --color-bg: #f6f8fc;
+  --color-text: #212529;
+  --color-navbar: #ffffff;
+  --color-navbar-text: #212529;
+  --color-navbar-hover: #0d6efd;
+  --color-card: #ffffff;
+  --color-footer: #e9ecef;
+
+  --color-primary: #578bbf;
+  --color-accent: #8bbf57;
+
+  /* Spacing */
+  --spacing-section: 2rem;
+  --spacing-card: 1rem;
+
+  /* Borders */
+  --border-radius: 10px;
+
+  --aimblue:#578bbf
+}
+
+[data-bs-theme="dark"] {
+  --color-bg: #292a2d;
+  --color-text: #ffffff;
+  --color-navbar: #1f1f1f;
+  --color-navbar-text: #f8f9fa;
+  --color-navbar-hover: #57bfb5;
+  --color-card: #1f1f1f;
+  --color-footer: #2c2c2c;
+}
+
+@media (min-width: 1180px) {
+  .navbar-nav .dropdown:hover .dropdown-menu {
+    display: block;
+    border-bottom: 1px solid gray;
+  }
+  .dropdown {
+    position: inherit;
+  }
+  .dropdown-menu {
+    padding: 0;
+    width: auto;
   }
 }
-[data-bs-theme="light"] body {
-  background-color: #f6f8fc;
-  .card {
-    background-color: #ffff;
+/* ======================================
+   2. GLOBAL RESET & BASE
+====================================== */
+body {
+  font-family: var(--font-primary);
+  font-size: 16px;
+  line-height: 1.5;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+.navbar a,
+.btn-link {
+    text-decoration: none;
+}
+
+a {
+    color: inherit;
+    text-decoration: underline;
+}
+.navbar a {
+    text-decoration: none;
+}
+
+/* ======================================
+   3. TYPOGRAPHY
+====================================== */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+/* ======================================
+   4. NAVBAR
+====================================== */
+.navbar {
+  background-color: var(--color-navbar);
+  border-bottom: 1px solid #dee2e6;
+  padding: 1rem 2rem;
+}
+
+.navbar-brand {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--bs-link-color);
+}
+
+.navbar-nav .nav-link {
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  font-weight: 1000;
+  color: var(--bs-link-color);
+  padding: 0.5rem 1rem;
+  transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  color: var(--color-navbar-hover);
+}
+
+.navbar-toggler {
+  border: none;
+  outline: none;
+}
+
+/* Responsive Navbar */
+@media (max-width: 992px) {
+  .navbar .navbar-nav {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.75rem;
+  }
+
+  .navbar-brand {
+    margin-bottom: 1rem;
   }
 }
+
+/* ======================================
+   5. DROPDOWNS
+====================================== */
+.dropdown-menu {
+  border-radius: var(--border-radius);
+  font-size: 0.95rem;
+  padding: 0.5rem;
+}
+
+.dropdown-menu a {
+  padding: 0.5rem 1rem;
+  color: var(--color-text);
+}
+
+.dropdown-menu a:hover {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+
 [data-bs-theme="dark"] .theme-bg {
   background-color: #1f1f1f; /* Dark gray background for dark theme */
   color: white;
 }
 [data-bs-theme="light"] .theme-bg {
   background-color: #ffffff;
-}
-
-[data-bs-theme="light"] .card {
-  background-color: #f9f9f9; /* Dark gray background for dark theme */
-}
-body {
-  min-height: 100vh;
 }
 
 .custom-img {
@@ -57,12 +198,14 @@ body {
   min-height: 85px;
 }
 
-.dropdown-menu {
-  font-size: 20px;
-}
 
 #workshops-container {
   height: 700px;
+  overflow-y: auto;
+}
+
+#workshopTabsContent {
+  max-height: 800px; /* Prevent collapse when empty */
   overflow-y: auto;
 }
 
@@ -96,54 +239,6 @@ body {
   right: -50px;
 }
 
-.navbar {
-  position: relative;
-  font-size: 1.2rem;
-}
-
-.navbar-nav .dropdown {
-  padding-left: 5px;
-}
-
-nav {
-  font-family: "Inter", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 600;
-  font-style: normal;
-  font-variation-settings: "slnt" 0;
-}
-@media (min-width: 1180px) {
-  .navbar-nav .dropdown:hover .dropdown-menu {
-    display: block;
-    border-bottom: 1px solid gray;
-  }
-  .dropdown {
-    position: inherit;
-  }
-  .dropdown-menu {
-    padding: 0;
-    width: auto;
-  }
-}
-@media (max-width: 1400px) {
-  .d-flex {
-    display: block !important;
-  }
-  .dropdown-menu .d-flex {
-    display: block;
-  }
-}
-.navbar-nav .dropdown:hover .dropdown-menu {
-  display: block;
-}
-/* #navbarNavDropdown {
-  position: relative;
-} */
-
-.navbar .nav-link {
-  color: var(--bs-link-color);
-}
-
 .corner-position {
   position: absolute;
   inset: auto 0px 0px auto;
@@ -151,87 +246,18 @@ nav {
   transform: translate3d(0px, -44px, 0px);
 }
 
-.sedan-sc-regular {
-  font-family: "Sedan SC", serif;
-  font-weight: 400;
-  font-style: normal;
-}
 
-.inter-font {
-  font-family: "Inter", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 100;
-  font-style: normal;
-  font-variation-settings: "slnt" 0;
-}
-.poppins-regular {
-  font-family: "Poppins", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
-.poppins-bold-italic {
-  font-family: "Poppins", sans-serif;
-  font-weight: 700;
-  font-style: italic;
-}
-.poppins-bold {
-  font-family: "Poppins", sans-serif;
-  font-weight: 700;
-  font-style: normal;
-}
-
-.freeman-regular {
-  font-family: "Freeman", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
-:root {
-  --aimgreen: #8bbf57;
-  --aimblue: #578bbf;
-  --aimlightblue: #57bfb5;
-  --aimdarkblue: #3f72a4;
-  --aimpurple: #5757bf;
-  --aimbrown: #bf8b57;
-  --background: #3f72a4;
-  --darkblack: #1f1f1f;
-  --buttonPrimary: #75b8b1;
-  --lightblack: #292a2d;
-  --primary: white;
-  --secondary: #fff;
-}
-footer {
-  background-color: gray;
-}
-
+/* ======================================
+   6. CARDS
+====================================== */
 .card {
-  margin-bottom: 10px;
-  border-radius: 10px;
+  background-color: var(--color-card);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: var(--spacing-card);
+  margin-bottom: 1.5rem;
 }
 
-.people-banner {
-  position: relative;
-  height: 140px;
-  margin-bottom: 35px;
-}
-
-.people-banner img {
-  height: 100%;
-  width: 100%;
-}
-
-.horizontal-list {
-  list-style: none; /* Remove default list styles */
-  padding: 0;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-}
-
-.horizontal-list li {
-  width: 100%;
-}
 .horizontal-list li a {
   display: flex; /* Display list items horizontally */
   border-radius: 0;
@@ -261,15 +287,9 @@ footer {
   background-color: #007bff; /* Blue background color for active state */
 }
 
-.individual-staff {
-  font-size: 0.875rem;
-  background: #1f1f1f;
-  padding: 16px;
-  margin: 0;
-}
 
 .position-tag {
-  color: blue;
+  color: var(--aimblue);
   padding-bottom: 5px;
 }
 
@@ -308,10 +328,20 @@ footer {
   max-height: 100%;
 }
 
+/* ======================================
+   7. FOOTER
+====================================== */
+footer {
+  background-color: var(--color-footer);
+  padding: 2rem;
+  text-align: center;
+}
+
 footer .nav-link {
-  color: white;
+  color: var(--color-text);
   font-size: 0.85rem;
 }
+
 
 .scrolling-wrapper-flexbox {
   display: flex;
@@ -325,3 +355,4 @@ footer .nav-link {
     background-color: none;
   }
 }
+
