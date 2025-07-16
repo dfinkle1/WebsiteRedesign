@@ -31,7 +31,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     # Utilities
-    "django_htmx",
     "whitenoise.runserver_nostatic",
     "treebeard",
     "storages",
