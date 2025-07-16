@@ -114,3 +114,7 @@ def frg2_view(request):
 
 def frg3_view(request):
     return render(request, "FRG/activities.html")
+
+
+def navtest(request):
+    return render(request, "navtest.html")

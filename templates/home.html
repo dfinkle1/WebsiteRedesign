@@ -60,59 +60,53 @@
         </div>
       </div>
     </section>
-    <section tag="Split-columns News and Workshops">
+    <section>
       <div class="row g-3 mb-3">
+        <!-- Column 1: News -->
         <div class="col-md-8">
-          <div class="p-3 theme-bg">
-            <h3 class="pb-4 mb-4 fst-italic border-bottom">Recent News</h3>
+          <div class="p-3 theme-bg rounded">
+            <h3 class="pb-3 mb-3 fst-italic border-bottom">Recent News</h3>
             {% render_featured_article %}
           </div>
         </div>
-        <div class="col-md-4 col-sm-12 p-1 theme-bg">
-          <div class="p-3 rounded theme-bg" id="workshops-container">
-            <h3 class="fst-italic pb-4 mb-4 border-bottom">Workshops</h3>
-            <nav>
-              <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <button class="nav-link active"
-                        id="nav-home-tab"
+        <!-- Column 2: Workshops -->
+        <div class="col-md-4 col-sm-12">
+          <div class="p-3 theme-bg rounded d-flex flex-column" style="height: 100%;">
+            <h3 class="pb-3 mb-3 fst-italic border-bottom">Workshops</h3>
+            <!-- Tabs -->
+            <ul class="nav nav-pills flex-column flex-sm-row mb-3"
+                id="workshopTabs"
+                role="tablist">
+              <li class="nav-item flex-fill">
+                <button class="nav-link active w-100"
+                        id="upcoming-tab"
                         data-bs-toggle="tab"
-                        data-bs-target="#nav-home"
+                        data-bs-target="#upcoming"
                         type="button"
-                        role="tab"
-                        aria-controls="nav-home"
-                        aria-selected="true">Upcoming Workshops</button>
-                <button class="nav-link"
-                        id="applications-open-tab"
+                        role="tab">Upcoming</button>
+              </li>
+              <li class="nav-item flex-fill">
+                <button class="nav-link w-100"
+                        id="open-app-tab"
                         data-bs-toggle="tab"
-                        data-bs-target="#applications-open"
+                        data-bs-target="#open-app"
                         type="button"
-                        role="tab"
-                        aria-controls="applications-open"
-                        aria-selected="false">Open Applications</button>
-              </div>
-            </nav>
-            <div class="tab-content" id="nav-tabContent">
-              <div class="tab-pane fade show active"
-                   id="nav-home"
-                   role="tabpanel"
-                   aria-labelledby="nav-home-tab"
-                   tabindex="0">
-                <ul class="list-unstyled pt-2" id="workshops-list">
+                        role="tab">Open Applications</button>
+              </li>
+            </ul>
+            <!-- Tab Content -->
+            <div class="tab-content flex-grow-1" id="workshopTabsContent">
+              <div class="tab-pane fade show active" id="upcoming" role="tabpanel">
+                <ul class="list-unstyled pt-2">
                   {% include "core/upcoming.html" %}
                 </ul>
               </div>
-              <div class="tab-pane fade"
-                   id="applications-open"
-                   role="tabpanel"
-                   aria-labelledby="applications-open-tab"
-                   tabindex="0">
-                <ul class="list-unstyled" id="workshops-list">
+              <div class="tab-pane fade" id="open-app" role="tabpanel">
+                <ul class="list-unstyled">
+                  <!-- Dynamic content for open applications -->
                 </ul>
               </div>
             </div>
-            <ul class="list-unstyled" id="workshops-list">
-              {% include "core/upcoming.html" %}
-            </ul>
           </div>
         </div>
       </div>
