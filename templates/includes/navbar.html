@@ -1,12 +1,9 @@
 {% load cms_tags sekizai_tags static %}
-<!-- Google Font -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
       rel="stylesheet">
 <nav class="navbar navbar-expand-lg rounded" aria-label="Main navigation">
-    <div class="container-fluid flex-column text-center py-2">
-        <!-- Brand Name -->
-        <h1 class="navbar-brand mb-0">American Institute of Mathematics</h1>
-        <!-- Navbar Toggler for Mobile -->
+    <div class="container-fluid">
+        <!-- Toggler for Mobile -->
         <button class="navbar-toggler"
                 type="button"
                 data-bs-toggle="collapse"
@@ -16,11 +13,13 @@
                 aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <!-- Collapsible Navigation -->
-        <div class="collapse navbar-collapse justify-content-center mt-3"
-             id="navbarContent">
-            <ul class="navbar-nav d-flex flex-column flex-lg-row gap-3">
-                <!-- Home -->
+        <div class="collapse navbar-collapse d-lg-flex" id="navbarContent">
+            <!-- LEFT: Brand -->
+            <!-- <a class="navbar-brand col-lg-3 me-0 d-flex align-items-center" href="{% url 'index' %}">
+                <img src="{{ MEDIA_URL }}images/aimlogotransparent.png" alt="American Institute of Mathematics" class="img-fluid" style="max-height: 150px">
+            </a> -->
+            <!-- CENTER: Navigation -->
+            <ul class="navbar-nav col-lg-6 justify-content-lg-center gap-3">
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'index' %}">Home</a>
                 </li>
@@ -132,7 +131,6 @@
                         <a class="dropdown-item" href="{% page_url 'news' %}#news-stories">News Stories</a>
                     </ul>
                 </li>
-                <!-- Theme Switcher -->
                 <li class="nav-item dropdown">
                     <button class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle"
                             id="bd-theme"
@@ -216,7 +214,7 @@
                         </li>
                     </ul>
                 </li>
-            </ul>
+                <!-- RIGHT: Theme Switcher -->
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
