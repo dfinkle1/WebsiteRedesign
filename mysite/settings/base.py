@@ -3,6 +3,7 @@ import os
 import environ
 from dotenv import load_dotenv
 import dj_database_url
+from cms.utils.conf import get_cms_setting
 
 # Load environment variables
 load_dotenv()
@@ -32,6 +33,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
+    "cms",
+    "menus",
     # Utilities
     "whitenoise.runserver_nostatic",
     "treebeard",
@@ -40,13 +43,12 @@ INSTALLED_APPS = [
     "adminsortable2",
     "easy_thumbnails",
     # django CMS core
-    "cms",
-    "menus",
     # django CMS addons
+    "djangocms_text",
+    "djangocms_link",
     "djangocms_admin_style",
     "djangocms_versioning",
     "djangocms_alias",
-    "djangocms_text_ckeditor",
     "djangocms_picture",
     "djangocms_file",
     "djangocms_video",
@@ -76,6 +78,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = "mysite.urls"
 WSGI_APPLICATION = "mysite.wsgi.application"
 
+
 # Templates
 TEMPLATES = [
     {
@@ -100,16 +103,18 @@ TEMPLATES = [
 # CMS Settings
 CMS_CONFIRM_VERSION4 = True
 DJANGOCMS_VERSIONING_ALLOW_DELETING_VERSIONS = True
-TEXT_INLINE_EDITING = True
-TEXT_ADDITIONAL_TAGS = ("iframe",)
-TEXT_ADDITIONAL_ATTRIBUTES = (
-    "scrolling",
-    "allowfullscreen",
-    "frameborder",
-    "src",
-    "height",
-    "width",
-)
+
+
+# TEXT_INLINE_EDITING = True
+# TEXT_ADDITIONAL_TAGS = ("iframe",)
+# TEXT_ADDITIONAL_ATTRIBUTES = (
+#     "scrolling",
+#     "allowfullscreen",
+#     "frameborder",
+#     "src",
+#     "height",
+#     "width",
+# )
 
 CMS_TEMPLATES = [
     ("cms_templates/home.html", "Home"),
@@ -163,35 +168,35 @@ DATABASES = {
 }
 
 # Static & Media with S3
-USE_S3 = env.bool("USE_S3", default=True)
+# USE_S3 = env.bool("USE_S3", default=True)
 
-if USE_S3:
-    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
-    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-    AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
-    AWS_DEFAULT_ACL = "public-read"
-    AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
-    AWS_S3_CUSTOM_DOMAIN = "dk87yvhh7cphv.cloudfront.net"
-    AWS_CLOUDFRONT_DOMAIN = f"{AWS_S3_CUSTOM_DOMAIN}"
-    AWS_LOCATION = "static"
+# if USE_S3:
+#     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+#     AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+#     AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
+#     AWS_DEFAULT_ACL = "public-read"
+#     AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
+#     AWS_S3_CUSTOM_DOMAIN = "dk87yvhh7cphv.cloudfront.net"
+#     AWS_CLOUDFRONT_DOMAIN = f"{AWS_S3_CUSTOM_DOMAIN}"
+#     AWS_LOCATION = "static"
 
-    STORAGES = {
-        "default": {
-            "BACKEND": "utils.storages_backends.MediaStorage",
-            "OPTIONS": {
-                "bucket_name": AWS_STORAGE_BUCKET_NAME,
-                "custom_domain": AWS_S3_CUSTOM_DOMAIN,
-            },
-        },
-        "staticfiles": {
-            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
-            "OPTIONS": {
-                "bucket_name": AWS_STORAGE_BUCKET_NAME,
-                "location": "static",
-                "custom_domain": AWS_S3_CUSTOM_DOMAIN,
-            },
-        },
-    }
+#     STORAGES = {
+#         "default": {
+#             "BACKEND": "utils.storages_backends.MediaStorage",
+#             "OPTIONS": {
+#                 "bucket_name": AWS_STORAGE_BUCKET_NAME,
+#                 "custom_domain": AWS_S3_CUSTOM_DOMAIN,
+#             },
+#         },
+#         "staticfiles": {
+#             "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+#             "OPTIONS": {
+#                 "bucket_name": AWS_STORAGE_BUCKET_NAME,
+#                 "location": "static",
+#                 "custom_domain": AWS_S3_CUSTOM_DOMAIN,
+#             },
+#         },
+#     }
 
-    STATIC_URL = f"{AWS_CLOUDFRONT_DOMAIN}/{AWS_LOCATION}/"
-    MEDIA_URL = f"{AWS_CLOUDFRONT_DOMAIN}/media/"
+#     STATIC_URL = f"{AWS_CLOUDFRONT_DOMAIN}/{AWS_LOCATION}/"
+#     MEDIA_URL = f"{AWS_CLOUDFRONT_DOMAIN}/media/"

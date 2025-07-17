@@ -5,8 +5,8 @@
          width="350px"
          height="auto" />
     <div>
-        <h5 class="text-primary-emphasis">{{ article.title }}</h5>
-        <p class="fs-5">{{ article.text }}</p>
+        <h5 class="text-primary-emphasis">{{ article.title | safe }}</h5>
+        <p class="fs-5">{{ article.text | safe }}</p>
     </div>
 {% else %}
     <p>no current article</p>

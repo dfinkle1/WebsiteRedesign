@@ -1,6 +1,6 @@
 from django.db import models
+from django.db.models import TextField
 from filer.fields.image import FilerImageField
-from djangocms_text_ckeditor.fields import HTMLField
 from django.utils.text import slugify
 from filer.fields.file import FilerFileField
 
@@ -10,7 +10,7 @@ class NewsArticle(models.Model):
         primary_key=True,
     )
     title = models.CharField(max_length=255, blank=True, null=True)
-    text = HTMLField(blank=True, null=True)
+    text = TextField(blank=True, null=True)
     news_image = FilerImageField(null=True, blank=True, on_delete=models.CASCADE)
     published_date = models.DateTimeField()
     featured = models.BooleanField(default=False)

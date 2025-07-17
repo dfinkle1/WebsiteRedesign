@@ -12,7 +12,7 @@
                          height="100px">
                 </div>
                 <div class="col">
-                    <h2>{{ article.title }}</h2>
+                    <h2>{{ article.title | safe }}</h2>
                 </div>
             </div>
         </div>
@@ -27,7 +27,7 @@
                  alt="{{ article.title }}"
                  height="500px"
                  width="500px">
-            <p>{{ article.text }}</p>
+            <p>{{ article.text | safe }}</p>
         </div>
     </div>
 {% endblock content %}
