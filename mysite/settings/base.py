@@ -6,9 +6,11 @@ import dj_database_url
 
 # Load environment variables
 load_dotenv()
-env = environ.Env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+env = environ.Env()
+env.read_env(BASE_DIR / ".env")
 
 SECRET_KEY = env("SECRET_KEY", default="unsafe-secret-key")
 DEBUG = False  # Overridden in dev/prod

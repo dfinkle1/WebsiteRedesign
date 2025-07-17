@@ -8,7 +8,7 @@
   /* LIGHT THEME */
   --color-bg: #f6f8fc;
   --color-text: #212529;
-  --color-navbar: #ffffff;
+  --color-navbar: #e9ecef;
   --color-navbar-text: #212529;
   --color-navbar-hover: #0d6efd;
   --color-card: #ffffff;
@@ -35,6 +35,10 @@
   --color-navbar-hover: #57bfb5;
   --color-card: #1f1f1f;
   --color-footer: #2c2c2c;
+}
+
+[data-bs-theme="dark"].navbar-brand{
+  color: var(--bs-link-color);
 }
 
 @media (min-width: 1080px) {
@@ -103,7 +107,7 @@ p {
   font-family: var(--font-heading);
   font-size: 1.8rem;
   font-weight: 600;
-  color: var(--bs-link-color);
+  color: black;
 }
 
 .navbar-nav .nav-link {
