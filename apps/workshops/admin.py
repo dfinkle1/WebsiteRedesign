@@ -47,7 +47,6 @@ class ParticipantChoiceField(admin.TabularInline):
     can_delete = False
 
 
-@admin.register(OldWorkshop)
 class OldWorkshopAdmin(admin.ModelAdmin):
     list_display = (
         "workshopname",
@@ -55,6 +54,7 @@ class OldWorkshopAdmin(admin.ModelAdmin):
         "workshopenddate",
         "participants_list",
     )
+    search_fields = ("workshopid",)
     actions = ["email_participants", "export_participants_csv"]
     inlines = [ParticipantChoiceField]
 
@@ -127,6 +127,9 @@ class OldWorkshopAdmin(admin.ModelAdmin):
         return response
 
     export_participants_csv.short_description = "Export participants as CSV"
+
+
+admin.site.register(OldWorkshop, OldWorkshopAdmin)
 
 
 @admin.register(Uniqueuser)

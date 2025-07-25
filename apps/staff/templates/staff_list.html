@@ -1,7 +1,12 @@
 {% for person in staff %}
     <div class="row mb-4">
-        <div class="col-sm-3">
-            <img src="{{ person.staff_photo.url }}" alt="image here" class="img-fluid" />
+        <div class="col-sm-auto">
+            <img src="{{ person.staff_photo.url }}"
+                 class="img-fluid"
+                 style="width:200px;
+                        height:200px;
+                        object-fit:cover;
+                        border-radius:35% !important" />
         </div>
         <div class="col-sm-9">
             <div class="d-flex align-items-center gap-3 mb-1">
@@ -9,7 +14,7 @@
                 -
                 <div class="position-tag m-0 p-0">{{ person.role }}</div>
             </div>
-            <p class="p-0 m-0">{{ person.bio }}</p>
+            <p class="p-0 m-0">{{ person.bio | safe }}</p>
             {% if person.more_info_link is not defined %}
                 <a href="{{ person.more_info_link }}"
                    target="_blank"

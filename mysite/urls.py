@@ -12,6 +12,7 @@ urlpatterns = i18n_patterns(
     # ✅ CMS handles everything else
     path("", include("cms.urls")),
     path("news/", include("apps.news.urls")),
+    path("", include("apps.reimbursements.urls")),
 )
 
 if settings.DEBUG:

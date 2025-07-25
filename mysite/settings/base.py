@@ -19,6 +19,7 @@ DEBUG = False  # Overridden in dev/prod
 INSTALLED_APPS = [
     # Project apps
     "mysite",
+    "apps.reimbursements.apps.ReimbursementsConfig",
     "participants.apps.ParticipantsConfig",
     "apps.workshops.apps.WorkshopsConfig",
     "apps.frg.apps.FrgConfig",
@@ -26,6 +27,7 @@ INSTALLED_APPS = [
     "apps.staff.apps.StaffConfig",
     "apps.news.apps.NewsConfig",
     # Django core
+    "djangocms_admin_style",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -36,6 +38,7 @@ INSTALLED_APPS = [
     "cms",
     "menus",
     # Utilities
+    "django_recaptcha",
     "whitenoise.runserver_nostatic",
     "treebeard",
     "storages",
@@ -44,9 +47,24 @@ INSTALLED_APPS = [
     "easy_thumbnails",
     # django CMS core
     # django CMS addons
+    "djangocms_frontend",
+    "djangocms_frontend.contrib.accordion",
+    "djangocms_frontend.contrib.alert",
+    "djangocms_frontend.contrib.badge",
+    "djangocms_frontend.contrib.card",
+    "djangocms_frontend.contrib.carousel",
+    "djangocms_frontend.contrib.collapse",
+    "djangocms_frontend.contrib.content",
+    "djangocms_frontend.contrib.grid",
+    "djangocms_frontend.contrib.image",
+    "djangocms_frontend.contrib.jumbotron",
+    "djangocms_frontend.contrib.link",
+    "djangocms_frontend.contrib.listgroup",
+    "djangocms_frontend.contrib.media",
+    "djangocms_frontend.contrib.tabs",
+    "djangocms_frontend.contrib.utilities",
     "djangocms_text",
     "djangocms_link",
-    "djangocms_admin_style",
     "djangocms_versioning",
     "djangocms_alias",
     "djangocms_picture",
@@ -167,6 +185,11 @@ DATABASES = {
     )
 }
 
+
+RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY")
+RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY")
+
+
 # Static & Media with S3
 USE_S3 = env.bool("USE_S3", default=True)
 
@@ -177,26 +200,34 @@ if USE_S3:
     AWS_DEFAULT_ACL = "public-read"
     AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
     AWS_S3_CUSTOM_DOMAIN = "dk87yvhh7cphv.cloudfront.net"
+
     AWS_CLOUDFRONT_DOMAIN = f"{AWS_S3_CUSTOM_DOMAIN}"
-    AWS_LOCATION = "static"
+    AWS_LOCATION = "media"  # Keep for django-filer and legacy code
+
+    # media
+    AWS_MEDIA_BUCKET_NAME = os.getenv("AWS_MEDIA_BUCKET_NAME")
+    AWS_PRIVATE_DOMAIN = f"{AWS_MEDIA_BUCKET_NAME}.s3.amazonaws.com"
 
     STORAGES = {
         "default": {
-            "BACKEND": "utils.storages_backends.MediaStorage",
+            "BACKEND": "storages.backends.s3.S3Storage",
             "OPTIONS": {
-                "bucket_name": AWS_STORAGE_BUCKET_NAME,
-                "custom_domain": AWS_S3_CUSTOM_DOMAIN,
+                "bucket_name": AWS_MEDIA_BUCKET_NAME,
+                "querystring_auth": True,
+                "default_acl": None,
+                "querystring_expire": 300,
+                "custom_domain": AWS_PRIVATE_DOMAIN,
             },
         },
         "staticfiles": {
-            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+            "BACKEND": "storages.backends.s3.S3Storage",
             "OPTIONS": {
                 "bucket_name": AWS_STORAGE_BUCKET_NAME,
                 "location": "static",
-                "custom_domain": AWS_S3_CUSTOM_DOMAIN,
+                "custom_domain": "dk87yvhh7cphv.cloudfront.net",
             },
         },
     }
 
-    STATIC_URL = f"{AWS_CLOUDFRONT_DOMAIN}/{AWS_LOCATION}/"
-    MEDIA_URL = f"{AWS_CLOUDFRONT_DOMAIN}/media/"
+    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
+    # MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
