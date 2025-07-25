@@ -17,7 +17,7 @@
             <!-- LEFT: Brand -->
             <a class="navbar-brand col-lg-auto me-0 d-flex align-items-center"
                href="{% url 'index' %}">
-                <img src="{{ MEDIA_URL }}images/aimlogotransparentnotext.png"
+                <img src="{% static 'images/aimlogotransparentnotext.png' %}"
                      alt="American Institute of Mathematics"
                      class=""
                      style="max-height: 90px">
@@ -91,6 +91,11 @@
                         <a class="dropdown-item"
                            href="{% page_url 'visiting' %}#travel-guidelines">Travel Guidelines</a>
                         <a class="dropdown-item" href="{% page_url 'visiting' %}#child-care">Child Care</a>
+                        <a class="dropdown-item"
+                           href="{% page_url 'visiting' %}#explore-pasadena">Explore Pasadena</a>
+                        <a class="dropdown-item" href="{% page_url 'visiting' %}#facilities">Facilities</a>
+                        <a class="dropdown-item" href="{% page_url 'visiting' %}#accessibility">Accessibility</a>
+                        <a class="dropdown-item" href="{% page_url 'visiting' %}#faq">FAQ</a>
                     </ul>
                 </li>
                 <!-- Resources -->
@@ -106,6 +111,12 @@
                                    href="{% page_url 'resources' %}#careers-advice">Math Careers Advice</a>
                                 <a class="dropdown-item"
                                    href="{% page_url 'resources' %}#open-textbook-initiative">Open Textbook Initiative</a>
+                                <a class="dropdown-item" href="{% page_url 'resources' %}#videos">Videos</a>
+                                <a class="dropdown-item" href="{% page_url 'resources' %}#problem-list">Problem Lists</a>
+                                <a class="dropdown-item"
+                                   href="{% page_url 'resources' %}#preprint-series">Preprint Series</a>
+                                <a class="dropdown-item"
+                                   href="{% page_url 'resources' %}#published-paper">Published Papers</a>
                             </div>
                             <div class="flex-fill">
                                 <h6 class="dropdown-header">Library</h6>
@@ -123,6 +134,8 @@
                         <a class="dropdown-item" href="{% page_url 'about' %}#contact">Contact</a>
                         <a class="dropdown-item" href="{% page_url 'about' %}#staff">Staff</a>
                         <a class="dropdown-item" href="{% page_url 'about' %}#governance">Governance</a>
+                        <a class="dropdown-item" href="{% page_url 'about' %}#diversity">Diversity</a>
+                        <a class="dropdown-item" href="{% page_url 'about' %}#mission-history">Mission & History</a>
                     </ul>
                 </li>
                 <!-- News -->

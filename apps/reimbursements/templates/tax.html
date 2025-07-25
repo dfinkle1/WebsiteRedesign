@@ -1,0 +1,119 @@
+{% extends "reimbursement_base.html" %}
+{% load static %}
+{% block content %}
+    <div class="container my-5">
+        {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+        {% for field in form %}
+            {% if field.errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ field.label }}:</strong> {{ field.errors|join:", " }}
+                </div>
+            {% endif %}
+        {% endfor %}
+        <div class="card shadow-sm border-dark">
+            <div class="card-body p-4">
+                <!-- Header Section -->
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold">Declaration of Tax Status Form</h2>
+                    <p class="text-muted">
+                        United States and California laws require that the American Institute of Mathematics has on record
+                        information regarding the tax status of visitors. This form must be completed to claim reimbursement.
+                    </p>
+                    <p class="fw-bolder text-primary">This form is valid for one calendar year.</p>
+                </div>
+                <!-- Form Start -->
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ wizard.management_form }}
+                    <!-- Tax Status Section -->
+                    <h4 class="mb-3 border-bottom pb-2">Tax Status</h4>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Select Your Tax Status:</label>
+                        {{ form.tax_status }}
+                    </div>
+                    <!-- Visa Section (hidden by default) -->
+                    <div id="visa-section"
+                         style="display:none"
+                         class="mt-4 p-3 border rounded bg-light">
+                        <h5 class="mb-3 text-secondary">Visa Details</h5>
+                        <div class="mb-3">
+                            <label class="form-label">Visa Tax Status:</label>
+                            {{ form.visa_tax_status }}
+                            <p class="mt-2">
+                                <a href="https://www.irs.gov/individuals/international-taxpayers/substantial-presence-test"
+                                   target="_blank"
+                                   class="text-decoration-none">Learn about the Substantial Presence Test</a>
+                            </p>
+                        </div>
+                        <!-- Extra fields for residents -->
+                        <div id="resident-extra"
+                             style="display:none"
+                             class="border rounded p-3 bg-white mb-3">
+                            <p class="mb-2 fw-bold">Additional Information (for residents only):</p>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Date of Admission:</label>
+                                    {{ form.admission_date }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Visa/Permit Type:</label>
+                                    {{ form.visa_option }}
+                                </div>
+                            </div>
+                            <p class="small text-muted mt-2">
+                                By providing this information, you confirm your residence in the U.S. and understand that your
+                                income is subject to IRS laws until residency is abandoned.
+                            </p>
+                        </div>
+                        <!-- Other Visa Uploads -->
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Visa Type:</label>
+                                {{ form.visa_type }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Passport Number:</label>
+                                {{ form.passport_number }}
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label">I am a citizen of:</label>
+                                {{ form.resident_of }}
+                                <span>or</span>
+                                <label class="form-label">I am a resident of:</label>
+                                {{ form.citizenship }}
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label">Permanent Home Address:</label>
+                                <div class="input-group">{{ form.permanent_home_address }}</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Most Recent I-94:</label>
+                                {{ form.most_recent_i94 }}
+                                <p class="small text-muted">
+                                    Get this from
+                                    <a href="https://i94.cbp.dhs.gov/search/recent-search" target="_blank">CBP I-94 Website</a>
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Travel History:</label>
+                                {{ form.travel_history_i94 }}
+                                <p class="small text-muted">
+                                    After retrieving your I-94, click <strong>"Travel History"</strong> at the bottom right of the CBP page.
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Upload Passport:</label>
+                                {{ form.passport_copy }}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Submit Button -->
+                    <div class="text-end mt-4">
+                        <button type="submit" class="btn btn-primary px-4">Next</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/tabs.js' %}"></script>
+{% endblock %}
