@@ -3,7 +3,8 @@ import os
 import environ
 from dotenv import load_dotenv
 import dj_database_url
-from cms.utils.conf import get_cms_setting
+from debug_toolbar.settings import PANELS_DEFAULTS
+
 
 # Load environment variables
 load_dotenv()
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
     # django CMS core
     # django CMS addons
     "djangocms_frontend",
+    "djangocms_text.contrib.text_ckeditor4",
     "djangocms_frontend.contrib.accordion",
     "djangocms_frontend.contrib.alert",
     "djangocms_frontend.contrib.badge",
@@ -77,6 +79,8 @@ INSTALLED_APPS = [
     "filer",
 ]
 
+# TEXT_EDITOR = "djangocms_text.contrib.text_ckeditor4.ckeditor4"
+DEBUG_TOOLBAR_PANELS = [p for p in PANELS_DEFAULTS if "profiling" not in p]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
