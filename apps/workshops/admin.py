@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import OldWorkshop, Uniqueuser
-from participants.models import Participant
+from .models import OldWorkshop, Uniqueuser, Participant
+
+# from participants.models import Participant
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from datetime import date
@@ -11,6 +12,30 @@ from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib import messages
+
+
+# @admin.register(Participant)
+class ParticipantAdmin(admin.ModelAdmin):
+    def display_is_organizer(self):
+        if self.isorganizer == True:
+            return "Is organizer"
+        else:
+            return "Not Organizer"
+
+    list_display = [
+        "id",
+        "firstname",
+        "lastname",
+        "workshopcode",
+        "namesuffix",
+        "workshop",
+        "isorganizer",
+        "acceptedoffer",
+    ]
+    search_fields = [
+        "firstname",
+        "lastname",
+    ]
 
 
 class WorkshopDateFilter(admin.SimpleListFilter):
@@ -54,7 +79,7 @@ class OldWorkshopAdmin(admin.ModelAdmin):
         "workshopenddate",
         "participants_list",
     )
-    search_fields = ("workshopid",)
+    search_fields = ("workshopid", "workshopname", "participant__firstname")
     actions = ["email_participants", "export_participants_csv"]
     inlines = [ParticipantChoiceField]
 
@@ -71,7 +96,7 @@ class OldWorkshopAdmin(admin.ModelAdmin):
                 # Collect all participant emails from selected workshops
                 emails = []
                 for workshop in queryset:
-                    participants = Participant.objects.filter(workshop=workshop)
+                    # participants = Participant.objects.filter(workshop=workshop)
                     emails.extend(
                         [p.emailaddress for p in participants if p.emailaddress]
                     )
@@ -107,29 +132,32 @@ class OldWorkshopAdmin(admin.ModelAdmin):
 
     email_participants.short_description = "Email participants of selected workshops"
 
-    def export_participants_csv(self, request, queryset):
-        """
-        Export participants from selected workshops as a CSV file.
-        """
-        response = HttpResponse(content_type="text/csv")
-        response["Content-Disposition"] = 'attachment; filename="participants.csv"'
+    # def export_participants_csv(self, request, queryset):
+    #     """
+    #     Export participants from selected workshops as a CSV file.
+    #     """
+    #     response = HttpResponse(content_type="text/csv")
+    #     response["Content-Disposition"] = 'attachment; filename="participants.csv"'
 
-        writer = csv.writer(response)
-        writer.writerow(["First Name", "Last Name", "Email", "Workshop"])
+    #     writer = csv.writer(response)
+    #     writer.writerow(["First Name", "Last Name", "Email", "Workshop"])
 
-        for workshop in queryset:
-            participants = Participant.objects.filter(workshop=workshop)
-            for p in participants:
-                writer.writerow(
-                    [p.firstname, p.lastname, p.emailaddress, workshop.workshopname]
-                )
+    #     for workshop in queryset:
+    #         participants = Participant.objects.filter(workshop=workshop)
+    #         for p in participants:
+    #             writer.writerow(
+    #                 [p.firstname, p.lastname, p.emailaddress, workshop.workshopname]
+    #             )
 
-        return response
+    #     return response
 
-    export_participants_csv.short_description = "Export participants as CSV"
+    # export_participants_csv.short_description = "Export participants as CSV"
 
 
 admin.site.register(OldWorkshop, OldWorkshopAdmin)
+
+
+admin.site.register(Participant, ParticipantAdmin)
 
 
 @admin.register(Uniqueuser)

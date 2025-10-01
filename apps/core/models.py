@@ -2,8 +2,6 @@ from django.db import models
 from cms.models.fields import PlaceholderRelationField, PlaceholderField
 from cms.utils.placeholder import get_placeholder_from_slot
 from functools import cached_property
-from filer.fields.image import FilerImageField
-from django.utils.text import slugify
 
 
 class MyModel(models.Model):

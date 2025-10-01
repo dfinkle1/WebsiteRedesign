@@ -21,12 +21,12 @@ INSTALLED_APPS = [
     # Project apps
     "mysite",
     "apps.reimbursements.apps.ReimbursementsConfig",
-    "participants.apps.ParticipantsConfig",
     "apps.workshops.apps.WorkshopsConfig",
     "apps.frg.apps.FrgConfig",
     "apps.core.apps.CoreConfig",
     "apps.staff.apps.StaffConfig",
     "apps.news.apps.NewsConfig",
+    "apps.events",
     # Django core
     "djangocms_admin_style",
     "django.contrib.admin",
@@ -150,8 +150,8 @@ CMS_TEMPLATES = [
     ("FRG/frg-activities.html", "FRG Activities"),
     ("FRG/frg-landing.html", "FRG Landing Page"),
     ("FRG/frg-papers.html", "FRG Papers"),
-    ("staff_member_plugin.html", "Staff Template"),
     ("new_page_template.html", "New Page Template"),
+    ("donate.html", "Donation Page"),
 ]
 
 # Internationalization
@@ -183,6 +183,16 @@ STATICFILES_DIRS = [BASE_DIR / "assets"]
 # Site ID
 SITE_ID = 2
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "<rds-db-name>",
+#         "USER": "<rds-username>",
+#         "PASSWORD": "<rds-password>",
+#         "HOST": "<rds-endpoint>",
+#         "PORT": "5432",
+#     }
+# }
 DATABASES = {
     "default": dj_database_url.config(
         default=os.getenv("DATABASE_URL"), conn_max_age=600

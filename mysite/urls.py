@@ -9,6 +9,7 @@ urlpatterns = i18n_patterns(
     path("admin/", admin.site.urls),
     # ✅ Your custom app takes root first
     path("", include("apps.core.urls")),
+    path("events/", include("apps.events.urls")),
     # ✅ CMS handles everything else
     path("", include("cms.urls")),
     path("news/", include("apps.news.urls")),
