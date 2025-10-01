@@ -1,45 +1,35 @@
 from django.shortcuts import HttpResponse, render, get_object_or_404
-from datetime import date
+from datetime import date, datetime, time, timedelta
+from django.utils import timezone
 from apps.workshops.models import OldWorkshop
 from django.http import JsonResponse
 from apps.core.models import *
 
 
-def render_my_model(request, obj):
+def home(request):
+    local_today = timezone.localdate()
+    start_of_tomorrow = timezone.make_aware(
+        datetime.combine(local_today + timedelta(days=1), time.min),
+        timezone.get_current_timezone(),
+    )
+    qs = (
+        OldWorkshop.objects.filter(workshopstartdate__gte=start_of_tomorrow)
+        .only("workshopid", "workshopname", "workshopabbrev", "workshopstartdate")
+        .order_by("workshopstartdate")
+    )
+    cache_key = f"home_workshops::{local_today.isoformat()}"
     return render(
         request,
-        "about.html",
+        "home.html",
         {
-            "object": obj,
+            "old_workshops_after_today": qs,
+            "home_cache_key": cache_key,
         },
     )
 
 
-def my_model_detail(request, id):
-    obj = get_object_or_404(MyModel)  # Get the object (here by id)
-    request.toolbar.set_object(obj)  # Announce the object to the toolbar
-    return render_my_model(request, MyModel)  # Same as preview rendering
-
-
-def home(request):
-    # featured_article = (
-    #     NewsArticle.objects.filter(featured=True).order_by("-published_date").first()
-    # )
-    # recent_articles = NewsArticle.objects.filter(featured=False).order_by(
-    #     "-published_date"
-    # )[:5]
-    current_date = date.today()
-    old_workshops_after_today = OldWorkshop.objects.filter(
-        workshopstartdate__date__gte=current_date
-    ).order_by("workshopstartdate")
-    # template = loader.get_template("workshop/index.html")
-    context = {
-        "old_workshops_after_today": old_workshops_after_today,
-        # "featured_article": featured_article,
-        # "recent_articles": recent_articles,
-    }
-
-    return render(request, "home.html", context)
+def donation_page(request):
+    return render(request, "donate.html")
 
 
 def filter_workshops(request):
@@ -60,61 +50,12 @@ def filter_workshops(request):
     return JsonResponse(data, safe=False)
 
 
-def home2(request):
-    current_date = date.today()
-    old_workshops_after_today = OldWorkshop.objects.filter(
-        workshopstartdate__date__gt=current_date
-    ).order_by("workshopstartdate")
-    # template = loader.get_template("workshop/index.html")
-    context = {"old_workshops_after_today": old_workshops_after_today}
-    print([workshop.workshopstartdate for workshop in old_workshops_after_today[:5]])
-    return render(request, "home.html", context)
-
-
-def focused_collaborative_research(request):
-    return render(request, "navbar/focusedcollaborativeresearch/focused-landing.html")
-
-
-# navbar/joyfulmath
-def joyfulmath_view(request):
-    return render(request, "navbar/joyfulmath/joyfulmathematics.html")
-
-
-#
-
-
-def template_view(request):
-    return render(request, "template1.html")
-
-
-# navbar/about
-def about_view(request):
-    return render(request, "about.html")
-
-
-# navbar/visiting
-
-
-def codeofconduct(request):
-    return render(request, "navbar/visiting/#codeofconduct")
-
-
-#
-# navbar/visiting
-
-
-# FRG
-def frg1_view(request):
-    return render(request, "FRG/aimfrg.html")
-
-
-def frg2_view(request):
-    return render(request, "FRG/papers.html")
-
-
-def frg3_view(request):
-    return render(request, "FRG/activities.html")
-
-
-def navtest(request):
-    return render(request, "navtest.html")
+# def home2(request):
+#     current_date = date.today()
+#     old_workshops_after_today = OldWorkshop.objects.filter(
+#         workshopstartdate__date__gt=current_date
+#     ).order_by("workshopstartdate")
+#     # template = loader.get_template("workshop/index.html")
+#     context = {"old_workshops_after_today": old_workshops_after_today}
+#     print([workshop.workshopstartdate for workshop in old_workshops_after_today[:5]])
+#     return render(request, "home.html", context)
