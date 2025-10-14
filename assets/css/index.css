@@ -206,12 +206,11 @@ p {
 }
 
 #workshops-container {
-  height: 700px;
   overflow-y: auto;
 }
 
 #workshopTabsContent {
-  max-height: 800px; /* Prevent collapse when empty */
+  max-height: 1px;
   overflow-y: auto;
 }
 

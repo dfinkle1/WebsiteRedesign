@@ -64,7 +64,7 @@
       <div class="row g-3 mb-3">
         <!-- Column 1: News -->
         <div class="col-md-8">
-          <div class="p-2 rounded">
+          <div class="p-2 theme-bg rounded ">
             <h3 class="pb-0 mb-3 fst-italic border-bottom">Recent News</h3>
             {% render_featured_article %}
           </div>
@@ -100,15 +100,13 @@
                 <ul class="list-unstyled pt-2">
                   {% load cache %}
                   {% cache 600 home_cache_key %}
-                  <section class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                  <section>
                     {% for w in old_workshops_after_today %}
                       <article class="card">
-                        <header class="card-header">
-                          <h3 class="card-title">
-                            {{ w.workshopname }}
-                            {% if w.workshopabbrev %}<small class="opacity-70">({{ w.workshopabbrev }})</small>{% endif %}
-                          </h3>
-                        </header>
+                        <h5 class="card-title">
+                          {{ w.workshopname }}
+                          {% if w.workshopabbrev %}<small class="opacity-70">({{ w.workshopabbrev }})</small>{% endif %}
+                        </h5>
                         <div class="card-content">
                           <time datetime="{{ w.workshopstartdate|date:'c' }}">
                             {{ w.workshopstartdate|date:"M j, Y" }}
@@ -124,7 +122,23 @@
             </div>
             <div class="tab-pane fade" id="open-app" role="tabpanel">
               <ul class="list-unstyled">
-                <!-- Dynamic content for open applications -->
+                <section>
+                  {% for w in old_workshops_after_today %}
+                    <article class="card">
+                      <h3 class="card-title">
+                        {{ w.workshopname }}
+                        {% if w.workshopabbrev %}<small class="opacity-70">({{ w.workshopabbrev }})</small>{% endif %}
+                      </h3>
+                      <div class="card-content">
+                        <time datetime="{{ w.workshopstartdate|date:'c' }}">
+                          {{ w.workshopstartdate|date:"M j, Y" }}
+                        </time>
+                      </div>
+                    </article>
+                  {% empty %}
+                    <p>No upcoming workshops yet—check back soon.</p>
+                  {% endfor %}
+                </section>
               </ul>
             </div>
           </div>

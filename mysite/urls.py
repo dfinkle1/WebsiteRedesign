@@ -7,6 +7,8 @@ import debug_toolbar
 
 urlpatterns = i18n_patterns(
     path("admin/", admin.site.urls),
+    path("accounts/", include("allauth.urls")),
+    path("accounts/", include("accounts.urls", "accounts")),
     # ✅ Your custom app takes root first
     path("", include("apps.core.urls")),
     path("events/", include("apps.events.urls")),

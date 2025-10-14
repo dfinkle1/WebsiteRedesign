@@ -14,8 +14,9 @@ def home(request):
     )
     qs = (
         OldWorkshop.objects.filter(workshopstartdate__gte=start_of_tomorrow)
+        .filter(type=0)
         .only("workshopid", "workshopname", "workshopabbrev", "workshopstartdate")
-        .order_by("workshopstartdate")
+        .order_by("workshopstartdate")[:11]
     )
     cache_key = f"home_workshops::{local_today.isoformat()}"
     return render(

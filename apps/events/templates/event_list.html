@@ -2,30 +2,32 @@
 {% load cms_tags djangocms_alias_tags %}
 {% load static %}
 {% block content %}
-    <h2>Upcoming Events</h2>
-    {% if upcoming %}
-        <ul class="list-unstyled">
-            {% for e in upcoming %}
-                <li class="mb-2">
-                    <a href="{% url 'event-detail' e.slug %}">{{ e.title }}</a>
-                    <small class="text-muted">({{ e.start|date:"M j, Y" }})</small>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p class="text-muted">No upcoming events.</p>
-    {% endif %}
+    <div class="container">
+        <h2>Upcoming Events</h2>
+        {% if upcoming %}
+            <ul class="list-unstyled">
+                {% for e in upcoming %}
+                    <li class="mb-2">
+                        <a href="{% url 'event-detail' e.slug %}">{{ e.title }}</a>
+                        <small class="text-muted">({{ e.start|date:"M j, Y" }})</small>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-muted">No upcoming events.</p>
+        {% endif %}
+    </div>
     <h2 class="mt-4">Past Events</h2>
     {% regroup past by year as past_by_year %}
     <ul class="nav small gap-2 mb-3">
         {% for g in past_by_year %}
             <li>
-                <a href="#y{{ g.grouper }}">{{ g.grouper }}</a>
+                <a href="{{ g.grouper }}">{{ g.grouper }}</a>
             </li>
         {% endfor %}
     </ul>
     {% for g in past_by_year %}
-        <h3 id="y{{ g.grouper }}">{{ g.grouper }}</h3>
+        <h3 id="{{ g.grouper }}">{{ g.grouper }}</h3>
         <ul class="list-unstyled mb-4">
             {% for e in g.list %}
                 <li class="mb-2">
