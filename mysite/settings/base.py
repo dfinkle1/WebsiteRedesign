@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     "apps.staff.apps.StaffConfig",
     "apps.news.apps.NewsConfig",
     "apps.events",
+    "accounts",
     # Django core
     "djangocms_admin_style",
     "django.contrib.admin",
@@ -46,6 +47,11 @@ INSTALLED_APPS = [
     "sekizai",
     "adminsortable2",
     "easy_thumbnails",
+    # allauth
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.orcid",
     # django CMS core
     # django CMS addons
     "djangocms_frontend",
@@ -95,6 +101,7 @@ MIDDLEWARE = [
     "cms.middleware.toolbar.ToolbarMiddleware",
     "cms.middleware.language.LanguageCookieMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "mysite.urls"
@@ -117,10 +124,43 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.media",
                 "cms.context_processors.cms_settings",
+                "django.template.context_processors.request",
             ],
         },
     },
 ]
+
+# Django-allauth-settings
+
+# settings.py
+SOCIALACCOUNT_ADAPTER = "accounts.adapter.OrcidAdapter"
+
+ACCOUNT_UNIQUE_EMAIL = True  # keep email unique across users
+ACCOUNT_EMAIL_VERIFICATION = "optional"  # or "mandatory" if you want verified emails
+SOCIALACCOUNT_STORE_TOKENS = True
+
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    "django.contrib.auth.backends.ModelBackend",
+    # `allauth` specific authentication methods, such as login by email
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+SOCIALACCOUNT_PROVIDERS = {
+    "orcid": {
+        # Base domain of the API. Default value: 'orcid.org', for the production API
+        "BASE_DOMAIN": "sandbox.orcid.org",  # for the sandbox API
+        "MEMBER_API": False,  # for the member API
+        "SCOPE": ["/authenticate"],
+    }
+}
+
+
+LOGIN_URL = "/accounts/login/"
+
+
+#
 
 # CMS Settings
 CMS_CONFIRM_VERSION4 = True
@@ -183,20 +223,15 @@ STATICFILES_DIRS = [BASE_DIR / "assets"]
 # Site ID
 SITE_ID = 2
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": "<rds-db-name>",
-#         "USER": "<rds-username>",
-#         "PASSWORD": "<rds-password>",
-#         "HOST": "<rds-endpoint>",
-#         "PORT": "5432",
-#     }
-# }
 DATABASES = {
-    "default": dj_database_url.config(
-        default=os.getenv("DATABASE_URL"), conn_max_age=600
-    )
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "aim_local",
+        "USER": "daniel",
+        "PASSWORD": "",
+        "HOST": "localhost",
+        "PORT": "5431",
+    }
 }
 
 

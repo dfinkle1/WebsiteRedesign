@@ -12,7 +12,7 @@ class NewsletterAdmin(admin.ModelAdmin):
 
 class NewsArticleAdmin(admin.ModelAdmin):
     # form = NewsArticleForm
-    list_display = ("title", "slug")
+    list_display = ("title", "slug", "published_date")
     formfield_overrides = {
         models.TextField: {"widget": TextEditorWidget},
     }

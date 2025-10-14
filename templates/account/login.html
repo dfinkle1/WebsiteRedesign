@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <div class="container align-items-center">
+        {% load socialaccount %}
+        <h1>Sign in</h1>
+        <!-- Your custom copy/branding here -->
+        <p>Use your ORCID iD to access the portal.</p>
+        <a href="{% provider_login_url 'orcid' process='login' %}">Sign in with ORCID</a>
+    </div>
+{% endblock content %}

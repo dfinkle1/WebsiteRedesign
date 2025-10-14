@@ -90,7 +90,7 @@ class OldWorkshop(models.Model):
         db_column="OrganizerWebpage8", blank=True, null=True
     )
     organizerwebpage9 = models.TextField(
-        db_column="OrganizerWebpage9", blank=True, null=True
+        db_column="Organi zerWebpage9", blank=True, null=True
     )
     webliaisonwebpage = models.TextField(
         db_column="WebLiaisonWebpage", blank=True, null=True
@@ -122,51 +122,24 @@ class OldWorkshop(models.Model):
         db_table = "old_workshop"
 
 
-class Uniqueuser(models.Model):
-    codenumber = models.IntegerField(blank=True, null=True)
-    workshopcode = models.IntegerField()
-    firstname = models.CharField(max_length=255, blank=True, null=True)
-    middlenames = models.CharField(max_length=255, blank=True, null=True)
-    lastname = models.CharField(max_length=255, blank=True, null=True)
-    namesuffix = models.CharField(max_length=255, blank=True, null=True)
-    mailingaddress = models.TextField(blank=True, null=True)
-    emailaddress = models.CharField(max_length=255, blank=True, null=True)
-    phonenumber = models.CharField(max_length=255, blank=True, null=True)
-    homepage = models.TextField(blank=True, null=True)
-    affiliation = models.CharField(max_length=255, blank=True, null=True)
-    nameprefix = models.CharField(max_length=255, blank=True, null=True)
-    airport1 = models.CharField(max_length=255, blank=True, null=True)
-    airport2 = models.CharField(max_length=255, blank=True, null=True)
-    arrivalday = models.CharField(max_length=255, blank=True, null=True)
-    departureday = models.CharField(max_length=255, blank=True, null=True)
-    mrid = models.CharField(max_length=255, blank=True, null=True)
-    mealrestriction = models.CharField(max_length=255, blank=True, null=True)
-    hotelrequirement = models.CharField(max_length=255, blank=True, null=True)
-    travelcomments1 = models.TextField(blank=True, null=True)
-    travelcomments2 = models.TextField(blank=True, null=True)
-    webpagecontribution = models.TextField(blank=True, null=True)
-    orcid = models.CharField(max_length=255, blank=True, null=True)
-    acceptedoffer = models.DateTimeField(blank=True, null=True)
-    declinedoffer = models.DateTimeField(blank=True, null=True)
-    declinedreason = models.TextField(blank=True, null=True)
-    travelplans = models.TextField(blank=True, null=True)
-    travelplanstatus = models.TextField(blank=True, null=True)
-    funding = models.CharField(max_length=255, blank=True, null=True)
-    gender = models.SmallIntegerField(blank=True, null=True)
-    ethnicity = models.SmallIntegerField(blank=True, null=True)
-    unused = models.TextField(blank=True, null=True)
-    personid = models.AutoField(primary_key=True)
-
-    def __str__(self):
-        return str(self.personid)
-
-    @classmethod
-    def get_by_name(cls, firstname):
-        return cls.objects.filter(firstname=firstname)
+class People(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    orcid_id = models.TextField(
+        blank=True, null=True, unique=True
+    )  # unique when present
+    email = models.TextField(
+        blank=True, null=True, unique=True
+    )  # will be citext at DB level
+    first_name = models.TextField(blank=True, null=True)
+    last_name = models.TextField(blank=True, null=True)  # allow NULL if you want
+    institution = models.TextField(blank=True, null=True)
+    address_raw = models.TextField(blank=True, null=True)
+    phone = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        managed = False
-        db_table = "uniqueuser"
+        db_table = "people"
 
 
 class Participant(models.Model):
@@ -215,10 +188,16 @@ class Participant(models.Model):
         null=True,  # Allow null values
         default=None,  # Default value is None
     )
-
-    def __str__(self):
-        return str(self.id)
+    person = models.ForeignKey(
+        People,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="participants",
+    )
 
     class Meta:
-        managed = True
         db_table = "participant"
+        indexes = [
+            models.Index(fields=["workshopcode"]),  # helps the backfill join
+        ]
