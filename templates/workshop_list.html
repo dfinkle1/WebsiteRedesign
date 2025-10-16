@@ -1,0 +1,19 @@
+<h3>Upcoming Workshops</h3>
+{% for w in workshops %}
+    <a href="{% url 'program-page' w.code %}">{{ w.title }} — {{ w.get_type_display }}</a>
+    <br>
+    <br>
+{% empty %}
+    <li>No workshops found.</li>
+{% endfor %}
+<div class="row">
+    {% for w in workshops %}
+        <div class="col-md-4">
+            <div class="card">
+                <h5 class="card-title">{{ w.title |safe }}</h5>
+                <p class="card-text">{{ w.description|slice:":150" | safe }}...</p>
+            </div>
+        </div>
+    </div>
+    <a href="{% url 'program-page' w.code %}" class="btn btn-primary">Read more</a>
+{% endfor %}

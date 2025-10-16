@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container mt-5 text-center">
+        <div class="row">
+            <h2 class="">{{ program_page.title |safe }}</h2>
+            <span>{{ program_page.start_date }} - {{ program_page.end_date }}</span>
+            <p class="">{{ program_page.description | safe }}</p>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock content %}

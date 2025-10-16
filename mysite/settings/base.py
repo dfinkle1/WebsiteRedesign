@@ -11,6 +11,8 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "127.0.0.1:80000"]
+
 env = environ.Env()
 env.read_env(BASE_DIR / ".env")
 
@@ -28,6 +30,10 @@ INSTALLED_APPS = [
     "apps.news.apps.NewsConfig",
     "apps.events",
     "accounts",
+    "programs",
+    "people",
+    "enrollments",
+    "corsheaders",
     # Django core
     "djangocms_admin_style",
     "django.contrib.admin",
@@ -40,7 +46,6 @@ INSTALLED_APPS = [
     "cms",
     "menus",
     # Utilities
-    "django_recaptcha",
     "whitenoise.runserver_nostatic",
     "treebeard",
     "storages",
@@ -85,9 +90,21 @@ INSTALLED_APPS = [
     "filer",
 ]
 
+X_FRAME_OPTIONS = "SAMEORIGIN"
+CORS_ALLOWED_ORIGINS = ["https://127.0.0.1:8000"]
+CORS_ALLOW_HEADERS = (
+    "accept",
+    "authorization",
+    "content-type",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+)
+
 # TEXT_EDITOR = "djangocms_text.contrib.text_ckeditor4.ckeditor4"
 DEBUG_TOOLBAR_PANELS = [p for p in PANELS_DEFAULTS if "profiling" not in p]
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -233,10 +250,6 @@ DATABASES = {
         "PORT": "5431",
     }
 }
-
-
-RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY")
-RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY")
 
 
 # Static & Media with S3

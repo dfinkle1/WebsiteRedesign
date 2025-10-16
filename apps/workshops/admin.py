@@ -6,7 +6,7 @@ class ParticipantInlineForWorkshop(admin.TabularInline):
     model = Participant
     extra = 0
     fields = (
-        "person.firstname",
+        "person",
         "firstname",
         "lastname",
         "emailaddress",
