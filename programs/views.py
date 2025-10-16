@@ -8,7 +8,10 @@ def program_page(request, code):
     program_page = get_object_or_404(
         Program, type=Program.ProgramType.WORKSHOP, code=code
     )
-    return render(request, "program_page.html", {"program_page": program_page})
+    now = timezone.now()
+    return render(
+        request, "program_page.html", {"program_page": program_page, "now": now}
+    )
 
 
 def list_of_workshops(request):

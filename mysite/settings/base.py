@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "people",
     "enrollments",
     "corsheaders",
+    "django-browser-reload",
     # Django core
     "djangocms_admin_style",
     "django.contrib.admin",
@@ -118,6 +119,7 @@ MIDDLEWARE = [
     "cms.middleware.toolbar.ToolbarMiddleware",
     "cms.middleware.language.LanguageCookieMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
     "allauth.account.middleware.AccountMiddleware",
 ]
 
