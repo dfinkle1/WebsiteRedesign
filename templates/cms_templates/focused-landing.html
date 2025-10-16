@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load cms_tags djangocms_alias_tags %}
 {% load static %}
+{% load program_tags %}
 {% block title %}
     {% page_attribute "page_title" %}
 {% endblock title %}
@@ -22,6 +23,7 @@
         </div>
     </section>
     <div class="container">
+        <div></div>
         <div class="row mt-5 mb-4">
             <div class="col-lg-3">
                 <div class="d-flex align-items-start">

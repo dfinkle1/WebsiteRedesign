@@ -1,0 +1,13 @@
+{# templates/partials/program_cards.html #}
+<div class="program-cards">
+    {% for w in workshops %}
+        <p class="fs-6">
+            {% if w.application_deadline > now %}*{% endif %}
+            <a href="{% url 'program-page' w.code %}">
+                {{ w.title }} - <span>{{ w.start_date|date:"M j, Y" }}</span>
+            </a>
+        </p>
+    {% empty %}
+        <p>No upcoming workshops.</p>
+    {% endfor %}
+</div>
