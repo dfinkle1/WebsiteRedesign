@@ -11,7 +11,12 @@ MIDDLEWARE = [m for m in MIDDLEWARE if "whitenoise" not in m]
 INSTALLED_APPS += ["django_browser_reload"]
 MIDDLEWARE += ["django_browser_reload.middleware.BrowserReloadMiddleware"]
 
-DATABASE_URL = os.getenv("DATABASE_URL")  # e.g., from Codespaces secrets
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
+}
 
 DATABASES = {"default": dj_database_url.parse(DATABASE_URL, conn_max_age=0)}
 
