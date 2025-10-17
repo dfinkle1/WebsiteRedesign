@@ -118,6 +118,7 @@ MIDDLEWARE = [
     "cms.middleware.toolbar.ToolbarMiddleware",
     "cms.middleware.language.LanguageCookieMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
     "allauth.account.middleware.AccountMiddleware",
 ]
 
@@ -253,7 +254,7 @@ DATABASES = {
 
 
 # Static & Media with S3
-USE_S3 = env.bool("USE_S3", default=True)
+USE_S3 = env.bool("USE_S3", default=False)
 
 if USE_S3:
     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")

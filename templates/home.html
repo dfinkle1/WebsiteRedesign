@@ -73,23 +73,25 @@
         <div class="col-md-4 col-sm-12">
           <div class="p-2 theme-bg rounded d-flex flex-column" style="height: 100%;">
             <h3 class="pb-0 mb-3 fst-italic border-bottom">Upcoming Workshops</h3>
-            <div class="tab-content flex-grow-1" id="workshopTabsContent">
+            <div class="flex-grow-1" id="workshopTabsContent">
               <div>
                 <ul class="list-unstyled pt-2">
                   <section>
                     {% for w in workshops %}
-                      <article class="card">
-                        <h5 class="card-title">
-                          {% if w.application_deadline > now %}<span>*</span>{% endif %}
-                          {{ w.title }}
-                          {% if w.title_abbreviation %}<small class="opacity-70">({{ w.title_abbreviation }})</small>{% endif %}
-                        </h5>
-                        <div class="card-content">
-                          <time datetime="{{ w.workshopstartdate|date:'c' }}">
-                            {{ w.start_date|date:"M j, Y" }} - {{ w.end_date|date:"M j, Y" }}
-                          </time>
-                        </div>
-                      </article>
+                      <a href="{% url 'program-page' w.code %}">
+                        <article class="card">
+                          <h5 class="card-title">
+                            {% if w.application_deadline > now %}<span>*</span>{% endif %}
+                            {{ w.title }}
+                            {% if w.title_abbreviation %}<small class="opacity-70">({{ w.title_abbreviation }})</small>{% endif %}
+                          </h5>
+                          <div class="card-content">
+                            <time datetime="{{ w.workshopstartdate|date:'c' }}">
+                              {{ w.start_date|date:"M j, Y" }} - {{ w.end_date|date:"M j, Y" }}
+                            </time>
+                          </div>
+                        </article>
+                      </a>
                     {% empty %}
                       <p>No upcoming workshops yet—check back soon.</p>
                     {% endfor %}
