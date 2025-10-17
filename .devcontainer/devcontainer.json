@@ -19,7 +19,5 @@
     "DJANGO_SETTINGS_MODULE": "mysite.settings.dev"
   },
   "postCreateCommand": "pip install -r requirements.txt",
-  "postAttachCommand": {
-    "server": "echo 'Run: python manage.py runserver 0.0.0.0:8000'"
-  }
+  "postAttachCommand": "python manage.py runserver"
 }

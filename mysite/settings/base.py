@@ -34,7 +34,6 @@ INSTALLED_APPS = [
     "people",
     "enrollments",
     "corsheaders",
-    "django-browser-reload",
     # Django core
     "djangocms_admin_style",
     "django.contrib.admin",
@@ -255,7 +254,7 @@ DATABASES = {
 
 
 # Static & Media with S3
-USE_S3 = env.bool("USE_S3", default=True)
+USE_S3 = env.bool("USE_S3", default=False)
 
 if USE_S3:
     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
