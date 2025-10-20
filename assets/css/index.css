@@ -251,6 +251,9 @@ p {
   transform: translate3d(0px, -44px, 0px);
 }
 
+.dropdown-header {
+  font-size: 1.5rem;
+}
 /* ======================================
    6. CARDS
 ====================================== */
