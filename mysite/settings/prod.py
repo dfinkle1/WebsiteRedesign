@@ -4,6 +4,17 @@ DEBUG = False
 
 USE_S3 = True
 
+INSTALLED_APPS += [
+    "whitenoise.runserver_nostatic",
+]
+
+# Static and Media (Base Defaults)
+STATIC_URL = "/static/"
+
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
 DATABASES = {
     "default": dj_database_url.config(
         default=os.getenv("DATABASE_URL"), conn_max_age=600

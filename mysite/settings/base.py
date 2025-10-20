@@ -14,7 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "127.0.0.1:80000"]
 
 env = environ.Env()
-env.read_env(BASE_DIR / ".env")
+# env.read_env(BASE_DIR / ".env")
 
 SECRET_KEY = env("SECRET_KEY", default="unsafe-secret-key")
 DEBUG = False  # Overridden in dev/prod
@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     "cms",
     "menus",
     # Utilities
-    "whitenoise.runserver_nostatic",
     "treebeard",
     "storages",
     "sekizai",
@@ -105,6 +104,7 @@ CORS_ALLOW_HEADERS = (
 DEBUG_TOOLBAR_PANELS = [p for p in PANELS_DEFAULTS if "profiling" not in p]
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -118,7 +118,6 @@ MIDDLEWARE = [
     "cms.middleware.toolbar.ToolbarMiddleware",
     "cms.middleware.language.LanguageCookieMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    "django_browser_reload.middleware.BrowserReloadMiddleware",
     "allauth.account.middleware.AccountMiddleware",
 ]
 
@@ -231,12 +230,6 @@ CACHES = {
 }
 CMS_CACHE_DURATIONS = {"content": 3600, "menus": 3600, "permissions": 3600}
 
-# Static and Media (Base Defaults)
-STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
-STATICFILES_DIRS = [BASE_DIR / "assets"]
 
 # Site ID
 SITE_ID = 2
@@ -252,9 +245,13 @@ DATABASES = {
     }
 }
 
+STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STATICFILES_DIRS = [BASE_DIR / "assets"]
 
 # Static & Media with S3
-USE_S3 = env.bool("USE_S3", default=False)
+USE_S3 = False
 
 if USE_S3:
     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
@@ -294,3 +291,11 @@ if USE_S3:
 
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
     # MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
+else:
+    # --- Development / local filesystem ---
+    STORAGES = {
+        "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"
+        },
+    }
