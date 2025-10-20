@@ -20,9 +20,6 @@
     <link rel="icon"
           href="{% static 'images/logo-svg.svg' %}"
           type="image/svg+xml">
-    {% if debug %}
-      <link rel="stylesheet" href="{% static 'css/index.css' %}">
-    {% endif %}
     {% block extra_css %}
     {% endblock extra_css %}
     {% render_block "css" %}
