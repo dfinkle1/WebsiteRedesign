@@ -59,7 +59,17 @@ if APP_ENV == "codespaces" or IN_CODESPACES:
         or os.getenv("DATABASE_URL")
     )
 elif APP_ENV == "local":
-    DB_URL = os.getenv("DATABASE_URL_LOCAL") or os.getenv("DATABASE_URL")
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "aim_local",
+            "USER": "daniel",
+            "PASSWORD": "",
+            "HOST": "localhost",
+            "PORT": "5431",
+        }
+    }
+    # DB_URL = os.getenv("DATABASE_URL_LOCAL") or os.getenv("DATABASE_URL")
 
 if DB_URL:
     DATABASES = {"default": dj_database_url.parse(DB_URL, conn_max_age=0)}

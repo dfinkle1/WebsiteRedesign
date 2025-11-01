@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-    <div class="container mt-5 theme-bg">
+    <div class="container mt-5 mb-5 theme-bg">
         {% if program_page.application_deadline < now %}
             <p class="text-end">Applications are closed for this workshop</p>
         {% endif %}
@@ -21,8 +21,26 @@
                 <p>The deadline to apply for support to participate in this workshop has passed.</p>
             {% endif %}
             <p>
-                For more information email <i>workshops@aimath.org</i>
+                For more information email <i><a href="mailto:workshops@aimath.org">workshops@aimath.org</a></i>
             </p>
         </div>
     </div>
 {% endblock content %}
+{% block scripts %}
+    <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+       extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
+       jax: ["input/TeX", "output/HTML-CSS"],
+       tex2jax: {
+         inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+         displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+         processEscapes: true
+       },
+       "HTML-CSS": { availableFonts: ["TeX"] }
+     });
+    </script>
+    <script type="text/javascript"  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML-full">
+    </script>
+    <script type="text/javascript"
+            src="https://aimath.org/mathbook/mathbook-add-on.js"></script>
+{% endblock scripts %}
