@@ -1,22 +1,27 @@
 from django.contrib import admin
+from django.utils import timezone
 from .models import Program
+
+
+class UpcomingFilter(admin.SimpleListFilter):
+    title = "Date window"
+    parameter_name = "when"
+
+    def lookups(self, request, model_admin):
+        return [("upcoming", "Upcoming"), ("past", "Past")]
+
+    def queryset(self, request, queryset):
+        today = timezone.localdate()
+        if self.value() == "upcoming":
+            return queryset.filter(end_date__gte=today)
+        if self.value() == "past":
+            return queryset.filter(end_date__lt=today)
+        return queryset
 
 
 @admin.register(Program)
 class ProgramAdmin(admin.ModelAdmin):
-    list_display = ("code", "title", "start_date", "application_deadline")
-    list_filter = ("start_date", "type")
+    list_display = ("code", "title", "type", "start_date", "end_date")
+    list_filter = ("type", UpcomingFilter)
     search_fields = ("code", "title")
-
-
-# @admin.register(OldWorkshop)
-# class OldWorkshopAdmin(admin.ModelAdmin):
-#     list_display = (
-#         "workshopid",
-#         "workshopname",
-#         "workshopstartdate",
-#         "workshopenddate",
-#     )
-#     search_fields = ("workshopname", "workshopabbrev")
-#     list_filter = ("workshopstartdate",)
-#     inlines = [ParticipantInlineForWorkshop]
+    ordering = ("start_date",)

@@ -234,16 +234,6 @@ CMS_CACHE_DURATIONS = {"content": 3600, "menus": 3600, "permissions": 3600}
 # Site ID
 SITE_ID = 2
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "aim_local",
-        "USER": "daniel",
-        "PASSWORD": "",
-        "HOST": "localhost",
-        "PORT": "5431",
-    }
-}
 
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"

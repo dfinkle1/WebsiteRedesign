@@ -48,14 +48,11 @@ class PeopleAdmin(admin.ModelAdmin):
 class ParticipantAdmin(admin.ModelAdmin):
     list_display = (
         "id",
-        "person",
-        "workshop",
-        "isorganizer",
-        "emailaddress",
         "firstname",
         "lastname",
+        "workshop",
+        "emailaddress",
     )
-    list_filter = ("isorganizer",)
     search_fields = (
         "firstname",
         "lastname",
