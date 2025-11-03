@@ -14,7 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "127.0.0.1:80000"]
 
 env = environ.Env()
-# env.read_env(BASE_DIR / ".env")
+env.read_env(BASE_DIR / ".env")
 
 SECRET_KEY = env("SECRET_KEY", default="unsafe-secret-key")
 DEBUG = False  # Overridden in dev/prod
@@ -241,7 +241,8 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "assets"]
 
 # Static & Media with S3
-USE_S3 = False
+USE_S3 = os.getenv("USE_S3")
+print(USE_S3)
 
 if USE_S3:
     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
