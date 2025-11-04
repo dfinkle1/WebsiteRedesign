@@ -25,7 +25,7 @@ INSTALLED_APPS = [
     "apps.reimbursements.apps.ReimbursementsConfig",
     "apps.workshops.apps.WorkshopsConfig",
     "apps.frg.apps.FrgConfig",
-    "apps.core.apps.CoreConfig",
+    # "apps.core.apps.CoreConfig",
     "apps.staff.apps.StaffConfig",
     "apps.news.apps.NewsConfig",
     "apps.events",
@@ -213,7 +213,7 @@ CMS_TEMPLATES = [
 
 # Internationalization
 LANGUAGE_CODE = "en"
-LANGUAGES = [("en", "English"), ("de", "German"), ("it", "Italian")]
+LANGUAGES = [("en", "English")]
 TIME_ZONE = "America/Vancouver"
 USE_I18N = False
 USE_TZ = True
@@ -242,7 +242,7 @@ STATICFILES_DIRS = [BASE_DIR / "assets"]
 
 # Static & Media with S3
 USE_S3 = os.getenv("USE_S3")
-print(USE_S3)
+
 
 if USE_S3:
     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")

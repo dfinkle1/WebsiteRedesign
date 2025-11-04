@@ -62,7 +62,7 @@ elif APP_ENV == "local":
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": "aim_local",
+            "NAME": "aim_temp",
             "USER": "daniel",
             "PASSWORD": "",
             "HOST": "localhost",

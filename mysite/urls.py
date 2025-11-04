@@ -11,7 +11,6 @@ urlpatterns = i18n_patterns(
     path("accounts/", include("accounts.urls", "accounts")),
     path("", include("programs.urls")),
     # ✅ Your custom app takes root first
-    path("", include("apps.core.urls")),
     path("events/", include("apps.events.urls")),
     # ✅ CMS handles everything else
     path("", include("cms.urls")),
