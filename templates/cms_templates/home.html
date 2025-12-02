@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% load cms_tags %}
+{% load cms_tags article_tags %}
 {% block title %}
   Home
 {% endblock title %}
@@ -14,7 +14,7 @@
            alt="aim home banner" />
     </div>
   </section>
-  <section tag="propose a research activity announcement">
+  <!-- <section tag="propose a research activity announcement">
     <div class="p-3" id="propose-activity-banner">
       <div class="container fs-3">
         <div class="row justify-content-around">
@@ -38,19 +38,19 @@
         </div>
       </div>
     </div>
-  </section>
+  </section> -->
   <main class="container">
     <section tag="NSF Logo Contribution">
-      <div class="row mb-2 p-4 align-items-center">
+      <div class="row mb-2 align-items-center">
         <div class="col-auto">
           <img src="{% static 'images/NSFlogo.png' %}"
                class="img-fluid"
                alt="nsflogo"
-               width="150px"
+               width="120px"
                height="auto" />
         </div>
         <div class="col">
-          <p class="fs-5">
+          <p class="fs-6">
             AIM's goal is to advance mathematical knowledge through
             collaboration, to broaden participation in the mathematical
             endeavor, and to increase the awareness of the contributions of
@@ -60,69 +60,45 @@
         </div>
       </div>
     </section>
-    <section tag="Split-columns News and Workshops">
+    <section>
       <div class="row g-3 mb-3">
+        <!-- Column 1: News -->
         <div class="col-md-8">
-          <div class="p-3 theme-bg">
-            <h3 class="pb-4 mb-4 fst-italic border-bottom">Recent News</h3>
-            {% if featured_article %}
-              <img src="{{ featured_article.news_image.url }}"
-                   alt="{{ featured_article.title }}"
-                   class="img-fluid float-start me-3 mb-3"
-                   width="350px"
-                   height="auto" />
-              <div>
-                <h5 class="text-primary-emphasis">{{ featured_article.title }}</h5>
-                <p class="fs-5">{{ featured_article.text }}</p>
-              </div>
-            {% else %}
-              <p>no current article</p>
-            {% endif %}
+          <div class="p-2 theme-bg rounded ">
+            <h3 class="pb-0 mb-3 fst-italic border-bottom">Recent News</h3>
+            {% render_featured_article %}
           </div>
         </div>
-        <div class="col-md-4 col-sm-12 p-1 theme-bg">
-          <div class="p-3 rounded theme-bg" id="workshops-container">
-            <h3 class="fst-italic pb-4 mb-4 border-bottom">Workshops</h3>
-            <nav>
-              <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <button class="nav-link active"
-                        id="nav-home-tab"
-                        data-bs-toggle="tab"
-                        data-bs-target="#nav-home"
-                        type="button"
-                        role="tab"
-                        aria-controls="nav-home"
-                        aria-selected="true">Upcoming Workshops</button>
-                <button class="nav-link"
-                        id="applications-open-tab"
-                        data-bs-toggle="tab"
-                        data-bs-target="#applications-open"
-                        type="button"
-                        role="tab"
-                        aria-controls="applications-open"
-                        aria-selected="false">Open Applications</button>
-              </div>
-            </nav>
-            <div class="tab-content" id="nav-tabContent">
-              <div class="tab-pane fade show active"
-                   id="nav-home"
-                   role="tabpanel"
-                   aria-labelledby="nav-home-tab"
-                   tabindex="0">
-                <ul class="list-unstyled pt-2" id="workshops-list">
-                </ul>
-              </div>
-              <div class="tab-pane fade"
-                   id="applications-open"
-                   role="tabpanel"
-                   aria-labelledby="applications-open-tab"
-                   tabindex="0">
-                <ul class="list-unstyled" id="workshops-list">
+        <!-- Column 2: Workshops -->
+        <div class="col-md-4 col-sm-12">
+          <div class="p-2 theme-bg rounded d-flex flex-column" style="height: 100%;">
+            <h3 class="pb-0 mb-3 fst-italic border-bottom">Upcoming Workshops</h3>
+            <div class="flex-grow-1" id="workshopTabsContent">
+              <div>
+                <ul class="list-unstyled pt-2">
+                  <section>
+                    {% for w in workshops %}
+                      <a href="{% url 'program-page' w.code %}">
+                        <article class="card">
+                          <h5 class="card-title">
+                            {% if w.application_deadline > now %}<span>*</span>{% endif %}
+                            {{ w.title }}
+                            {% if w.title_abbreviation %}<small class="opacity-70">({{ w.title_abbreviation }})</small>{% endif %}
+                          </h5>
+                          <div class="card-content">
+                            <time datetime="{{ w.workshopstartdate|date:'c' }}">
+                              {{ w.start_date|date:"M j, Y" }} - {{ w.end_date|date:"M j, Y" }}
+                            </time>
+                          </div>
+                        </article>
+                      </a>
+                    {% empty %}
+                      <p>No upcoming workshops yet—check back soon.</p>
+                    {% endfor %}
+                  </section>
                 </ul>
               </div>
             </div>
-            <ul class="list-unstyled" id="workshops-list">
-            </ul>
           </div>
         </div>
       </div>
@@ -139,25 +115,7 @@
             <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223" />
           </svg>
         </button>
-        <div class="scrolling-wrapper-flexbox" id="horizontal-container">
-          {% for article in recent_articles %}
-            <a href="{% url 'news-article-detail' article.slug %}" target="_blank">
-              <div class="card p-3 mb-3">
-                <li class="list-unstyled">
-                  <h6 class="mb-0 text-primary-emphasis">{{ article.title }}</h6>
-                  <a class="" href="#">
-                    {% if article.news_image %}
-                      <img src="{{ article.news_image.url }}"
-                           class="img-fluid"
-                           aria-hidden="true"
-                           alt="{{ article.title }}" />
-                    {% endif %}
-                  </a>
-                </li>
-              </div>
-            </a>
-          {% endfor %}
-        </div>
+        {% render_news_carousel %}
         <button id="next-btn" class="next-btn">
           <svg xmlns="http://www.w3.org/2000/svg"
                width="50"

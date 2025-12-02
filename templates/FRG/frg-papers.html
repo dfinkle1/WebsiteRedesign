@@ -1,6 +1,6 @@
+{% extends "base.html" %}
 {% load cms_tags sekizai_tags %}
 {% load static %}
-
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
   <head>
     <meta name="generator" content="jemdoc, see http://jemdoc.jaboc.net/" />
@@ -11,103 +11,101 @@
     <!-- MathJax -->
     <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML'
             async></script>
-    <script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-	  TeX: { equationNumbers: { autoNumber: "AMS" } }
-});
-    </script>
     <!-- End MathJax -->
   </head>
-  <body>
-    
-    <table summary="Table for page layout." id="tlayout">
-      <tr valign="top">
-        <td id="layout-menu">
-          <div class="menu-category">AIM FRG</div>
-          <div class="menu-item">
-            <a href="{% page_url 'frg' %}">Home</a>
-          </div>
-          <div class="menu-item">
-            <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1854398">NSF&nbsp;Grant</a>
-          </div>
-          <div class="menu-item">
-            <a href="{% page_url 'frg' %}papers" class="current">Papers</a>
-          </div>
-          <div class="menu-item">
-            <a href="{% page_url 'frg' %}activities">Activities</a>
-          </div>
-          <div class="menu-item">
-            <a href="https://vimeo.com/showcase/7398886">Videos</a>
-          </div>
-          <div class="menu-item">
-            <a href="./references/">References</a>
-          </div>
-        </td>
-        <td id="layout-content">
-          <div id="toptitle">
-            <h1>Papers</h1>
-          </div>
-          <p>
-            The following is a list of papers which were supported by the FRG Grant or were inspired by the conversations or events that were part of the FRG.
-          </p>
-          <h2>Index</h2>
-          <ul>
-            <li>
-              <p>\(\spadesuit\): PI or co-PIs of the grant.</p>
-            </li>
-            <li>
-              <p>\(\heartsuit\): Designated as research scientists in the grant.</p>
-            </li>
-            <li>
-              <p>\(\diamondsuit\): Postdocs supported by the grant.</p>
-            </li>
-            <li>
-              <p>\(\clubsuit\): Other participants in the FRG.</p>
-            </li>
-          </ul>
-          <h2>Journal Publications</h2>
-          <p>The following publications were directly financially supported by the FRG:</p>
-          <ol>
-            <li>
-              <p>
-                Olga Balkanova(\(\clubsuit\)), John Brian Conrey(\(\spadesuit\)), and Dmitry Frolenkov. <b>An approximation formula for the shifted cubic moment of automorphic L-functions in the weight aspect</b>, <i>Canadian Journal of Mathematics</i>,  First View: 1&ndash;24, 2023.
-                (<a href="https://doi.org/10.4153/S0008414X23000512"
+  {% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/jemdoc.css' %}" />
+  {% endblock extra_css %}
+  {% block content %}
+    <body>
+      <table summary="Table for page layout." id="tlayout">
+        <tr valign="top">
+          <td id="layout-menu">
+            <div class="menu-category">AIM FRG</div>
+            <div class="menu-item">
+              <a href="{% page_url 'frg' %}">Home</a>
+            </div>
+            <div class="menu-item">
+              <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1854398">NSF&nbsp;Grant</a>
+            </div>
+            <div class="menu-item">
+              <a href="{% page_url 'frg' %}papers" class="current">Papers</a>
+            </div>
+            <div class="menu-item">
+              <a href="{% page_url 'frg' %}activities">Activities</a>
+            </div>
+            <div class="menu-item">
+              <a href="https://vimeo.com/showcase/7398886">Videos</a>
+            </div>
+            <div class="menu-item">
+              <a href="./references/">References</a>
+            </div>
+          </td>
+          <td id="layout-content">
+            <div id="toptitle">
+              <h1>Papers</h1>
+            </div>
+            <p>
+              The following is a list of papers which were supported by the FRG Grant or were inspired by the conversations or events that were part of the FRG.
+            </p>
+            <h2>Index</h2>
+            <ul>
+              <li>
+                <p>\(\spadesuit\): PI or co-PIs of the grant.</p>
+              </li>
+              <li>
+                <p>\(\heartsuit\): Designated as research scientists in the grant.</p>
+              </li>
+              <li>
+                <p>\(\diamondsuit\): Postdocs supported by the grant.</p>
+              </li>
+              <li>
+                <p>\(\clubsuit\): Other participants in the FRG.</p>
+              </li>
+            </ul>
+            <h2>Journal Publications</h2>
+            <p>The following publications were directly financially supported by the FRG:</p>
+            <ol>
+              <li>
+                <p>
+                  Olga Balkanova(\(\clubsuit\)), John Brian Conrey(\(\spadesuit\)), and Dmitry Frolenkov. <b>An approximation formula for the shifted cubic moment of automorphic L-functions in the weight aspect</b>, <i>Canadian Journal of Mathematics</i>,  First View: 1&ndash;24, 2023.
+                  (<a href="https://doi.org/10.4153/S0008414X23000512"
    target
    ldquo
    blank
    rdquo>journal</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Siegfred Baluyot(\(\diamondsuit\)) and Cruz Castillo. <b>Sign changes of the error term in the Piltz divisor problem</b>, <i>Int. Math. Res. Not. IMRN</i>, (20): 13191&ndash;13220, 2024. (<a href="https://doi.org/10.1093/imrn/rnae189" target ldquo blank rdquo>journal</a>, <a href="https://arxiv.org/abs/2302.08003v2" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4811685"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Siegfred Baluyot(\(\diamondsuit\)) and Cruz Castillo. <b>Sign changes of the error term in the Piltz divisor problem</b>, <i>Int. Math. Res. Not. IMRN</i>, (20): 13191&ndash;13220, 2024. (<a href="https://doi.org/10.1093/imrn/rnae189" target ldquo blank rdquo>journal</a>, <a href="https://arxiv.org/abs/2302.08003v2" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4811685"
     target
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Siegfred Baluyot(\(\diamondsuit\)) and Brian Conrey(\(\spadesuit\)). <b>Moments of zeta and correlations of divisor-sums: stratification and Vandermonde integrals</b>, <i>Mathematika</i>, 70(2): Paper No. e12243, 32, 2024. (<a href="https://doi.org/10.1112/mtk.12243" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/2206.04821v2" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4734693"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Siegfred Baluyot(\(\diamondsuit\)) and Brian Conrey(\(\spadesuit\)). <b>Moments of zeta and correlations of divisor-sums: stratification and Vandermonde integrals</b>, <i>Mathematika</i>, 70(2): Paper No. e12243, 32, 2024. (<a href="https://doi.org/10.1112/mtk.12243" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/2206.04821v2" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4734693"
     target
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Siegfred Alan C. Baluyot(\(\diamondsuit\)), Daniel Alan Goldston(\(\clubsuit\)), Ade Irma Suriajaya, and Caroline L. Turnage-Butterbaugh(\(\heartsuit\)). <b>An unconditional Montgomery theorem for pair correlation of zeros of the Riemann zeta-function</b>, <i>Acta Arith.</i>, 214: 357&ndash;376, 2024. (<a href="https://doi.org/10.4064/aa230612-20-3" target ldquo blank rdquo>journal</a>, <a href="https://arxiv.org/abs/2306.04799" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4772293"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Siegfred Alan C. Baluyot(\(\diamondsuit\)), Daniel Alan Goldston(\(\clubsuit\)), Ade Irma Suriajaya, and Caroline L. Turnage-Butterbaugh(\(\heartsuit\)). <b>An unconditional Montgomery theorem for pair correlation of zeros of the Riemann zeta-function</b>, <i>Acta Arith.</i>, 214: 357&ndash;376, 2024. (<a href="https://doi.org/10.4064/aa230612-20-3" target ldquo blank rdquo>journal</a>, <a href="https://arxiv.org/abs/2306.04799" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4772293"
     target
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Estelle Basor and Brian Conrey(\(\spadesuit\)). <b>Factoring determinants and applications to number theory</b>, <i>Random Matrices Theory Appl.</i>, 13(2): Paper No. 2450010, 33, 2024. (<a href="https://doi.org/10.1142/S2010326324500102"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Estelle Basor and Brian Conrey(\(\spadesuit\)). <b>Factoring determinants and applications to number theory</b>, <i>Random Matrices Theory Appl.</i>, 13(2): Paper No. 2450010, 33, 2024. (<a href="https://doi.org/10.1142/S2010326324500102"
    target
    ldquo
    blank
@@ -116,20 +114,20 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Jacques Benatar, Alon Nishry, and Brad Rodgers(\(\heartsuit\)). <b>Moments of polynomials with random multiplicative coefficients</b>, <i>Mathematika</i>, 68(1): 191&ndash;216, 2022. (<a href="https://doi.org/10.1112/mtk.12121" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/2012.15507v3" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4405975"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Jacques Benatar, Alon Nishry, and Brad Rodgers(\(\heartsuit\)). <b>Moments of polynomials with random multiplicative coefficients</b>, <i>Mathematika</i>, 68(1): 191&ndash;216, 2022. (<a href="https://doi.org/10.1112/mtk.12121" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/2012.15507v3" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4405975"
     target
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Sandro Bettin(\(\clubsuit\)) and John Brian Conrey(\(\spadesuit\)). <b>Averages of long Dirichlet polynomials</b>, <i>Riv. Math. Univ. Parma (N.S.)</i>, 12(1): 1&ndash;27, 2021. (<a href="https://www.rivmat.unipr.it/vols/2021-12-1/01-bettin.html"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Sandro Bettin(\(\clubsuit\)) and John Brian Conrey(\(\spadesuit\)). <b>Averages of long Dirichlet polynomials</b>, <i>Riv. Math. Univ. Parma (N.S.)</i>, 12(1): 1&ndash;27, 2021. (<a href="https://www.rivmat.unipr.it/vols/2021-12-1/01-bettin.html"
    target
    ldquo
    blank
@@ -138,11 +136,11 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Sandro Bettin(\(\clubsuit\)) and Alessandro Fazzari(\(\diamondsuit\)). <b>A weighted one-level density of the non-trivial zeros of the Riemann zeta-function</b>, <i>Math. Z.</i>, 307(2): Paper No. 32, 23, 2024. (<a href="https://doi.org/10.1007/s00209-024-03496-7"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Sandro Bettin(\(\clubsuit\)) and Alessandro Fazzari(\(\diamondsuit\)). <b>A weighted one-level density of the non-trivial zeros of the Riemann zeta-function</b>, <i>Math. Z.</i>, 307(2): Paper No. 32, 23, 2024. (<a href="https://doi.org/10.1007/s00209-024-03496-7"
    target
    ldquo
    blank
@@ -151,56 +149,56 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Jonathan W. Bober, Lara Du, Dan Fretwell, Gene S. Kopp, and Trevor D. Wooley(\(\spadesuit\)). <b>On \(2\)-superirreducible polynomials over finite fields</b>, <i>Indag. Math. (N.S.)</i>, in press: 1&ndash;11, 2024. (<a href="https://doi.org/10.1016/j.indag.2024.08.005"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Jonathan W. Bober, Lara Du, Dan Fretwell, Gene S. Kopp, and Trevor D. Wooley(\(\spadesuit\)). <b>On \(2\)-superirreducible polynomials over finite fields</b>, <i>Indag. Math. (N.S.)</i>, in press: 1&ndash;11, 2024. (<a href="https://doi.org/10.1016/j.indag.2024.08.005"
    target
    ldquo
    blank
    rdquo>journal</a>, <a href="https://arxiv.org/abs/2309.15304v3" target=&ldquo;blank&rdquo;>arXiv</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Julia Brandes and Trevor D. Wooley(\(\spadesuit\)). <b>Optimal mean value estimates beyond Vinogradov's mean value theorem</b>, <i>Acta Arith.</i>, 200(2): 149&ndash;182, 2021. (<a href="https://doi.org/10.4064/aa200824-9-3" target ldquo blank rdquo>journal</a>, <a href="https://arxiv.org/abs/1901.03153v2" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4324812"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Julia Brandes and Trevor D. Wooley(\(\spadesuit\)). <b>Optimal mean value estimates beyond Vinogradov's mean value theorem</b>, <i>Acta Arith.</i>, 200(2): 149&ndash;182, 2021. (<a href="https://doi.org/10.4064/aa200824-9-3" target ldquo blank rdquo>journal</a>, <a href="https://arxiv.org/abs/1901.03153v2" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4324812"
     target
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Jörg Brüdern and Trevor D. Wooley(\(\spadesuit\)). <b>An instance where the major and minor arc integrals meet</b>, <i>Bull. Lond. Math. Soc.</i>, 51(6): 1113&ndash;1128, 2019. (<a href="https://doi.org/10.1112/blms.12291" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/1902.05155v1" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4041016"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Jörg Brüdern and Trevor D. Wooley(\(\spadesuit\)). <b>An instance where the major and minor arc integrals meet</b>, <i>Bull. Lond. Math. Soc.</i>, 51(6): 1113&ndash;1128, 2019. (<a href="https://doi.org/10.1112/blms.12291" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/1902.05155v1" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4041016"
     target
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Jörg Brüdern and Trevor D. Wooley(\(\spadesuit\)). <b>A paucity problem for certain triples of diagonal equations</b>, <i>Bull. Lond. Math. Soc.</i>, 54(4): 1396&ndash;1412, 2022. (<a href="https://doi.org/10.1112/blms.12636" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/2106.03986v1" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4488314"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Jörg Brüdern and Trevor D. Wooley(\(\spadesuit\)). <b>A paucity problem for certain triples of diagonal equations</b>, <i>Bull. Lond. Math. Soc.</i>, 54(4): 1396&ndash;1412, 2022. (<a href="https://doi.org/10.1112/blms.12636" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/2106.03986v1" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4488314"
     target
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Jörg Brüdern and Trevor D. Wooley(\(\spadesuit\)). <b>On smooth Weyl sums over biquadrates and Waring's problem</b>, <i>Acta Arith.</i>, 204(1): 19&ndash;40, 2022. (<a href="https://doi.org/10.4064/aa210910-6-4" target ldquo blank rdquo>journal</a>, <a href="https://arxiv.org/abs/2110.04348v1" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4450278"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Jörg Brüdern and Trevor D. Wooley(\(\spadesuit\)). <b>On smooth Weyl sums over biquadrates and Waring's problem</b>, <i>Acta Arith.</i>, 204(1): 19&ndash;40, 2022. (<a href="https://doi.org/10.4064/aa210910-6-4" target ldquo blank rdquo>journal</a>, <a href="https://arxiv.org/abs/2110.04348v1" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4450278"
     target
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Jörg Brüdern and Trevor D. Wooley(\(\spadesuit\)). <b>On Waring's problem for larger powers</b>, <i>J. Reine Angew. Math.</i>, 805: 115&ndash;142, 2023. (<a href="https://doi.org/10.1515/crelle-2023-0072"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Jörg Brüdern and Trevor D. Wooley(\(\spadesuit\)). <b>On Waring's problem for larger powers</b>, <i>J. Reine Angew. Math.</i>, 805: 115&ndash;142, 2023. (<a href="https://doi.org/10.1515/crelle-2023-0072"
    target
    ldquo
    blank
@@ -209,57 +207,57 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Jörg Brüdern and Trevor D. Wooley(\(\spadesuit\)). <b>Pairs of diagonal quartic forms: the asymptotic formulae</b>, <i>Int. Math. Res. Not. IMRN</i>, (18): 15928&ndash;15975, 2023. (<a href="https://doi.org/10.1093/imrn/rnad021" target ldquo blank rdquo>journal</a>, <a href="https://arxiv.org/abs/2211.10397v1" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4644977"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Jörg Brüdern and Trevor D. Wooley(\(\spadesuit\)). <b>Pairs of diagonal quartic forms: the asymptotic formulae</b>, <i>Int. Math. Res. Not. IMRN</i>, (18): 15928&ndash;15975, 2023. (<a href="https://doi.org/10.1093/imrn/rnad021" target ldquo blank rdquo>journal</a>, <a href="https://arxiv.org/abs/2211.10397v1" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4644977"
     target
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Jörg Brüdern and Trevor D. Wooley(\(\spadesuit\)). <b>Pairs of diagonal quartic forms: the non-singular Hasse principle</b>, <i>Q. J. Math.</i>, 74(1): 101&ndash;128, 2023. (<a href="https://doi.org/10.1093/qmath/haac019" target ldquo blank rdquo>journal</a>, <a href="https://arxiv.org/abs/2110.04349v1" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4571624"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Jörg Brüdern and Trevor D. Wooley(\(\spadesuit\)). <b>Pairs of diagonal quartic forms: the non-singular Hasse principle</b>, <i>Q. J. Math.</i>, 74(1): 101&ndash;128, 2023. (<a href="https://doi.org/10.1093/qmath/haac019" target ldquo blank rdquo>journal</a>, <a href="https://arxiv.org/abs/2110.04349v1" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4571624"
     target
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Jörg Brüdern and Trevor D. Wooley(\(\spadesuit\)). <b>Estimates for smooth Weyl sums on major arcs</b>, <i>Int. Math. Res. Not. IMRN</i>, in press: 1&ndash;27, 2024. (<a href="https://doi.org/10.1093/imrn/rnae252" target ldquo blank rdquo>journal</a>, <a href="https://arxiv.org/abs/2405.18608v1" target=&ldquo;blank&rdquo;>arXiv</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Jörg Brüdern and Trevor D. Wooley(\(\spadesuit\)). <b>On Waring's problem: beyond Freĭman's theorem</b>, <i>J. Lond. Math. Soc. (2)</i>, 109(1): Paper No. e12820, 25, 2024. (<a href="https://doi.org/10.1112/jlms.12820" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/2302.12920v1" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4680202"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Jörg Brüdern and Trevor D. Wooley(\(\spadesuit\)). <b>Estimates for smooth Weyl sums on major arcs</b>, <i>Int. Math. Res. Not. IMRN</i>, in press: 1&ndash;27, 2024. (<a href="https://doi.org/10.1093/imrn/rnae252" target ldquo blank rdquo>journal</a>, <a href="https://arxiv.org/abs/2405.18608v1" target=&ldquo;blank&rdquo;>arXiv</a>)
+                </p>
+              </li>
+              <li>
+                <p>
+                  Jörg Brüdern and Trevor D. Wooley(\(\spadesuit\)). <b>On Waring's problem: beyond Freĭman's theorem</b>, <i>J. Lond. Math. Soc. (2)</i>, 109(1): Paper No. e12820, 25, 2024. (<a href="https://doi.org/10.1112/jlms.12820" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/2302.12920v1" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4680202"
     target
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Jörg Brüdern and Trevor D. Wooley(\(\spadesuit\)). <b>Partitio Numerorum: sums of a prime and a number of \(k\)-th powers</b>, <i>J. Eur. Math. Soc. (JEMS)</i>, online first:1&ndash;26, 2024. (<a href="https://doi.org/10.4171/JEMS/1567" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/2211.10387v1" target=&ldquo;blank&rdquo;>arXiv</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Jörg Brüdern and Trevor D. Wooley(\(\spadesuit\)). <b>Partitio Numerorum: sums of squares and higher powers</b>, <i>Funct. Approx. Comment. Math.</i>, 71(1): 21&ndash;67, 2024. (<a href="https://doi.org/10.7169/facm/2165" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/2402.09537v1" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4797640"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Jörg Brüdern and Trevor D. Wooley(\(\spadesuit\)). <b>Partitio Numerorum: sums of a prime and a number of \(k\)-th powers</b>, <i>J. Eur. Math. Soc. (JEMS)</i>, online first:1&ndash;26, 2024. (<a href="https://doi.org/10.4171/JEMS/1567" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/2211.10387v1" target=&ldquo;blank&rdquo;>arXiv</a>)
+                </p>
+              </li>
+              <li>
+                <p>
+                  Jörg Brüdern and Trevor D. Wooley(\(\spadesuit\)). <b>Partitio Numerorum: sums of squares and higher powers</b>, <i>Funct. Approx. Comment. Math.</i>, 71(1): 21&ndash;67, 2024. (<a href="https://doi.org/10.7169/facm/2165" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/2402.09537v1" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4797640"
     target
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Emanuel Carneiro, Mithun Kumar Das, Alexandra Florea(\(\clubsuit\)), Angel V. Kumchev, Amita Malik(\(\diamondsuit\)), Micah B. Milinovich(\(\clubsuit\)), Caroline Turnage-Butterbaugh(\(\heartsuit\)), and Jiuya Wang. <b>Hilbert transforms and the equidistribution of zeros of polynomials</b>, <i>J. Funct. Anal.</i>, 281(9): Paper No. 109199, 25, 2021. (<a href="https://doi.org/10.1016/j.jfa.2021.109199"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Emanuel Carneiro, Mithun Kumar Das, Alexandra Florea(\(\clubsuit\)), Angel V. Kumchev, Amita Malik(\(\diamondsuit\)), Micah B. Milinovich(\(\clubsuit\)), Caroline Turnage-Butterbaugh(\(\heartsuit\)), and Jiuya Wang. <b>Hilbert transforms and the equidistribution of zeros of polynomials</b>, <i>J. Funct. Anal.</i>, 281(9): Paper No. 109199, 25, 2021. (<a href="https://doi.org/10.1016/j.jfa.2021.109199"
    target
    ldquo
    blank
@@ -268,16 +266,16 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Giacomo Cherubini and Alessandro Fazzari(\(\diamondsuit\)). <b>Hyperbolic Angles from Heegner Points</b>, <i>Michigan Mathematical Journal</i>, Advance Publication: 1&ndash;28, 2024. (<a href="https://doi.org/10.1307/mmj/20226321" target ldquo blank rdquo>journal</a>, <a href="https://arxiv.org/abs/2206.08282v1" target=&ldquo;blank&rdquo;>arXiv</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Brian Conrey(\(\spadesuit\)). <b>Character sums and the Riemann Hypothesis</b>, <i>Acta Arith.</i>, 214: 327&ndash;342, 2024. (<a href="https://doi.org/10.4064/aa230530-13-11"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Giacomo Cherubini and Alessandro Fazzari(\(\diamondsuit\)). <b>Hyperbolic Angles from Heegner Points</b>, <i>Michigan Mathematical Journal</i>, Advance Publication: 1&ndash;28, 2024. (<a href="https://doi.org/10.1307/mmj/20226321" target ldquo blank rdquo>journal</a>, <a href="https://arxiv.org/abs/2206.08282v1" target=&ldquo;blank&rdquo;>arXiv</a>)
+                </p>
+              </li>
+              <li>
+                <p>
+                  Brian Conrey(\(\spadesuit\)). <b>Character sums and the Riemann Hypothesis</b>, <i>Acta Arith.</i>, 214: 327&ndash;342, 2024. (<a href="https://doi.org/10.4064/aa230530-13-11"
    target
    ldquo
    blank
@@ -286,20 +284,20 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Brian Conrey(\(\spadesuit\)) and Alessandro Fazzari(\(\diamondsuit\)). <b>Averages of long Dirichlet polynomials with modular coefficients</b>, <i>Mathematika</i>, 69(4): 1060&ndash;1080, 2023. (<a href="https://doi.org/10.1112/mtk.12220" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/2207.12989v2" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4627908"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Brian Conrey(\(\spadesuit\)) and Alessandro Fazzari(\(\diamondsuit\)). <b>Averages of long Dirichlet polynomials with modular coefficients</b>, <i>Mathematika</i>, 69(4): 1060&ndash;1080, 2023. (<a href="https://doi.org/10.1112/mtk.12220" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/2207.12989v2" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4627908"
     target
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Alessandro Fazzari(\(\diamondsuit\)). <b>A survey on a weighted one-level density of families of L-functions</b>, <i>Rend. Semin. Mat. Univ. Politec. Torino</i>, 80(1): 29&ndash;40, 2022. (<a href="http://www.seminariomatematico.polito.it/rendiconti/80-1/Fazzari.pdf"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Alessandro Fazzari(\(\diamondsuit\)). <b>A survey on a weighted one-level density of families of L-functions</b>, <i>Rend. Semin. Mat. Univ. Politec. Torino</i>, 80(1): 29&ndash;40, 2022. (<a href="http://www.seminariomatematico.polito.it/rendiconti/80-1/Fazzari.pdf"
    target
    ldquo
    blank
@@ -308,11 +306,11 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Alessandro Fazzari(\(\diamondsuit\)). <b>A Voronoi summation formula for the shifted triple divisor function</b>, <i>Ramanujan J.</i>, 63(4): 1179&ndash;1198, 2024. (<a href="https://doi.org/10.1007/s11139-023-00810-5"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Alessandro Fazzari(\(\diamondsuit\)). <b>A Voronoi summation formula for the shifted triple divisor function</b>, <i>Ramanujan J.</i>, 63(4): 1179&ndash;1198, 2024. (<a href="https://doi.org/10.1007/s11139-023-00810-5"
    target
    ldquo
    blank
@@ -321,11 +319,11 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                J. B. Friedlander, D. A. Goldston(\(\clubsuit\)), H. Iwaniec(\(\spadesuit\)), and A. I. Suriajaya. <b>Exceptional zeros and the Goldbach problem</b>, <i>J. Number Theory</i>, 233: 78&ndash;86, 2022. (<a href="https://doi.org/10.1016/j.jnt.2021.06.004"
+                </p>
+              </li>
+              <li>
+                <p>
+                  J. B. Friedlander, D. A. Goldston(\(\clubsuit\)), H. Iwaniec(\(\spadesuit\)), and A. I. Suriajaya. <b>Exceptional zeros and the Goldbach problem</b>, <i>J. Number Theory</i>, 233: 78&ndash;86, 2022. (<a href="https://doi.org/10.1016/j.jnt.2021.06.004"
    target
    ldquo
    blank
@@ -334,11 +332,11 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Daniel A. Goldston(\(\clubsuit\)), Timothy S. Trudgian, and Caroline L. Turnage-Butterbaugh(\(\heartsuit\)). <b>On the Montgomery-Odlyzko method regarding gaps between zeros of the zeta-function</b>, <i>J. Math. Anal. Appl.</i>, 527(2): Paper No. 127548, 7, 2023. (<a href="https://doi.org/10.1016/j.jmaa.2023.127548"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Daniel A. Goldston(\(\clubsuit\)), Timothy S. Trudgian, and Caroline L. Turnage-Butterbaugh(\(\heartsuit\)). <b>On the Montgomery-Odlyzko method regarding gaps between zeros of the zeta-function</b>, <i>J. Math. Anal. Appl.</i>, 527(2): Paper No. 127548, 7, 2023. (<a href="https://doi.org/10.1016/j.jmaa.2023.127548"
    target
    ldquo
    blank
@@ -347,11 +345,11 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Ofir Gorodetsky(\(\clubsuit\)), Alexander Mangerel, and Brad Rodgers(\(\heartsuit\)). <b>Squarefrees are Gaussian in short intervals</b>, <i>J. Reine Angew. Math.</i>, 795: 1&ndash;44, 2023. (<a href="https://doi.org/10.1515/crelle-2022-0066"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Ofir Gorodetsky(\(\clubsuit\)), Alexander Mangerel, and Brad Rodgers(\(\heartsuit\)). <b>Squarefrees are Gaussian in short intervals</b>, <i>J. Reine Angew. Math.</i>, 795: 1&ndash;44, 2023. (<a href="https://doi.org/10.1515/crelle-2022-0066"
    target
    ldquo
    blank
@@ -360,11 +358,11 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Ofir Gorodetsky(\(\clubsuit\)), Kaisa Matomäki, Maksym Radziwiłł, and Brad Rodgers(\(\heartsuit\)). <b>On the variance of squarefree integers in short intervals and arithmetic progressions</b>, <i>Geom. Funct. Anal.</i>, 31(1): 111&ndash;149, 2021. (<a href="https://doi.org/10.1007/s00039-021-00557-5"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Ofir Gorodetsky(\(\clubsuit\)), Kaisa Matomäki, Maksym Radziwiłł, and Brad Rodgers(\(\heartsuit\)). <b>On the variance of squarefree integers in short intervals and arithmetic progressions</b>, <i>Geom. Funct. Anal.</i>, 31(1): 111&ndash;149, 2021. (<a href="https://doi.org/10.1007/s00039-021-00557-5"
    target
    ldquo
    blank
@@ -373,20 +371,20 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Ofir Gorodetsky(\(\clubsuit\)) and Brad Rodgers(\(\heartsuit\)). <b>The variance of the number of sums of two squares in \(\Bbb F_q[T]\) in short intervals</b>, <i>Amer. J. Math.</i>, 143(6): 1703&ndash;1745, 2021. (<a href="https://doi.org/10.1353/ajm.2021.0044" target ldquo blank rdquo>journal</a>, <a href="https://arxiv.org/abs/1810.06002v4" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4349131"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Ofir Gorodetsky(\(\clubsuit\)) and Brad Rodgers(\(\heartsuit\)). <b>The variance of the number of sums of two squares in \(\Bbb F_q[T]\) in short intervals</b>, <i>Amer. J. Math.</i>, 143(6): 1703&ndash;1745, 2021. (<a href="https://doi.org/10.1353/ajm.2021.0044" target ldquo blank rdquo>journal</a>, <a href="https://arxiv.org/abs/1810.06002v4" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4349131"
     target
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Winston Heap, Anurag Sahay(\(\clubsuit\)), and Trevor D. Wooley(\(\spadesuit\)). <b>A paucity problem associated with a shifted integer analogue of the divisor function</b>, <i>J. Number Theory</i>, 242: 660&ndash;668, 2023. (<a href="https://doi.org/10.1016/j.jnt.2022.05.006"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Winston Heap, Anurag Sahay(\(\clubsuit\)), and Trevor D. Wooley(\(\spadesuit\)). <b>A paucity problem associated with a shifted integer analogue of the divisor function</b>, <i>J. Number Theory</i>, 242: 660&ndash;668, 2023. (<a href="https://doi.org/10.1016/j.jnt.2022.05.006"
    target
    ldquo
    blank
@@ -395,29 +393,29 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Winston Heap and K. Soundararajan(\(\spadesuit\)). <b>Lower bounds for moments of zeta and L-functions revisited</b>, <i>Mathematika</i>, 68(1): 1&ndash;14, 2022. (<a href="https://doi.org/10.1112/mtk.12115" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/2007.13154v1" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4405969"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Winston Heap and K. Soundararajan(\(\spadesuit\)). <b>Lower bounds for moments of zeta and L-functions revisited</b>, <i>Mathematika</i>, 68(1): 1&ndash;14, 2022. (<a href="https://doi.org/10.1112/mtk.12115" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/2007.13154v1" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4405969"
     target
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Henryk Iwaniec(\(\spadesuit\)). <b>The sixth power moment of partial Riemann zeta function and Kloosterman sums</b>, <i>Funct. Approx. Comment. Math.</i>, 71(1): 121&ndash;125, 2024. (<a href="https://doi.org/10.7169/facm/2114" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4798624"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Henryk Iwaniec(\(\spadesuit\)). <b>The sixth power moment of partial Riemann zeta function and Kloosterman sums</b>, <i>Funct. Approx. Comment. Math.</i>, 71(1): 121&ndash;125, 2024. (<a href="https://doi.org/10.7169/facm/2114" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4798624"
     target
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Vivian Kuperberg(\(\clubsuit\)), Brad Rodgers(\(\heartsuit\)), and Edva Roditty-Gershon. <b>Sums of singular series and primes in short intervals in algebraic number fields</b>, <i>Ramanujan J.</i>, 58(2): 291&ndash;317, 2022. (<a href="https://doi.org/10.1007/s11139-022-00561-9"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Vivian Kuperberg(\(\clubsuit\)), Brad Rodgers(\(\heartsuit\)), and Edva Roditty-Gershon. <b>Sums of singular series and primes in short intervals in algebraic number fields</b>, <i>Ramanujan J.</i>, 58(2): 291&ndash;317, 2022. (<a href="https://doi.org/10.1007/s11139-022-00561-9"
    target
    ldquo
    blank
@@ -426,20 +424,20 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Amita Malik(\(\diamondsuit\)) and Neha Prabhu. <b>Equidistribution of \(\alpha p^\theta\) with a Chebotarev condition and applications to extremal primes</b>, <i>Mathematika</i>, 68(3): 595&ndash;619, 2022. (<a href="https://doi.org/10.1112/mtk.12133" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/2012.12534v2" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4418459"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Amita Malik(\(\diamondsuit\)) and Neha Prabhu. <b>Equidistribution of \(\alpha p^\theta\) with a Chebotarev condition and applications to extremal primes</b>, <i>Mathematika</i>, 68(3): 595&ndash;619, 2022. (<a href="https://doi.org/10.1112/mtk.12133" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/2012.12534v2" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4418459"
     target
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                D. T. Nguyen(\(\diamondsuit\)). <b>Generalized divisor functions in arithmetic progressions: II</b>, <i>Proc. Edinb. Math. Soc. (2)</i>, 67(1): 28&ndash;56, 2024. (<a href="https://doi.org/10.1017/s0013091523000664"
+                </p>
+              </li>
+              <li>
+                <p>
+                  D. T. Nguyen(\(\diamondsuit\)). <b>Generalized divisor functions in arithmetic progressions: II</b>, <i>Proc. Edinb. Math. Soc. (2)</i>, 67(1): 28&ndash;56, 2024. (<a href="https://doi.org/10.1017/s0013091523000664"
    target
    ldquo
    blank
@@ -448,20 +446,20 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                David T. Nguyen(\(\diamondsuit\)). <b>Variance of the \(k\)-fold divisor function in arithmetic progressions for individual modulus</b>, <i>Acta Arith.</i>, 212(3): 195&ndash;223, 2024. (<a href="https://doi.org/10.4064/aa220517-3-11" target ldquo blank rdquo>journal</a>, <a href="https://arxiv.org/abs/2205.02354v2" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4712676"
+                </p>
+              </li>
+              <li>
+                <p>
+                  David T. Nguyen(\(\diamondsuit\)). <b>Variance of the \(k\)-fold divisor function in arithmetic progressions for individual modulus</b>, <i>Acta Arith.</i>, 212(3): 195&ndash;223, 2024. (<a href="https://doi.org/10.4064/aa220517-3-11" target ldquo blank rdquo>journal</a>, <a href="https://arxiv.org/abs/2205.02354v2" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4712676"
     target
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Lillian B. Pierce, Caroline L. Turnage-Butterbaugh(\(\heartsuit\)), and Melanie Matchett Wood. <b>On a conjecture for \(\ell\)-torsion in class groups of number fields: from the perspective of moments</b>, <i>Math. Res. Lett.</i>, 28(2): 575&ndash;621, 2021. (<a href="https://doi.org/10.4310/MRL.2021.v28.n2.a9"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Lillian B. Pierce, Caroline L. Turnage-Butterbaugh(\(\heartsuit\)), and Melanie Matchett Wood. <b>On a conjecture for \(\ell\)-torsion in class groups of number fields: from the perspective of moments</b>, <i>Math. Res. Lett.</i>, 28(2): 575&ndash;621, 2021. (<a href="https://doi.org/10.4310/MRL.2021.v28.n2.a9"
    target
    ldquo
    blank
@@ -470,11 +468,11 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Brad Rodgers(\(\heartsuit\)) and Harshith Sai Vallabhaneni. <b>Autocorrelations of characteristic polynomials for the alternative circular unitary ensemble</b>, <i>Glasg. Math. J.</i>, 66(1): 51&ndash;64, 2024. (<a href="https://doi.org/10.1017/S0017089523000332"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Brad Rodgers(\(\heartsuit\)) and Harshith Sai Vallabhaneni. <b>Autocorrelations of characteristic polynomials for the alternative circular unitary ensemble</b>, <i>Glasg. Math. J.</i>, 66(1): 51&ndash;64, 2024. (<a href="https://doi.org/10.1017/S0017089523000332"
    target
    ldquo
    blank
@@ -483,20 +481,20 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Aleksander Simonić, Timothy S. Trudgian, and Caroline L. Turnage-Butterbaugh(\(\heartsuit\)). <b>Some explicit and unconditional results on gaps between zeroes of the Riemann zeta-function</b>, <i>Trans. Amer. Math. Soc.</i>, 375(5): 3239&ndash;3265, 2022. (<a href="https://doi.org/10.1090/tran/8571" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/2010.10675v1" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4402660"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Aleksander Simonić, Timothy S. Trudgian, and Caroline L. Turnage-Butterbaugh(\(\heartsuit\)). <b>Some explicit and unconditional results on gaps between zeroes of the Riemann zeta-function</b>, <i>Trans. Amer. Math. Soc.</i>, 375(5): 3239&ndash;3265, 2022. (<a href="https://doi.org/10.1090/tran/8571" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/2010.10675v1" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4402660"
     target
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Kannan Soundararajan(\(\spadesuit\)) and Max Wenqiang Xu(\(\clubsuit\)). <b>Central limit theorems for random multiplicative functions</b>, <i>J. Anal. Math.</i>, 151(1): 343&ndash;374, 2023. (<a href="https://doi.org/10.1007/s11854-023-0331-y"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Kannan Soundararajan(\(\spadesuit\)) and Max Wenqiang Xu(\(\clubsuit\)). <b>Central limit theorems for random multiplicative functions</b>, <i>J. Anal. Math.</i>, 151(1): 343&ndash;374, 2023. (<a href="https://doi.org/10.1007/s11854-023-0331-y"
    target
    ldquo
    blank
@@ -505,11 +503,11 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Trevor D. Wooley(\(\spadesuit\)). <b>Finite abelian groups via congruences</b>, <i>Amer. Math. Monthly</i>, 130(5): 482&ndash;484, 2023. (<a href="https://doi.org/10.1080/00029890.2023.2178221"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Trevor D. Wooley(\(\spadesuit\)). <b>Finite abelian groups via congruences</b>, <i>Amer. Math. Monthly</i>, 130(5): 482&ndash;484, 2023. (<a href="https://doi.org/10.1080/00029890.2023.2178221"
    target
    ldquo
    blank
@@ -518,11 +516,11 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Trevor D. Wooley(\(\spadesuit\)). <b>Paucity problems and some relatives of Vinogradov's mean value theorem</b>, <i>Math. Proc. Cambridge Philos. Soc.</i>, 175(2): 327&ndash;343, 2023. (<a href="https://doi.org/10.1017/S0305004123000166"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Trevor D. Wooley(\(\spadesuit\)). <b>Paucity problems and some relatives of Vinogradov's mean value theorem</b>, <i>Math. Proc. Cambridge Philos. Soc.</i>, 175(2): 327&ndash;343, 2023. (<a href="https://doi.org/10.1017/S0305004123000166"
    target
    ldquo
    blank
@@ -531,11 +529,11 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Trevor D. Wooley(\(\spadesuit\)). <b>The paucity problem for certain symmetric Diophantine equations</b>, <i>Bull. Aust. Math. Soc.</i>, 108(1): 29&ndash;39, 2023. (<a href="https://doi.org/10.1017/S000497272200096X"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Trevor D. Wooley(\(\spadesuit\)). <b>The paucity problem for certain symmetric Diophantine equations</b>, <i>Bull. Aust. Math. Soc.</i>, 108(1): 29&ndash;39, 2023. (<a href="https://doi.org/10.1017/S000497272200096X"
    target
    ldquo
    blank
@@ -544,52 +542,52 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Trevor D. Wooley(\(\spadesuit\)). <b>Subconvexity in inhomogeneous Vinogradov systems</b>, <i>Q. J. Math.</i>, 74(1): 389&ndash;418, 2023. (<a href="https://doi.org/10.1093/qmath/haac027" target ldquo blank rdquo>journal</a>, <a href="https://arxiv.org/abs/2202.14003v1" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4571633"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Trevor D. Wooley(\(\spadesuit\)). <b>Subconvexity in inhomogeneous Vinogradov systems</b>, <i>Q. J. Math.</i>, 74(1): 389&ndash;418, 2023. (<a href="https://doi.org/10.1093/qmath/haac027" target ldquo blank rdquo>journal</a>, <a href="https://arxiv.org/abs/2202.14003v1" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4571633"
     target
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Trevor D. Wooley(\(\spadesuit\)). <b>Subconvexity in the inhomogeneous cubic Vinogradov system</b>, <i>J. Lond. Math. Soc. (2)</i>, 107(2): 798&ndash;817, 2023. (<a href="https://doi.org/10.1112/jlms.12698" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/2202.05804v1" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4549146"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Trevor D. Wooley(\(\spadesuit\)). <b>Subconvexity in the inhomogeneous cubic Vinogradov system</b>, <i>J. Lond. Math. Soc. (2)</i>, 107(2): 798&ndash;817, 2023. (<a href="https://doi.org/10.1112/jlms.12698" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/2202.05804v1" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4549146"
     target
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Trevor D. Wooley(\(\spadesuit\)). <b>Rational lines on diagonal hypersurfaces and subconvexity via the circle method</b>, <i>Trans. Amer. Math. Soc.</i>, 377(3): 2125&ndash;2147, 2024. (<a href="https://doi.org/10.1090/tran/9077" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/2305.05071v1" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4744752"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Trevor D. Wooley(\(\spadesuit\)). <b>Rational lines on diagonal hypersurfaces and subconvexity via the circle method</b>, <i>Trans. Amer. Math. Soc.</i>, 377(3): 2125&ndash;2147, 2024. (<a href="https://doi.org/10.1090/tran/9077" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/2305.05071v1" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4744752"
     target
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-          </ol>
-          <p>
-            The following publications were based on, inspired by, or benefitted from seminars, events, and conversations that took place in the ambit of the FRG:
-          </p>
-          <ol>
-            <li>
-              <p>
-                Hung M. Bui(\(\clubsuit\)), Daniel A. Goldston(\(\clubsuit\)), Micah B. Milinovich(\(\clubsuit\)), and Hugh L. Montgomery. <b>Small gaps and small spacings between zeta zeros</b>, <i>Acta Arith.</i>, 210: 133&ndash;153, 2023. (<a href="https://doi.org/10.4064/aa220731-15-2" target ldquo blank rdquo>journal</a>, <a href="https://arxiv.org/abs/2208.02359v1" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4678121"
+                </p>
+              </li>
+            </ol>
+            <p>
+              The following publications were based on, inspired by, or benefitted from seminars, events, and conversations that took place in the ambit of the FRG:
+            </p>
+            <ol>
+              <li>
+                <p>
+                  Hung M. Bui(\(\clubsuit\)), Daniel A. Goldston(\(\clubsuit\)), Micah B. Milinovich(\(\clubsuit\)), and Hugh L. Montgomery. <b>Small gaps and small spacings between zeta zeros</b>, <i>Acta Arith.</i>, 210: 133&ndash;153, 2023. (<a href="https://doi.org/10.4064/aa220731-15-2" target ldquo blank rdquo>journal</a>, <a href="https://arxiv.org/abs/2208.02359v1" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4678121"
     target
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                D. A. Goldston(\(\clubsuit\)) and Ade Irma Suriajaya. <b>The prime number theorem and pair correlation of zeros of the Riemann zeta-function</b>, <i>Res. Number Theory</i>, 8(4): Paper No. 71, 10, 2022. (<a href="https://doi.org/10.1007/s40993-022-00371-4"
+                </p>
+              </li>
+              <li>
+                <p>
+                  D. A. Goldston(\(\clubsuit\)) and Ade Irma Suriajaya. <b>The prime number theorem and pair correlation of zeros of the Riemann zeta-function</b>, <i>Res. Number Theory</i>, 8(4): Paper No. 71, 10, 2022. (<a href="https://doi.org/10.1007/s40993-022-00371-4"
    target
    ldquo
    blank
@@ -598,11 +596,11 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Daniel A. Goldston(\(\clubsuit\)) and Ade Irma Suriajaya. <b>On a smoothed average of the number of Goldbach representations</b>, In <i>Number theory in memory of Eduard Wirsing</i>, pages 145&ndash;156. Springer, Cham, © 2023. (<a href="https://doi.org/10.1007/978-3-031-31617-3_10"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Daniel A. Goldston(\(\clubsuit\)) and Ade Irma Suriajaya. <b>On a smoothed average of the number of Goldbach representations</b>, In <i>Number theory in memory of Eduard Wirsing</i>, pages 145&ndash;156. Springer, Cham, © 2023. (<a href="https://doi.org/10.1007/978-3-031-31617-3_10"
    target
    ldquo
    blank
@@ -611,29 +609,29 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Daniel A. Goldston(\(\clubsuit\)) and Ade Irma Suriajaya. <b>On an average Goldbach representation formula of Fujii</b>, <i>Nagoya Math. J.</i>, 250: 511&ndash;532, 2023. (<a href="https://doi.org/10.1017/nmj.2022.44" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/2110.14250v2" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4583139"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Daniel A. Goldston(\(\clubsuit\)) and Ade Irma Suriajaya. <b>On an average Goldbach representation formula of Fujii</b>, <i>Nagoya Math. J.</i>, 250: 511&ndash;532, 2023. (<a href="https://doi.org/10.1017/nmj.2022.44" target=&ldquo;blank&rdquo;>journal</a>, <a href="https://arxiv.org/abs/2110.14250v2" target=&ldquo;blank&rdquo;>arXiv</a>, <a href="https://mathscinet.ams.org/mathscinet/article?mr=4583139"
     target
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Winston Heap and Anurag Sahay(\(\clubsuit\)). <b>The fourth moment of the Hurwitz zeta function</b>, <i>J. Reine Angew. Math.</i>, Ahead of Print: 1&ndash;29, 2024. (<a href="https://doi.org/10.1515/crelle-2024-0086"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Winston Heap and Anurag Sahay(\(\clubsuit\)). <b>The fourth moment of the Hurwitz zeta function</b>, <i>J. Reine Angew. Math.</i>, Ahead of Print: 1&ndash;29, 2024. (<a href="https://doi.org/10.1515/crelle-2024-0086"
    target
    ldquo
    blank
    rdquo>journal</a>, <a href="https://arxiv.org/abs/2405.10888v1" target=&ldquo;blank&rdquo;>arXiv</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Vivian Kuperberg(\(\clubsuit\)) and Matilde Lalín(\(\clubsuit\)). <b>Sums of divisor functions and von Mangoldt convolutions in \(\Bbb F_q[T]\) leading to symplectic distributions</b>, <i>Forum Math.</i>, 34(3): 711&ndash;747, 2022. (<a href="https://doi.org/10.1515/forum-2021-0171"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Vivian Kuperberg(\(\clubsuit\)) and Matilde Lalín(\(\clubsuit\)). <b>Sums of divisor functions and von Mangoldt convolutions in \(\Bbb F_q[T]\) leading to symplectic distributions</b>, <i>Forum Math.</i>, 34(3): 711&ndash;747, 2022. (<a href="https://doi.org/10.1515/forum-2021-0171"
    target
    ldquo
    blank
@@ -642,11 +640,11 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Chung-Hang Kwan(\(\clubsuit\)). <b>Spectral moment formulae for \(\operatorname{GL}(3) \times \operatorname{GL}(2)\) \(L\)-functions I: The cuspidal case</b>, <i>Algebra Number Theory</i>, 18(10): 1817&ndash;1862, 2024. (<a href="https://doi.org/10.2140/ant.2024.18.1817"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Chung-Hang Kwan(\(\clubsuit\)). <b>Spectral moment formulae for \(\operatorname{GL}(3) \times \operatorname{GL}(2)\) \(L\)-functions I: The cuspidal case</b>, <i>Algebra Number Theory</i>, 18(10): 1817&ndash;1862, 2024. (<a href="https://doi.org/10.2140/ant.2024.18.1817"
    target
    ldquo
    blank
@@ -655,20 +653,20 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Chung-Hang Kwan(\(\clubsuit\)). <b>Spectral moment formulae for \(GL(3) \times GL(2)\) \(L\)-functions III: The twisted case</b>, <i>Math. Ann.</i>, in press, 2024. (<a href="https://doi.org/10.1007/s00208-024-02914-9"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Chung-Hang Kwan(\(\clubsuit\)). <b>Spectral moment formulae for \(GL(3) \times GL(2)\) \(L\)-functions III: The twisted case</b>, <i>Math. Ann.</i>, in press, 2024. (<a href="https://doi.org/10.1007/s00208-024-02914-9"
    target
    ldquo
    blank
    rdquo>journal</a>, <a href="https://arxiv.org/abs/2311.15417v2" target=&ldquo;blank&rdquo;>arXiv</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Anurag Sahay(\(\clubsuit\)). <b>Moments of the Hurwitz zeta function on the critical line</b>, <i>Math. Proc. Cambridge Philos. Soc</i>, 174(3): 631-661, 2023. (<a href="https://doi.org/10.1017/S0305004122000457"
+                </p>
+              </li>
+              <li>
+                <p>
+                  Anurag Sahay(\(\clubsuit\)). <b>Moments of the Hurwitz zeta function on the critical line</b>, <i>Math. Proc. Cambridge Philos. Soc</i>, 174(3): 631-661, 2023. (<a href="https://doi.org/10.1017/S0305004122000457"
    target
    ldquo
    blank
@@ -677,141 +675,142 @@ MathJax.Hub.Config({
     ldquo
     blank
     rdquo>mathscinet</a>)
-              </p>
-            </li>
-          </ol>
-          <h2>Preprints</h2>
-          <p>The following preprints were directly supported by the FRG:</p>
-          <ol>
-            <li>
-              <p>
-                Emilia Alvarez(\(\clubsuit\)), Brian Conrey(\(\spadesuit\)), Michael O. Rubinstein(\(\clubsuit\)), and Nina C. Snaith(\(\clubsuit\)). <b>Moments of the derivative of the characteristic polynomial of unitary matrices</b>, 2024, <i>submitted</i>. (<a href="https://arxiv.org/abs/2407.13124v2" target=&ldquo;blank&rdquo;>arXiv:2407.13124v2</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Theodoros Assiotis, Mustafa Alper Gunes, Jonathan P. Keating(\(\spadesuit\)), and Fei Wei(\(\diamondsuit\)). <b>Exchangeable arrays and integrable systems for characteristic polynomials of random matrices</b>, 2024, <i>submitted</i>. (<a href="https://arxiv.org/abs/2407.19233v3" target=&ldquo;blank&rdquo;>arXiv:2407.19233v3</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Siegfred Baluyot(\(\diamondsuit\)), Vorrapan Chandee(\(\clubsuit\)), and Xiannan Li(\(\clubsuit\)). <b>Low-lying zeros of a large orthogonal family of automorphic \(L\)-functions</b>, 2024, <i>submitted</i>. (<a href="https://arxiv.org/abs/2310.07606v3" target=&ldquo;blank&rdquo;>arXiv:2310.07606v3</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Siegfred Baluyot(\(\diamondsuit\)) and Caroline L. Turnage-Butterbaugh(\(\heartsuit\)). <b>Twisted \(2k\)th moments of primitive Dirichlet \(L\)-functions: beyond the diagonal</b>, 2022, <i>submitted</i>. (<a href="https://arxiv.org/abs/2205.00641v1" target=&ldquo;blank&rdquo;>arXiv:2205.00641v1</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                M. Čech(\(\clubsuit\)). <b>Moments of real Dirichlet \(L\)-functions and multiple Dirichlet series</b>, 2024, <i>submitted</i>. (<a href="https://arxiv.org/abs/2402.07473v2" target=&ldquo;blank&rdquo;>arXiv:2402.07473v2</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                J. Champagne, T. H. Lê, Y. R. Liu, and T. D. Wooley(\(\spadesuit\)). <b>Well-distribution modulo one and the primes</b>, 2024, <i>submitted</i>. (<a href="https://arxiv.org/abs/2406.19491v1" target=&ldquo;blank&rdquo;>arXiv:2406.19491v1</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Brian Conrey(\(\spadesuit\)) and Brad Rodgers(\(\heartsuit\)). <b>Averages of quadratic twists of long Dirichlet polynomials</b>, 2022, <i>submitted</i>. (<a href="https://arxiv.org/abs/2208.01783v1" target=&ldquo;blank&rdquo;>arXiv:2208.01783v1</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Brian Conrey(\(\spadesuit\)) and Neil Shah. <b>Which numbers are not the sum plus the product of three positive integers?</b>, 2022, <i>submitted</i>. (<a href="https://arxiv.org/abs/2112.15551v2" target=&ldquo;blank&rdquo;>arXiv:2112.15551v2</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Steven M. Gonek(\(\clubsuit\)) and Anurag Sahay(\(\clubsuit\)). <b>Consecutive moderate gaps between zeros of the Riemann zeta function</b>, 2024, <i>submitted</i>. (<a href="https://arxiv.org/abs/2412.15481v1" target=&ldquo;blank&rdquo;>arXiv:2412.15481v1</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Alessandro Fazzari(\(\diamondsuit\)). <b>On the joint second moment of zeta and its logarithmic derivative</b>, 2024, <i>accepted</i>, to appear in <i>Acta Arith.</i> (<a href="https://arxiv.org/abs/2310.15918v2" target=&ldquo;blank&rdquo;>arXiv:2310.15918v2</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Thái Hoàng Lê, Yu-Ru Liu, and Trevor D. Wooley(\(\spadesuit\)). <b>Equidistribution of polynomial sequences in function fields, with applications</b>, 2023, <i>submitted</i>. (<a href="https://arxiv.org/abs/1311.0892v2" target=&ldquo;blank&rdquo;>arXiv:1311.0892v2</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Amita Malik(\(\diamondsuit\)). <b>Partitions into primes with a Chebotarev condition</b>, 2024, <i>submitted</i>.
-              </p>
-            </li>
-            <li>
-              <p>
-                A. M. Masullo(\(\diamondsuit\)). <b>Crystalline cohomology over general bases</b>, 2020, <i>submitted</i>. (<a href="https://arxiv.org/abs/2011.11182v1" target=&ldquo;blank&rdquo;>arXiv:2011.11182v1</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                David T. Nguyen(\(\diamondsuit\)). <b>On correlation of the 3-fold divisor function with itself</b>, 2023, <i>submitted</i>. (<a href="https://arxiv.org/abs/2206.05877v2" target=&ldquo;blank&rdquo;>arXiv:2206.05877v2</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Nick Simm and Fei Wei(\(\diamondsuit\)). <b>On moments of the derivative of CUE characteristic polynomials and the Riemann zeta function</b>, 2024, <i>submitted</i>. (<a href="https://arxiv.org/abs/2409.03687v1" target=&ldquo;blank&rdquo;>arXiv:2409.03687v1</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Trevor D. Wooley(\(\spadesuit\)). <b>Subconvexity and the Hilbert-Kamke Problem</b>, 2022, <i>submitted</i>. (<a href="https://arxiv.org/abs/2201.02699v1" target=&ldquo;blank&rdquo;>arXiv:2201.02699v1</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Trevor D. Wooley(\(\spadesuit\)). <b>Condensation and densification for sets of large diameter</b>, 2023, <i>accepted</i>, to appear in <i>Combinatorial and Additive Number Theory VI &ndash; CANT, New York, USA, 2022 and 2023, Ed. Melvyn B. Nathanson, Springer Proceedings in Mathematics and Statistics</i>. (<a href="https://arxiv.org/abs/2305.19968v1" target=&ldquo;blank&rdquo;>arXiv:2305.19968v1</a>)
-              </p>
-            </li>
-          </ol>
-          <p>
-            The following preprints were based on, inspired by, or benefitted from seminars, events, and conversations that took place in the ambit of the FRG:
-          </p>
-          <ol>
-            <li>
-              <p>
-                Yacine Barhoumi-Andréani. <b>A new approach to the characteristic polynomial of a random unitary matrix</b>, 2020, <i>submitted</i>. (<a href="https://arxiv.org/abs/2011.02465v1" target=&ldquo;blank&rdquo;>arXiv:2011.02465v1</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Vivian Kuperberg(\(\clubsuit\)) and Matilde Lalín(\(\clubsuit\)). <b>Symplectic conjectures for sums of divisor functions and explorations of an orthogonal regime</b>, 2024, <i>accepted</i>, to appear in <i>Trans. Amer. Math. Soc.</i> (<a href="https://arxiv.org/abs/2212.04969v2" target=&ldquo;blank&rdquo;>arXiv:2212.04969v2</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Chung-Hang Kwan(\(\clubsuit\)). <b>Spectral moment formulae for \(GL(3)\times GL(2)\) \(L\)-functions II: The Eisenstein case</b>, 2023, <i>submitted</i>. (<a href="https://arxiv.org/abs/2310.09419v1" target=&ldquo;blank&rdquo;>arXiv:2310.09419v1</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Chung-Hang Kwan(\(\clubsuit\)) and Wing Hong Leung. <b>Character sums, reciprocity and functional equations</b>, 2024, <i>submitted</i>. (<a href="https://arxiv.org/abs/2410.11193v1" target=&ldquo;blank&rdquo;>arxiv:2410.11193v1</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Chung-Hang Kwan(\(\clubsuit\)) and Wing Hong Leung. <b>Trace formula and functional equation</b>, 2024, <i>submitted</i>. (<a href="https://arxiv.org/abs/2410.16921v1" target=&ldquo;blank&rdquo;>arxiv:2410.16921v1</a>)
-              </p>
-            </li>
-            <li>
-              <p>
-                Will Sawin(\(\clubsuit\)). <b>A refined random matrix model for function field L-functions</b>, 2024, <i>submitted</i>. (<a href="https://arxiv.org/abs/2409.02876v1" target=&ldquo;blank&rdquo;>arXiv:2409.02876v1</a>)
-              </p>
-            </li>
-          </ol>
-          <div id="footer">
-            <div id="footer-text">
-              Page generated 2024-12-28 20:51:55 EST, by <a href="https://github.com/wsshin/jemdoc_mathjax" target="blank">jemdoc+MathJax</a>.
-              (<a href="papers.jemdoc">source</a>)
+                </p>
+              </li>
+            </ol>
+            <h2>Preprints</h2>
+            <p>The following preprints were directly supported by the FRG:</p>
+            <ol>
+              <li>
+                <p>
+                  Emilia Alvarez(\(\clubsuit\)), Brian Conrey(\(\spadesuit\)), Michael O. Rubinstein(\(\clubsuit\)), and Nina C. Snaith(\(\clubsuit\)). <b>Moments of the derivative of the characteristic polynomial of unitary matrices</b>, 2024, <i>submitted</i>. (<a href="https://arxiv.org/abs/2407.13124v2" target=&ldquo;blank&rdquo;>arXiv:2407.13124v2</a>)
+                </p>
+              </li>
+              <li>
+                <p>
+                  Theodoros Assiotis, Mustafa Alper Gunes, Jonathan P. Keating(\(\spadesuit\)), and Fei Wei(\(\diamondsuit\)). <b>Exchangeable arrays and integrable systems for characteristic polynomials of random matrices</b>, 2024, <i>submitted</i>. (<a href="https://arxiv.org/abs/2407.19233v3" target=&ldquo;blank&rdquo;>arXiv:2407.19233v3</a>)
+                </p>
+              </li>
+              <li>
+                <p>
+                  Siegfred Baluyot(\(\diamondsuit\)), Vorrapan Chandee(\(\clubsuit\)), and Xiannan Li(\(\clubsuit\)). <b>Low-lying zeros of a large orthogonal family of automorphic \(L\)-functions</b>, 2024, <i>submitted</i>. (<a href="https://arxiv.org/abs/2310.07606v3" target=&ldquo;blank&rdquo;>arXiv:2310.07606v3</a>)
+                </p>
+              </li>
+              <li>
+                <p>
+                  Siegfred Baluyot(\(\diamondsuit\)) and Caroline L. Turnage-Butterbaugh(\(\heartsuit\)). <b>Twisted \(2k\)th moments of primitive Dirichlet \(L\)-functions: beyond the diagonal</b>, 2022, <i>submitted</i>. (<a href="https://arxiv.org/abs/2205.00641v1" target=&ldquo;blank&rdquo;>arXiv:2205.00641v1</a>)
+                </p>
+              </li>
+              <li>
+                <p>
+                  M. Čech(\(\clubsuit\)). <b>Moments of real Dirichlet \(L\)-functions and multiple Dirichlet series</b>, 2024, <i>submitted</i>. (<a href="https://arxiv.org/abs/2402.07473v2" target=&ldquo;blank&rdquo;>arXiv:2402.07473v2</a>)
+                </p>
+              </li>
+              <li>
+                <p>
+                  J. Champagne, T. H. Lê, Y. R. Liu, and T. D. Wooley(\(\spadesuit\)). <b>Well-distribution modulo one and the primes</b>, 2024, <i>submitted</i>. (<a href="https://arxiv.org/abs/2406.19491v1" target=&ldquo;blank&rdquo;>arXiv:2406.19491v1</a>)
+                </p>
+              </li>
+              <li>
+                <p>
+                  Brian Conrey(\(\spadesuit\)) and Brad Rodgers(\(\heartsuit\)). <b>Averages of quadratic twists of long Dirichlet polynomials</b>, 2022, <i>submitted</i>. (<a href="https://arxiv.org/abs/2208.01783v1" target=&ldquo;blank&rdquo;>arXiv:2208.01783v1</a>)
+                </p>
+              </li>
+              <li>
+                <p>
+                  Brian Conrey(\(\spadesuit\)) and Neil Shah. <b>Which numbers are not the sum plus the product of three positive integers?</b>, 2022, <i>submitted</i>. (<a href="https://arxiv.org/abs/2112.15551v2" target=&ldquo;blank&rdquo;>arXiv:2112.15551v2</a>)
+                </p>
+              </li>
+              <li>
+                <p>
+                  Steven M. Gonek(\(\clubsuit\)) and Anurag Sahay(\(\clubsuit\)). <b>Consecutive moderate gaps between zeros of the Riemann zeta function</b>, 2024, <i>submitted</i>. (<a href="https://arxiv.org/abs/2412.15481v1" target=&ldquo;blank&rdquo;>arXiv:2412.15481v1</a>)
+                </p>
+              </li>
+              <li>
+                <p>
+                  Alessandro Fazzari(\(\diamondsuit\)). <b>On the joint second moment of zeta and its logarithmic derivative</b>, 2024, <i>accepted</i>, to appear in <i>Acta Arith.</i> (<a href="https://arxiv.org/abs/2310.15918v2" target=&ldquo;blank&rdquo;>arXiv:2310.15918v2</a>)
+                </p>
+              </li>
+              <li>
+                <p>
+                  Thái Hoàng Lê, Yu-Ru Liu, and Trevor D. Wooley(\(\spadesuit\)). <b>Equidistribution of polynomial sequences in function fields, with applications</b>, 2023, <i>submitted</i>. (<a href="https://arxiv.org/abs/1311.0892v2" target=&ldquo;blank&rdquo;>arXiv:1311.0892v2</a>)
+                </p>
+              </li>
+              <li>
+                <p>
+                  Amita Malik(\(\diamondsuit\)). <b>Partitions into primes with a Chebotarev condition</b>, 2024, <i>submitted</i>.
+                </p>
+              </li>
+              <li>
+                <p>
+                  A. M. Masullo(\(\diamondsuit\)). <b>Crystalline cohomology over general bases</b>, 2020, <i>submitted</i>. (<a href="https://arxiv.org/abs/2011.11182v1" target=&ldquo;blank&rdquo;>arXiv:2011.11182v1</a>)
+                </p>
+              </li>
+              <li>
+                <p>
+                  David T. Nguyen(\(\diamondsuit\)). <b>On correlation of the 3-fold divisor function with itself</b>, 2023, <i>submitted</i>. (<a href="https://arxiv.org/abs/2206.05877v2" target=&ldquo;blank&rdquo;>arXiv:2206.05877v2</a>)
+                </p>
+              </li>
+              <li>
+                <p>
+                  Nick Simm and Fei Wei(\(\diamondsuit\)). <b>On moments of the derivative of CUE characteristic polynomials and the Riemann zeta function</b>, 2024, <i>submitted</i>. (<a href="https://arxiv.org/abs/2409.03687v1" target=&ldquo;blank&rdquo;>arXiv:2409.03687v1</a>)
+                </p>
+              </li>
+              <li>
+                <p>
+                  Trevor D. Wooley(\(\spadesuit\)). <b>Subconvexity and the Hilbert-Kamke Problem</b>, 2022, <i>submitted</i>. (<a href="https://arxiv.org/abs/2201.02699v1" target=&ldquo;blank&rdquo;>arXiv:2201.02699v1</a>)
+                </p>
+              </li>
+              <li>
+                <p>
+                  Trevor D. Wooley(\(\spadesuit\)). <b>Condensation and densification for sets of large diameter</b>, 2023, <i>accepted</i>, to appear in <i>Combinatorial and Additive Number Theory VI &ndash; CANT, New York, USA, 2022 and 2023, Ed. Melvyn B. Nathanson, Springer Proceedings in Mathematics and Statistics</i>. (<a href="https://arxiv.org/abs/2305.19968v1" target=&ldquo;blank&rdquo;>arXiv:2305.19968v1</a>)
+                </p>
+              </li>
+            </ol>
+            <p>
+              The following preprints were based on, inspired by, or benefitted from seminars, events, and conversations that took place in the ambit of the FRG:
+            </p>
+            <ol>
+              <li>
+                <p>
+                  Yacine Barhoumi-Andréani. <b>A new approach to the characteristic polynomial of a random unitary matrix</b>, 2020, <i>submitted</i>. (<a href="https://arxiv.org/abs/2011.02465v1" target=&ldquo;blank&rdquo;>arXiv:2011.02465v1</a>)
+                </p>
+              </li>
+              <li>
+                <p>
+                  Vivian Kuperberg(\(\clubsuit\)) and Matilde Lalín(\(\clubsuit\)). <b>Symplectic conjectures for sums of divisor functions and explorations of an orthogonal regime</b>, 2024, <i>accepted</i>, to appear in <i>Trans. Amer. Math. Soc.</i> (<a href="https://arxiv.org/abs/2212.04969v2" target=&ldquo;blank&rdquo;>arXiv:2212.04969v2</a>)
+                </p>
+              </li>
+              <li>
+                <p>
+                  Chung-Hang Kwan(\(\clubsuit\)). <b>Spectral moment formulae for \(GL(3)\times GL(2)\) \(L\)-functions II: The Eisenstein case</b>, 2023, <i>submitted</i>. (<a href="https://arxiv.org/abs/2310.09419v1" target=&ldquo;blank&rdquo;>arXiv:2310.09419v1</a>)
+                </p>
+              </li>
+              <li>
+                <p>
+                  Chung-Hang Kwan(\(\clubsuit\)) and Wing Hong Leung. <b>Character sums, reciprocity and functional equations</b>, 2024, <i>submitted</i>. (<a href="https://arxiv.org/abs/2410.11193v1" target=&ldquo;blank&rdquo;>arxiv:2410.11193v1</a>)
+                </p>
+              </li>
+              <li>
+                <p>
+                  Chung-Hang Kwan(\(\clubsuit\)) and Wing Hong Leung. <b>Trace formula and functional equation</b>, 2024, <i>submitted</i>. (<a href="https://arxiv.org/abs/2410.16921v1" target=&ldquo;blank&rdquo;>arxiv:2410.16921v1</a>)
+                </p>
+              </li>
+              <li>
+                <p>
+                  Will Sawin(\(\clubsuit\)). <b>A refined random matrix model for function field L-functions</b>, 2024, <i>submitted</i>. (<a href="https://arxiv.org/abs/2409.02876v1" target=&ldquo;blank&rdquo;>arXiv:2409.02876v1</a>)
+                </p>
+              </li>
+            </ol>
+            <div id="footer">
+              <div id="footer-text">
+                Page generated 2024-12-28 20:51:55 EST, by <a href="https://github.com/wsshin/jemdoc_mathjax" target="blank">jemdoc+MathJax</a>.
+                (<a href="papers.jemdoc">source</a>)
+              </div>
             </div>
-          </div>
-        </td>
-      </tr>
-    </table>
-  </body>
+          </td>
+        </tr>
+      </table>
+    </body>
+  {% endblock content %}
 </html>
