@@ -196,7 +196,7 @@ DJANGOCMS_VERSIONING_ALLOW_DELETING_VERSIONS = True
 # )
 
 CMS_TEMPLATES = [
-    ("cms_templates/home.html", "Home"),
+    ("new_page_template.html", "New Page Template"),
     ("cms_templates/about.html", "About"),
     ("cms_templates/focused-landing.html", "Focused Collaborative Research"),
     ("cms_templates/joyfulmathematics.html", "Joyful Mathematics Template"),
@@ -207,7 +207,6 @@ CMS_TEMPLATES = [
     ("FRG/frg-activities.html", "FRG Activities"),
     ("FRG/frg-landing.html", "FRG Landing Page"),
     ("FRG/frg-papers.html", "FRG Papers"),
-    ("new_page_template.html", "New Page Template"),
     ("donate.html", "Donation Page"),
 ]
 
@@ -232,7 +231,7 @@ CMS_CACHE_DURATIONS = {"content": 3600, "menus": 3600, "permissions": 3600}
 
 
 # Site ID
-SITE_ID = 2
+SITE_ID = 4
 
 
 STATIC_URL = "static/"

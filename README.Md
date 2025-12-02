@@ -24,9 +24,9 @@ pip install -r requirements.txt
 
 # Start the app - (if using a local database run the commands below)
 
-python manage.py migrate
-python manage.py createsuperuser
-python manage.py bootstrap_cms_pages
+python manage.py migrate\
+python manage.py createsuperuser\
+python manage.py bootstrap_cms_pages\
 
 python manage.py runserver
 
