@@ -11,7 +11,6 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "127.0.0.1:80000"]
 
 env = environ.Env()
 env.read_env(BASE_DIR / ".env")

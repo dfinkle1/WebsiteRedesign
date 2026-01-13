@@ -29,125 +29,135 @@
                 </li>
                 <!-- Focused Collaborative Research -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle"
-                       href="{% page_url 'collaborative' %}"
-                       role="button"
-                       aria-expanded="false">Focused Collaborative Research</a>
-                    <ul class="dropdown-menu" aria-labelledby="collaborativeDropdown">
-                        <div class="d-flex flex-wrap">
-                            <div class="flex-fill">
-                                <h6 class="dropdown-header">Workshops</h6>
-                                <a class="dropdown-item" href="{% page_url 'collaborative' %}#workshops">Workshops</a>
-                                <a class="dropdown-item" href="{% page_url 'collaborative' %}#squares">SQuaREs</a>
+                    {% page_url 'collaborative' as collaborative_url %}
+                    {% if collaborative_url %}
+                        <a class="nav-link dropdown-toggle"
+                           href="{{ collaborative_url }}"
+                           role="button"
+                           aria-expanded="false">Focused Collaborative Research</a>
+                        <ul class="dropdown-menu" aria-labelledby="collaborativeDropdown">
+                            <div class="d-flex flex-wrap">
+                                <div class="flex-fill">
+                                    <h6 class="dropdown-header">Workshops</h6>
+                                    <a class="dropdown-item" href="{{ collaborative_url }}#workshops">Workshops</a>
+                                    <a class="dropdown-item" href="{{ collaborative_url }}#squares">SQuaREs</a>
+                                </div>
+                                <div class="flex-fill">
+                                    <h6 class="dropdown-header">Projects</h6>
+                                    <a class="dropdown-item"
+                                       href="{{ collaborative_url }}#research-communities">Research Communities</a>
+                                    <a class="dropdown-item" href="{{ collaborative_url }}#reuf">REUF</a>
+                                    <a class="dropdown-item" href="{{ collaborative_url }}#roots-of-unity">Roots of Unity</a>
+                                </div>
+                                <div class="flex-fill">
+                                    <h6 class="dropdown-header">Other</h6>
+                                    <a class="dropdown-item"
+                                       href="{{ collaborative_url }}#alexanderson-award">Alexanderson Award</a>
+                                    <a class="dropdown-item" href="{% page_url 'frg' %}">FRG</a>
+                                </div>
                             </div>
-                            <div class="flex-fill">
-                                <h6 class="dropdown-header">Diversity</h6>
-                                <a class="dropdown-item"
-                                   href="{% page_url 'collaborative' %}#research-communities">Research Communities</a>
-                                <a class="dropdown-item" href="{% page_url 'collaborative' %}#reuf">REUF</a>
-                                <a class="dropdown-item"
-                                   href="{% page_url 'collaborative' %}#roots-of-unity">Roots of Unity</a>
-                            </div>
-                            <div class="flex-fill">
-                                <h6 class="dropdown-header">Other</h6>
-                                <a class="dropdown-item"
-                                   href="{% page_url 'collaborative' %}#alexanderson-award">Alexanderson Award</a>
-                                <a class="dropdown-item" href="{% page_url 'frg' %}">FRG</a>
-                            </div>
-                        </div>
-                    </ul>
-                </li>
+                        </ul>
+                    </li>
+                {% endif %}
                 <!-- Joyful Mathematics -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle"
-                       href="{% page_url 'joyful' %}"
-                       aria-expanded="false">Joyful Mathematics For All</a>
-                    <ul class="dropdown-menu">
-                        <div class="d-flex flex-wrap">
-                            <div class="flex-fill">
-                                <h6 class="dropdown-header">Partnerships</h6>
-                                <a class="dropdown-item" href="{% page_url 'joyful' %}#math-circles">Math Circle Network</a>
-                                <a class="dropdown-item" href="{% page_url 'joyful' %}#math-communities">Math Communities</a>
+                    {% page_url 'joyful' as joyful_url %}
+                    {% if joyful_url %}
+                        <a class="nav-link dropdown-toggle"
+                           href="{{ joyful_url }}"
+                           aria-expanded="false">Joyful Mathematics For All</a>
+                        <ul class="dropdown-menu">
+                            <div class="d-flex flex-wrap">
+                                <div class="flex-fill">
+                                    <h6 class="dropdown-header">Partnerships</h6>
+                                    <a class="dropdown-item" href="{{ joyful_url }}#math-circles">Math Circle Network</a>
+                                    <a class="dropdown-item" href="{{ joyful_url }}#math-communities">Math Communities</a>
+                                </div>
+                                <div class="flex-fill">
+                                    <h6 class="dropdown-header">Other</h6>
+                                    <a class="dropdown-item" href="{{ joyful_url }}#match">MATCH</a>
+                                    <a class="dropdown-item" href="{{ joyful_url }}#math-border">Math on the Border</a>
+                                    <a class="dropdown-item" href="{{ joyful_url }}#morgan-hill">Morgan Hill Math</a>
+                                </div>
                             </div>
-                            <div class="flex-fill">
-                                <h6 class="dropdown-header">Other</h6>
-                                <a class="dropdown-item" href="{% page_url 'joyful' %}#match">MATCH</a>
-                                <a class="dropdown-item" href="{% page_url 'joyful' %}#math-border">Math on the Border</a>
-                                <a class="dropdown-item" href="{% page_url 'joyful' %}#morgan-hill">Morgan Hill Math</a>
-                            </div>
-                        </div>
-                    </ul>
-                </li>
+                        </ul>
+                    </li>
+                {% endif %}
                 <!-- Visiting -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle"
-                       href="{% page_url 'visiting' %}"
-                       aria-expanded="false">Visiting</a>
-                    <ul class="dropdown-menu">
-                        <a class="dropdown-item"
-                           href="{% page_url 'visiting' %}#code-of-conduct">Code of Conduct</a>
-                        <a class="dropdown-item"
-                           href="{% page_url 'visiting' %}#local-information">Local Information</a>
-                        <a class="dropdown-item"
-                           href="{% page_url 'visiting' %}#travel-guidelines">Travel Guidelines</a>
-                        <a class="dropdown-item" href="{% page_url 'visiting' %}#child-care">Child Care</a>
-                        <a class="dropdown-item"
-                           href="{% page_url 'visiting' %}#explore-pasadena">Explore Pasadena</a>
-                        <a class="dropdown-item" href="{% page_url 'visiting' %}#facilities">Facilities</a>
-                        <a class="dropdown-item" href="{% page_url 'visiting' %}#accessibility">Accessibility</a>
-                        <a class="dropdown-item" href="{% page_url 'visiting' %}#faq">FAQ</a>
-                    </ul>
-                </li>
+                {% page_url 'visiting' as visiting_url %}
+                {% if visiting_url %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle"
+                           href="{{ visiting_url }}"
+                           aria-expanded="false">Visiting</a>
+                        <ul class="dropdown-menu">
+                            <a class="dropdown-item" href="{{ visiting_url }}#code-of-conduct">Code of Conduct</a>
+                            <a class="dropdown-item" href="{{ visiting_url }}#local-information">Local Information</a>
+                            <a class="dropdown-item" href="{{ visiting_url }}#travel-guidelines">Travel Guidelines</a>
+                            <a class="dropdown-item" href="{{ visiting_url }}#child-care">Child Care</a>
+                            <a class="dropdown-item" href="{{ visiting_url }}#explore-pasadena">Explore Pasadena</a>
+                            <a class="dropdown-item" href="{{ visiting_url }}#facilities">Facilities</a>
+                            <a class="dropdown-item" href="{{ visiting_url }}#accessibility">Accessibility</a>
+                            <a class="dropdown-item" href="{{ visiting_url }}#faq">FAQ</a>
+                        </ul>
+                    </li>
+                {% endif %}
                 <!-- Resources -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle"
-                       href="{% page_url 'resources' %}"
-                       aria-expanded="false">Resources</a>
-                    <ul class="dropdown-menu">
-                        <div class="d-flex flex-wrap">
-                            <div class="flex-fill">
-                                <h6 class="dropdown-header">Resources</h6>
-                                <a class="dropdown-item"
-                                   href="{% page_url 'resources' %}#careers-advice">Math Careers Advice</a>
-                                <a class="dropdown-item"
-                                   href="{% page_url 'resources' %}#open-textbook-initiative">Open Textbook Initiative</a>
-                                <a class="dropdown-item" href="{% page_url 'resources' %}#videos">Videos</a>
-                                <a class="dropdown-item" href="{% page_url 'resources' %}#problem-list">Problem Lists</a>
-                                <a class="dropdown-item"
-                                   href="{% page_url 'resources' %}#preprint-series">Preprint Series</a>
-                                <a class="dropdown-item"
-                                   href="{% page_url 'resources' %}#published-paper">Published Papers</a>
+                {% page_url 'resources' as resources_url %}
+                {% if resources_url %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle"
+                           href="{{ resources_url }}"
+                           aria-expanded="false">Resources</a>
+                        <ul class="dropdown-menu">
+                            <div class="d-flex flex-wrap">
+                                <div class="flex-fill">
+                                    <h6 class="dropdown-header">Resources</h6>
+                                    <a class="dropdown-item" href="{{ resources_url }}#careers-advice">Math Careers Advice</a>
+                                    <a class="dropdown-item"
+                                       href="{{ resources_url }}#open-textbook-initiative">Open Textbook Initiative</a>
+                                    <a class="dropdown-item" href="{{ resources_url }}#videos">Videos</a>
+                                    <a class="dropdown-item" href="{{ resources_url }}#problem-list">Problem Lists</a>
+                                    <a class="dropdown-item" href="{{ resources_url }}#preprint-series">Preprint Series</a>
+                                    <a class="dropdown-item" href="{{ resources_url }}#published-paper">Published Papers</a>
+                                </div>
+                                <div class="flex-fill">
+                                    <h6 class="dropdown-header">Library</h6>
+                                    <a class="dropdown-item" href="#">Reprints</a>
+                                </div>
                             </div>
-                            <div class="flex-fill">
-                                <h6 class="dropdown-header">Library</h6>
-                                <a class="dropdown-item" href="#">Reprints</a>
-                            </div>
-                        </div>
-                    </ul>
-                </li>
+                        </ul>
+                    </li>
+                {% endif %}
                 <!-- About -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle"
-                       href="{% page_url 'about' %}"
-                       aria-expanded="false">About</a>
-                    <ul class="dropdown-menu">
-                        <a class="dropdown-item" href="{% page_url 'about' %}#contact">Contact</a>
-                        <a class="dropdown-item" href="{% page_url 'about' %}#staff">Staff</a>
-                        <a class="dropdown-item" href="{% page_url 'about' %}#governance">Governance</a>
-                        <a class="dropdown-item" href="{% page_url 'about' %}#diversity">Diversity</a>
-                        <a class="dropdown-item" href="{% page_url 'about' %}#mission-history">Mission & History</a>
-                    </ul>
-                </li>
+                {% page_url 'about' as about_url %}
+                {% if about_url %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle"
+                           href="{{ about_url }}"
+                           aria-expanded="false">About</a>
+                        <ul class="dropdown-menu">
+                            <a class="dropdown-item" href="{{ about_url }}#contact">Contact</a>
+                            <a class="dropdown-item" href="{{ about_url }}#staff">Staff</a>
+                            <a class="dropdown-item" href="{{ about_url }}#governance">Governance</a>
+                            {# <a class="dropdown-item" href="{{ about_url }}#diversity">Diversity</a> #}
+                            <a class="dropdown-item" href="{{ about_url }}#mission-history">Mission & History</a>
+                        </ul>
+                    </li>
+                {% endif %}
                 <!-- News -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle"
-                       href="{% page_url 'news' %}"
-                       aria-expanded="false">News</a>
-                    <ul class="dropdown-menu">
-                        <a class="dropdown-item" href="{% page_url 'news' %}#news-letter">Newsletter</a>
-                        <a class="dropdown-item" href="{% page_url 'news' %}#news-stories">News Stories</a>
-                    </ul>
-                </li>
+                {% page_url 'news' as news_url %}
+                {% if news_url %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle"
+                           href="{{ news_url }}"
+                           aria-expanded="false">News</a>
+                        <ul class="dropdown-menu">
+                            <a class="dropdown-item" href="{{ news_url }}#news-letter">Newsletter</a>
+                            <a class="dropdown-item" href="{{ news_url }}#news-stories">News Stories</a>
+                        </ul>
+                    </li>
+                {% endif %}
                 <!-- Support AIM -->
                 <li class="nav-item">
                     <a class="nav-link" href="">Support AIM</a>

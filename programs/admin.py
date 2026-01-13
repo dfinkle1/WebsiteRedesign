@@ -8,7 +8,7 @@ class UpcomingFilter(admin.SimpleListFilter):
     parameter_name = "when"
 
     def lookups(self, request, model_admin):
-        return [("upcoming", "Upcoming"), ("past", "Past")]
+        return [("upcoming", "Upcoming"), ("past", "Past"), ("deadline", "Deadline")]
 
     def queryset(self, request, queryset):
         today = timezone.localdate()
@@ -16,12 +16,21 @@ class UpcomingFilter(admin.SimpleListFilter):
             return queryset.filter(end_date__gte=today)
         if self.value() == "past":
             return queryset.filter(end_date__lt=today)
+        if self.value() == "deadline":
+            return queryset.filter(application_deadline__gte=today)
         return queryset
 
 
 @admin.register(Program)
 class ProgramAdmin(admin.ModelAdmin):
-    list_display = ("code", "title", "type", "start_date", "end_date")
+    list_display = (
+        "code",
+        "title",
+        "type",
+        "start_date",
+        "end_date",
+        "application_deadline",
+    )
     list_filter = ("type", UpcomingFilter)
     search_fields = ("code", "title")
     ordering = ("start_date",)
