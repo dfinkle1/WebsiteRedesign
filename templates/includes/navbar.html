@@ -34,7 +34,8 @@
                         <a class="nav-link dropdown-toggle"
                            href="{{ collaborative_url }}"
                            role="button"
-                           aria-expanded="false">Focused Collaborative Research</a>
+                           aria-expanded="false"
+                           aria-haspopup="true">Focused Collaborative Research</a>
                         <ul class="dropdown-menu" aria-labelledby="collaborativeDropdown">
                             <div class="d-flex flex-wrap">
                                 <div class="flex-fill">
@@ -65,7 +66,8 @@
                     {% if joyful_url %}
                         <a class="nav-link dropdown-toggle"
                            href="{{ joyful_url }}"
-                           aria-expanded="false">Joyful Mathematics For All</a>
+                           aria-expanded="false"
+                           aria-haspopup="true">Joyful Mathematics For All</a>
                         <ul class="dropdown-menu">
                             <div class="d-flex flex-wrap">
                                 <div class="flex-fill">
@@ -89,7 +91,8 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle"
                            href="{{ visiting_url }}"
-                           aria-expanded="false">Visiting</a>
+                           aria-expanded="false"
+                           aria-haspopup="true">Visiting</a>
                         <ul class="dropdown-menu">
                             <a class="dropdown-item" href="{{ visiting_url }}#code-of-conduct">Code of Conduct</a>
                             <a class="dropdown-item" href="{{ visiting_url }}#local-information">Local Information</a>
@@ -108,7 +111,8 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle"
                            href="{{ resources_url }}"
-                           aria-expanded="false">Resources</a>
+                           aria-expanded="false"
+                           aria-haspopup="true">Resources</a>
                         <ul class="dropdown-menu">
                             <div class="d-flex flex-wrap">
                                 <div class="flex-fill">
@@ -135,7 +139,8 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle"
                            href="{{ about_url }}"
-                           aria-expanded="false">About</a>
+                           aria-expanded="false"
+                           aria-haspopup="true">About</a>
                         <ul class="dropdown-menu">
                             <a class="dropdown-item" href="{{ about_url }}#contact">Contact</a>
                             <a class="dropdown-item" href="{{ about_url }}#staff">Staff</a>
@@ -151,7 +156,8 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle"
                            href="{{ news_url }}"
-                           aria-expanded="false">News</a>
+                           aria-expanded="false"
+                           aria-haspopup="true">News</a>
                         <ul class="dropdown-menu">
                             <a class="dropdown-item" href="{{ news_url }}#news-letter">Newsletter</a>
                             <a class="dropdown-item" href="{{ news_url }}#news-stories">News Stories</a>
@@ -160,7 +166,8 @@
                 {% endif %}
                 <!-- Support AIM -->
                 <li class="nav-item">
-                    <a class="nav-link" href="">Support AIM</a>
+                    {% page_url 'donate' as donate_url %}
+                    <a class="nav-link" href="{% if donate_url %}{{ donate_url }}{% else %}#support{% endif %}">Support AIM</a>
                 </li>
                 <li class="nav-item dropdown">
                     <button class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle"

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Enrollment
-from apps.workshops.models import People
+from people.models import People
 
 # Register your models here.
 

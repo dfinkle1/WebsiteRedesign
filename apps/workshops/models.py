@@ -123,6 +123,12 @@ class OldWorkshop(models.Model):
 
 
 class People(models.Model):
+    """
+    DEPRECATED: This model is a placeholder and will be removed.
+    Use people.models.People instead, which has more complete fields and better structure.
+
+    This model is kept temporarily for reference during migration from MariaDB dump.
+    """
     id = models.BigAutoField(primary_key=True)
     orcid_id = models.TextField(
         blank=True, null=True, unique=True
@@ -139,7 +145,8 @@ class People(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table = "people"
+        managed = False  # Don't create/manage this table via migrations
+        # db_table removed to avoid conflict with people.models.People
 
 
 class Participant(models.Model):

@@ -15,7 +15,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 env = environ.Env()
 env.read_env(BASE_DIR / ".env")
 
-SECRET_KEY = env("SECRET_KEY", default="unsafe-secret-key")
+# SECRET_KEY is required - will raise ImproperlyConfigured if not set
+# In development, set it in .env file
+# In production, set it via environment variable
+try:
+    SECRET_KEY = env("SECRET_KEY")
+except Exception:
+    # Only allow default in development
+    if os.getenv("DEBUG", "0") == "1":
+        SECRET_KEY = "dev-only-insecure-key-change-in-production"
+    else:
+        raise Exception(
+            "SECRET_KEY environment variable is required. "
+            "Generate one with: python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'"
+        )
+
 DEBUG = False  # Overridden in dev/prod
 
 INSTALLED_APPS = [
@@ -105,18 +119,18 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # Must be right after SecurityMiddleware
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "django.middleware.locale.LocaleMiddleware",
+    # "django.middleware.locale.LocaleMiddleware",  # Disabled - no i18n URL prefixes
     "cms.middleware.user.CurrentUserMiddleware",
     "cms.middleware.page.CurrentPageMiddleware",
     "cms.middleware.toolbar.ToolbarMiddleware",
     "cms.middleware.language.LanguageCookieMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
     "allauth.account.middleware.AccountMiddleware",
 ]
 
@@ -148,12 +162,25 @@ TEMPLATES = [
 
 # Django-allauth-settings
 
-# settings.py
-SOCIALACCOUNT_ADAPTER = "accounts.adapter.OrcidAdapter"
+# Disabled custom adapter - let allauth handle OAuth naturally
+# SOCIALACCOUNT_ADAPTER = "accounts.adapter.OrcidAdapter"
 
-ACCOUNT_UNIQUE_EMAIL = True  # keep email unique across users
-ACCOUNT_EMAIL_VERIFICATION = "optional"  # or "mandatory" if you want verified emails
+# Modern allauth settings (v2.0+)
+ACCOUNT_EMAIL_VERIFICATION = "none"  # Required for OAuth-only mode
+ACCOUNT_UNIQUE_EMAIL = (
+    False  # Don't require unique emails (ORCID ID is the unique identifier)
+)
 SOCIALACCOUNT_STORE_TOKENS = True
+SOCIALACCOUNT_AUTO_SIGNUP = True  # Allow automatic user creation on OAuth login
+SOCIALACCOUNT_EMAIL_REQUIRED = False  # ORCID might not return email
+SOCIALACCOUNT_ONLY = True  # Disable password-based authentication (OAuth only)
+
+# Use username for login (required for OAuth without unique email)
+ACCOUNT_SIGNUP_FIELDS = ["username"]  # Minimal signup - username only
+
+# Disable features not needed for OAuth-only authentication
+ACCOUNT_CHANGE_EMAIL = False  # Users can't change email (managed in profile)
+ACCOUNT_EMAIL_NOTIFICATIONS = False  # No email notifications
 
 
 AUTHENTICATION_BACKENDS = [
@@ -166,14 +193,16 @@ AUTHENTICATION_BACKENDS = [
 SOCIALACCOUNT_PROVIDERS = {
     "orcid": {
         # Base domain of the API. Default value: 'orcid.org', for the production API
-        "BASE_DOMAIN": "sandbox.orcid.org",  # for the sandbox API
+        "BASE_DOMAIN": "orcid.org",
         "MEMBER_API": False,  # for the member API
-        "SCOPE": ["/authenticate"],
+        "SCOPE": ["/authenticate"],  # Basic authentication only
     }
 }
 
 
 LOGIN_URL = "/accounts/login/"
+LOGIN_REDIRECT_URL = "/accounts/dashboard/"
+ACCOUNT_LOGOUT_REDIRECT_URL = "/accounts/login/"
 
 
 #
@@ -182,17 +211,6 @@ LOGIN_URL = "/accounts/login/"
 CMS_CONFIRM_VERSION4 = True
 DJANGOCMS_VERSIONING_ALLOW_DELETING_VERSIONS = True
 
-
-# TEXT_INLINE_EDITING = True
-# TEXT_ADDITIONAL_TAGS = ("iframe",)
-# TEXT_ADDITIONAL_ATTRIBUTES = (
-#     "scrolling",
-#     "allowfullscreen",
-#     "frameborder",
-#     "src",
-#     "height",
-#     "width",
-# )
 
 CMS_TEMPLATES = [
     ("new_page_template.html", "New Page Template"),

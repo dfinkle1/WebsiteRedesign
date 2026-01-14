@@ -1,5 +1,5 @@
 from django.db import models
-from apps.workshops.models import *
+from people.models import People
 
 
 class Enrollment(models.Model):

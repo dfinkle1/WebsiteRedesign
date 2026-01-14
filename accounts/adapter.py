@@ -1,9 +1,11 @@
 # accounts/adapter.py
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
-from allauth.account.utils import perform_login, user_email
+from allauth.account.utils import user_email
 from django.contrib.auth import get_user_model
+import logging
 
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 
 class OrcidAdapter(DefaultSocialAccountAdapter):
@@ -21,11 +23,11 @@ class OrcidAdapter(DefaultSocialAccountAdapter):
 
         try:
             existing = User.objects.get(email__iexact=email)
+            logger.info(f"Found existing user with email {email}, connecting social account")
         except User.DoesNotExist:
             return  # no conflict; normal auto-signup will happen
 
         # Attach this social account to the existing user
         sociallogin.connect(request, existing)
-
-        # Log in as the existing user (aborts the “create new user” path)
-        perform_login(request, existing, email_verification="optional")
+        # Note: perform_login removed - let the normal allauth flow handle this
+        # so that user_logged_in signal fires properly
