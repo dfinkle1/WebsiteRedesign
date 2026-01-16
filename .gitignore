@@ -139,3 +139,25 @@ GitHub.sublime-settings
 .history
 .DS_Store
 .vscode/settings.json
+
+# ============================================
+# Database Migration Scripts (SECURITY)
+# ============================================
+# NEVER commit migration scripts - they expose schema
+scripts/*migration*.sql
+scripts/db_*
+scripts/*_pipeline.sql
+*.sql
+backups/
+db_migrations/
+
+# Database dumps (contain sensitive data)
+*.dump
+*.backup
+*_raw*.sql
+participant*.sql
+workshop*.sql
+
+# Configuration files
+config.sh
+.env.local

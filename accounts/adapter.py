@@ -13,6 +13,8 @@ class OrcidAdapter(DefaultSocialAccountAdapter):
         """
         Called after successful auth at ORCID, before allauth decides to create a new user.
         If there's already a User with the same email, connect this social login to that user.
+
+        IMPORTANT: Don't auto-connect to staff/admin accounts - those should remain separate.
         """
         if sociallogin.is_existing:
             return  # already connected
@@ -23,6 +25,14 @@ class OrcidAdapter(DefaultSocialAccountAdapter):
 
         try:
             existing = User.objects.get(email__iexact=email)
+
+            # SECURITY: Don't auto-connect ORCID to admin/staff accounts
+            if existing.is_staff or existing.is_superuser:
+                logger.warning(
+                    f"Refusing to connect ORCID to staff/admin account: {existing.username}"
+                )
+                return  # Force creation of new account
+
             logger.info(f"Found existing user with email {email}, connecting social account")
         except User.DoesNotExist:
             return  # no conflict; normal auto-signup will happen

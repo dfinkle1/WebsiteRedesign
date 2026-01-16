@@ -102,17 +102,16 @@ def link_orcid_to_people(sender, request, user, **kwargs):
             # Step 5: Create/update UserProfile
             prof, created = UserProfile.objects.get_or_create(
                 user=user,
-                defaults={"person": person, "orcid": orcid_id}
+                defaults={"person": person}
             )
 
             if created:
-                logger.info(f"Created UserProfile for {user.username}")
-            elif prof.person_id != person.id or (orcid_id and prof.orcid != orcid_id):
+                logger.info(f"Created UserProfile for {user.username} → Person {person.id}")
+            elif prof.person_id != person.id:
+                # Update if person changed (shouldn't happen often)
                 prof.person = person
-                if orcid_id:
-                    prof.orcid = orcid_id
-                prof.save(update_fields=["person", "orcid"])
-                logger.info(f"Updated UserProfile for {user.username}")
+                prof.save(update_fields=["person"])
+                logger.info(f"Updated UserProfile for {user.username} → Person {person.id}")
 
             logger.info(
                 f"ORCID login complete - User: {user.username}, "
