@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% load static socialaccount %}
+{% block title %}
+    Sign In - AIM
+{% endblock title %}
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center min-vh-75 align-items-center py-5">
+            <div class="col-md-6 col-lg-5">
+                <!-- Login Card -->
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-5">
+                        <!-- Logo/Branding -->
+                        <div class="text-center mb-4">
+                            <img src="{% static 'images/aimlogotransparentnotext.png' %}"
+                                 alt="American Institute of Mathematics"
+                                 class="mb-3"
+                                 style="max-height: 80px">
+                            <h1 class="h3 mb-2">Welcome Back</h1>
+                            <p class="text-muted">Sign in to access your AIM account</p>
+                        </div>
+                        <!-- Sign In Button -->
+                        <div class="d-grid gap-3">
+                            <a href="{% provider_login_url 'orcid' process='login' %}"
+                               class="btn btn-primary btn-lg d-flex align-items-center justify-content-center"
+                               style="gap: 0.75rem">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     width="24"
+                                     height="24"
+                                     viewBox="0 0 256 256"
+                                     fill="currentColor"
+                                     aria-hidden="true">
+                                    <path d="M256,128c0,70.7-57.3,128-128,128C57.3,256,0,198.7,0,128C0,57.3,57.3,0,128,0C198.7,0,256,57.3,256,128z M86.3,186.2H70.9V79.1h15.4v48.4V186.2z M108.9,79.1h41.6c39.6,0,57,28.3,57,53.6c0,27.5-21.5,53.6-56.8,53.6h-41.8V79.1z M124.3,172.4h24.5c34.9,0,42.9-26.5,42.9-39.7c0-21.5-13.7-39.7-43.7-39.7h-23.7V172.4z M88.7,56.8c0,5.5-4.5,10.1-10.1,10.1c-5.6,0-10.1-4.6-10.1-10.1c0-5.6,4.5-10.1,10.1-10.1C84.2,46.7,88.7,51.3,88.7,56.8z" />
+                                </svg>
+                                Sign in with ORCID
+                            </a>
+                        </div>
+                        <!-- Divider -->
+                        <div class="position-relative my-4">
+                            <hr>
+                            <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted small">OR</span>
+                        </div>
+                        <!-- Guest Access -->
+                        <div class="text-center">
+                            <p class="text-muted small mb-2">Don't have an ORCID?</p>
+                            <a href="https://orcid.org/register"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="btn btn-outline-secondary">Create an ORCID iD</a>
+                        </div>
+                        <!-- Help Text -->
+                        <div class="mt-4 pt-4 border-top">
+                            <p class="text-muted small mb-0 text-center">
+                                <strong>What is ORCID?</strong>
+                                <br>
+                                ORCID provides a persistent digital identifier that you own and control,
+                                distinguishing you from every other researcher.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Footer Links -->
+                <div class="text-center mt-4">
+                    <p class="text-muted small">
+                        <a href="{% url 'index' %}" class="text-decoration-none">Back to Home</a>
+                        <span class="mx-2">•</span>
+                        <a href="#" class="text-decoration-none">Help</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+    .min-vh-75 {
+        min-height: 75vh;
+    }
+    .btn-primary {
+        background-color: #A6CE39;
+        border-color: #A6CE39;
+        color: #000;
+        font-weight: 500;
+    }
+    .btn-primary:hover {
+        background-color: #92b831;
+        border-color: #92b831;
+        color: #000;
+    }
+    .card {
+        border-radius: 1rem;
+    }
+    </style>
+{% endblock content %}

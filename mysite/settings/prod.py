@@ -6,6 +6,12 @@ DEBUG = False
 
 USE_S3 = True
 
+ALLOWED_HOSTS = [
+    "aimath.org",
+    "www.aimath.org",
+    "dev.aimath.org",
+]
+
 INSTALLED_APPS += [
     "whitenoise.runserver_nostatic",
 ]

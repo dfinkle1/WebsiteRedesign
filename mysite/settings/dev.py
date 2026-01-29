@@ -1,13 +1,15 @@
 from .base import *
 
 
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "127.0.0.1:80000"]
 INSTALLED_APPS += ["debug_toolbar"]
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
 # -- static/media
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "assets"]
 DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 
@@ -59,28 +61,31 @@ if APP_ENV == "codespaces" or IN_CODESPACES:
         or os.getenv("DATABASE_URL")
     )
 elif APP_ENV == "local":
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": "aim_temp",
-            "USER": "daniel",
-            "PASSWORD": "",
-            "HOST": "localhost",
-            "PORT": "5431",
-        }
-    }
-    # DB_URL = os.getenv("DATABASE_URL_LOCAL") or os.getenv("DATABASE_URL")
+    DB_URL = os.getenv("DATABASE_URL_LOCAL") or os.getenv("DATABASE_URL")
 
 if DB_URL:
     DATABASES = {"default": dj_database_url.parse(DB_URL, conn_max_age=0)}
 else:
+    # Fallback to environment variables for database configuration
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": "aim_new_prod",
-            "USER": "daniel",
-            "PASSWORD": "",
-            "HOST": "localhost",
-            "PORT": "5431",
+            "NAME": os.getenv("DB_NAME", "postgres"),
+            "USER": os.getenv("DB_USER", "postgres"),
+            "PASSWORD": os.getenv("DB_PASSWORD", ""),
+            "HOST": os.getenv("DB_HOST", "localhost"),
+            "PORT": os.getenv("DB_PORT", "5432"),
         }
     }
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "loggers": {
+        "django.request": {"handlers": ["console"], "level": "DEBUG"},
+        "allauth": {"handlers": ["console"], "level": "DEBUG"},
+        "allauth.socialaccount": {"handlers": ["console"], "level": "DEBUG"},
+        "accounts": {"handlers": ["console"], "level": "DEBUG"},
+    },
+}

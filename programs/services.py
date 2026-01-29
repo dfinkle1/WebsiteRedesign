@@ -22,6 +22,7 @@ def get_upcoming_workshops(limit=12, cache_seconds=600):
             "application_deadline",
             "start_date",
             "end_date",
+            "description",
         )[:limit]
     )
 
@@ -34,6 +35,7 @@ def get_upcoming_workshops(limit=12, cache_seconds=600):
         "application_deadline",
         "start_date",
         "end_date",
+        "description",
     ]
     data = [model_to_dict(p, fields=fields) for p in qs]
     cache.set(cache_key, data, cache_seconds)

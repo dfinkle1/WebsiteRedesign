@@ -1,0 +1,43 @@
+{% extends "cms_templates/focused_research/base.html" %}
+{% load cms_tags static %}
+
+{% block page_title %}Focused Collaborative Research - AIM{% endblock page_title %}
+
+{% block page_content %}
+    <h1>Focused Collaborative Research</h1>
+    <img src="{% static 'images/landing/FCR-lecture1.jpg' %}"
+         alt="People working on problems in the lecture room at AIM"
+         class="img-fluid float-end ms-2 mb-2"
+         width="450px" />
+
+    {% placeholder "focused-landing-content" %}
+
+    <!-- Optional: Quick links to programs -->
+    <div class="mt-4">
+        <h3>Explore Our Programs</h3>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Workshops</h5>
+                        <p class="card-text">Intensive collaborative research sessions</p>
+                        <a href="/workshops/" class="btn btn-primary">
+                            Learn More →
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">SQuaREs</h5>
+                        <p class="card-text">Structured Quartet Research Ensembles</p>
+                        <a href="/squares/" class="btn btn-primary">
+                            Learn More →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock page_content %}

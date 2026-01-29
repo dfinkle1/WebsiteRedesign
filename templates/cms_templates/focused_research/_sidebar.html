@@ -1,0 +1,30 @@
+{% comment %}
+Reusable sidebar navigation for all Focused Research pages.
+Auto-detects active section from request.path.
+{% endcomment %}
+<div class="nav flex-column nav-pills me-3"
+     id="v-pills-tab"
+     role="tablist"
+     aria-orientation="vertical">
+    <a class="nav-link {% if request.path == '/focused-collaborative-research/' %}active{% endif %}"
+       href="/focused-collaborative-research/"
+       role="tab">Focused Collaborative Research</a>
+    <a class="nav-link {% if '/workshops/' in request.path %}active{% endif %}"
+       href="/workshops/"
+       role="tab">Workshops</a>
+    <a class="nav-link {% if '/squares/' in request.path %}active{% endif %}"
+       href="/squares/"
+       role="tab">SQuaREs</a>
+    <a class="nav-link {% if request.path == '/research-communities/' %}active{% endif %}"
+       href="/research-communities/"
+       role="tab">Research Communities</a>
+    <a class="nav-link {% if '/focused-collaborative-research/reuf/' in request.path %}active{% endif %}"
+       href="/focused-collaborative-research/reuf/"
+       role="tab">Research Experiences for Undergraduate Faculty</a>
+    <a class="nav-link {% if '/focused-collaborative-research/diversity/' in request.path %}active{% endif %}"
+       href="/focused-collaborative-research/diversity/"
+       role="tab">Diversity Initiative</a>
+    <a class="nav-link {% if '/focused-collaborative-research/alexanderson-award/' in request.path %}active{% endif %}"
+       href="/focused-collaborative-research/alexanderson-award/"
+       role="tab">Alexanderson Award</a>
+</div>

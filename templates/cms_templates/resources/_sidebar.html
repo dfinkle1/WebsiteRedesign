@@ -1,0 +1,30 @@
+{% comment %}
+Reusable sidebar navigation for Resources section.
+Auto-detects active section from request.path.
+{% endcomment %}
+<div class="nav flex-column nav-pills me-3"
+     id="v-pills-tab"
+     role="tablist"
+     aria-orientation="vertical">
+   <a class="nav-link {% if request.path == '/resources/' %}active{% endif %}"
+      href="/resources/"
+      role="tab">Resources</a>
+   <a class="nav-link {% if request.path == '/careers-advice/' %}active{% endif %}"
+      href="/careers-advice/"
+      role="tab">Careers Advice</a>
+   <a class="nav-link {% if request.path == '/open-textbook-initiative/' %}active{% endif %}"
+      href="/open-textbook-initiative/"
+      role="tab">Open Textbook Initiative</a>
+   <a class="nav-link {% if request.path == '/videos/' %}active{% endif %}"
+      href="/videos/"
+      role="tab">Videos</a>
+   <a class="nav-link {% if request.path == '/problem-list/' %}active{% endif %}"
+      href="/problem-list/"
+      role="tab">Problem Lists</a>
+   <a class="nav-link {% if request.path == '/preprint-series/' %}active{% endif %}"
+      href="/preprint-series/"
+      role="tab">Preprint Series</a>
+   <a class="nav-link {% if request.path == '/published-papers/' %}active{% endif %}"
+      href="/published-papers/"
+      role="tab">Published Papers</a>
+</div>

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load cms_tags static %}
+
+{% block title %}
+    {% page_attribute "page_title" %}
+{% endblock title %}
+
+{% block content %}
+    <section class="header-banner" tag="banner">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <img src="{% static 'images/aim_white.png' %}"
+                         alt="AIM Logo"
+                         class="fluid"
+                         height="100px">
+                </div>
+                <div class="col">
+                    <h2>Focused Collaborative Research</h2>
+                    <span class="fst-italic">The American Institute of Mathematics</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="row mt-5 mb-4">
+            <!-- Side Navigation (converted to real links) -->
+            <div class="col-lg-3">
+                <div class="d-flex align-items-start">
+                    <div class="nav flex-column nav-pills me-3"
+                         id="v-pills-tab"
+                         role="tablist"
+                         aria-orientation="vertical">
+
+                        <!-- Overview tab - stays on this page -->
+                        <a class="nav-link {% if request.path == '/focused-collaborative-research/' %}active{% endif %}"
+                           href="/focused-collaborative-research/"
+                           role="tab">
+                            Focused Collaborative Research
+                        </a>
+
+                        <!-- Workshops - links to CMS landing page -->
+                        <a class="nav-link {% if '/workshops/' in request.path %}active{% endif %}"
+                           href="/workshops/"
+                           role="tab">
+                            Workshops
+                        </a>
+
+                        <!-- SQuaREs - links to CMS landing page -->
+                        <a class="nav-link {% if '/squares/' in request.path %}active{% endif %}"
+                           href="/squares/"
+                           role="tab">
+                            SQuaREs
+                        </a>
+
+                        <!-- Static CMS pages (if you have them) -->
+                        <a class="nav-link"
+                           href="/research-communities/"
+                           role="tab">
+                            Research Communities
+                        </a>
+
+                        <a class="nav-link"
+                           href="/reuf/"
+                           role="tab">
+                            Research Experiences for Undergraduate Faculty
+                        </a>
+
+                        <a class="nav-link"
+                           href="/diversity/"
+                           role="tab">
+                            Diversity Initiative
+                        </a>
+
+                        <a class="nav-link"
+                           href="/alexanderson-award/"
+                           role="tab">
+                            Alexanderson Award
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="col theme-bg rounded">
+                <div class="p-3">
+                    <h1>Focused Collaborative Research</h1>
+                    <img src="{% static 'images/landing/FCR-lecture1.jpg' %}"
+                         alt="People working on problems in the lecture room at AIM"
+                         class="img-fluid float-end ms-2 mb-2"
+                         width="450px" />
+
+                    <!-- Only placeholder for THIS page's content -->
+                    {% placeholder "focused-landing-content" %}
+
+                    <!-- Optional: Quick links to programs -->
+                    <div class="mt-4 program-links">
+                        <h3>Explore Our Programs</h3>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Workshops</h5>
+                                        <p class="card-text">Intensive collaborative research sessions</p>
+                                        <a href="{% url 'programs:workshops-upcoming' %}" class="btn btn-primary">
+                                            View Upcoming Workshops →
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">SQuaREs</h5>
+                                        <p class="card-text">Structured Quartet Research Ensembles</p>
+                                        <a href="/squares/upcoming/" class="btn btn-primary">
+                                            View SQuaREs →
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

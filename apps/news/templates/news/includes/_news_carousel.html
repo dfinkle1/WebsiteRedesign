@@ -1,0 +1,10 @@
+{# News carousel/grid for homepage - expects: articles #}
+{% if articles %}
+<div class="row g-4">
+  {% for article in articles %}
+  <div class="col-md-6 col-lg-4">
+    {% include "news/includes/_article_card.html" %}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}

@@ -1,5 +1,5 @@
 from django.db import models
-from apps.workshops.models import *
+from people.models import People
 
 
 class Enrollment(models.Model):
@@ -18,6 +18,7 @@ class Enrollment(models.Model):
         related_name="enrollments",
     )
     first_name = models.TextField(blank=True, null=True)
+    middle_name = models.TextField(blank=True, null=True)
     last_name = models.TextField(blank=True, null=True)
     email_snap = models.TextField(blank=True, null=True)
     orcid_snap = models.TextField(blank=True, null=True)

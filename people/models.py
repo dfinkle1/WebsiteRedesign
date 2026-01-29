@@ -4,6 +4,7 @@ from django.db import models
 class People(models.Model):
     first_name = models.TextField(blank=True, null=True)
     last_name = models.TextField(blank=True, null=True)  # allow NULL if you want
+    middle_name = models.TextField(blank=True, null=True)
     preferred_name = models.TextField(blank=True, null=True)
     email_address = models.TextField(
         blank=True, null=True, unique=True
@@ -23,7 +24,12 @@ class People(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        indexes = [models.Index(fields=["last_name", "first_name"])]
+        db_table = "people"  # Use consistent table name
+        indexes = [
+            models.Index(fields=["last_name", "first_name"], name="people_name_idx")
+        ]
 
     def __str__(self):
+        if self.preferred_name:
+            return f"{self.preferred_name} {self.last_name}"
         return f"{self.first_name} {self.last_name}"

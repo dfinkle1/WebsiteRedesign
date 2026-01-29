@@ -1,6 +1,86 @@
 from django.contrib import admin
 from django.utils import timezone
+from django.utils.html import format_html
+from django.urls import path, reverse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.http import HttpResponse
+from datetime import datetime
+from cms.admin.placeholderadmin import FrontendEditableAdminMixin
+import csv
+
 from .models import Program
+from enrollments.models import Enrollment
+from .forms import SendReminderForm
+
+
+class EnrollmentInline(admin.TabularInline):
+    """
+    Inline display of enrollments on Program detail page.
+    Shows all people enrolled in this workshop.
+    """
+
+    model = Enrollment
+    extra = 0
+    can_delete = True
+
+    # Use autocomplete for person field
+    autocomplete_fields = ("person",)
+
+    fields = (
+        "person",
+        "person_email",
+        "person_orcid",
+        "enrollment_status_display",
+        "accepted_at",
+        "declined_at",
+    )
+
+    readonly_fields = (
+        "person_email",
+        "person_orcid",
+        "enrollment_status_display",
+    )
+
+    def person_email(self, obj):
+        """Show person's current email"""
+        if obj.person:
+            return obj.person.email_address or "—"
+        return "—"
+
+    person_email.short_description = "Email"
+
+    def person_orcid(self, obj):
+        """Show person's ORCID as link"""
+        if obj.person and obj.person.orcid_id:
+            url = f"https://orcid.org/{obj.person.orcid_id}"
+            return format_html(
+                '<a href="{}" target="_blank">{}</a>', url, obj.person.orcid_id
+            )
+        return "—"
+
+    person_orcid.short_description = "ORCID"
+
+    def enrollment_status_display(self, obj):
+        """Show visual status indicator"""
+        if not obj.pk:
+            return "—"
+
+        if obj.accepted_at and obj.declined_at:
+            return format_html('<span style="color: orange;">⚠</span>')
+        elif obj.accepted_at:
+            return format_html('<span style="color: green;">✓</span>')
+        elif obj.declined_at:
+            return format_html('<span style="color: red;">✗</span>')
+        else:
+            return format_html('<span style="color: gray;">—</span>')
+
+    enrollment_status_display.short_description = "Status"
+
+    def get_queryset(self, request):
+        """Optimize query with select_related"""
+        qs = super().get_queryset(request)
+        return qs.select_related("person").order_by("-accepted_at", "person__last_name")
 
 
 class UpcomingFilter(admin.SimpleListFilter):
@@ -8,7 +88,7 @@ class UpcomingFilter(admin.SimpleListFilter):
     parameter_name = "when"
 
     def lookups(self, request, model_admin):
-        return [("upcoming", "Upcoming"), ("past", "Past")]
+        return [("upcoming", "Upcoming"), ("past", "Past"), ("deadline", "Deadline")]
 
     def queryset(self, request, queryset):
         today = timezone.localdate()
@@ -16,12 +96,353 @@ class UpcomingFilter(admin.SimpleListFilter):
             return queryset.filter(end_date__gte=today)
         if self.value() == "past":
             return queryset.filter(end_date__lt=today)
+        if self.value() == "deadline":
+            return queryset.filter(application_deadline__gte=today)
         return queryset
 
 
 @admin.register(Program)
-class ProgramAdmin(admin.ModelAdmin):
-    list_display = ("code", "title", "type", "start_date", "end_date")
-    list_filter = ("type", UpcomingFilter)
-    search_fields = ("code", "title")
-    ordering = ("start_date",)
+class ProgramAdmin(FrontendEditableAdminMixin, admin.ModelAdmin):
+
+    list_display = (
+        "code",
+        "title",
+        "type",
+        "start_date",
+        "end_date",
+        "application_deadline",
+        "enrollment_count",
+        "staff_actions",  # NEW: Action buttons
+    )
+    frontend_editable_fields = ("code", "title")
+
+    list_filter = ("type", UpcomingFilter, "online")
+
+    class Media:
+        css = {"all": ("admin/css/custom_admin.css")}
+
+    # Enhanced search - autocomplete will use these fields
+    search_fields = (
+        "code",
+        "title",
+        "abbreviation",
+        "description",
+        "organizer1",
+        "organizer2",
+    )
+
+    ordering = ("-start_date",)  # Most recent first
+
+    # Show enrollments inline on program detail page
+    inlines = [EnrollmentInline]
+
+    # Bulk actions
+    actions = ["export_programs_csv"]
+
+    def get_urls(self):
+        """Add custom URLs for staff tools"""
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                "<int:program_id>/applicants/",
+                self.admin_site.admin_view(self.applicants_view),
+                name="programs_program_applicants",
+            ),
+            path(
+                "<int:program_id>/export-csv/",
+                self.admin_site.admin_view(self.export_applicants_csv),
+                name="programs_program_export_csv",
+            ),
+            path(
+                "<int:program_id>/emails/",
+                self.admin_site.admin_view(self.get_emails_view),
+                name="programs_program_emails",
+            ),
+            path(
+                "<int:program_id>/send-reminder/",
+                self.admin_site.admin_view(self.send_reminder_view),
+                name="programs_program_send_reminder",
+            ),
+        ]
+        return custom_urls + urls
+
+    def enrollment_count(self, obj):
+        """Show number of enrollments"""
+        count = obj.enrollments.count()
+        return f"{count} enrolled"
+
+    enrollment_count.short_description = "Enrollments"
+
+    def staff_actions(self, obj):
+        """Action buttons for each program"""
+        applicants_url = reverse("admin:programs_program_applicants", args=[obj.id])
+        export_url = reverse("admin:programs_program_export_csv", args=[obj.id])
+        emails_url = reverse("admin:programs_program_emails", args=[obj.id])
+        reminder_url = reverse("admin:programs_program_send_reminder", args=[obj.id])
+
+        return format_html(
+            '<a class="button" href="{}" style="padding: 5px 10px; margin: 2px;">👥 Applicants</a> '
+            '<a class="button" href="{}" style="padding: 5px 10px; margin: 2px;">📥 CSV</a> '
+            '<a class="button" href="{}" style="padding: 5px 10px; margin: 2px;">📧 Emails</a> '
+            '<a class="button" href="{}" style="padding: 5px 10px; margin: 2px;">📬 Remind</a>',
+            applicants_url,
+            export_url,
+            emails_url,
+            reminder_url,
+        )
+
+    staff_actions.short_description = "Staff Tools"
+
+    # ========== CUSTOM VIEWS ==========
+
+    def applicants_view(self, request, program_id):
+        """View all applicants for a program"""
+        program = get_object_or_404(Program, id=program_id)
+
+        if not self.has_view_permission(request, program):
+            return HttpResponse("Permission denied", status=403)
+
+        enrollments = (
+            Enrollment.objects.filter(workshop=program)
+            .select_related("person")
+            .order_by("-accepted_at", "person__last_name", "person__first_name")
+        )
+
+        # Compute stats
+        stats = {
+            "total": enrollments.count(),
+            "accepted": enrollments.filter(accepted_at__isnull=False).count(),
+            "declined": enrollments.filter(declined_at__isnull=False).count(),
+            "pending": enrollments.filter(
+                accepted_at__isnull=True, declined_at__isnull=True
+            ).count(),
+        }
+
+        context = {
+            **self.admin_site.each_context(request),
+            "program": program,
+            "enrollments": enrollments,
+            "stats": stats,
+            "title": f"Applicants for {program.title}",
+        }
+
+        return render(request, "admin/programs/applicants.html", context)
+
+    def export_applicants_csv(self, request, program_id):
+        """Export applicants to CSV"""
+        program = get_object_or_404(Program, id=program_id)
+
+        if not self.has_view_permission(request, program):
+            return HttpResponse("Permission denied", status=403)
+
+        enrollments = (
+            Enrollment.objects.filter(workshop=program)
+            .select_related("person")
+            .order_by("person__last_name", "person__first_name")
+        )
+
+        # Create CSV response
+        response = HttpResponse(content_type="text/csv")
+        response["Content-Disposition"] = (
+            f'attachment; filename="program_{program.code}_applicants_'
+            f'{datetime.now().strftime("%Y%m%d")}.csv"'
+        )
+
+        writer = csv.writer(response)
+        writer.writerow(
+            [
+                "Last Name",
+                "First Name",
+                "Email",
+                "ORCID",
+                "Institution",
+                "Status",
+                "Accepted At",
+                "Declined At",
+            ]
+        )
+
+        for enrollment in enrollments:
+            person = enrollment.person
+            if enrollment.accepted_at:
+                status = "Accepted"
+            elif enrollment.declined_at:
+                status = "Declined"
+            else:
+                status = "Pending"
+
+            writer.writerow(
+                [
+                    person.last_name or "",
+                    person.first_name or "",
+                    person.email_address or "",
+                    person.orcid_id or "",
+                    person.institution or "",
+                    status,
+                    (
+                        enrollment.accepted_at.strftime("%Y-%m-%d %H:%M")
+                        if enrollment.accepted_at
+                        else ""
+                    ),
+                    (
+                        enrollment.declined_at.strftime("%Y-%m-%d %H:%M")
+                        if enrollment.declined_at
+                        else ""
+                    ),
+                ]
+            )
+
+        # Log the export
+        self.log_change(
+            request, program, f"Exported {enrollments.count()} applicants to CSV"
+        )
+
+        return response
+
+    def get_emails_view(self, request, program_id):
+        """Show comma-separated emails"""
+        program = get_object_or_404(Program, id=program_id)
+
+        if not self.has_view_permission(request, program):
+            return HttpResponse("Permission denied", status=403)
+
+        # Get accepted applicants' emails (deduplicated)
+        emails = (
+            Enrollment.objects.filter(
+                workshop=program,
+                accepted_at__isnull=False,
+                person__email_address__isnull=False,
+            )
+            .values_list("person__email_address", flat=True)
+            .distinct()
+        )
+
+        emails_list = sorted(list(emails))
+        emails_str = ", ".join(emails_list)
+
+        context = {
+            **self.admin_site.each_context(request),
+            "program": program,
+            "emails": emails_list,
+            "emails_str": emails_str,
+            "count": len(emails_list),
+            "title": f"Emails for {program.title}",
+        }
+
+        return render(request, "admin/programs/emails.html", context)
+
+    def send_reminder_view(self, request, program_id):
+        """Send reminder with confirmation"""
+        program = get_object_or_404(Program, id=program_id)
+
+        if not self.has_change_permission(request, program):
+            return HttpResponse("Permission denied", status=403)
+
+        # Get pending applicants
+        pending = Enrollment.objects.filter(
+            workshop=program,
+            accepted_at__isnull=True,
+            declined_at__isnull=True,
+            person__email_address__isnull=False,
+        ).select_related("person")
+
+        if request.method == "POST":
+            form = SendReminderForm(request.POST)
+
+            if form.is_valid() and form.cleaned_data.get("confirm"):
+                # Send emails (placeholder - will use Django's email backend)
+                sent_count = 0
+                errors = []
+
+                for enrollment in pending:
+                    try:
+                        self._send_reminder_email(
+                            enrollment.person.email_address,
+                            program,
+                            form.cleaned_data["message"],
+                        )
+                        sent_count += 1
+                    except Exception as e:
+                        errors.append(f"{enrollment.person.email_address}: {str(e)}")
+
+                # Log the action
+                self.log_change(
+                    request,
+                    program,
+                    f"Sent reminder to {sent_count} applicants by {request.user.username}",
+                )
+
+                if errors:
+                    messages.warning(
+                        request,
+                        f"Sent {sent_count} emails with {len(errors)} errors: {', '.join(errors[:3])}",
+                    )
+                else:
+                    messages.success(
+                        request, f"Successfully sent {sent_count} reminder emails"
+                    )
+
+                return redirect("admin:programs_program_change", program.id)
+        else:
+            form = SendReminderForm(
+                initial={
+                    "message": f"Reminder: Please respond to your application for {program.title}"
+                }
+            )
+
+        context = {
+            **self.admin_site.each_context(request),
+            "program": program,
+            "pending": pending,
+            "count": pending.count(),
+            "form": form,
+            "title": f"Send Reminder - {program.title}",
+        }
+
+        return render(request, "admin/programs/send_reminder.html", context)
+
+    def _send_reminder_email(self, email, program, message):
+        """Send reminder email using Django's email backend"""
+        from django.core.mail import send_mail
+
+        send_mail(
+            subject=f"Reminder: {program.title}",
+            message=message,
+            from_email="noreply@example.com",  # Update with your from email
+            recipient_list=[email],
+            fail_silently=False,
+        )
+
+    # ========== BULK ACTIONS ==========
+
+    @admin.action(description="Export selected programs to CSV")
+    def export_programs_csv(self, request, queryset):
+        """Bulk export programs"""
+        response = HttpResponse(content_type="text/csv")
+        response["Content-Disposition"] = (
+            f'attachment; filename="programs_{datetime.now().strftime("%Y%m%d")}.csv"'
+        )
+
+        writer = csv.writer(response)
+        writer.writerow(
+            ["Code", "Title", "Type", "Start Date", "End Date", "Enrollments"]
+        )
+
+        for program in queryset.order_by("code"):
+            writer.writerow(
+                [
+                    program.code,
+                    program.title,
+                    program.type,
+                    (
+                        program.start_date.strftime("%Y-%m-%d")
+                        if program.start_date
+                        else ""
+                    ),
+                    program.end_date.strftime("%Y-%m-%d") if program.end_date else "",
+                    program.enrollments.count(),
+                ]
+            )
+
+        self.message_user(request, f"Exported {queryset.count()} programs")
+        return response

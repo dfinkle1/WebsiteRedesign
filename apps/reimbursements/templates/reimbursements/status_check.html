@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Reimbursement Status | AIM{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h1 class="mb-4">Reimbursement Status</h1>
+
+  {% if person %}
+  <p class="lead">
+    Viewing reimbursements for: <strong>{{ person }}</strong>
+  </p>
+  {% endif %}
+
+  {% if user_requests %}
+  <div class="row g-4">
+    {% for req in user_requests %}
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <h5 class="card-title mb-0">
+              <a href="{% url 'reimbursements:detail' req.pk %}" class="text-decoration-none">
+                #{{ req.pk }}
+              </a>
+            </h5>
+            {% if req.status == 'draft' %}
+            <span class="badge bg-secondary">Draft</span>
+            {% elif req.status == 'submitted' %}
+            <span class="badge bg-primary">Submitted</span>
+            {% elif req.status == 'changes_needed' %}
+            <span class="badge bg-warning text-dark">Changes Needed</span>
+            {% elif req.status == 'approved' %}
+            <span class="badge bg-success">Approved</span>
+            {% elif req.status == 'paid' %}
+            <span class="badge" style="background-color: #20c997;">Paid</span>
+            {% elif req.status == 'cancelled' %}
+            <span class="badge bg-danger">Cancelled</span>
+            {% endif %}
+          </div>
+
+          {% if req.enrollment and req.enrollment.workshop %}
+          <p class="card-text text-muted small mb-2">
+            {{ req.enrollment.workshop.title|truncatewords:8 }}
+          </p>
+          {% endif %}
+
+          <p class="card-text h5 mb-2">
+            ${{ req.total_requested|floatformat:2 }}
+          </p>
+
+          {% if req.submitted_at %}
+          <p class="card-text small text-muted mb-0">
+            Submitted: {{ req.submitted_at|date:"M j, Y" }}
+          </p>
+          {% endif %}
+
+          {% if req.status == 'changes_needed' %}
+          <div class="alert alert-warning small mt-2 mb-0 py-2">
+            Action required - changes requested
+          </div>
+          {% endif %}
+        </div>
+        <div class="card-footer bg-transparent">
+          <a href="{% url 'reimbursements:detail' req.pk %}" class="btn btn-sm btn-outline-primary">
+            View Details
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="mt-4">
+    <a href="{% url 'reimbursements:my_reimbursements' %}" class="btn btn-primary">
+      View All Reimbursements
+    </a>
+  </div>
+  {% else %}
+  <div class="alert alert-info">
+    <h5 class="alert-heading">No Reimbursement Requests</h5>
+    <p class="mb-0">You don't have any reimbursement requests yet.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

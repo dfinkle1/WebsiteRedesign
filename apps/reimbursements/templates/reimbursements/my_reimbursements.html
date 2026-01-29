@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}My Reimbursements | AIM{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">My Reimbursements</h1>
+    <a href="{% url 'reimbursements:create' %}" class="btn btn-primary">
+      + New Request
+    </a>
+  </div>
+
+  {# Summary Cards #}
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-2">
+      <div class="card text-center h-100">
+        <div class="card-body">
+          <div class="h3 mb-0">{{ summary.total }}</div>
+          <small class="text-muted">Total</small>
+        </div>
+      </div>
+    </div>
+    {% if summary.draft %}
+    <div class="col-6 col-md-2">
+      <div class="card text-center h-100 border-secondary">
+        <div class="card-body">
+          <div class="h3 mb-0 text-secondary">{{ summary.draft }}</div>
+          <small class="text-muted">Draft</small>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% if summary.submitted %}
+    <div class="col-6 col-md-2">
+      <div class="card text-center h-100 border-primary">
+        <div class="card-body">
+          <div class="h3 mb-0 text-primary">{{ summary.submitted }}</div>
+          <small class="text-muted">Submitted</small>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% if summary.changes_needed %}
+    <div class="col-6 col-md-2">
+      <div class="card text-center h-100 border-warning">
+        <div class="card-body">
+          <div class="h3 mb-0 text-warning">{{ summary.changes_needed }}</div>
+          <small class="text-muted">Needs Changes</small>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% if summary.approved %}
+    <div class="col-6 col-md-2">
+      <div class="card text-center h-100 border-success">
+        <div class="card-body">
+          <div class="h3 mb-0 text-success">{{ summary.approved }}</div>
+          <small class="text-muted">Approved</small>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% if summary.paid %}
+    <div class="col-6 col-md-2">
+      <div class="card text-center h-100" style="border-color: #20c997;">
+        <div class="card-body">
+          <div class="h3 mb-0" style="color: #20c997;">{{ summary.paid }}</div>
+          <small class="text-muted">Paid</small>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  {# Requests Table #}
+  {% if requests %}
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead class="table-light">
+        <tr>
+          <th>ID</th>
+          <th>Status</th>
+          <th>Program</th>
+          <th>Amount</th>
+          <th>Submitted</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for req in requests %}
+        <tr>
+          <td>
+            <a href="{% url 'reimbursements:detail' req.pk %}">#{{ req.pk }}</a>
+          </td>
+          <td>
+            {% if req.status == 'draft' %}
+            <span class="badge bg-secondary">Draft</span>
+            {% elif req.status == 'submitted' %}
+            <span class="badge bg-primary">Submitted</span>
+            {% elif req.status == 'changes_needed' %}
+            <span class="badge bg-warning text-dark">Changes Needed</span>
+            {% elif req.status == 'approved' %}
+            <span class="badge bg-success">Approved</span>
+            {% elif req.status == 'paid' %}
+            <span class="badge" style="background-color: #20c997;">Paid</span>
+            {% elif req.status == 'cancelled' %}
+            <span class="badge bg-danger">Cancelled</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if req.enrollment and req.enrollment.workshop %}
+              {{ req.enrollment.workshop.title|truncatewords:5 }}
+            {% else %}
+              <span class="text-muted">Staff/Other</span>
+            {% endif %}
+          </td>
+          <td>
+            ${{ req.total_requested|floatformat:2 }}
+            {% if req.total_approved %}
+              <br><small class="text-success">Approved: ${{ req.total_approved|floatformat:2 }}</small>
+            {% endif %}
+          </td>
+          <td>
+            {% if req.submitted_at %}
+              {{ req.submitted_at|date:"M j, Y" }}
+            {% else %}
+              <span class="text-muted">Not submitted</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if req.status == 'draft' or req.status == 'changes_needed' %}
+            <a href="{% url 'reimbursements:edit' req.pk %}" class="btn btn-sm btn-primary">
+              Edit
+            </a>
+            {% else %}
+            <a href="{% url 'reimbursements:detail' req.pk %}" class="btn btn-sm btn-outline-primary">
+              View
+            </a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="alert alert-info">
+    <h5 class="alert-heading">No Reimbursement Requests</h5>
+    <p>You haven't submitted any reimbursement requests yet.</p>
+    <a href="{% url 'reimbursements:create' %}" class="btn btn-primary">
+      + Create Your First Request
+    </a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

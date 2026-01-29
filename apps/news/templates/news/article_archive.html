@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}News Archive | AIM{% endblock title %}
+
+{% block content %}
+<div class="container py-5">
+  <nav class="mb-3" aria-label="Breadcrumb">
+    <a href="{% url 'news:article_list' %}" class="text-decoration-none">&larr; Back to News</a>
+  </nav>
+
+  <h1 class="h2 mb-4">News Archive</h1>
+
+  {% if years %}
+  <div class="row g-3">
+    {% for item in years %}
+    <div class="col-6 col-md-4 col-lg-3">
+      <a href="{% url 'news:article_year' year=item.year %}"
+         class="card text-decoration-none h-100">
+        <div class="card-body text-center">
+          <span class="h3 mb-0">{{ item.year }}</span>
+        </div>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-muted">No archived articles yet.</p>
+  {% endif %}
+</div>
+{% endblock content %}

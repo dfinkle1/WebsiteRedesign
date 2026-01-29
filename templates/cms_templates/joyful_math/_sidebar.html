@@ -1,0 +1,30 @@
+{% comment %}
+Reusable sidebar navigation for Joyful Mathematics section.
+Auto-detects active section from request.path.
+{% endcomment %}
+<div class="nav flex-column nav-pills me-3"
+     id="v-pills-tab"
+     role="tablist"
+     aria-orientation="vertical">
+   <a class="nav-link {% if request.path == '/joyful-mathematics/' %}active{% endif %}"
+      href="/joyful-mathematics/"
+      role="tab">Joyful Mathematics For All</a>
+   <a class="nav-link {% if request.path == '/joyful-mathematics/math-circles/' %}active{% endif %}"
+      href="/joyful-mathematics/math-circles/"
+      role="tab">Math Circle Network</a>
+   <a class="nav-link {% if request.path == '/joyful-mathematics/math-communities/' %}active{% endif %}"
+      href="/joyful-mathematics/math-communities/"
+      role="tab">Math Communities</a>
+   <a class="nav-link {% if request.path == '/joyful-mathematics/match/' %}active{% endif %}"
+      href="/joyful-mathematics/match/"
+      role="tab">MATCH</a>
+   <a class="nav-link {% if request.path == '/joyful-mathematics/math-on-the-border/' %}active{% endif %}"
+      href="/joyful-mathematics/math-on-the-border/"
+      role="tab">Math On The Border</a>
+   <a class="nav-link {% if request.path == '/joyful-mathematics/morgan-hill-math/' %}active{% endif %}"
+      href="/joyful-mathematics/morgan-hill-math/"
+      role="tab">Morgan Hill Math</a>
+   <a class="nav-link {% if request.path == '/joyful-mathematics/affiliated-programs/' %}active{% endif %}"
+      href="/joyful-mathematics/affiliated-programs/"
+      role="tab">Affiliated Programs</a>
+</div>

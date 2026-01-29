@@ -11,13 +11,27 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "127.0.0.1:80000"]
 
 env = environ.Env()
 env.read_env(BASE_DIR / ".env")
 
-SECRET_KEY = env("SECRET_KEY", default="unsafe-secret-key")
+# SECRET_KEY is required - will raise ImproperlyConfigured if not set
+# In development, set it in .env file
+# In production, set it via environment variable
+try:
+    SECRET_KEY = env("SECRET_KEY")
+except Exception:
+    # Only allow default in development
+    if os.getenv("DEBUG", "0") == "1":
+        SECRET_KEY = "dev-only-insecure-key-change-in-production"
+    else:
+        raise Exception(
+            "SECRET_KEY environment variable is required. "
+            "Generate one with: python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'"
+        )
+
 DEBUG = False  # Overridden in dev/prod
+
 
 INSTALLED_APPS = [
     # Project apps
@@ -58,8 +72,9 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.orcid",
     # django CMS core
     # django CMS addons
-    "djangocms_frontend",
     "djangocms_text.contrib.text_ckeditor4",
+    "djangocms_text",
+    "djangocms_frontend",
     "djangocms_frontend.contrib.accordion",
     "djangocms_frontend.contrib.alert",
     "djangocms_frontend.contrib.badge",
@@ -75,7 +90,6 @@ INSTALLED_APPS = [
     "djangocms_frontend.contrib.media",
     "djangocms_frontend.contrib.tabs",
     "djangocms_frontend.contrib.utilities",
-    "djangocms_text",
     "djangocms_link",
     "djangocms_versioning",
     "djangocms_alias",
@@ -89,6 +103,36 @@ INSTALLED_APPS = [
     "filer",
 ]
 
+TEXT_EDITOR = "djangocms_text.contrib.text_ckeditor4.ckeditor4"
+CKEDITOR_CONFIGS = {
+    "default": {
+        "toolbar": "Custom",
+        "toolbar_Custom": [
+            [
+                "Bold",
+                "Italic",
+                "Underline",
+                "-",
+                "NumberedList",
+                "BulletedList",
+                "-",
+                "Link",
+                "Unlink",
+            ],
+            [
+                "LineHeight",
+                "FontSize",
+                "Maximize",
+                "Source",
+            ],  # Add 'LineHeight' to the toolbar
+        ],
+        "extraPlugins": "lineheight,someotherplugin",  # Add 'lineheight' to extraPlugins (as a single comma-separated string)
+        "line_height": "1em;1.1em;1.2em;1.4em;1.5em;2em",  # Optional: Define custom line height values
+        "height": 300,
+        "width": "100%",  # Use '100%' for a responsive width
+    },
+}
+
 X_FRAME_OPTIONS = "SAMEORIGIN"
 CORS_ALLOWED_ORIGINS = ["https://127.0.0.1:8000"]
 CORS_ALLOW_HEADERS = (
@@ -100,30 +144,29 @@ CORS_ALLOW_HEADERS = (
     "x-requested-with",
 )
 
-# TEXT_EDITOR = "djangocms_text.contrib.text_ckeditor4.ckeditor4"
+
 DEBUG_TOOLBAR_PANELS = [p for p in PANELS_DEFAULTS if "profiling" not in p]
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # Must be right after SecurityMiddleware
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "django.middleware.locale.LocaleMiddleware",
+    # "django.middleware.locale.LocaleMiddleware",  # Disabled - no i18n URL prefixes
     "cms.middleware.user.CurrentUserMiddleware",
     "cms.middleware.page.CurrentPageMiddleware",
     "cms.middleware.toolbar.ToolbarMiddleware",
     "cms.middleware.language.LanguageCookieMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
     "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "mysite.urls"
 WSGI_APPLICATION = "mysite.wsgi.application"
-
 
 # Templates
 TEMPLATES = [
@@ -149,12 +192,25 @@ TEMPLATES = [
 
 # Django-allauth-settings
 
-# settings.py
-SOCIALACCOUNT_ADAPTER = "accounts.adapter.OrcidAdapter"
+# Disabled custom adapter - let allauth handle OAuth naturally
+# SOCIALACCOUNT_ADAPTER = "accounts.adapter.OrcidAdapter"
 
-ACCOUNT_UNIQUE_EMAIL = True  # keep email unique across users
-ACCOUNT_EMAIL_VERIFICATION = "optional"  # or "mandatory" if you want verified emails
+# Modern allauth settings (v2.0+)
+ACCOUNT_EMAIL_VERIFICATION = "none"  # Required for OAuth-only mode
+ACCOUNT_UNIQUE_EMAIL = (
+    False  # Don't require unique emails (ORCID ID is the unique identifier)
+)
 SOCIALACCOUNT_STORE_TOKENS = True
+SOCIALACCOUNT_AUTO_SIGNUP = True  # Allow automatic user creation on OAuth login
+SOCIALACCOUNT_EMAIL_REQUIRED = False  # ORCID might not return email
+SOCIALACCOUNT_ONLY = True  # Disable password-based authentication (OAuth only)
+
+# Use username for login (required for OAuth without unique email)
+ACCOUNT_SIGNUP_FIELDS = ["username"]  # Minimal signup - username only
+
+# Disable features not needed for OAuth-only authentication
+ACCOUNT_CHANGE_EMAIL = False  # Users can't change email (managed in profile)
+ACCOUNT_EMAIL_NOTIFICATIONS = False  # No email notifications
 
 
 AUTHENTICATION_BACKENDS = [
@@ -167,14 +223,16 @@ AUTHENTICATION_BACKENDS = [
 SOCIALACCOUNT_PROVIDERS = {
     "orcid": {
         # Base domain of the API. Default value: 'orcid.org', for the production API
-        "BASE_DOMAIN": "sandbox.orcid.org",  # for the sandbox API
+        "BASE_DOMAIN": "orcid.org",
         "MEMBER_API": False,  # for the member API
-        "SCOPE": ["/authenticate"],
+        "SCOPE": ["/authenticate"],  # Basic authentication only
     }
 }
 
 
 LOGIN_URL = "/accounts/login/"
+LOGIN_REDIRECT_URL = "/accounts/dashboard/"
+ACCOUNT_LOGOUT_REDIRECT_URL = "/accounts/login/"
 
 
 #
@@ -184,30 +242,100 @@ CMS_CONFIRM_VERSION4 = True
 DJANGOCMS_VERSIONING_ALLOW_DELETING_VERSIONS = True
 
 
-# TEXT_INLINE_EDITING = True
-# TEXT_ADDITIONAL_TAGS = ("iframe",)
-# TEXT_ADDITIONAL_ATTRIBUTES = (
-#     "scrolling",
-#     "allowfullscreen",
-#     "frameborder",
-#     "src",
-#     "height",
-#     "width",
-# )
-
 CMS_TEMPLATES = [
     ("new_page_template.html", "New Page Template"),
-    ("cms_templates/about.html", "About"),
-    ("cms_templates/focused-landing.html", "Focused Collaborative Research"),
-    ("cms_templates/joyfulmathematics.html", "Joyful Mathematics Template"),
-    ("cms_templates/visiting.html", "Visiting Template"),
-    ("cms_templates/resources.html", "Resources Template"),
+    # === OLD TEMPLATES (DEPRECATED - Use new route-based versions below) ===
+    ("cms_templates/about.html", "About (OLD - DEPRECATED)"),
+    (
+        "cms_templates/focused-landing.html",
+        "Focused Collaborative Research (OLD - DEPRECATED)",
+    ),
+    ("cms_templates/joyfulmathematics.html", "Joyful Mathematics (OLD - DEPRECATED)"),
+    ("cms_templates/visiting.html", "Visiting (OLD - DEPRECATED)"),
+    ("cms_templates/resources.html", "Resources (OLD - DEPRECATED)"),
+    # === FOCUSED RESEARCH SECTION ===
+    ("cms_templates/focused_research/landing.html", "Focused Research - Overview"),
+    (
+        "cms_templates/focused_research/workshops_landing.html",
+        "Focused Research - Workshops",
+    ),
+    (
+        "cms_templates/focused_research/squares_landing.html",
+        "Focused Research - SQuaREs",
+    ),
+    (
+        "cms_templates/focused_research/research_communities.html",
+        "Focused Research - Research Communities",
+    ),
+    ("cms_templates/focused_research/reuf.html", "Focused Research - REUF"),
+    (
+        "cms_templates/focused_research/diversity.html",
+        "Focused Research - Diversity Initiative",
+    ),
+    (
+        "cms_templates/focused_research/alexanderson_award.html",
+        "Focused Research - Alexanderson Award",
+    ),
+    # === JOYFUL MATHEMATICS SECTION ===
+    ("cms_templates/joyful_math/landing.html", "Joyful Math - Overview"),
+    (
+        "cms_templates/joyful_math/math_circles.html",
+        "Joyful Math - Math Circle Network",
+    ),
+    (
+        "cms_templates/joyful_math/math_communities.html",
+        "Joyful Math - Math Communities",
+    ),
+    ("cms_templates/joyful_math/match.html", "Joyful Math - MATCH"),
+    (
+        "cms_templates/joyful_math/math_on_the_border.html",
+        "Joyful Math - Math On The Border",
+    ),
+    (
+        "cms_templates/joyful_math/morgan_hill_math.html",
+        "Joyful Math - Morgan Hill Math",
+    ),
+    (
+        "cms_templates/joyful_math/affiliated_programs.html",
+        "Joyful Math - Affiliated Programs",
+    ),
+    # === VISITING SECTION ===
+    ("cms_templates/visiting/landing.html", "Visiting - Overview"),
+    ("cms_templates/visiting/code_of_conduct.html", "Visiting - Code of Conduct"),
+    ("cms_templates/visiting/local_information.html", "Visiting - Local Information"),
+    ("cms_templates/visiting/travel_guidelines.html", "Visiting - Travel Guidelines"),
+    ("cms_templates/visiting/child_care.html", "Visiting - Child Care"),
+    ("cms_templates/visiting/explore_pasadena.html", "Visiting - Explore Pasadena"),
+    ("cms_templates/visiting/facilities.html", "Visiting - Facilities"),
+    ("cms_templates/visiting/accessibility.html", "Visiting - Accessibility"),
+    ("cms_templates/visiting/faq.html", "Visiting - FAQ"),
+    # === RESOURCES SECTION ===
+    ("cms_templates/resources/landing.html", "Resources - Overview"),
+    ("cms_templates/resources/careers_advice.html", "Resources - Careers Advice"),
+    (
+        "cms_templates/resources/open_textbook.html",
+        "Resources - Open Textbook Initiative",
+    ),
+    ("cms_templates/resources/videos.html", "Resources - Videos"),
+    ("cms_templates/resources/problem_lists.html", "Resources - Problem Lists"),
+    ("cms_templates/resources/preprint_series.html", "Resources - Preprint Series"),
+    ("cms_templates/resources/published_papers.html", "Resources - Published Papers"),
+    # === ABOUT SECTION ===
+    ("cms_templates/about/landing.html", "About - Overview"),
+    ("cms_templates/about/contact.html", "About - Contact"),
+    ("cms_templates/about/staff.html", "About - Staff"),
+    ("cms_templates/about/governance.html", "About - Governance"),
+    ("cms_templates/about/diversity_statement.html", "About - Diversity"),
+    ("cms_templates/about/mission_history.html", "About - Mission & History"),
+    ("cms_templates/about/past_programs.html", "About - Past Programs"),
+    # === OTHER ===
     ("cms_templates/news.html", "News Template"),
     ("FRG/frg-resources.html", "FRG Resources"),
     ("FRG/frg-activities.html", "FRG Activities"),
     ("FRG/frg-landing.html", "FRG Landing Page"),
     ("FRG/frg-papers.html", "FRG Papers"),
     ("donate.html", "Donation Page"),
+    ("programs/workshops_base.html", "Workshop Page"),
 ]
 
 # Internationalization

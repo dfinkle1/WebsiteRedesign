@@ -1,6 +1,6 @@
 <div class="scrolling-wrapper-flexbox gap-3" id="horizontal-container">
     {% for article in articles %}
-        <a href="{% url 'news-article-detail' article.slug %}"
+        <a href="{% url 'news:article_list' %}"
            target="_blank"
            class="news-card-link">
             <div class="card news-card">

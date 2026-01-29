@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+    Workshops - AIM
+{% endblock title %}
+{% block content %}
+    <section class="header-banner" tag="banner">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <img src="{% static 'images/aim_white.png' %}"
+                         alt="AIM Logo"
+                         class="fluid"
+                         height="100px">
+                </div>
+                <div class="col">
+                    <h2>Focused Collaborative Research</h2>
+                    <span class="fst-italic">The American Institute of Mathematics</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="container">
+        <div class="row mt-5 mb-4">
+            <!-- Side Navigation (same as CMS page) -->
+            <div class="col-lg-3">
+                <div class="d-flex align-items-start">
+                    <div class="nav flex-column nav-pills me-3"
+                         id="v-pills-tab"
+                         role="tablist"
+                         aria-orientation="vertical">
+                        <a class="nav-link" href="/focused-collaborative-research/" role="tab">Focused Collaborative Research</a>
+                        <!-- Workshops is active when on any workshop page -->
+                        <a class="nav-link active"
+                           href="{% url 'programs:upcoming_workshops' %}"
+                           role="tab">Workshops</a>
+                        <a class="nav-link" href="/squares/upcoming/" role="tab">SQuaREs</a>
+                        <a class="nav-link" href="/research-communities/" role="tab">Research Communities</a>
+                        <a class="nav-link" href="/reuf/" role="tab">Research Experiences for Undergraduate Faculty</a>
+                        <a class="nav-link" href="/diversity/" role="tab">Diversity Initiative</a>
+                        <a class="nav-link" href="/alexanderson-award/" role="tab">Alexanderson Award</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Content Area -->
+            <div class="col theme-bg rounded">
+                <div class="p-3">
+                    <!-- Workshop sub-navigation tabs -->
+                    <ul class="nav nav-tabs mb-4" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'workshops-upcoming' %}active{% endif %}"
+                               href="{% url 'programs:upcoming_workshops' %}">Upcoming</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'workshops-past' %}active{% endif %}"
+                               href="{% url 'programs:past-workshops' %}">Past</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/workshops/propose/">Propose a Workshop</a>
+                        </li>
+                    </ul>
+                    <!-- Page-specific content goes here -->
+                    {% block workshop_content %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
