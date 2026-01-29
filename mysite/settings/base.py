@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     # Project apps
     "mysite",
     "apps.reimbursements.apps.ReimbursementsConfig",
-    "apps.workshops.apps.WorkshopsConfig",
     "apps.frg.apps.FrgConfig",
     # "apps.core.apps.CoreConfig",
     "apps.staff.apps.StaffConfig",
