@@ -1,21 +1,134 @@
 from django.contrib import admin
-from .models import Newsletter, NewsArticle
-from djangocms_text.widgets import TextEditorWidget
-from djangocms_text.contrib.text_ckeditor4 import ckeditor4
 from django.db import models
+from django.utils.html import format_html
+from djangocms_text.widgets import TextEditorWidget
+from .models import NewsArticle, Newsletter
 
 
-@admin.register(Newsletter)
-class NewsletterAdmin(admin.ModelAdmin):
-    list_display = ("title", "pdf_file", "photo")
-
-
+@admin.register(NewsArticle)
 class NewsArticleAdmin(admin.ModelAdmin):
-    # form = NewsArticleForm
-    list_display = ("title", "slug", "published_date")
+    list_display = [
+        "title",
+        "published_at",
+        "is_published",
+        "is_featured",
+        "image_preview",
+    ]
+    list_filter = ["is_published", "is_featured", "published_at"]
+    search_fields = ["title", "excerpt", "body"]
+    prepopulated_fields = {"slug": ("title",)}
+    date_hierarchy = "published_at"
+    ordering = ["-published_at"]
+    list_editable = ["is_published", "is_featured"]
+    readonly_fields = ["created_at", "updated_at"]
+
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": ("title", "slug", "body", "excerpt"),
+            },
+        ),
+        (
+            "Media",
+            {
+                "fields": ("featured_image",),
+            },
+        ),
+        (
+            "Publishing",
+            {
+                "fields": ("is_published", "is_featured", "published_at"),
+            },
+        ),
+        (
+            "Metadata",
+            {
+                "fields": ("created_at", "updated_at"),
+                "classes": ("collapse",),
+            },
+        ),
+    )
+
     formfield_overrides = {
         models.TextField: {"widget": TextEditorWidget},
     }
 
+    def image_preview(self, obj):
+        if obj.featured_image:
+            return format_html(
+                '<img src="{}" width="50" height="50" '
+                'style="object-fit: cover; border-radius: 4px;" />',
+                obj.featured_image.url,
+            )
+        return "-"
 
-admin.site.register(NewsArticle, NewsArticleAdmin)
+    image_preview.short_description = "Image"
+
+
+@admin.register(Newsletter)
+class NewsletterAdmin(admin.ModelAdmin):
+    list_display = [
+        "title",
+        "issue_date",
+        "volume_issue",
+        "is_published",
+        "cover_preview",
+    ]
+    list_filter = ["is_published", "issue_date"]
+    search_fields = ["title", "description"]
+    prepopulated_fields = {"slug": ("title",)}
+    date_hierarchy = "issue_date"
+    ordering = ["-issue_date"]
+    list_editable = ["is_published"]
+    readonly_fields = ["created_at", "updated_at"]
+
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": ("title", "slug", "description"),
+            },
+        ),
+        (
+            "Issue Details",
+            {
+                "fields": ("issue_date", "volume", "issue_number"),
+            },
+        ),
+        (
+            "Files",
+            {
+                "fields": ("pdf_file", "cover_image"),
+            },
+        ),
+        (
+            "Publishing",
+            {
+                "fields": ("is_published",),
+            },
+        ),
+        (
+            "Metadata",
+            {
+                "fields": ("created_at", "updated_at"),
+                "classes": ("collapse",),
+            },
+        ),
+    )
+
+    def volume_issue(self, obj):
+        return obj.issue_label or "-"
+
+    volume_issue.short_description = "Vol/Issue"
+
+    def cover_preview(self, obj):
+        if obj.cover_image:
+            return format_html(
+                '<img src="{}" width="40" height="50" '
+                'style="object-fit: cover; border-radius: 2px;" />',
+                obj.cover_image.url,
+            )
+        return "-"
+
+    cover_preview.short_description = "Cover"

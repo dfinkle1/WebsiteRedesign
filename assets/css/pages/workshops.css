@@ -1,0 +1,31 @@
+/* Past Workshops Page Styles */
+
+.workshop-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.workshop-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.workshop-date {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.filter-section {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.workshop-code {
+    background: #007bff;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}

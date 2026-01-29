@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
+from programs.views import home
 import debug_toolbar
 
 # All URLs (no language prefix)
@@ -14,7 +15,8 @@ urlpatterns = [
     path("", include("programs.urls")),
     path("events/", include("apps.events.urls")),
     path("news/", include("apps.news.urls")),
-    path("", include("apps.reimbursements.urls")),
+    path("reimbursements/", include("apps.reimbursements.urls")),
+    path("", home, name="index"),
     # CMS handles everything else - must be last
     path("", include("cms.urls")),
 ]

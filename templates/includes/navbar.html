@@ -40,20 +40,19 @@
                             <div class="d-flex flex-wrap">
                                 <div class="flex-fill">
                                     <h6 class="dropdown-header">Workshops</h6>
-                                    <a class="dropdown-item" href="{{ collaborative_url }}#workshops">Workshops</a>
-                                    <a class="dropdown-item" href="{{ collaborative_url }}#squares">SQuaREs</a>
+                                    <a class="dropdown-item" href="/workshops/">Workshops</a>
+                                    <a class="dropdown-item" href="/squares/">SQuaREs</a>
                                 </div>
                                 <div class="flex-fill">
                                     <h6 class="dropdown-header">Projects</h6>
-                                    <a class="dropdown-item"
-                                       href="{{ collaborative_url }}#research-communities">Research Communities</a>
-                                    <a class="dropdown-item" href="{{ collaborative_url }}#reuf">REUF</a>
-                                    <a class="dropdown-item" href="{{ collaborative_url }}#roots-of-unity">Roots of Unity</a>
+                                    <a class="dropdown-item" href="/research-communities/">Research Communities</a>
+                                    <a class="dropdown-item" href="{{ collaborative_url }}reuf/">REUF</a>
+                                    <a class="dropdown-item" href="{{ collaborative_url }}diversity/">Roots of Unity</a>
                                 </div>
                                 <div class="flex-fill">
                                     <h6 class="dropdown-header">Other</h6>
                                     <a class="dropdown-item"
-                                       href="{{ collaborative_url }}#alexanderson-award">Alexanderson Award</a>
+                                       href="{{ collaborative_url }}alexanderson-award">Alexanderson Award</a>
                                     <a class="dropdown-item" href="{% page_url 'frg' %}">FRG</a>
                                 </div>
                             </div>
@@ -72,14 +71,14 @@
                             <div class="d-flex flex-wrap">
                                 <div class="flex-fill">
                                     <h6 class="dropdown-header">Partnerships</h6>
-                                    <a class="dropdown-item" href="{{ joyful_url }}#math-circles">Math Circle Network</a>
-                                    <a class="dropdown-item" href="{{ joyful_url }}#math-communities">Math Communities</a>
+                                    <a class="dropdown-item" href="{{ joyful_url }}math-circles">Math Circle Network</a>
+                                    <a class="dropdown-item" href="{{ joyful_url }}math-communities">Math Communities</a>
                                 </div>
                                 <div class="flex-fill">
                                     <h6 class="dropdown-header">Other</h6>
-                                    <a class="dropdown-item" href="{{ joyful_url }}#match">MATCH</a>
-                                    <a class="dropdown-item" href="{{ joyful_url }}#math-border">Math on the Border</a>
-                                    <a class="dropdown-item" href="{{ joyful_url }}#morgan-hill">Morgan Hill Math</a>
+                                    <a class="dropdown-item" href="{{ joyful_url }}match">MATCH</a>
+                                    <a class="dropdown-item" href="{{ joyful_url }}math-border">Math on the Border</a>
+                                    <a class="dropdown-item" href="{{ joyful_url }}morgan-hill-math">Morgan Hill Math</a>
                                 </div>
                             </div>
                         </ul>
@@ -94,14 +93,14 @@
                            aria-expanded="false"
                            aria-haspopup="true">Visiting</a>
                         <ul class="dropdown-menu">
-                            <a class="dropdown-item" href="{{ visiting_url }}#code-of-conduct">Code of Conduct</a>
-                            <a class="dropdown-item" href="{{ visiting_url }}#local-information">Local Information</a>
-                            <a class="dropdown-item" href="{{ visiting_url }}#travel-guidelines">Travel Guidelines</a>
-                            <a class="dropdown-item" href="{{ visiting_url }}#child-care">Child Care</a>
-                            <a class="dropdown-item" href="{{ visiting_url }}#explore-pasadena">Explore Pasadena</a>
-                            <a class="dropdown-item" href="{{ visiting_url }}#facilities">Facilities</a>
-                            <a class="dropdown-item" href="{{ visiting_url }}#accessibility">Accessibility</a>
-                            <a class="dropdown-item" href="{{ visiting_url }}#faq">FAQ</a>
+                            <a class="dropdown-item" href="{{ visiting_url }}code-of-conduct">Code of Conduct</a>
+                            <a class="dropdown-item" href="{{ visiting_url }}local-information">Local Information</a>
+                            <a class="dropdown-item" href="{{ visiting_url }}travel-guidelines">Travel Guidelines</a>
+                            <a class="dropdown-item" href="{{ visiting_url }}child-care">Child Care</a>
+                            <a class="dropdown-item" href="{{ visiting_url }}explore-pasadena">Explore Pasadena</a>
+                            <a class="dropdown-item" href="{{ visiting_url }}facilities">Facilities</a>
+                            <a class="dropdown-item" href="{{ visiting_url }}accessibility">Accessibility</a>
+                            <a class="dropdown-item" href="{{ visiting_url }}faq">FAQ</a>
                         </ul>
                     </li>
                 {% endif %}
@@ -117,13 +116,12 @@
                             <div class="d-flex flex-wrap">
                                 <div class="flex-fill">
                                     <h6 class="dropdown-header">Resources</h6>
-                                    <a class="dropdown-item" href="{{ resources_url }}#careers-advice">Math Careers Advice</a>
-                                    <a class="dropdown-item"
-                                       href="{{ resources_url }}#open-textbook-initiative">Open Textbook Initiative</a>
-                                    <a class="dropdown-item" href="{{ resources_url }}#videos">Videos</a>
-                                    <a class="dropdown-item" href="{{ resources_url }}#problem-list">Problem Lists</a>
-                                    <a class="dropdown-item" href="{{ resources_url }}#preprint-series">Preprint Series</a>
-                                    <a class="dropdown-item" href="{{ resources_url }}#published-paper">Published Papers</a>
+                                    <a class="dropdown-item" href="/careers-advice">Math Careers Advice</a>
+                                    <a class="dropdown-item" href="/open-textbook-initiative">Open Textbook Initiative</a>
+                                    <a class="dropdown-item" href="/videos">Videos</a>
+                                    <a class="dropdown-item" href="/problem-list">Problem Lists</a>
+                                    <a class="dropdown-item" href="/preprint-series">Preprint Series</a>
+                                    <a class="dropdown-item" href="/published-papers">Published Papers</a>
                                 </div>
                                 <div class="flex-fill">
                                     <h6 class="dropdown-header">Library</h6>
@@ -142,11 +140,11 @@
                            aria-expanded="false"
                            aria-haspopup="true">About</a>
                         <ul class="dropdown-menu">
-                            <a class="dropdown-item" href="{{ about_url }}#contact">Contact</a>
-                            <a class="dropdown-item" href="{{ about_url }}#staff">Staff</a>
-                            <a class="dropdown-item" href="{{ about_url }}#governance">Governance</a>
+                            <a class="dropdown-item" href="/contact/">Contact</a>
+                            <a class="dropdown-item" href="/staff/">Staff</a>
+                            <a class="dropdown-item" href="/governance/">Governance</a>
                             {# <a class="dropdown-item" href="{{ about_url }}#diversity">Diversity</a> #}
-                            <a class="dropdown-item" href="{{ about_url }}#mission-history">Mission & History</a>
+                            <a class="dropdown-item" href="/mission/">Mission & History</a>
                         </ul>
                     </li>
                 {% endif %}
@@ -159,15 +157,16 @@
                            aria-expanded="false"
                            aria-haspopup="true">News</a>
                         <ul class="dropdown-menu">
-                            <a class="dropdown-item" href="{{ news_url }}#news-letter">Newsletter</a>
-                            <a class="dropdown-item" href="{{ news_url }}#news-stories">News Stories</a>
+                            <a class="dropdown-item" href="{{ news_url }}newsletters/">Newsletter</a>
+                            <a class="dropdown-item" href="{{ news_url }}">News Stories</a>
                         </ul>
                     </li>
                 {% endif %}
                 <!-- Support AIM -->
                 <li class="nav-item">
                     {% page_url 'donate' as donate_url %}
-                    <a class="nav-link" href="{% if donate_url %}{{ donate_url }}{% else %}#support{% endif %}">Support AIM</a>
+                    <a class="nav-link"
+                       href="{% if donate_url %}{{ donate_url }}{% else %}#support{% endif %}">Support AIM</a>
                 </li>
                 <li class="nav-item dropdown">
                     <button class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle"

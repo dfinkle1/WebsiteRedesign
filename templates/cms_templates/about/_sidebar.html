@@ -1,0 +1,30 @@
+{% comment %}
+Reusable sidebar navigation for About section.
+Auto-detects active section from request.path.
+{% endcomment %}
+<div class="nav flex-column nav-pills me-3"
+     id="v-pills-tab"
+     role="tablist"
+     aria-orientation="vertical">
+    <a class="nav-link {% if request.path == '/about/' %}active{% endif %}"
+       href="/about/"
+       role="tab">About</a>
+    <a class="nav-link {% if request.path == '/contact/' %}active{% endif %}"
+       href="/contact/"
+       role="tab">Contact</a>
+    <a class="nav-link {% if request.path == '/staff/' %}active{% endif %}"
+       href="/staff/"
+       role="tab">Staff</a>
+    <a class="nav-link {% if request.path == '/governance/' %}active{% endif %}"
+       href="/governance/"
+       role="tab">Governance</a>
+    <a class="nav-link {% if request.path == '/diversity-statement/' %}active{% endif %}"
+       href="/diversity-statement/"
+       role="tab">Diversity</a>
+    <a class="nav-link {% if request.path == '/mission/' %}active{% endif %}"
+       href="/mission/"
+       role="tab">Mission & History</a>
+    <a class="nav-link {% if request.path == '/past-programs/' %}active{% endif %}"
+       href="/past-programs/"
+       role="tab">Past Programs</a>
+</div>

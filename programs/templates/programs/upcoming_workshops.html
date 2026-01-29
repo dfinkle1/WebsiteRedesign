@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+    Past Workshops - AIM
+{% endblock title %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/pages/workshops.css' %}">
+{% endblock extra_css %}
+{% block content %}
+    <div class="container py-5">
+        <div class="row mb-4">
+            <div class="col">
+                <h1 class="display-4">Upcoming Workshops</h1>
+            </div>
+        </div>
+        <div class="container mt-4 mb-4 p-4 theme-bg">
+            <p>
+                Each AIM workshop has places reserved for applicants. Successful applicants for in-person workshops receive funding for travel and accommodations for participation in the workshop. The workshops marked with an * below are still accepting applications. The AIM style workshop features a limited number of talks and significant time devoted to organized group activities.
+            </p>
+            {% for w in workshops %}
+                <a href="{% url 'programs:program-page' w.code %}">{{ w.title }} — {{ w.get_type_display }}</a><time datetime="{{ w.start_date|date:'c' }}">
+                    {{ w.start_date|date:"M j, Y" }} - {{ w.end_date|date:"M j, Y" }}
+                </time>
+                <br>
+                <br>
+            {% empty %}
+                <li>No workshops found.</li>
+            {% endfor %}
+        </div>
+    {% endblock content %}

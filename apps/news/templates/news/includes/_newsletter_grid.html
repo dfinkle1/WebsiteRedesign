@@ -1,0 +1,12 @@
+{# Newsletter grid for homepage - expects: newsletters #}
+{% if newsletters %}
+<div class="row g-4">
+  {% for newsletter in newsletters %}
+  <div class="col-md-6 col-lg-4">
+    {% include "news/includes/_newsletter_card.html" %}
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<p class="text-muted">No newsletters available.</p>
+{% endif %}

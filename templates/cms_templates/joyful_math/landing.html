@@ -1,0 +1,14 @@
+{% extends "cms_templates/joyful_math/base.html" %}
+{% load cms_tags static %}
+
+{% block page_title %}Joyful Mathematics For All - AIM{% endblock page_title %}
+
+{% block page_content %}
+    <h1>Joyful Mathematics For All</h1>
+    <img src="{% static 'images/landing/JFMA-landing.jpg' %}"
+         alt="People playing with tiles from AIMs Math Fair"
+         class="img-fluid float-end ms-2 mb-2"
+         width="450px" />
+
+    {% placeholder "Joyful-Math-content" %}
+{% endblock page_content %}

@@ -81,7 +81,7 @@
                       <li>
                         <article class="card">
                           <h5 class="card-title">
-                            <a href="{% url 'program-page' w.code %}">
+                            <a href="{% url 'programs:program-page' w.code %}">
                               {% if w.application_deadline > now %}<span aria-label="Applications open">*</span>{% endif %}
                               {{ w.title }}
                               {% if w.title_abbreviation %}<small class="opacity-70">({{ w.title_abbreviation }})</small>{% endif %}
@@ -95,7 +95,9 @@
                         </article>
                       </li>
                     {% empty %}
-                      <li><p>No upcoming workshops yet—check back soon.</p></li>
+                      <li>
+                        <p>No upcoming workshops yet—check back soon.</p>
+                      </li>
                     {% endfor %}
                   </section>
                 </ul>

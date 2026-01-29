@@ -1,0 +1,132 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    .stats-box {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    .stats-box table {
+        width: 100%;
+        max-width: 400px;
+    }
+    .stats-box td {
+        padding: 5px 10px;
+    }
+    .stats-box strong {
+        font-weight: 600;
+    }
+    #result_list {
+        width: 100%;
+    }
+    #result_list th {
+        background: #417690;
+        color: white;
+        padding: 10px;
+        text-align: left;
+    }
+    #result_list td {
+        padding: 8px 10px;
+        border-bottom: 1px solid #eee;
+    }
+    #result_list tr:hover {
+        background: #f5f5f5;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>{{ program.title }} - Applicants</h1>
+
+<div class="stats-box">
+    <h2>Statistics</h2>
+    <table>
+        <tr>
+            <td><strong>Total:</strong></td>
+            <td>{{ stats.total }}</td>
+        </tr>
+        <tr>
+            <td><strong>Accepted:</strong></td>
+            <td style="color: green;">{{ stats.accepted }}</td>
+        </tr>
+        <tr>
+            <td><strong>Declined:</strong></td>
+            <td style="color: red;">{{ stats.declined }}</td>
+        </tr>
+        <tr>
+            <td><strong>Pending:</strong></td>
+            <td style="color: orange;">{{ stats.pending }}</td>
+        </tr>
+    </table>
+</div>
+
+<div class="module">
+    <h2>Applicants ({{ enrollments.count }})</h2>
+    <table id="result_list">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>ORCID</th>
+                <th>Institution</th>
+                <th>Status</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for enrollment in enrollments %}
+            <tr>
+                <td>
+                    <a href="{% url 'admin:people_people_change' enrollment.person.id %}">
+                        {{ enrollment.person.first_name }} {{ enrollment.person.last_name }}
+                    </a>
+                </td>
+                <td>{{ enrollment.person.email_address|default:"—" }}</td>
+                <td>
+                    {% if enrollment.person.orcid_id %}
+                    <a href="https://orcid.org/{{ enrollment.person.orcid_id }}" target="_blank">
+                        {{ enrollment.person.orcid_id }}
+                    </a>
+                    {% else %}—{% endif %}
+                </td>
+                <td>{{ enrollment.person.institution|default:"—" }}</td>
+                <td>
+                    {% if enrollment.accepted_at %}
+                    <span style="color: green;">✓ Accepted</span>
+                    {% elif enrollment.declined_at %}
+                    <span style="color: red;">✗ Declined</span>
+                    {% else %}
+                    <span style="color: gray;">— Pending</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if enrollment.accepted_at %}
+                    {{ enrollment.accepted_at|date:"Y-m-d H:i" }}
+                    {% elif enrollment.declined_at %}
+                    {{ enrollment.declined_at|date:"Y-m-d H:i" }}
+                    {% else %}—{% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 20px; color: #999;">
+                    No applicants yet
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="submit-row" style="margin-top: 20px;">
+    <a href="{% url 'admin:programs_program_export_csv' program.id %}" class="button">📥 Export CSV</a>
+    <a href="{% url 'admin:programs_program_emails' program.id %}" class="button">📧 Get Emails</a>
+    <a href="{% url 'admin:programs_program_send_reminder' program.id %}" class="button">📬 Send Reminder</a>
+    <a href="{% url 'admin:programs_program_change' program.id %}" class="button default">← Back to Program</a>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+    <h3>Upcoming Workshops</h3>
+    <div class="container mt-4 mb-4 theme-bg">
+        <p>
+            Each AIM workshop has places reserved for applicants. Successful applicants for in-person workshops receive funding for travel and accommodations for participation in the workshop. The workshops marked with an * below are still accepting applications. The AIM style workshop features a limited number of talks and significant time devoted to organized group activities.
+        </p>
+        {% for w in workshops %}
+            <a href="{% url 'programs:program-page' w.code %}">{{ w.title }} — {{ w.get_type_display }}</a><time datetime="{{ w.start_date|date:'c' }}">
+                {{ w.start_date|date:"M j, Y" }} - {{ w.end_date|date:"M j, Y" }}
+            </time>
+            <br>
+            <br>
+        {% empty %}
+            <li>No workshops found.</li>
+        {% endfor %}
+    </div>
+{% endblock content %}

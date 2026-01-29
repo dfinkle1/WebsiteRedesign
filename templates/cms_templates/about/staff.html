@@ -1,0 +1,9 @@
+{% extends "cms_templates/about/base.html" %}
+{% load cms_tags staff_tags %}
+{% block page_title %}
+    Staff - AIM
+{% endblock page_title %}
+{% block page_content %}
+    <h1>Staff</h1>
+    <div class="content">{% render_staff %}</div>
+{% endblock page_content %}

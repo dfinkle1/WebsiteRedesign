@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block title %}Reimbursement #{{ reimbursement.pk }} | AIM{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <nav class="mb-3">
+    <a href="{% url 'reimbursements:my_reimbursements' %}" class="text-decoration-none">
+      &larr; Back to My Reimbursements
+    </a>
+  </nav>
+
+  <div class="row">
+    {# Main Content #}
+    <div class="col-lg-8">
+      <div class="d-flex justify-content-between align-items-start mb-4">
+        <div>
+          <h1 class="mb-1">Reimbursement #{{ reimbursement.pk }}</h1>
+          <p class="text-muted mb-0">
+            {% if reimbursement.enrollment and reimbursement.enrollment.workshop %}
+              For: {{ reimbursement.enrollment.workshop.title }}
+            {% else %}
+              Staff/Vendor Reimbursement
+            {% endif %}
+          </p>
+        </div>
+        <div>
+          {% if reimbursement.status == 'draft' %}
+          <span class="badge bg-secondary fs-6">Draft</span>
+          {% elif reimbursement.status == 'submitted' %}
+          <span class="badge bg-primary fs-6">Submitted</span>
+          {% elif reimbursement.status == 'changes_needed' %}
+          <span class="badge bg-warning text-dark fs-6">Changes Needed</span>
+          {% elif reimbursement.status == 'approved' %}
+          <span class="badge bg-success fs-6">Approved</span>
+          {% elif reimbursement.status == 'paid' %}
+          <span class="badge fs-6" style="background-color: #20c997;">Paid</span>
+          {% elif reimbursement.status == 'cancelled' %}
+          <span class="badge bg-danger fs-6">Cancelled</span>
+          {% endif %}
+        </div>
+      </div>
+
+      {# Changes Needed Alert #}
+      {% if reimbursement.status == 'changes_needed' and reimbursement.change_request_notes %}
+      <div class="alert alert-warning">
+        <h5 class="alert-heading">Changes Requested</h5>
+        <p class="mb-0">{{ reimbursement.change_request_notes }}</p>
+      </div>
+      {% endif %}
+
+      {# Financial Summary #}
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">Financial Summary</h5>
+        </div>
+        <div class="card-body">
+          <div class="row text-center">
+            <div class="col-md-4">
+              <div class="h4 mb-0">${{ reimbursement.total_requested|floatformat:2 }}</div>
+              <small class="text-muted">Requested</small>
+            </div>
+            <div class="col-md-4">
+              {% if reimbursement.total_approved %}
+              <div class="h4 mb-0 text-success">${{ reimbursement.total_approved|floatformat:2 }}</div>
+              <small class="text-muted">Approved</small>
+              {% else %}
+              <div class="h4 mb-0 text-muted">-</div>
+              <small class="text-muted">Approved</small>
+              {% endif %}
+            </div>
+            <div class="col-md-4">
+              {% if reimbursement.total_paid %}
+              <div class="h4 mb-0" style="color: #20c997;">${{ reimbursement.total_paid|floatformat:2 }}</div>
+              <small class="text-muted">Paid</small>
+              {% else %}
+              <div class="h4 mb-0 text-muted">-</div>
+              <small class="text-muted">Paid</small>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {# Expense Line Items #}
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">Expenses</h5>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th class="text-end">Requested</th>
+                <th class="text-end">Approved</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in reimbursement.line_items.all %}
+              <tr>
+                <td>{{ item.get_category_display }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.date_incurred|date:"M j, Y" }}</td>
+                <td class="text-end">${{ item.amount_requested|floatformat:2 }}</td>
+                <td class="text-end">
+                  {% if item.amount_approved %}
+                    ${{ item.amount_approved|floatformat:2 }}
+                  {% else %}
+                    <span class="text-muted">-</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="5" class="text-center text-muted py-4">
+                  No expenses added yet.
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {# Payment Information #}
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">Payment Information</h5>
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-4">Payment Method</dt>
+            <dd class="col-sm-8">{{ reimbursement.get_payment_method_display }}</dd>
+
+            {% if reimbursement.payment_method == 'check' %}
+            <dt class="col-sm-4">Mailing Address</dt>
+            <dd class="col-sm-8">{{ reimbursement.payment_address|linebreaks }}</dd>
+            {% endif %}
+
+            {% if reimbursement.payment_reference %}
+            <dt class="col-sm-4">Payment Reference</dt>
+            <dd class="col-sm-8">{{ reimbursement.payment_reference }}</dd>
+            {% endif %}
+          </dl>
+        </div>
+      </div>
+
+      {# Notes #}
+      {% if reimbursement.submitter_notes %}
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">Your Notes</h5>
+        </div>
+        <div class="card-body">
+          {{ reimbursement.submitter_notes|linebreaks }}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    {# Sidebar - Timeline #}
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Status Timeline</h5>
+        </div>
+        <div class="card-body">
+          <ul class="list-unstyled mb-0">
+            {% for event in timeline %}
+            <li class="d-flex mb-3">
+              <div class="me-3">
+                {% if event.completed %}
+                <span class="badge rounded-pill bg-success">&#10003;</span>
+                {% else %}
+                <span class="badge rounded-pill bg-secondary">&#8226;</span>
+                {% endif %}
+              </div>
+              <div>
+                <strong>{{ event.label }}</strong>
+                <br>
+                <small class="text-muted">
+                  {{ event.date|date:"M j, Y g:i A" }}
+                </small>
+                {% if event.user %}
+                <br>
+                <small class="text-muted">by {{ event.user.get_full_name|default:event.user.username }}</small>
+                {% endif %}
+                {% if event.notes %}
+                <br>
+                <small class="text-info">{{ event.notes }}</small>
+                {% endif %}
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+
+      {# Person Info #}
+      <div class="card mt-4">
+        <div class="card-header">
+          <h5 class="mb-0">Payee</h5>
+        </div>
+        <div class="card-body">
+          <p class="mb-1"><strong>{{ reimbursement.person }}</strong></p>
+          {% if reimbursement.person.email_address %}
+          <p class="mb-0 text-muted">{{ reimbursement.person.email_address }}</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

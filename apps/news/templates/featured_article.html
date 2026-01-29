@@ -1,12 +1,12 @@
 {% if article %}
-    <img src="{{ article.news_image.url }}"
+    <img src="{{ article.featured_image.url }}"
          alt="{{ article.title }}"
          class="img-fluid float-start me-3 mb-3"
          width="350px"
          height="auto" />
     <div>
         <h5 class="text-primary-emphasis">{{ article.title | safe }}</h5>
-        <p class="fs-5">{{ article.text | safe }}</p>
+        <p class="fs-5">{{ article.body | safe }}</p>
     </div>
 {% else %}
     <p>no current article</p>

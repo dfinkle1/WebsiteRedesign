@@ -1,0 +1,32 @@
+{# Featured article hero section - expects: article #}
+{% if article %}
+  <div class="card theme-bg overflow-hidden">
+    <div class="row g-0">
+      {% if article.featured_image %}
+        <div class="col-md-6">
+          <img src="{{ article.featured_image.url }}"
+               alt=""
+               class="w-100 h-100"
+               style="object-fit: cover;
+                      min-height: 300px"
+               loading="eager">
+        </div>
+      {% endif %}
+      <div class="col-md-{% if article.featured_image %}6{% else %}12{% endif %}">
+        <div class="card-body d-flex flex-column justify-content-center h-100 p-4 p-lg-5">
+          <span class="badge bg-primary mb-2" style="width: fit-content;">Featured</span>
+          <h2 class="card-title h3 mb-3">
+            <a href="{{ article.get_absolute_url }}"
+               class="text-decoration-none stretched-link">{{ article.title }}</a>
+          </h2>
+          <p class="card-text small mb-3">
+            <time datetime="{{ article.published_at|date:'Y-m-d' }}">
+              {{ article.published_at|date:"F j, Y" }}
+            </time>
+          </p>
+          {% if article.excerpt %}<p class="card-text">{{ article.excerpt|truncatewords:40 }}</p>{% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}

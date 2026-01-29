@@ -1,0 +1,32 @@
+{# Reusable article card component - expects: article #}
+<article class="card h-100">
+  {% if article.featured_image %}
+  <img
+    src="{{ article.featured_image.url }}"
+    alt=""
+    class="card-img-top"
+    loading="lazy"
+    style="height: 200px; object-fit: cover;"
+  >
+  {% else %}
+  <div class="card-img-top bg-light d-flex align-items-center justify-content-center"
+       style="height: 200px;">
+    <span class="text-muted">No image</span>
+  </div>
+  {% endif %}
+  <div class="card-body d-flex flex-column">
+    <h3 class="card-title h5">
+      <a href="{{ article.get_absolute_url }}" class="text-decoration-none stretched-link">
+        {{ article.title }}
+      </a>
+    </h3>
+    <p class="card-text text-muted small mb-2">
+      <time datetime="{{ article.published_at|date:'Y-m-d' }}">
+        {{ article.published_at|date:"F j, Y" }}
+      </time>
+    </p>
+    {% if article.excerpt %}
+    <p class="card-text flex-grow-1">{{ article.excerpt|truncatewords:25 }}</p>
+    {% endif %}
+  </div>
+</article>

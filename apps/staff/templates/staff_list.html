@@ -15,10 +15,10 @@
                 <div class="position-tag m-0 p-0">{{ person.role }}</div>
             </div>
             <p class="p-0 m-0">{{ person.bio | safe }}</p>
-            {% if person.more_info_link is not defined %}
+            {% if person.more_info_link %}
                 <a href="{{ person.more_info_link }}"
                    target="_blank"
-                   class="col text-decoration">more info</a>
+                   class="col text-decoration-none">more info</a>
             {% endif %}
         </div>
     </div>

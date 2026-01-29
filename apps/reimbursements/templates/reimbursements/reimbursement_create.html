@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block title %}New Reimbursement Request | AIM{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <nav class="mb-3">
+    <a href="{% url 'reimbursements:my_reimbursements' %}" class="text-decoration-none">
+      &larr; Back to My Reimbursements
+    </a>
+  </nav>
+
+  <h1 class="mb-4">New Reimbursement Request</h1>
+
+  <div class="row">
+    <div class="col-lg-8">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">Payee Information</h5>
+        </div>
+        <div class="card-body">
+          <p class="mb-0">
+            <strong>{{ person }}</strong><br>
+            {% if person.email_address %}
+            <span class="text-muted">{{ person.email_address }}</span>
+            {% endif %}
+          </p>
+        </div>
+      </div>
+
+      <form method="post" class="needs-validation" novalidate>
+        {% csrf_token %}
+
+        {# Program Selection #}
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Program (Optional)</h5>
+          </div>
+          <div class="card-body">
+            <p class="text-muted small">
+              If this reimbursement is related to a specific program you attended,
+              select it below. Leave blank for staff or other reimbursements.
+            </p>
+            {{ form.enrollment }}
+            {% if form.enrollment.errors %}
+            <div class="invalid-feedback d-block">{{ form.enrollment.errors }}</div>
+            {% endif %}
+          </div>
+        </div>
+
+        {# Tax Status #}
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Tax Status</h5>
+          </div>
+          <div class="card-body">
+            <label for="id_tax_status" class="form-label">What is your US tax status?</label>
+            {{ form.tax_status }}
+            {% if form.tax_status.errors %}
+            <div class="invalid-feedback d-block">{{ form.tax_status.errors }}</div>
+            {% endif %}
+            <div class="form-text">
+              Visa holders will need to provide additional documentation.
+            </div>
+          </div>
+        </div>
+
+        {# Payment Method #}
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Payment Method</h5>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              {% for radio in form.payment_method %}
+              <div class="form-check">
+                {{ radio.tag }}
+                <label class="form-check-label" for="{{ radio.id_for_label }}">
+                  {{ radio.choice_label }}
+                </label>
+              </div>
+              {% endfor %}
+              {% if form.payment_method.errors %}
+              <div class="invalid-feedback d-block">{{ form.payment_method.errors }}</div>
+              {% endif %}
+            </div>
+
+            {# Check Payment Fields #}
+            <div id="check-fields" class="payment-fields">
+              <h6 class="mt-4">Mailing Address</h6>
+              {{ form.payment_address }}
+              {% if form.payment_address.errors %}
+              <div class="invalid-feedback d-block">{{ form.payment_address.errors }}</div>
+              {% endif %}
+            </div>
+
+            {# ACH Payment Fields #}
+            <div id="ach-fields" class="payment-fields" style="display: none;">
+              <h6 class="mt-4">Bank Information</h6>
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="form-label">Bank Name</label>
+                  {{ form.bank_name }}
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Routing Number</label>
+                  {{ form.bank_routing_number }}
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Account Number</label>
+                  {{ form.bank_account_number }}
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Account Type</label>
+                  {{ form.bank_account_type }}
+                </div>
+              </div>
+              {% if form.bank_name.errors or form.bank_routing_number.errors or form.bank_account_number.errors %}
+              <div class="invalid-feedback d-block">Please fill in all bank information.</div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        {# Notes #}
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Additional Notes (Optional)</h5>
+          </div>
+          <div class="card-body">
+            {{ form.submitter_notes }}
+          </div>
+        </div>
+
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary">
+            Create Request &amp; Add Expenses
+          </button>
+          <a href="{% url 'reimbursements:my_reimbursements' %}" class="btn btn-outline-secondary">
+            Cancel
+          </a>
+        </div>
+      </form>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Instructions</h5>
+        </div>
+        <div class="card-body">
+          <ol class="ps-3 mb-0">
+            <li class="mb-2">Fill out this form with your tax and payment information</li>
+            <li class="mb-2">Add your expenses on the next page</li>
+            <li class="mb-2">Upload receipts for each expense</li>
+            <li class="mb-2">Review and sign to submit</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const paymentRadios = document.querySelectorAll('input[name="payment_method"]');
+  const checkFields = document.getElementById('check-fields');
+  const achFields = document.getElementById('ach-fields');
+
+  function updatePaymentFields() {
+    const selected = document.querySelector('input[name="payment_method"]:checked');
+    if (selected) {
+      if (selected.value === 'check') {
+        checkFields.style.display = 'block';
+        achFields.style.display = 'none';
+      } else if (selected.value === 'ach') {
+        checkFields.style.display = 'none';
+        achFields.style.display = 'block';
+      }
+    }
+  }
+
+  paymentRadios.forEach(radio => {
+    radio.addEventListener('change', updatePaymentFields);
+  });
+
+  updatePaymentFields();
+});
+</script>
+{% endblock %}

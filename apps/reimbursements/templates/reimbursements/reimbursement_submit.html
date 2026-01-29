@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block title %}Submit Reimbursement #{{ reimbursement.pk }} | AIM{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <nav class="mb-3">
+    <a href="{% url 'reimbursements:edit' reimbursement.pk %}" class="text-decoration-none">
+      &larr; Back to Edit
+    </a>
+  </nav>
+
+  <h1 class="mb-4">Review & Submit</h1>
+
+  {% if errors %}
+  <div class="alert alert-danger">
+    <h5 class="alert-heading">Please fix the following issues:</h5>
+    <ul class="mb-0">
+      {% for error in errors %}
+      <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+    <hr>
+    <a href="{% url 'reimbursements:edit' reimbursement.pk %}" class="btn btn-outline-danger">
+      Go Back and Fix
+    </a>
+  </div>
+  {% endif %}
+
+  <div class="row">
+    <div class="col-lg-8">
+      {# Summary Card #}
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">Reimbursement Summary</h5>
+        </div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-4">Payee</dt>
+            <dd class="col-sm-8">{{ reimbursement.person }}</dd>
+
+            {% if reimbursement.enrollment and reimbursement.enrollment.workshop %}
+            <dt class="col-sm-4">Program</dt>
+            <dd class="col-sm-8">{{ reimbursement.enrollment.workshop.title }}</dd>
+            {% endif %}
+
+            <dt class="col-sm-4">Tax Status</dt>
+            <dd class="col-sm-8">{{ reimbursement.get_tax_status_display }}</dd>
+
+            <dt class="col-sm-4">Payment Method</dt>
+            <dd class="col-sm-8">{{ reimbursement.get_payment_method_display }}</dd>
+
+            {% if reimbursement.payment_method == 'check' %}
+            <dt class="col-sm-4">Mailing Address</dt>
+            <dd class="col-sm-8">{{ reimbursement.payment_address|linebreaksbr }}</dd>
+            {% else %}
+            <dt class="col-sm-4">Bank</dt>
+            <dd class="col-sm-8">
+              {{ reimbursement.bank_name }}<br>
+              <span class="text-muted">Account ending in {{ reimbursement.bank_account_number|slice:"-4:" }}</span>
+            </dd>
+            {% endif %}
+          </dl>
+        </div>
+      </div>
+
+      {# Expenses Table #}
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">Expenses</h5>
+        </div>
+        <div class="table-responsive">
+          <table class="table mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th class="text-end">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in reimbursement.line_items.all %}
+              <tr>
+                <td>{{ item.get_category_display }}</td>
+                <td>
+                  {{ item.description }}
+                  {% if item.receipts.exists %}
+                  <span class="badge bg-success">{{ item.receipts.count }} receipt{{ item.receipts.count|pluralize }}</span>
+                  {% else %}
+                  <span class="badge bg-warning text-dark">No receipt</span>
+                  {% endif %}
+                </td>
+                <td>{{ item.date_incurred|date:"M j, Y" }}</td>
+                <td class="text-end">${{ item.amount_requested|floatformat:2 }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+            <tfoot class="table-light">
+              <tr>
+                <td colspan="3" class="text-end"><strong>Total Requested:</strong></td>
+                <td class="text-end"><strong class="h5">${{ reimbursement.calculate_total_requested|floatformat:2 }}</strong></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      {# Signature Form #}
+      {% if not errors %}
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">Certification & Signature</h5>
+        </div>
+        <div class="card-body">
+          <form method="post">
+            {% csrf_token %}
+
+            <div class="mb-4">
+              <div class="form-check mb-2">
+                {{ form.confirm_accuracy }}
+                <label class="form-check-label" for="id_confirm_accuracy">
+                  {{ form.confirm_accuracy.label }}
+                </label>
+              </div>
+              <div class="form-check">
+                {{ form.confirm_no_duplicate }}
+                <label class="form-check-label" for="id_confirm_no_duplicate">
+                  {{ form.confirm_no_duplicate.label }}
+                </label>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label for="id_signature" class="form-label">
+                <strong>Digital Signature</strong>
+              </label>
+              {{ form.signature }}
+              <div class="form-text">
+                {{ form.signature.help_text }}
+              </div>
+            </div>
+
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-primary btn-lg">
+                Submit Reimbursement Request
+              </button>
+              <a href="{% url 'reimbursements:edit' reimbursement.pk %}" class="btn btn-outline-secondary btn-lg">
+                Go Back
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    {# Sidebar #}
+    <div class="col-lg-4">
+      <div class="card bg-light">
+        <div class="card-body">
+          <h5 class="card-title">What happens next?</h5>
+          <ol class="ps-3 mb-0">
+            <li class="mb-2">Your request will be reviewed by AIM staff</li>
+            <li class="mb-2">You'll be notified if any changes are needed</li>
+            <li class="mb-2">Once approved, payment will be processed</li>
+            <li class="mb-0">You can track status on your dashboard</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

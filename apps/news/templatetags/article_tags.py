@@ -1,5 +1,6 @@
 from django import template
 from apps.news.models import NewsArticle
+from apps.news.views import get_featured_article, get_recent_articles
 
 register = template.Library()
 
@@ -12,15 +13,10 @@ def render_news_list():
 
 @register.inclusion_tag("featured_article.html")
 def render_featured_article():
-    article = (
-        NewsArticle.objects.filter(featured=True).order_by("-published_date").first()
-    )
-    return {"article": article}
+    """Render the featured article hero section."""
+    return {"article": get_featured_article()}
 
 
 @register.inclusion_tag("news_carousel.html")
-def render_news_carousel():
-    articles = NewsArticle.objects.filter(featured=False).order_by("-published_date")[
-        :5
-    ]
-    return {"articles": articles}
+def render_news_carousel(limit=5):
+    return {"articles": get_recent_articles(limit=limit, exclude_featured=True)}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}
+  {% if year %}News from {{ year }}{% else %}News{% endif %} | AIM
+{% endblock title %}
+
+{% block content %}
+<div class="container py-5">
+  {% if featured_article and not is_archive %}
+  <section class="mb-5">
+    {% include "news/includes/_article_hero.html" with article=featured_article %}
+  </section>
+  {% endif %}
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2 mb-0">
+      {% if year %}News from {{ year }}{% else %}Latest News{% endif %}
+    </h1>
+    {% if not is_archive %}
+    <a href="{% url 'news:article_archive' %}" class="btn btn-outline-secondary btn-sm">
+      Browse Archive
+    </a>
+    {% endif %}
+  </div>
+
+  {% if is_archive %}
+  <nav class="mb-4" aria-label="Breadcrumb">
+    <a href="{% url 'news:article_list' %}" class="text-decoration-none">&larr; All News</a>
+  </nav>
+  {% endif %}
+
+  {% if articles %}
+  <div class="row g-4">
+    {% for article in articles %}
+    <div class="col-md-6 col-lg-4">
+      {% include "news/includes/_article_card.html" %}
+    </div>
+    {% endfor %}
+  </div>
+
+  {% include "news/includes/_pagination.html" %}
+  {% else %}
+  <p class="text-muted">No articles found.</p>
+  {% endif %}
+</div>
+{% endblock content %}

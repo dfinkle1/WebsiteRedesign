@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}{{ newsletter.title }} | AIM Newsletters{% endblock title %}
+
+{% block content %}
+<div class="container py-5">
+  <nav class="mb-3" aria-label="Breadcrumb">
+    <a href="{% url 'news:newsletter_list' %}" class="text-decoration-none">&larr; Back to Newsletters</a>
+  </nav>
+
+  <article class="row">
+    <div class="col-lg-4 mb-4">
+      {% if newsletter.cover_image %}
+      <img
+        src="{{ newsletter.cover_image.url }}"
+        alt="{{ newsletter.title }} cover"
+        class="img-fluid rounded shadow-sm"
+        loading="lazy"
+      >
+      {% else %}
+      <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 300px;">
+        <span class="text-muted">No cover image</span>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="col-lg-8">
+      <h1>{{ newsletter.title }}</h1>
+
+      <dl class="row mb-4">
+        <dt class="col-sm-3">Issue Date</dt>
+        <dd class="col-sm-9">
+          <time datetime="{{ newsletter.issue_date|date:'Y-m-d' }}">
+            {{ newsletter.issue_date|date:"F Y" }}
+          </time>
+        </dd>
+
+        {% if newsletter.issue_label %}
+        <dt class="col-sm-3">Volume/Issue</dt>
+        <dd class="col-sm-9">{{ newsletter.issue_label }}</dd>
+        {% endif %}
+      </dl>
+
+      {% if newsletter.description %}
+      <div class="mb-4">
+        {{ newsletter.description|linebreaks }}
+      </div>
+      {% endif %}
+
+      <div class="d-flex gap-2 mb-4">
+        <a href="{{ newsletter.pdf_file.url }}"
+           class="btn btn-primary"
+           target="_blank"
+           rel="noopener">
+          Download PDF
+        </a>
+        <a href="{{ newsletter.pdf_file.url }}"
+           class="btn btn-outline-secondary"
+           target="_blank"
+           rel="noopener">
+          View in Browser
+        </a>
+      </div>
+    </div>
+  </article>
+
+  {# PDF Embed (optional - can be removed if not needed) #}
+  <section class="mt-5">
+    <h2 class="h4 mb-3">Preview</h2>
+    <div class="ratio" style="--bs-aspect-ratio: 141.4%;">
+      <iframe
+        src="{{ newsletter.pdf_file.url }}#view=FitH"
+        title="{{ newsletter.title }}"
+        loading="lazy"
+      ></iframe>
+    </div>
+  </section>
+
+  {# Newsletter Navigation #}
+  {% if previous_newsletter or next_newsletter %}
+  <nav class="mt-5 pt-4 border-top" aria-label="Newsletter navigation">
+    <div class="row">
+      <div class="col-6">
+        {% if previous_newsletter %}
+        <a href="{{ previous_newsletter.get_absolute_url }}" class="text-decoration-none">
+          <small class="text-muted d-block">&larr; Previous</small>
+          {{ previous_newsletter.title }}
+        </a>
+        {% endif %}
+      </div>
+      <div class="col-6 text-end">
+        {% if next_newsletter %}
+        <a href="{{ next_newsletter.get_absolute_url }}" class="text-decoration-none">
+          <small class="text-muted d-block">Next &rarr;</small>
+          {{ next_newsletter.title }}
+        </a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+  {% endif %}
+</div>
+{% endblock content %}

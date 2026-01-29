@@ -1,0 +1,24 @@
+{% extends "cms_templates/focused_research/base.html" %}
+{% load cms_tags static %}
+{% block page_title %}
+    SQuaREs - AIM
+{% endblock page_title %}
+{% block page_content %}
+    <h1>SQuaREs</h1>
+    <p class="lead">Structured Quartet Research Ensembles</p>
+
+    {% placeholder "squares_intro" %}
+
+    <!-- Links to dynamic pages (when you create them) -->
+    <div class="mt-4 mb-4">
+        <h3>Explore SQuaREs</h3>
+        <div class="d-flex gap-3">
+            <a href="/squares/past/" class="btn btn-outline-primary">
+                Browse Past SQuaREs →
+            </a>
+        </div>
+    </div>
+
+    {% placeholder "squares_details" %}
+    {% placeholder "squares_apply" %}
+{% endblock page_content %}

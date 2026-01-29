@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}
+  {% if year %}Newsletters from {{ year }}{% else %}Newsletters{% endif %} | AIM
+{% endblock title %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2 mb-0">
+      {% if year %}Newsletters from {{ year }}{% else %}Newsletter Archive{% endif %}
+    </h1>
+  </div>
+
+  {% if is_archive %}
+  <nav class="mb-4" aria-label="Breadcrumb">
+    <a href="{% url 'news:newsletter_list' %}" class="text-decoration-none">&larr; All Newsletters</a>
+  </nav>
+  {% endif %}
+
+  {% if available_years %}
+  <nav class="mb-4" aria-label="Filter by year">
+    <span class="me-2 text-muted">Filter by year:</span>
+    {% for y in available_years %}
+    <a href="{% url 'news:newsletter_year' year=y %}"
+       class="btn btn-sm {% if y == year %}btn-primary{% else %}btn-outline-secondary{% endif %} me-1 mb-1">
+      {{ y }}
+    </a>
+    {% endfor %}
+    {% if year %}
+    <a href="{% url 'news:newsletter_list' %}" class="btn btn-sm btn-outline-secondary me-1 mb-1">
+      All
+    </a>
+    {% endif %}
+  </nav>
+  {% endif %}
+
+  {% if newsletters %}
+  <div class="row g-4">
+    {% for newsletter in newsletters %}
+    <div class="col-md-6 col-lg-4">
+      {% include "news/includes/_newsletter_card.html" %}
+    </div>
+    {% endfor %}
+  </div>
+
+  {% include "news/includes/_pagination.html" %}
+  {% else %}
+  <p class="text-muted">No newsletters found.</p>
+  {% endif %}
+</div>
+{% endblock content %}

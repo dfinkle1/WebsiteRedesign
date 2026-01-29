@@ -1,0 +1,173 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    .warning-box {
+        background: #fff3cd;
+        border: 2px solid #ffc107;
+        border-radius: 4px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    .warning-box h3 {
+        color: #856404;
+        margin-top: 0;
+    }
+    .warning-box p {
+        color: #856404;
+        margin-bottom: 0;
+    }
+    .recipient-box {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    .recipient-list {
+        max-height: 300px;
+        overflow-y: auto;
+        margin-top: 10px;
+    }
+    .recipient-list ul {
+        list-style: none;
+        padding: 0;
+    }
+    .recipient-list li {
+        padding: 5px 10px;
+        border-bottom: 1px solid #eee;
+    }
+    .recipient-list li:hover {
+        background: #f5f5f5;
+    }
+    .form-row {
+        margin-bottom: 20px;
+    }
+    .form-row label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    .form-row .helptext {
+        display: block;
+        font-size: 12px;
+        color: #666;
+        margin-top: 5px;
+    }
+    .form-row .errorlist {
+        color: #dc3545;
+        list-style: none;
+        padding: 0;
+        margin: 5px 0;
+    }
+    .checkbox-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .checkbox-row input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+    }
+    .checkbox-row label {
+        cursor: pointer;
+        margin: 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>Send Reminder - {{ program.title }}</h1>
+
+<div class="warning-box">
+    <h3>⚠️ Warning: You are about to send emails</h3>
+    <p>
+        This action will send an email to <strong>{{ count }} pending applicant{{ count|pluralize }}</strong>.
+        Please review the recipient list below and confirm your message before proceeding.
+    </p>
+</div>
+
+{% if count > 0 %}
+<div class="recipient-box">
+    <h2>Recipients ({{ count }})</h2>
+    <p style="color: #666; font-size: 13px;">
+        The following pending applicants will receive your reminder:
+    </p>
+    <div class="recipient-list">
+        <ul>
+            {% for enrollment in pending %}
+            <li>
+                <strong>{{ enrollment.person.first_name }} {{ enrollment.person.last_name }}</strong>
+                - {{ enrollment.person.email_address }}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<form method="post" id="reminderForm">
+    {% csrf_token %}
+
+    <div class="form-row">
+        <label for="id_message">{{ form.message.label }}:</label>
+        {{ form.message }}
+        {% if form.message.errors %}
+            <ul class="errorlist">
+                {% for error in form.message.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <span class="helptext">{{ form.message.help_text }}</span>
+    </div>
+
+    <div class="form-row checkbox-row">
+        {{ form.confirm }}
+        <label for="id_confirm">{{ form.confirm.label }}</label>
+        {% if form.confirm.errors %}
+            <ul class="errorlist">
+                {% for error in form.confirm.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+    <div class="form-row">
+        <span class="helptext" style="margin-left: 30px;">{{ form.confirm.help_text }}</span>
+    </div>
+
+    <div class="submit-row">
+        <button type="submit" class="button default" onclick="return confirmSend()">📬 Send Reminder Emails</button>
+        <a href="{% url 'admin:programs_program_applicants' program.id %}" class="button">Cancel</a>
+    </div>
+</form>
+
+{% else %}
+<div class="recipient-box" style="text-align: center; color: #999; padding: 40px;">
+    <p style="font-size: 16px;">No pending applicants to send reminders to.</p>
+    <p>All applicants have either accepted or declined their invitation.</p>
+</div>
+
+<div class="submit-row">
+    <a href="{% url 'admin:programs_program_applicants' program.id %}" class="button default">← Back to Applicants</a>
+</div>
+{% endif %}
+
+<script>
+function confirmSend() {
+    const checkbox = document.getElementById('id_confirm');
+    if (!checkbox.checked) {
+        alert('Please check the confirmation checkbox to proceed.');
+        return false;
+    }
+
+    const count = {{ count }};
+    const message = `Are you sure you want to send reminder emails to ${count} applicant${count !== 1 ? 's' : ''}?\n\nThis action cannot be undone.`;
+
+    return confirm(message);
+}
+</script>
+{% endblock %}

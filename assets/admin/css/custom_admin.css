@@ -1,0 +1,19 @@
+/* Limit width + ellipsis
+th.column-description,
+td.column-description {
+  max-width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+} */
+
+/* Example for emails */
+th.column-title,
+td.column-title {
+  max-width: 150px;
+  word-break: break-all;
+}
+
+main {
+  color: green;
+}
