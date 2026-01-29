@@ -9,31 +9,64 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('programs', '0004_alter_program_location_alter_program_scribe'),
-        ('workshops', '0007_alter_participant_options_participant_person_and_more'),
+        ("programs", "0004_alter_program_location_alter_program_scribe"),
+        ("people", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Enrollment',
+            name="Enrollment",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('first_name', models.TextField(blank=True, null=True)),
-                ('last_name', models.TextField(blank=True, null=True)),
-                ('email_snap', models.TextField(blank=True, null=True)),
-                ('orcid_snap', models.TextField(blank=True, null=True)),
-                ('institution', models.TextField(blank=True, null=True)),
-                ('accepted_at', models.DateTimeField(blank=True, null=True)),
-                ('declined_at', models.DateTimeField(blank=True, null=True)),
-                ('notes', models.TextField(blank=True, null=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('person', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='enrollments', to='workshops.people')),
-                ('workshop', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='enrollments', to='programs.program')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("first_name", models.TextField(blank=True, null=True)),
+                ("last_name", models.TextField(blank=True, null=True)),
+                ("email_snap", models.TextField(blank=True, null=True)),
+                ("orcid_snap", models.TextField(blank=True, null=True)),
+                ("institution", models.TextField(blank=True, null=True)),
+                ("accepted_at", models.DateTimeField(blank=True, null=True)),
+                ("declined_at", models.DateTimeField(blank=True, null=True)),
+                ("notes", models.TextField(blank=True, null=True)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "person",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="enrollments",
+                        to="people.people",
+                    ),
+                ),
+                (
+                    "workshop",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="enrollments",
+                        to="programs.program",
+                    ),
+                ),
             ],
             options={
-                'db_table': 'enrollment',
-                'indexes': [models.Index(fields=['person'], name='enrollment_person__267614_idx'), models.Index(fields=['workshop'], name='enrollment_worksho_44d085_idx')],
+                "db_table": "enrollment",
+                "indexes": [
+                    models.Index(
+                        fields=["person"], name="enrollment_person__267614_idx"
+                    ),
+                    models.Index(
+                        fields=["workshop"], name="enrollment_worksho_44d085_idx"
+                    ),
+                ],
             },
         ),
     ]
