@@ -13,6 +13,13 @@ class ProgramQuerySet(models.QuerySet):
             .only("title", "code", "application_deadline", "start_date", "end_date")
         )
 
+    def accepting_applications(self):
+        """Programs currently open for public applications."""
+        return self.filter(
+            application_mode=Program.ApplicationMode.OPEN,
+            application_deadline__gte=timezone.now(),
+        )
+
 
 class Program(models.Model):
     class ProgramType(models.TextChoices):
@@ -22,6 +29,11 @@ class Program(models.Model):
         VWORKSHOP = "VWORKSHOP", "Virtual Workshop"
         VSQUARE = "VSQUARE", "Virtual SQuaRE"
         COMMUNITY = "COMMUNITY", "Community"
+
+    class ApplicationMode(models.TextChoices):
+        CLOSED = "closed", "Closed"
+        OPEN = "open", "Open Applications"
+        INVITE_ONLY = "invite", "Invite Only"
 
     code = models.IntegerField(unique=True)
     title = models.CharField(max_length=255)
@@ -45,6 +57,11 @@ class Program(models.Model):
     description = models.TextField(blank=True, null=True)
     workshop_email_description = models.CharField(max_length=255, blank=True, null=True)
     online = models.BooleanField(default=True, blank=True, null=True)
+    application_mode = models.CharField(
+        max_length=10,
+        choices=ApplicationMode.choices,
+        default=ApplicationMode.CLOSED,
+    )
     objects = ProgramQuerySet.as_manager()
 
     class Meta:
@@ -53,3 +70,21 @@ class Program(models.Model):
 
     def __str__(self):
         return f"{self.code} — {self.title}"
+
+    @property
+    def is_accepting_applications(self):
+        """True if program has open applications and deadline hasn't passed."""
+        if self.application_mode != self.ApplicationMode.OPEN:
+            return False
+        if not self.application_deadline:
+            return False
+        return timezone.now() <= self.application_deadline
+
+    @property
+    def applications_closed(self):
+        """True if application deadline has passed or mode is closed."""
+        if self.application_mode == self.ApplicationMode.CLOSED:
+            return True
+        if self.application_deadline and timezone.now() > self.application_deadline:
+            return True
+        return False

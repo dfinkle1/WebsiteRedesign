@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block title %}
+    {% if is_accepted %}
+        Enrollment Details
+    {% elif is_pending %}
+        Application Details
+    {% else %}
+        Enrollment
+    {% endif %}
+    - {{ program.title }}
+{% endblock %}
+{% block content %}
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card border-0 shadow">
+                    <div class="card-header {% if is_accepted %}bg-success{% elif is_pending %}bg-info{% else %}bg-secondary{% endif %} text-white py-3">
+                        <h1 class="h4 mb-0">
+                            {% if is_accepted %}
+                                Enrollment Details
+                            {% elif is_pending %}
+                                Application Pending
+                            {% else %}
+                                Application Status
+                            {% endif %}
+                        </h1>
+                    </div>
+                    <div class="card-body p-4">
+                        {% if is_accepted %}
+                            <div class="alert alert-success mb-4">
+                                <strong>You are enrolled!</strong> You have been accepted to participate in this program.
+                            </div>
+                        {% elif is_pending %}
+                            <div class="alert alert-info mb-4">
+                                <strong>Application pending.</strong> Your application is being reviewed. We will notify you when a decision is made.
+                            </div>
+                        {% elif is_declined %}
+                            <div class="alert alert-secondary mb-4">
+                                {% if 'Withdrawn' in enrollment.declined_reason|default:'' %}
+                                    <strong>Withdrawn.</strong> You withdrew from this program.
+                                {% else %}
+                                    <strong>Not accepted.</strong> Unfortunately, your application was not accepted for this program.
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        <div class="mb-4">
+                            <h2 class="h5">{{ program.title }}</h2>
+                            <p class="text-muted mb-1">
+                                <strong>Dates:</strong> {{ program.start_date|date:"F j, Y" }} - {{ program.end_date|date:"F j, Y" }}
+                            </p>
+                            {% if program.location %}
+                                <p class="text-muted mb-0">
+                                    <strong>Location:</strong> {{ program.location }}
+                                </p>
+                            {% endif %}
+                        </div>
+                        <hr class="my-4">
+                        {% if can_edit %}
+                            <form method="post">
+                                <h4>Please update this page once your travel schedule is arranaged.</h4>
+                                {% csrf_token %}
+                                <h3 class="h5 mb-3">Lodging Information</h3>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="check_in_date" class="form-label">Check-in Date</label>
+                                        <input type="date"
+                                               class="form-control"
+                                               id="check_in_date"
+                                               name="check_in_date"
+                                               value="{{ enrollment.check_in_date|date:'Y-m-d'|default:'' }}">
+                                        <div class="form-text">When do you need lodging to start?</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="check_out_date" class="form-label">Check-out Date</label>
+                                        <input type="date"
+                                               class="form-control"
+                                               id="check_out_date"
+                                               name="check_out_date"
+                                               value="{{ enrollment.check_out_date|date:'Y-m-d'|default:'' }}">
+                                        <div class="form-text">When will you check out?</div>
+                                    </div>
+                                </div>
+                                <h3 class="h5 mb-3 mt-4">Contact Information</h3>
+                                <div class="mb-3">
+                                    <label for="phone_number" class="form-label">Phone Number</label>
+                                    <input type="tel"
+                                           class="form-control"
+                                           id="phone_number"
+                                           name="phone_number"
+                                           value="{{ enrollment.phone_number|default:'' }}"
+                                           placeholder="Your phone number">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="mailing_address" class="form-label">Mailing Address</label>
+                                    <textarea class="form-control"
+                                              id="mailing_address"
+                                              name="mailing_address"
+                                              rows="3"
+                                              placeholder="Your mailing address">{{ enrollment.mailing_address|default:'' }}</textarea>
+                                </div>
+                                <h3 class="h5 mb-3 mt-4">Additional Notes</h3>
+                                <div class="mb-4">
+                                    <label for="notes" class="form-label">Notes or Special Requests (optional)</label>
+                                    <textarea class="form-control"
+                                              id="notes"
+                                              name="notes"
+                                              rows="3"
+                                              placeholder="Dietary restrictions, accessibility needs, etc.">{{ enrollment.notes|default:'' }}</textarea>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary btn-lg">Save Details</button>
+                                    <a href="{% url 'accounts:dashboard' %}" class="btn btn-link">Back to Dashboard</a>
+                                </div>
+                            </form>
+                            {% if is_accepted %}
+                                <hr class="my-4">
+                                <div class="text-center">
+                                    <p class="text-muted small mb-2">Need to cancel your participation?</p>
+                                    <a href="{% url 'enrollments:withdraw_enrollment' enrollment.id %}"
+                                       class="btn btn-outline-danger btn-sm">Withdraw from Program</a>
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <!-- Read-only view for declined enrollments -->
+                            <div class="mb-3">
+                                <strong>Lodging:</strong>
+                                {% if enrollment.check_in_date and enrollment.check_out_date %}
+                                    {{ enrollment.check_in_date|date:"M j, Y" }} - {{ enrollment.check_out_date|date:"M j, Y" }}
+                                {% else %}
+                                    Not provided
+                                {% endif %}
+                            </div>
+                            <div class="mb-3">
+                                <strong>Phone:</strong> {{ enrollment.phone_number|default:"Not provided" }}
+                            </div>
+                            <div class="mb-3">
+                                <strong>Address:</strong> {{ enrollment.mailing_address|default:"Not provided" }}
+                            </div>
+                            {% if enrollment.notes %}
+                                <div class="mb-3">
+                                    <strong>Notes:</strong> {{ enrollment.notes }}
+                                </div>
+                            {% endif %}
+                            <div class="d-grid">
+                                <a href="{% url 'accounts:dashboard' %}" class="btn btn-primary">Back to Dashboard</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

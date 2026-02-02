@@ -1,0 +1,91 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">Home</a>
+    &rsaquo; <a href="{% url 'admin:programs_program_changelist' %}">Programs</a>
+    &rsaquo; <a href="{% url 'admin:programs_program_change' program.id %}">{{ program.code }}</a>
+    &rsaquo; Bulk Invite
+</div>
+{% endblock %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 4px;">
+    <h3 style="margin-top: 0;">Program Details</h3>
+    <p><strong>{{ program.title }}</strong></p>
+    <p>
+        <strong>Dates:</strong> {{ program.start_date }} - {{ program.end_date }}<br>
+        <strong>Application Deadline:</strong> {{ program.application_deadline|default:"Not set" }}
+    </p>
+
+    <h4>Current Invitations</h4>
+    <ul>
+        <li><strong>{{ invitation_stats.total }}</strong> total invitations</li>
+        <li><strong>{{ invitation_stats.pending }}</strong> pending response</li>
+        <li><strong>{{ invitation_stats.accepted }}</strong> accepted</li>
+    </ul>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+
+    <fieldset class="module aligned">
+        <h2>Email Addresses</h2>
+
+        <div class="form-row">
+            <div>
+                {{ form.emails.errors }}
+                <label for="id_emails" class="required">Email Addresses:</label>
+                {{ form.emails }}
+                <p class="help">{{ form.emails.help_text }}</p>
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset class="module aligned">
+        <h2>Invitation Message (Optional)</h2>
+
+        <div class="form-row">
+            <div>
+                {{ form.message.errors }}
+                <label for="id_message">Personal Message:</label>
+                {{ form.message }}
+                <p class="help">{{ form.message.help_text }}</p>
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset class="module aligned">
+        <h2>Email Options</h2>
+
+        <div class="form-row">
+            <div class="checkbox-row">
+                {{ form.send_emails }} {{ form.send_emails.label_tag }}
+                <p class="help">{{ form.send_emails.help_text }}</p>
+            </div>
+        </div>
+    </fieldset>
+
+    <div class="submit-row">
+        <input type="submit" value="Create Invitations" class="default">
+        <a href="{% url 'admin:programs_program_change' program.id %}" class="closelink">Cancel</a>
+    </div>
+</form>
+
+<div style="margin-top: 30px; padding: 15px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px;">
+    <h4 style="margin-top: 0;">How it works:</h4>
+    <ol>
+        <li>Paste email addresses separated by commas, semicolons, or new lines</li>
+        <li>Duplicate emails and emails already invited/enrolled will be skipped</li>
+        <li>If a person with that email exists in the system, they'll be linked automatically</li>
+        <li>If "Send invitation emails immediately" is checked, emails go out right away</li>
+        <li>Recipients click the link to accept or decline - they'll be prompted to sign in with ORCID if needed</li>
+    </ol>
+</div>
+
+{% endblock %}

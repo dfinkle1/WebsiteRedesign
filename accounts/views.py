@@ -1,10 +1,14 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
+from django.db import models
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.utils import timezone
+
 from .forms import ProfileEditForm
 from .models import UserProfile
+from enrollments.models import ProgramInvitation
+from programs.models import Program
 
 
 def accounts_root(request):
@@ -36,6 +40,11 @@ def logout_view(request):
 
 @login_required
 def dashboard(request):
+    # Check for pending invitation token from pre-login flow
+    pending_token = request.session.pop('pending_invitation_token', None)
+    if pending_token:
+        return redirect('enrollments:invitation_respond', token=pending_token)
+
     # Check if user has a profile
     try:
         profile = request.user.profile
@@ -59,15 +68,52 @@ def dashboard(request):
         })
 
     today = timezone.now().date()
+    now = timezone.now()
 
-    # Get user's enrollments
+    from enrollments.models import Enrollment
+
+    # Get confirmed upcoming enrollments (accepted, not withdrawn)
     upcoming_enrollments = person.enrollments.filter(
-        workshop__end_date__gte=today
+        workshop__end_date__gte=today,
+        accepted_at__isnull=False,
+        declined_at__isnull=True,  # Not withdrawn
     ).select_related('workshop').order_by('workshop__start_date')
 
+    # Get pending applications (applied but no decision yet)
+    pending_applications = person.enrollments.filter(
+        accepted_at__isnull=True,
+        declined_at__isnull=True,
+        workshop__end_date__gte=today,  # Program hasn't ended
+    ).select_related('workshop').order_by('workshop__start_date')
+
+    # Get past enrollments (completed programs they attended)
     past_enrollments = person.enrollments.filter(
-        workshop__end_date__lt=today
+        workshop__end_date__lt=today,
+        accepted_at__isnull=False,  # Only show accepted ones
     ).select_related('workshop').order_by('-workshop__end_date')
+
+    # Get pending invitations for this person (by email or person record)
+    pending_invitations = ProgramInvitation.objects.filter(
+        status=ProgramInvitation.Status.PENDING,
+        program__application_deadline__gte=now,
+    ).filter(
+        # Match by person record OR by email
+        models.Q(person=person) | models.Q(email__iexact=person.email_address)
+    ).select_related('program').order_by('program__application_deadline')
+
+    # Get programs already enrolled in (to exclude from open applications)
+    enrolled_program_ids = person.enrollments.values_list('workshop_id', flat=True)
+
+    # Get open programs the user can apply to
+    open_programs = Program.objects.accepting_applications().exclude(
+        id__in=enrolled_program_ids
+    ).order_by('application_deadline')[:5]
+
+    # Get reimbursements for this person
+    from apps.reimbursements.models import ReimbursementRequest
+    reimbursements = ReimbursementRequest.objects.filter(
+        person=person
+    ).select_related('enrollment__workshop').order_by('-created_at')[:5]
 
     # Calculate profile completion
     profile_fields = [
@@ -85,10 +131,15 @@ def dashboard(request):
     context = {
         'person': person,
         'upcoming_enrollments': upcoming_enrollments,
+        'pending_applications': pending_applications,
         'past_enrollments': past_enrollments,
         'upcoming_count': upcoming_enrollments.count(),
+        'pending_applications_count': pending_applications.count(),
         'past_count': past_enrollments.count(),
         'profile_completion': profile_completion,
+        'pending_invitations': pending_invitations,
+        'open_programs': open_programs,
+        'reimbursements': reimbursements,
     }
 
     return render(request, "accounts/dashboard.html", context)

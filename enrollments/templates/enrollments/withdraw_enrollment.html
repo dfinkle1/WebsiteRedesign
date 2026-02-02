@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Withdraw - {{ program.title }}{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-0 shadow border-danger">
+                <div class="card-header bg-danger text-white py-3">
+                    <h1 class="h4 mb-0">Withdraw from Program</h1>
+                </div>
+                <div class="card-body p-4">
+                    <div class="alert alert-warning mb-4">
+                        <strong>Are you sure?</strong> This action cannot be undone. You will need to contact staff if you change your mind.
+                    </div>
+
+                    <div class="mb-4">
+                        <h2 class="h5">{{ program.title }}</h2>
+                        <p class="text-muted mb-1">
+                            <strong>Dates:</strong> {{ program.start_date|date:"F j, Y" }} - {{ program.end_date|date:"F j, Y" }}
+                        </p>
+                        {% if program.location %}
+                        <p class="text-muted mb-0">
+                            <strong>Location:</strong> {{ program.location }}
+                        </p>
+                        {% endif %}
+                    </div>
+
+                    <hr class="my-4">
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="mb-4">
+                            <label for="reason" class="form-label">Reason for withdrawing (optional)</label>
+                            <textarea class="form-control" id="reason" name="reason" rows="3"
+                                      placeholder="Let us know why you need to withdraw..."></textarea>
+                            <div class="form-text">This helps us improve our programs.</div>
+                        </div>
+
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" id="confirm" name="confirm" required>
+                            <label class="form-check-label" for="confirm">
+                                I understand that withdrawing is final and I will need to contact staff to re-enroll.
+                            </label>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-danger">
+                                Confirm Withdrawal
+                            </button>
+                            <a href="{% url 'enrollments:enrollment_details' enrollment.id %}" class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
