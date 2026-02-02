@@ -1,9 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.paginator import Paginator
+from django_ratelimit.decorators import ratelimit
 from .models import Program
 from programs.services import get_upcoming_workshops
 from django.utils import timezone
+from mysite.utils import get_safe_page
 
 
 def program_page(request, code):
@@ -51,10 +53,13 @@ def upcoming_workshops(request):
     )
 
 
+@ratelimit(key='ip', rate='60/m', method='GET', block=True)
 def past_workshops(request):
     """
     Display past workshops with pagination, year filter, and search.
     Efficient: Uses LIMIT + OFFSET for pagination.
+    Rate limited: 60 requests/minute per IP.
+    Page capped: Maximum 100 pages to prevent bot abuse.
     """
     today = timezone.localdate()
 
@@ -82,21 +87,11 @@ def past_workshops(request):
     # Order by most recent first
     workshops = workshops.order_by("-end_date")
 
-    # Pagination - 10 per page
-    paginator = Paginator(workshops, 10)  # Show 10 workshops per page
-    page = request.GET.get("page")
-
-    try:
-        workshops_page = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page
-        workshops_page = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range, deliver last page of results
-        workshops_page = paginator.page(paginator.num_pages)
+    # Pagination - 10 per page with safety cap
+    paginator = Paginator(workshops, 10)
+    workshops_page = get_safe_page(request, paginator)
 
     # Get available years for filter dropdown
-    # This is efficient - just gets distinct years from past workshops
     available_years = (
         Program.objects.filter(
             type=Program.ProgramType.WORKSHOP,
@@ -109,7 +104,7 @@ def past_workshops(request):
     )
 
     context = {
-        "workshops": workshops_page,  # Paginated workshops
+        "workshops": workshops_page,
         "available_years": available_years,
         "selected_year": year,
         "search_query": search,

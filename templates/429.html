@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Too Many Requests - AIM{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <div class="mb-4">
+                <span class="display-1 text-muted">429</span>
+            </div>
+
+            <h1 class="h2 mb-3">Too Many Requests</h1>
+
+            <p class="text-muted mb-4">
+                You've made too many requests in a short period of time.<br>
+                Please wait a moment and try again.
+            </p>
+
+            <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+                <a href="{% url 'index' %}" class="btn btn-primary">Go to Homepage</a>
+                <button onclick="setTimeout(() => location.reload(), 5000)" class="btn btn-outline-secondary">
+                    Retry in 5 seconds
+                </button>
+            </div>
+
+            <p class="text-muted small mt-4">
+                This limit helps protect our site from automated abuse.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
