@@ -88,3 +88,54 @@ class Program(models.Model):
         if self.application_deadline and timezone.now() > self.application_deadline:
             return True
         return False
+
+
+# =============================================================================
+# PROXY MODELS FOR ADMIN
+# These don't create new database tables - they're just filtered views
+# =============================================================================
+
+
+class WorkshopManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(type=Program.ProgramType.WORKSHOP)
+
+
+class Workshop(Program):
+    """Proxy model for Workshops - appears as separate admin entry."""
+    objects = WorkshopManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = "Workshop"
+        verbose_name_plural = "Workshops"
+
+
+class SQuaREManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(type=Program.ProgramType.SQUARE)
+
+
+class SQuaRE(Program):
+    """Proxy model for SQuaREs - appears as separate admin entry."""
+    objects = SQuaREManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = "SQuaRE"
+        verbose_name_plural = "SQuaREs"
+
+
+class ResearchCommunityManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(type=Program.ProgramType.COMMUNITY)
+
+
+class ResearchCommunity(Program):
+    """Proxy model for Research Communities."""
+    objects = ResearchCommunityManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = "Research Community"
+        verbose_name_plural = "Research Communities"

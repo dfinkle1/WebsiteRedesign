@@ -9,7 +9,7 @@ from datetime import datetime
 from cms.admin.placeholderadmin import FrontendEditableAdminMixin
 import csv
 
-from .models import Program
+from .models import Program, Workshop, SQuaRE, ResearchCommunity
 from enrollments.models import Enrollment, ProgramInvitation, InvitationEmail
 from .forms import SendReminderForm, BulkInviteForm
 
@@ -106,20 +106,15 @@ class ProgramAdmin(FrontendEditableAdminMixin, admin.ModelAdmin):
 
     list_display = (
         "code",
-        "title",
+        "short_title",
         "type",
-        "start_date",
-        "end_date",
-        "application_deadline",
+        "dates_display",
         "enrollment_count",
-        "staff_actions",  # NEW: Action buttons
+        "quick_actions",
     )
     frontend_editable_fields = ("code", "title")
 
     list_filter = ("type", UpcomingFilter, "online")
-
-    class Media:
-        css = {"all": ("admin/css/custom_admin.css")}
 
     # Enhanced search - autocomplete will use these fields
     search_fields = (
@@ -137,7 +132,7 @@ class ProgramAdmin(FrontendEditableAdminMixin, admin.ModelAdmin):
     inlines = [EnrollmentInline]
 
     # Bulk actions
-    actions = ["export_programs_csv"]
+    actions = ["export_programs_csv", "export_bulk_name_badges"]
 
     def get_urls(self):
         """Add custom URLs for staff tools"""
@@ -168,16 +163,77 @@ class ProgramAdmin(FrontendEditableAdminMixin, admin.ModelAdmin):
                 self.admin_site.admin_view(self.bulk_invite_view),
                 name="programs_program_bulk_invite",
             ),
+            path(
+                "<int:program_id>/name-badges/",
+                self.admin_site.admin_view(self.export_name_badges),
+                name="programs_program_name_badges",
+            ),
         ]
         return custom_urls + urls
+
+    def short_title(self, obj):
+        """Truncated title with tooltip for full text"""
+        max_len = 50
+        if len(obj.title) > max_len:
+            return format_html(
+                '<span title="{}">{}&hellip;</span>', obj.title, obj.title[:max_len]
+            )
+        return obj.title
+
+    short_title.short_description = "Title"
+    short_title.admin_order_field = "title"
+
+    def dates_display(self, obj):
+        """Compact date range display"""
+        if obj.start_date and obj.end_date:
+            # Same year? Show compact format
+            if obj.start_date.year == obj.end_date.year:
+                return format_html(
+                    '<span style="white-space:nowrap">{} - {}</span>',
+                    obj.start_date.strftime("%b %d"),
+                    obj.end_date.strftime("%b %d, %Y"),
+                )
+            return format_html(
+                '<span style="white-space:nowrap">{} - {}</span>',
+                obj.start_date.strftime("%b %d, %Y"),
+                obj.end_date.strftime("%b %d, %Y"),
+            )
+        return "—"
+
+    dates_display.short_description = "Dates"
+    dates_display.admin_order_field = "start_date"
 
     def enrollment_count(self, obj):
         """Show number of enrollments"""
         count = obj.enrollments.count()
-        return f"{count} enrolled"
+        return count
 
-    enrollment_count.short_description = "Enrollments"
+    enrollment_count.short_description = "#"
 
+    def quick_actions(self, obj):
+        """Compact action links with icons"""
+        applicants_url = reverse("admin:programs_program_applicants", args=[obj.id])
+        export_url = reverse("admin:programs_program_export_csv", args=[obj.id])
+        emails_url = reverse("admin:programs_program_emails", args=[obj.id])
+        invite_url = reverse("admin:programs_program_bulk_invite", args=[obj.id])
+        badges_url = reverse("admin:programs_program_name_badges", args=[obj.id])
+
+        return format_html(
+            '<a href="{}">👥 Applicants</a> | '
+            '<a href="{}">📥 CSV</a> | '
+            '<a href="{}">📧 Emails</a> | '
+            '<a href="{}">✉️ Invite</a> | '
+            '<a href="{}">🏷️ Badges</a>',
+            applicants_url,
+            export_url,
+            emails_url,
+            invite_url,
+            badges_url,
+        )
+
+    quick_actions.short_description = "Actions"
+
+    # Keep old staff_actions for detail page if needed
     def staff_actions(self, obj):
         """Action buttons for each program"""
         applicants_url = reverse("admin:programs_program_applicants", args=[obj.id])
@@ -434,21 +490,23 @@ class ProgramAdmin(FrontendEditableAdminMixin, admin.ModelAdmin):
 
         # Get existing invitations and enrollments for this program
         existing_invite_emails = set(
-            ProgramInvitation.objects.filter(program=program)
-            .values_list('email', flat=True)
+            ProgramInvitation.objects.filter(program=program).values_list(
+                "email", flat=True
+            )
         )
         existing_enrollment_emails = set(
-            Enrollment.objects.filter(workshop=program, person__email_address__isnull=False)
-            .values_list('person__email_address', flat=True)
+            Enrollment.objects.filter(
+                workshop=program, person__email_address__isnull=False
+            ).values_list("person__email_address", flat=True)
         )
 
-        if request.method == 'POST':
+        if request.method == "POST":
             form = BulkInviteForm(request.POST)
 
             if form.is_valid():
-                emails = form.cleaned_data['emails']
-                message = form.cleaned_data.get('message', '')
-                send_emails = form.cleaned_data.get('send_emails', True)
+                emails = form.cleaned_data["emails"]
+                message = form.cleaned_data.get("message", "")
+                send_emails = form.cleaned_data.get("send_emails", True)
 
                 created_count = 0
                 skipped_existing = []
@@ -494,9 +552,13 @@ class ProgramAdmin(FrontendEditableAdminMixin, admin.ModelAdmin):
                 if created_count:
                     result_parts.append(f"Created {created_count} invitation(s)")
                 if skipped_existing:
-                    result_parts.append(f"Skipped {len(skipped_existing)} already invited")
+                    result_parts.append(
+                        f"Skipped {len(skipped_existing)} already invited"
+                    )
                 if skipped_enrolled:
-                    result_parts.append(f"Skipped {len(skipped_enrolled)} already enrolled")
+                    result_parts.append(
+                        f"Skipped {len(skipped_enrolled)} already enrolled"
+                    )
 
                 if result_parts:
                     messages.success(request, ". ".join(result_parts) + ".")
@@ -505,39 +567,44 @@ class ProgramAdmin(FrontendEditableAdminMixin, admin.ModelAdmin):
                     messages.warning(
                         request,
                         f"Email errors: {', '.join(email_errors[:3])}"
-                        + (f" and {len(email_errors) - 3} more" if len(email_errors) > 3 else "")
+                        + (
+                            f" and {len(email_errors) - 3} more"
+                            if len(email_errors) > 3
+                            else ""
+                        ),
                     )
 
                 # Log the action
                 self.log_change(
-                    request, program,
-                    f"Bulk invited {created_count} participants by {request.user.username}"
+                    request,
+                    program,
+                    f"Bulk invited {created_count} participants by {request.user.username}",
                 )
 
-                return redirect('admin:programs_program_change', program.id)
+                return redirect("admin:programs_program_change", program.id)
         else:
             form = BulkInviteForm()
 
         # Get invitation stats for context
         invitation_stats = {
-            'total': ProgramInvitation.objects.filter(program=program).count(),
-            'pending': ProgramInvitation.objects.filter(
+            "total": ProgramInvitation.objects.filter(program=program).count(),
+            "pending": ProgramInvitation.objects.filter(
                 program=program, status=ProgramInvitation.Status.PENDING
             ).count(),
-            'accepted': ProgramInvitation.objects.filter(
+            "accepted": ProgramInvitation.objects.filter(
                 program=program, status=ProgramInvitation.Status.ACCEPTED
             ).count(),
         }
 
         context = {
             **self.admin_site.each_context(request),
-            'program': program,
-            'form': form,
-            'invitation_stats': invitation_stats,
-            'title': f"Bulk Invite - {program.title}",
+            "program": program,
+            "form": form,
+            "invitation_stats": invitation_stats,
+            "title": f"Bulk Invite - {program.title}",
         }
 
-        return render(request, 'admin/programs/bulk_invite.html', context)
+        return render(request, "admin/programs/bulk_invite.html", context)
 
     def _send_invitation_email(self, request, invitation):
         """Send an invitation email."""
@@ -545,7 +612,7 @@ class ProgramAdmin(FrontendEditableAdminMixin, admin.ModelAdmin):
         from django.conf import settings
 
         invite_url = request.build_absolute_uri(
-            reverse('enrollments:invitation_respond', args=[invitation.token])
+            reverse("enrollments:invitation_respond", args=[invitation.token])
         )
 
         subject = f"You're invited to {invitation.program.title}"
@@ -618,3 +685,200 @@ American Institute of Mathematics
 
         self.message_user(request, f"Exported {queryset.count()} programs")
         return response
+
+    @admin.action(
+        description="🏷️ Export name badges (First, Last) for selected programs"
+    )
+    def export_bulk_name_badges(self, request, queryset):
+        """
+        Export name badges CSV for multiple programs at once.
+        Only includes accepted participants who haven't withdrawn.
+        """
+        response = HttpResponse(content_type="text/csv")
+        response["Content-Disposition"] = (
+            f'attachment; filename="name_badges_{datetime.now().strftime("%Y%m%d")}.csv"'
+        )
+
+        writer = csv.writer(response)
+        writer.writerow(["First Name", "Last Name", "Program"])
+
+        total_count = 0
+        for program in queryset.order_by("start_date"):
+            # Only accepted, not withdrawn
+            attendees = (
+                Enrollment.objects.filter(
+                    workshop=program,
+                    accepted_at__isnull=False,
+                    declined_at__isnull=True,
+                )
+                .select_related("person")
+                .order_by("person__last_name", "person__first_name")
+            )
+
+            for enrollment in attendees:
+                person = enrollment.person
+                if person:
+                    writer.writerow(
+                        [
+                            person.first_name or "",
+                            person.last_name or "",
+                        ]
+                    )
+                    total_count += 1
+
+        self.message_user(
+            request,
+            f"Exported {total_count} name badges from {queryset.count()} program(s)",
+        )
+        return response
+
+    # ========== SINGLE PROGRAM VIEWS ==========
+
+    def export_name_badges(self, request, program_id):
+        """
+        Export name badges CSV for a single program.
+        Only includes accepted participants who haven't withdrawn.
+        Format: First Name, Last Name (for Avery label import)
+        """
+        program = get_object_or_404(Program, id=program_id)
+
+        if not self.has_view_permission(request, program):
+            return HttpResponse("Permission denied", status=403)
+
+        # Only accepted, not withdrawn
+        attendees = (
+            Enrollment.objects.filter(
+                workshop=program,
+                accepted_at__isnull=False,
+                declined_at__isnull=True,
+            )
+            .select_related("person")
+            .order_by("person__last_name", "person__first_name")
+        )
+
+        response = HttpResponse(content_type="text/csv")
+        response["Content-Disposition"] = (
+            f'attachment; filename="badges_{program.code}_{datetime.now().strftime("%Y%m%d")}.csv"'
+        )
+
+        writer = csv.writer(response)
+        writer.writerow(["First Name", "Last Name"])
+
+        for enrollment in attendees:
+            person = enrollment.person
+            if person:
+                writer.writerow(
+                    [
+                        person.first_name or "",
+                        person.last_name or "",
+                    ]
+                )
+
+        self.log_change(request, program, f"Exported {attendees.count()} name badges")
+
+        return response
+
+
+# =============================================================================
+# PROXY MODEL ADMINS
+# These appear as separate entries in the admin sidebar
+# =============================================================================
+
+
+class UpcomingProgramFilter(admin.SimpleListFilter):
+    """Filter for upcoming vs past programs."""
+
+    title = "Status"
+    parameter_name = "status"
+
+    def lookups(self, request, model_admin):
+        return [
+            ("upcoming", "Upcoming"),
+            ("past", "Past"),
+            ("accepting", "Accepting Applications"),
+        ]
+
+    def queryset(self, request, queryset):
+        today = timezone.localdate()
+        if self.value() == "upcoming":
+            return queryset.filter(end_date__gte=today)
+        if self.value() == "past":
+            return queryset.filter(end_date__lt=today)
+        if self.value() == "accepting":
+            return queryset.filter(
+                application_mode=Program.ApplicationMode.OPEN,
+                application_deadline__gte=timezone.now(),
+            )
+        return queryset
+
+
+@admin.register(Workshop)
+class WorkshopAdmin(ProgramAdmin):
+    """Admin for Workshops only - filtered view."""
+
+    list_display = (
+        "code",
+        "short_title",
+        "dates_display",
+        "application_mode",
+        "enrollment_count",
+        "staff_actions",
+    )
+
+    # Simpler filters - no type filter needed
+    list_filter = (UpcomingProgramFilter, "application_mode", "online")
+
+    def get_queryset(self, request):
+        """Already filtered by proxy model manager."""
+        return super().get_queryset(request)
+
+    def save_model(self, request, obj, form, change):
+        """Ensure type is set to WORKSHOP for new objects."""
+        if not change:
+            obj.type = Program.ProgramType.WORKSHOP
+        super().save_model(request, obj, form, change)
+
+
+@admin.register(SQuaRE)
+class SQuaREAdmin(ProgramAdmin):
+    """Admin for SQuaREs only - filtered view."""
+
+    list_display = (
+        "code",
+        "title",
+        "start_date",
+        "end_date",
+        "application_deadline",
+        "enrollment_count",
+        "staff_actions",
+    )
+
+    list_filter = (UpcomingProgramFilter, "application_mode", "online")
+
+    def save_model(self, request, obj, form, change):
+        """Ensure type is set to SQUARE for new objects."""
+        if not change:
+            obj.type = Program.ProgramType.SQUARE
+        super().save_model(request, obj, form, change)
+
+
+@admin.register(ResearchCommunity)
+class ResearchCommunityAdmin(ProgramAdmin):
+    """Admin for Research Communities only."""
+
+    list_display = (
+        "code",
+        "title",
+        "start_date",
+        "end_date",
+        "enrollment_count",
+        "staff_actions",
+    )
+
+    list_filter = (UpcomingProgramFilter, "online")
+
+    def save_model(self, request, obj, form, change):
+        """Ensure type is set to COMMUNITY for new objects."""
+        if not change:
+            obj.type = Program.ProgramType.COMMUNITY
+        super().save_model(request, obj, form, change)

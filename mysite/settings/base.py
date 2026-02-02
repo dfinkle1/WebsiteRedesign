@@ -356,6 +356,10 @@ CACHES = {
 }
 CMS_CACHE_DURATIONS = {"content": 3600, "menus": 3600, "permissions": 3600}
 
+# Rate limiting (django-ratelimit)
+# Uses the default cache backend
+RATELIMIT_USE_CACHE = "default"
+RATELIMIT_ENABLE = True  # Set to False to disable in development if needed
 
 # Site ID
 SITE_ID = 4

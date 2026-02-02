@@ -1,15 +1,20 @@
 from django.views.generic import ListView, DetailView
 from django.db.models.functions import ExtractYear
+from django.utils.decorators import method_decorator
+from django_ratelimit.decorators import ratelimit
+from mysite.utils import SafePaginationMixin
 from .models import NewsArticle, Newsletter
 
 
-class ArticleListView(ListView):
+@method_decorator(ratelimit(key='ip', rate='60/m', method='GET', block=True), name='dispatch')
+class ArticleListView(SafePaginationMixin, ListView):
     """Paginated list of published news articles."""
 
     model = NewsArticle
     template_name = "news/article_list.html"
     context_object_name = "articles"
     paginate_by = 12
+    max_page = 50  # Cap at 50 pages
 
     def get_queryset(self):
         return NewsArticle.published.select_related("featured_image").only(
@@ -70,13 +75,15 @@ class ArticleArchiveView(ListView):
         )
 
 
-class ArticleYearView(ListView):
+@method_decorator(ratelimit(key='ip', rate='60/m', method='GET', block=True), name='dispatch')
+class ArticleYearView(SafePaginationMixin, ListView):
     """Articles from a specific year."""
 
     model = NewsArticle
     template_name = "news/article_list.html"
     context_object_name = "articles"
     paginate_by = 20
+    max_page = 20
 
     def get_queryset(self):
         return NewsArticle.published.filter(
@@ -90,13 +97,15 @@ class ArticleYearView(ListView):
         return context
 
 
-class NewsletterListView(ListView):
+@method_decorator(ratelimit(key='ip', rate='60/m', method='GET', block=True), name='dispatch')
+class NewsletterListView(SafePaginationMixin, ListView):
     """Paginated list of newsletters."""
 
     model = Newsletter
     template_name = "news/newsletter_list.html"
     context_object_name = "newsletters"
     paginate_by = 12
+    max_page = 30
 
     def get_queryset(self):
         return Newsletter.published.select_related("cover_image", "pdf_file")
@@ -141,13 +150,15 @@ class NewsletterDetailView(DetailView):
         return context
 
 
-class NewsletterYearView(ListView):
+@method_decorator(ratelimit(key='ip', rate='60/m', method='GET', block=True), name='dispatch')
+class NewsletterYearView(SafePaginationMixin, ListView):
     """Newsletters from a specific year."""
 
     model = Newsletter
     template_name = "news/newsletter_list.html"
     context_object_name = "newsletters"
     paginate_by = 20
+    max_page = 10
 
     def get_queryset(self):
         return Newsletter.published.filter(

@@ -3,10 +3,12 @@ from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
 from programs.views import home
+from mysite.views import robots_txt
 import debug_toolbar
 
 # All URLs (no language prefix)
 urlpatterns = [
+    path("robots.txt", robots_txt, name="robots_txt"),
     path("admin/", admin.site.urls),
     # Custom accounts URLs first (takes precedence over allauth)
     path("accounts/", include("accounts.urls", "accounts")),
