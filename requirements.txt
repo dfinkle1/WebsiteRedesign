@@ -31,6 +31,7 @@ django-fsm-2==4.1.0
 django-js-asset==3.1.2
 django-parler==2.3
 django-polymorphic==3.1.0
+django-ratelimit==4.1.0
 django-recaptcha==4.1.0
 django-sekizai==4.1.0
 django-storages==1.14.6
