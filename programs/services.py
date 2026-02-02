@@ -4,7 +4,7 @@ from django.forms.models import model_to_dict
 from .models import *
 
 
-def get_upcoming_workshops(limit=12, cache_seconds=600):
+def get_upcoming_workshops(limit=20, cache_seconds=600):
     today = timezone.localdate()
     cache_key = f"upcoming_workshops::{today.isoformat()}::{limit}"
     data = cache.get(cache_key)

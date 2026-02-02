@@ -102,35 +102,35 @@ INSTALLED_APPS = [
     "filer",
 ]
 
-TEXT_EDITOR = "djangocms_text.contrib.text_ckeditor4.ckeditor4"
-CKEDITOR_CONFIGS = {
-    "default": {
-        "toolbar": "Custom",
-        "toolbar_Custom": [
-            [
-                "Bold",
-                "Italic",
-                "Underline",
-                "-",
-                "NumberedList",
-                "BulletedList",
-                "-",
-                "Link",
-                "Unlink",
-            ],
-            [
-                "LineHeight",
-                "FontSize",
-                "Maximize",
-                "Source",
-            ],  # Add 'LineHeight' to the toolbar
-        ],
-        "extraPlugins": "lineheight,someotherplugin",  # Add 'lineheight' to extraPlugins (as a single comma-separated string)
-        "line_height": "1em;1.1em;1.2em;1.4em;1.5em;2em",  # Optional: Define custom line height values
-        "height": 300,
-        "width": "100%",  # Use '100%' for a responsive width
-    },
-}
+# TEXT_EDITOR = "djangocms_text.contrib.text_ckeditor4.ckeditor4"
+# CKEDITOR_CONFIGS = {
+#     "default": {
+#         "toolbar": "Custom",
+#         "toolbar_Custom": [
+#             [
+#                 "Bold",
+#                 "Italic",
+#                 "Underline",
+#                 "-",
+#                 "NumberedList",
+#                 "BulletedList",
+#                 "-",
+#                 "Link",
+#                 "Unlink",
+#             ],
+#             [
+#                 "LineHeight",
+#                 "FontSize",
+#                 "Maximize",
+#                 "Source",
+#             ],  # Add 'LineHeight' to the toolbar
+#         ],
+#         "extraPlugins": "lineheight,someotherplugin",  # Add 'lineheight' to extraPlugins (as a single comma-separated string)
+#         "line_height": "1em;1.1em;1.2em;1.4em;1.5em;2em",  # Optional: Define custom line height values
+#         "height": 300,
+#         "width": "100%",  # Use '100%' for a responsive width
+#     },
+# }
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
 CORS_ALLOWED_ORIGINS = ["https://127.0.0.1:8000"]

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Invitation - {{ program.title }}{% endblock %}
+{% block content %}
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card border-0 shadow">
+                    <div class="card-header bg-primary text-white py-3">
+                        <h1 class="h4 mb-0">You're Invited</h1>
+                    </div>
+                    <div class="card-body p-4">
+                        <h2>Workshop Registration</h2>
+                        <h3 class="mb-3 ">
+                            {{ program.title }}
+                        </h2>
+                        <div>
+                            <p>
+                                This form is to confirm your acceptance of an invitation to participate in the workshop Time-dependent Bernoulli-type free boundary problems. Accepting the invitation to this workshop is an explicit agreement to fully participate in all activities of the workshop. Note that workshop activities go from 9:00 Monday until 5:00 Friday afternoon, with activities every morning and afternoon (including Friday). If you are receiving funding from AIM, then it is expected that you will participate in the entire workshop. In addition, you agree to:
+                                <ol>
+                                    <li>Actively participate in the open, collaborative atmosphere of the workshop activities.</li>
+                                    <li>
+                                        Acknowledge the support of AIM and the NSF in papers arising from work at the workshop, and contribute those papers to the AIM preprint series.
+                                    </li>
+                                    <li>Give AIM permission to include your papers from the ArXiv in the AIM Collected Works project.</li>
+                                    <li>Follow the AIM Code of Conduct.</li>
+                                </ol>
+                                AIM will cover your travel and accommodations, and provide an allowance for meals.
+                            </p>
+                        </div>
+                        <div class="mb-4">
+                            <p class="text-muted mb-2">
+                                <strong>Dates:</strong> {{ program.start_date|date:"F j, Y" }} - {{ program.end_date|date:"F j, Y" }}
+                            </p>
+                            {% if program.location %}
+                                <p class="text-muted mb-2">
+                                    <strong>Location:</strong> {{ program.location }}
+                                </p>
+                            {% endif %}
+                            <p class="text-muted mb-0">
+                                <strong>Respond by:</strong> {{ invitation.expires_at|date:"F j, Y" }}
+                            </p>
+                        </div>
+                        {% if invitation.message %}
+                            <div class="alert alert-light border mb-4">
+                                <p class="mb-0">
+                                    <em>{{ invitation.message }}</em>
+                                </p>
+                            </div>
+                        {% endif %}
+                        {% if program.description %}
+                            <div class="mb-4">
+                                <h3 class="h6">About this program</h3>
+                                <p class="text-muted small">{{ program.description|truncatewords:100 }}</p>
+                            </div>
+                        {% endif %}
+                        <hr class="my-4">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="d-grid gap-2">
+                                <button type="submit"
+                                        name="action"
+                                        value="accept"
+                                        class="btn btn-success btn-lg">Accept Invitation</button>
+                                <button type="submit"
+                                        name="action"
+                                        value="decline"
+                                        class="btn btn-outline-secondary">Decline</button>
+                            </div>
+                        </form>
+                        {% if not user.is_authenticated %}
+                            <p class="text-muted small mt-3 mb-0 text-center">
+                                You will be asked to sign in with ORCID to accept this invitation.
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

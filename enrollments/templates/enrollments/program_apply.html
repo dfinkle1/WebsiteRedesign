@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}Apply - {{ program.title }}{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow">
+                <div class="card-header bg-primary text-white py-3">
+                    <h1 class="h4 mb-0">Apply to Program</h1>
+                </div>
+                <div class="card-body p-4">
+                    <h2 class="h5 mb-3">{{ program.title }}</h2>
+
+                    <div class="mb-4">
+                        <p class="text-muted mb-1">
+                            <strong>Dates:</strong> {{ program.start_date|date:"F j, Y" }} - {{ program.end_date|date:"F j, Y" }}
+                        </p>
+                        {% if program.location %}
+                        <p class="text-muted mb-1">
+                            <strong>Location:</strong> {{ program.location }}
+                        </p>
+                        {% endif %}
+                        <p class="text-muted mb-0">
+                            <strong>Application Deadline:</strong> {{ program.application_deadline|date:"F j, Y" }}
+                        </p>
+                    </div>
+
+                    {% if program.description %}
+                    <div class="mb-4">
+                        <p class="text-muted small">{{ program.description|truncatewords:100 }}</p>
+                    </div>
+                    {% endif %}
+
+                    <hr class="my-4">
+
+                    <div class="alert alert-info mb-4">
+                        <strong>Applying as:</strong> {{ person.first_name }} {{ person.last_name }}
+                        ({{ person.email_address }})
+                        <br>
+                        <small><a href="{% url 'accounts:profile' %}">Edit your profile</a> if this information is incorrect.</small>
+                    </div>
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <h2 class="h5 mb-3">Lodging Information</h2>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="check_in_date" class="form-label">Check-in Date</label>
+                                <input type="date" class="form-control" id="check_in_date" name="check_in_date">
+                                <div class="form-text">When do you need lodging to start?</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="check_out_date" class="form-label">Check-out Date</label>
+                                <input type="date" class="form-control" id="check_out_date" name="check_out_date">
+                                <div class="form-text">When will you check out?</div>
+                            </div>
+                        </div>
+
+                        <h2 class="h5 mb-3 mt-4">Contact Information</h2>
+
+                        <div class="mb-3">
+                            <label for="phone_number" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone_number" name="phone_number"
+                                   placeholder="Your phone number">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="mailing_address" class="form-label">Mailing Address</label>
+                            <textarea class="form-control" id="mailing_address" name="mailing_address"
+                                      rows="3" placeholder="Your mailing address"></textarea>
+                        </div>
+
+                        <h2 class="h5 mb-3 mt-4">Additional Information</h2>
+
+                        <div class="mb-4">
+                            <label for="notes" class="form-label">Why would you like to participate? (optional)</label>
+                            <textarea class="form-control" id="notes" name="notes"
+                                      rows="4" placeholder="Tell us about your interest in this program, relevant experience, etc."></textarea>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg">Submit Application</button>
+                            <a href="{% url 'programs:program-page' program.code %}" class="btn btn-link">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

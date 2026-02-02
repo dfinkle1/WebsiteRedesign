@@ -10,8 +10,8 @@ from cms.admin.placeholderadmin import FrontendEditableAdminMixin
 import csv
 
 from .models import Program
-from enrollments.models import Enrollment
-from .forms import SendReminderForm
+from enrollments.models import Enrollment, ProgramInvitation, InvitationEmail
+from .forms import SendReminderForm, BulkInviteForm
 
 
 class EnrollmentInline(admin.TabularInline):
@@ -163,6 +163,11 @@ class ProgramAdmin(FrontendEditableAdminMixin, admin.ModelAdmin):
                 self.admin_site.admin_view(self.send_reminder_view),
                 name="programs_program_send_reminder",
             ),
+            path(
+                "<int:program_id>/bulk-invite/",
+                self.admin_site.admin_view(self.bulk_invite_view),
+                name="programs_program_bulk_invite",
+            ),
         ]
         return custom_urls + urls
 
@@ -179,16 +184,19 @@ class ProgramAdmin(FrontendEditableAdminMixin, admin.ModelAdmin):
         export_url = reverse("admin:programs_program_export_csv", args=[obj.id])
         emails_url = reverse("admin:programs_program_emails", args=[obj.id])
         reminder_url = reverse("admin:programs_program_send_reminder", args=[obj.id])
+        invite_url = reverse("admin:programs_program_bulk_invite", args=[obj.id])
 
         return format_html(
             '<a class="button" href="{}" style="padding: 5px 10px; margin: 2px;">👥 Applicants</a> '
             '<a class="button" href="{}" style="padding: 5px 10px; margin: 2px;">📥 CSV</a> '
             '<a class="button" href="{}" style="padding: 5px 10px; margin: 2px;">📧 Emails</a> '
-            '<a class="button" href="{}" style="padding: 5px 10px; margin: 2px;">📬 Remind</a>',
+            '<a class="button" href="{}" style="padding: 5px 10px; margin: 2px;">📬 Remind</a> '
+            '<a class="button" href="{}" style="padding: 5px 10px; margin: 2px; background: #417690; color: white;">✉️ Bulk Invite</a>',
             applicants_url,
             export_url,
             emails_url,
             reminder_url,
+            invite_url,
         )
 
     staff_actions.short_description = "Staff Tools"
@@ -411,6 +419,170 @@ class ProgramAdmin(FrontendEditableAdminMixin, admin.ModelAdmin):
             from_email="noreply@example.com",  # Update with your from email
             recipient_list=[email],
             fail_silently=False,
+        )
+
+    def bulk_invite_view(self, request, program_id):
+        """Bulk invite participants by email addresses."""
+        from django.core.mail import send_mail
+        from django.conf import settings
+        from people.models import People
+
+        program = get_object_or_404(Program, id=program_id)
+
+        if not self.has_change_permission(request, program):
+            return HttpResponse("Permission denied", status=403)
+
+        # Get existing invitations and enrollments for this program
+        existing_invite_emails = set(
+            ProgramInvitation.objects.filter(program=program)
+            .values_list('email', flat=True)
+        )
+        existing_enrollment_emails = set(
+            Enrollment.objects.filter(workshop=program, person__email_address__isnull=False)
+            .values_list('person__email_address', flat=True)
+        )
+
+        if request.method == 'POST':
+            form = BulkInviteForm(request.POST)
+
+            if form.is_valid():
+                emails = form.cleaned_data['emails']
+                message = form.cleaned_data.get('message', '')
+                send_emails = form.cleaned_data.get('send_emails', True)
+
+                created_count = 0
+                skipped_existing = []
+                skipped_enrolled = []
+                email_errors = []
+
+                for email in emails:
+                    email_lower = email.lower()
+
+                    # Skip if already invited
+                    if email_lower in existing_invite_emails:
+                        skipped_existing.append(email)
+                        continue
+
+                    # Skip if already enrolled
+                    if email_lower in existing_enrollment_emails:
+                        skipped_enrolled.append(email)
+                        continue
+
+                    # Try to find existing person by email
+                    person = People.objects.filter(email_address__iexact=email).first()
+
+                    # Create invitation
+                    invitation = ProgramInvitation.objects.create(
+                        program=program,
+                        email=email_lower,
+                        person=person,
+                        message=message,
+                        invited_by=request.user,
+                    )
+                    created_count += 1
+                    existing_invite_emails.add(email_lower)  # Track for deduplication
+
+                    # Send email if requested
+                    if send_emails:
+                        try:
+                            self._send_invitation_email(request, invitation)
+                        except Exception as e:
+                            email_errors.append(f"{email}: {str(e)}")
+
+                # Build result message
+                result_parts = []
+                if created_count:
+                    result_parts.append(f"Created {created_count} invitation(s)")
+                if skipped_existing:
+                    result_parts.append(f"Skipped {len(skipped_existing)} already invited")
+                if skipped_enrolled:
+                    result_parts.append(f"Skipped {len(skipped_enrolled)} already enrolled")
+
+                if result_parts:
+                    messages.success(request, ". ".join(result_parts) + ".")
+
+                if email_errors:
+                    messages.warning(
+                        request,
+                        f"Email errors: {', '.join(email_errors[:3])}"
+                        + (f" and {len(email_errors) - 3} more" if len(email_errors) > 3 else "")
+                    )
+
+                # Log the action
+                self.log_change(
+                    request, program,
+                    f"Bulk invited {created_count} participants by {request.user.username}"
+                )
+
+                return redirect('admin:programs_program_change', program.id)
+        else:
+            form = BulkInviteForm()
+
+        # Get invitation stats for context
+        invitation_stats = {
+            'total': ProgramInvitation.objects.filter(program=program).count(),
+            'pending': ProgramInvitation.objects.filter(
+                program=program, status=ProgramInvitation.Status.PENDING
+            ).count(),
+            'accepted': ProgramInvitation.objects.filter(
+                program=program, status=ProgramInvitation.Status.ACCEPTED
+            ).count(),
+        }
+
+        context = {
+            **self.admin_site.each_context(request),
+            'program': program,
+            'form': form,
+            'invitation_stats': invitation_stats,
+            'title': f"Bulk Invite - {program.title}",
+        }
+
+        return render(request, 'admin/programs/bulk_invite.html', context)
+
+    def _send_invitation_email(self, request, invitation):
+        """Send an invitation email."""
+        from django.core.mail import send_mail
+        from django.conf import settings
+
+        invite_url = request.build_absolute_uri(
+            reverse('enrollments:invitation_respond', args=[invitation.token])
+        )
+
+        subject = f"You're invited to {invitation.program.title}"
+
+        body = f"""
+You have been invited to participate in {invitation.program.title}.
+
+Program Dates: {invitation.program.start_date} - {invitation.program.end_date}
+Location: {invitation.program.location or 'TBD'}
+
+Please respond by: {invitation.expires_at}
+
+{invitation.message if invitation.message else ''}
+
+To accept or decline this invitation, please visit:
+{invite_url}
+
+If you have any questions, please contact workshops@aimath.org.
+
+Best regards,
+American Institute of Mathematics
+        """.strip()
+
+        send_mail(
+            subject=subject,
+            message=body,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[invitation.email],
+            fail_silently=False,
+        )
+
+        # Record the email
+        InvitationEmail.objects.create(
+            invitation=invitation,
+            sent_by=request.user,
+            subject=subject,
+            body=body,
         )
 
     # ========== BULK ACTIONS ==========

@@ -7,12 +7,31 @@ from django.utils import timezone
 
 
 def program_page(request, code):
-    program_page = get_object_or_404(
-        Program, type=Program.ProgramType.WORKSHOP, code=code
-    )
+    program = get_object_or_404(Program, type=Program.ProgramType.WORKSHOP, code=code)
     now = timezone.now()
+
+    # Check if user is enrolled or has applied
+    user_enrollment = None
+    if request.user.is_authenticated:
+        try:
+            person = request.user.profile.person
+            from enrollments.models import Enrollment
+
+            user_enrollment = Enrollment.objects.filter(
+                person=person, workshop=program
+            ).first()
+        except AttributeError:
+            pass
+
     return render(
-        request, "program_page.html", {"program_page": program_page, "now": now}
+        request,
+        "program_page.html",
+        {
+            "program_page": program,
+            "program": program,  # alias for cleaner template code
+            "now": now,
+            "user_enrollment": user_enrollment,
+        },
     )
 
 

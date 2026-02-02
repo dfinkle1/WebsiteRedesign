@@ -1,9 +1,48 @@
 {% extends "base.html" %}
 {% block content %}
     <div class="container mt-5 mb-5 theme-bg">
-        {% if program_page.application_deadline < now %}
-            <p class="text-end">Applications are closed for this workshop</p>
-        {% endif %}
+        <!-- Application Status Banner -->
+        <div class="row mb-4">
+            <div class="col-12">
+                {% if user_enrollment %}
+                    {% if user_enrollment.accepted_at %}
+                        <div class="alert alert-success d-flex justify-content-between align-items-center">
+                            <span><strong>You are enrolled</strong> in this workshop.</span>
+                            <a href="{% url 'accounts:dashboard' %}" class="btn btn-sm btn-outline-success">View Dashboard</a>
+                        </div>
+                    {% elif user_enrollment.declined_at %}
+                        <div class="alert alert-secondary">
+                            Your application was not accepted for this workshop.
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info d-flex justify-content-between align-items-center">
+                            <span><strong>Application pending</strong> - We will notify you when a decision is made.</span>
+                            <a href="{% url 'accounts:dashboard' %}" class="btn btn-sm btn-outline-info">View Dashboard</a>
+                        </div>
+                    {% endif %}
+                {% elif program.is_accepting_applications %}
+                    <div class="alert alert-success d-flex justify-content-between align-items-center">
+                        <span>
+                            <strong>Applications Open</strong> - Apply by {{ program.application_deadline|date:"F j, Y" }}
+                        </span>
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'enrollments:program_apply' program.code %}" class="btn btn-success">Apply Now</a>
+                        {% else %}
+                            <a href="{% url 'accounts:login' %}?next={% url 'enrollments:program_apply' program.code %}" class="btn btn-success">Sign In to Apply</a>
+                        {% endif %}
+                    </div>
+                {% elif program.application_mode == 'invite' %}
+                    <div class="alert alert-light border">
+                        <strong>Invite Only</strong> - This workshop is by invitation only.
+                    </div>
+                {% elif program.applications_closed %}
+                    <div class="alert alert-secondary">
+                        Applications are closed for this workshop.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
         <div class="row m-3">
             <div class="text-center">
                 <h2>{{ program_page.title |safe }}</h2>
@@ -13,13 +52,10 @@
                     <a href="https://aimath.org" target="_blank">American Institute of Mathematics</a>,  Pasadena, California
                 </h4>
             </div>
-            <p>This workshop, sponsered by AIM and the NSF, {{ program_page.description | safe }}</p>
+            <p>This workshop, sponsored by AIM and the NSF, {{ program_page.description | safe }}</p>
             <p>
                 This event will be run as an AIM-style workshop. Participants will be invited to suggest open problems and questions before the workshop begins, and these will be posted on the workshop website. These include specific problems on which there is hope of making some progress during the workshop, as well as more ambitious problems which may influence the future activity of the field. Lectures at the workshop will be focused on familiarizing the participants with the background material leading up to specific problems, and the schedule will include discussion and parallel working sessions.
             </p>
-            {% if program_page.application_deadline < now %}
-                <p>The deadline to apply for support to participate in this workshop has passed.</p>
-            {% endif %}
             <p>
                 For more information email <i><a href="mailto:workshops@aimath.org">workshops@aimath.org</a></i>
             </p>
