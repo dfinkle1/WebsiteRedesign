@@ -1,0 +1,29 @@
+{% if years %}
+    <div class="mb-4">
+        <strong>Select year:</strong>
+        {% for y in years %}
+            <a href="?year={{ y }}"
+               class="btn btn-sm {% if selected_year == y %}btn-primary{% else %}btn-outline-primary{% endif %}">{{ y }}</a>
+        {% endfor %}
+    </div>
+{% endif %}
+{% if preprints %}
+    <h3 class="mb-3">Volume {{ selected_year }}</h3>
+    <p class="text-muted mb-3">{{ preprints|length }} papers</p>
+    <ul class="list-unstyled">
+        {% for preprint in preprints %}
+            <li class="mb-3 pb-2 border-bottom">
+                <strong>{{ preprint.entry_id }}.</strong>
+                {% if preprint.paper_url %}
+                    <a href="{{ preprint.paper_url }}" target="_blank" rel="noopener">{{ preprint.title }}</a>
+                {% else %}
+                    {{ preprint.title }}
+                {% endif %}
+                <br>
+                <span class="text-muted">by {{ preprint.authors }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p class="text-muted">No preprints found for this year.</p>
+{% endif %}

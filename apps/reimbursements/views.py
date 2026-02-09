@@ -7,8 +7,9 @@ User-facing views for creating, editing, and viewing reimbursement requests.
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import Http404, JsonResponse
+from django.http import Http404, JsonResponse, FileResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
+from django.conf import settings
 from django.urls import reverse
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
@@ -445,3 +446,71 @@ def reimbursement_cancel(request, pk):
             messages.error(request, f"Could not cancel: {e}")
 
     return redirect("reimbursements:detail", pk=pk)
+
+
+# =============================================================================
+# PROTECTED FILE ACCESS
+# =============================================================================
+
+
+@login_required(login_url="/accounts/login/")
+def protected_receipt(request, pk, expense_pk, receipt_pk):
+    """
+    Serve receipt files with authorization check.
+    Only the submitter or staff can access receipt files.
+    """
+    reimbursement = get_object_or_404(ReimbursementRequest, pk=pk)
+
+    # Authorization check
+    if reimbursement.submitted_by != request.user and not request.user.is_staff:
+        raise Http404("File not found")
+
+    receipt = get_object_or_404(
+        Receipt,
+        pk=receipt_pk,
+        line_item__pk=expense_pk,
+        line_item__request=reimbursement,
+    )
+
+    # For S3 storage, redirect to a signed URL
+    # For local storage, serve the file directly
+    if hasattr(receipt.file.storage, 'url'):
+        # S3 or other cloud storage - redirect to signed URL
+        return HttpResponseRedirect(receipt.file.url)
+    else:
+        # Local filesystem - serve directly
+        return FileResponse(
+            receipt.file.open('rb'),
+            as_attachment=False,
+            filename=receipt.original_filename,
+        )
+
+
+@login_required(login_url="/accounts/login/")
+def protected_visa_doc(request, pk, doc_type):
+    """
+    Serve visa documents (passport, i94) with authorization check.
+    Only the submitter or staff can access these documents.
+    """
+    reimbursement = get_object_or_404(ReimbursementRequest, pk=pk)
+
+    # Authorization check
+    if reimbursement.submitted_by != request.user and not request.user.is_staff:
+        raise Http404("File not found")
+
+    # Get the appropriate file
+    if doc_type == "passport" and reimbursement.passport_copy:
+        file_field = reimbursement.passport_copy
+    elif doc_type == "i94" and reimbursement.i94_document:
+        file_field = reimbursement.i94_document
+    else:
+        raise Http404("File not found")
+
+    # For S3 storage, redirect to a signed URL
+    if hasattr(file_field.storage, 'url'):
+        return HttpResponseRedirect(file_field.url)
+    else:
+        return FileResponse(
+            file_field.open('rb'),
+            as_attachment=False,
+        )

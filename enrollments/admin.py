@@ -232,14 +232,14 @@ class EnrollmentAdmin(admin.ModelAdmin):
         """Visual indicator of enrollment status"""
         if obj.accepted_at and obj.declined_at:
             return format_html(
-                '<span style="color: orange;">⚠ Accepted then Declined</span>'
+                '<span style="color: orange;">⚠ Accepted then Declined</span>', "yes"
             )
         elif obj.accepted_at:
-            return format_html('<span style="color: green;">✓ Accepted</span>')
+            return format_html('<span style="color: green;">✓ Accepted</span>', "yes")
         elif obj.declined_at:
-            return format_html('<span style="color: red;">✗ Declined</span>')
+            return format_html('<span style="color: red;">✗ Declined</span>', "yes")
         else:
-            return format_html('<span style="color: gray;">— Pending</span>')
+            return format_html('<span style="color: gray;">— Pending</span>', "yes")
 
     enrollment_status.short_description = "Status"
 

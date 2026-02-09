@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # "apps.core.apps.CoreConfig",
     "apps.staff.apps.StaffConfig",
     "apps.news.apps.NewsConfig",
+    "apps.preprints.apps.PreprintsConfig",
     "apps.events",
     "accounts",
     "programs",
@@ -372,7 +373,6 @@ STATICFILES_DIRS = [BASE_DIR / "assets"]
 
 # Static & Media with S3
 USE_S3 = os.getenv("USE_S3")
-
 
 if USE_S3:
     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")

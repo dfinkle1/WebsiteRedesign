@@ -63,17 +63,17 @@ class EnrollmentInline(admin.TabularInline):
 
     def enrollment_status_display(self, obj):
         """Show visual status indicator"""
-        if not obj.pk:
+        if not obj or not obj.pk:
             return "—"
 
         if obj.accepted_at and obj.declined_at:
-            return format_html('<span style="color: orange;">⚠</span>')
+            return "⚠️ Withdrawn"
         elif obj.accepted_at:
-            return format_html('<span style="color: green;">✓</span>')
+            return "✅ Accepted"
         elif obj.declined_at:
-            return format_html('<span style="color: red;">✗</span>')
+            return "❌ Declined"
         else:
-            return format_html('<span style="color: gray;">—</span>')
+            return "⏳ Pending"
 
     enrollment_status_display.short_description = "Status"
 

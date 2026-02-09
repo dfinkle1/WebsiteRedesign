@@ -63,7 +63,9 @@
                   <td>
                     {% for receipt in item.receipts.all %}
                     <span class="badge bg-light text-dark me-1">
-                      {{ receipt.original_filename|truncatechars:15 }}
+                      <a href="{% url 'reimbursements:protected_receipt' reimbursement.pk item.pk receipt.pk %}" target="_blank" class="text-decoration-none text-dark" title="View {{ receipt.original_filename }}">
+                        {{ receipt.original_filename|truncatechars:15 }}
+                      </a>
                       <form method="post" action="{% url 'reimbursements:receipt_delete' reimbursement.pk item.pk receipt.pk %}" class="d-inline">
                         {% csrf_token %}
                         <button type="submit" class="btn-close btn-sm" style="font-size: 0.5rem;" title="Remove"></button>
