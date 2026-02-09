@@ -44,7 +44,19 @@
                             </div>
                         {% endif %}
                         <div class="mb-4">
-                            <h2 class="h5">{{ program.title }}</h2>
+                            <h2 class="">{{ program.title }}</h2>
+                            <p>
+                                This form is to confirm your acceptance of an invitation to participate in the workshop {{ program.title }}. Accepting the invitation to this workshop is an explicit agreement to fully participate in all activities of the workshop. Note that workshop activities go from 9:00 Monday until 5:00 Friday afternoon, with activities every morning and afternoon (including Friday). If you are receiving funding from AIM, then it is expected that you will participate in the entire workshop. In addition, you agree to:
+                                <ul>
+                                    <li>Actively participate in the open, collaborative atmosphere of the workshop activities.</li>
+                                    <li>
+                                        Acknowledge the support of AIM and the NSF in papers arising from work at the workshop, and contribute those papers to the AIM preprint series.
+                                    </li>
+                                    <li>Give AIM permission to include your papers from the ArXiv in the AIM Collected Works project.</li>
+                                    <li>Follow the AIM Code of Conduct.</li>
+                                </ul>
+                                AIM will cover your travel and accommodations, and provide an allowance for meals.
+                            </p>
                             <p class="text-muted mb-1">
                                 <strong>Dates:</strong> {{ program.start_date|date:"F j, Y" }} - {{ program.end_date|date:"F j, Y" }}
                             </p>

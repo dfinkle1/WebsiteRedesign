@@ -28,4 +28,16 @@ urlpatterns = [
         views.receipt_delete,
         name="receipt_delete"
     ),
+
+    # Protected file access (use these URLs instead of direct media URLs)
+    path(
+        "<int:pk>/expenses/<int:expense_pk>/receipt/<int:receipt_pk>/view/",
+        views.protected_receipt,
+        name="protected_receipt"
+    ),
+    path(
+        "<int:pk>/document/<str:doc_type>/",
+        views.protected_visa_doc,
+        name="protected_visa_doc"
+    ),
 ]

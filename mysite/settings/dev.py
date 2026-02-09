@@ -23,7 +23,6 @@ DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-BLOCK_REMOTE_MEDIA = os.getenv("BLOCK_REMOTE_MEDIA", "1") == "1" and DEBUG
 
 STORAGES = {
     "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
