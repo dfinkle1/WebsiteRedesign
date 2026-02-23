@@ -112,7 +112,8 @@ class ProgramAdmin(FrontendEditableAdminMixin, admin.ModelAdmin):
         "enrollment_count",
         "quick_actions",
     )
-    frontend_editable_fields = ("code", "title")
+    frontend_editable_fields = ("title",)
+    readonly_fields = ("code",)  # Auto-generated, not editable
 
     list_filter = ("type", UpcomingFilter, "online")
 
@@ -168,6 +169,21 @@ class ProgramAdmin(FrontendEditableAdminMixin, admin.ModelAdmin):
                 self.admin_site.admin_view(self.export_name_badges),
                 name="programs_program_name_badges",
             ),
+            path(
+                "<int:program_id>/manage-enrollments/",
+                self.admin_site.admin_view(self.manage_enrollments_view),
+                name="programs_program_manage_enrollments",
+            ),
+            path(
+                "<int:program_id>/import-enrollments/",
+                self.admin_site.admin_view(self.import_enrollments_view),
+                name="programs_program_import_enrollments",
+            ),
+            path(
+                "<int:program_id>/send-enrollment-invites/",
+                self.admin_site.admin_view(self.send_enrollment_invites_view),
+                name="programs_program_send_enrollment_invites",
+            ),
         ]
         return custom_urls + urls
 
@@ -211,24 +227,27 @@ class ProgramAdmin(FrontendEditableAdminMixin, admin.ModelAdmin):
     enrollment_count.short_description = "#"
 
     def quick_actions(self, obj):
-        """Compact action links with icons"""
+        """Action links displayed vertically"""
         applicants_url = reverse("admin:programs_program_applicants", args=[obj.id])
         export_url = reverse("admin:programs_program_export_csv", args=[obj.id])
         emails_url = reverse("admin:programs_program_emails", args=[obj.id])
         invite_url = reverse("admin:programs_program_bulk_invite", args=[obj.id])
         badges_url = reverse("admin:programs_program_name_badges", args=[obj.id])
+        manage_url = reverse("admin:programs_program_manage_enrollments", args=[obj.id])
 
         return format_html(
-            '<a href="{}">👥 Applicants</a> | '
-            '<a href="{}">📥 CSV</a> | '
-            '<a href="{}">📧 Emails</a> | '
-            '<a href="{}">✉️ Invite</a> | '
-            '<a href="{}">🏷️ Badges</a>',
+            '<a href="{}">👥 Applicants</a><br>'
+            '<a href="{}">📥 CSV</a><br>'
+            '<a href="{}">📧 Emails</a><br>'
+            '<a href="{}">✉️ Invite</a><br>'
+            '<a href="{}">🏷️ Badges</a><br>'
+            '<a href="{}">⚙️ Manage</a>',
             applicants_url,
             export_url,
             emails_url,
             invite_url,
             badges_url,
+            manage_url,
         )
 
     quick_actions.short_description = "Actions"
@@ -335,13 +354,27 @@ class ProgramAdmin(FrontendEditableAdminMixin, admin.ModelAdmin):
             else:
                 status = "Pending"
 
+            # Use person fields if linked, otherwise use enrollment snapshot fields
+            if person:
+                last_name = person.last_name or ""
+                first_name = person.first_name or ""
+                email = person.email_address or ""
+                orcid = person.orcid_id or ""
+                institution = person.institution or ""
+            else:
+                last_name = enrollment.last_name or ""
+                first_name = enrollment.first_name or ""
+                email = enrollment.email_snap or ""
+                orcid = enrollment.orcid_snap or ""
+                institution = enrollment.institution or ""
+
             writer.writerow(
                 [
-                    person.last_name or "",
-                    person.first_name or "",
-                    person.email_address or "",
-                    person.orcid_id or "",
-                    person.institution or "",
+                    last_name,
+                    first_name,
+                    email,
+                    orcid,
+                    institution,
                     status,
                     (
                         enrollment.accepted_at.strftime("%Y-%m-%d %H:%M")
@@ -777,6 +810,211 @@ American Institute of Mathematics
         self.log_change(request, program, f"Exported {attendees.count()} name badges")
 
         return response
+
+    def manage_enrollments_view(self, request, program_id):
+        """
+        Unified enrollment management page:
+        - Import enrollments from CSV
+        - View pending invites
+        - Send invite emails
+        """
+        program = get_object_or_404(Program, id=program_id)
+
+        if not self.has_change_permission(request, program):
+            return HttpResponse("Permission denied", status=403)
+
+        # Get enrollment stats
+        pending_invites = Enrollment.objects.filter(
+            workshop=program,
+            person__isnull=True,
+            invite_sent_at__isnull=True,
+        ).order_by("created_at")
+
+        invited_awaiting = Enrollment.objects.filter(
+            workshop=program,
+            person__isnull=True,
+            invite_sent_at__isnull=False,
+        ).order_by("-invite_sent_at")
+
+        confirmed = Enrollment.objects.filter(
+            workshop=program,
+            person__isnull=False,
+        ).select_related("person").order_by("-created_at")
+
+        context = {
+            **self.admin_site.each_context(request),
+            "program": program,
+            "pending_invites": pending_invites,
+            "invited_awaiting": invited_awaiting,
+            "confirmed": confirmed,
+            "opts": self.model._meta,
+            "title": f"Manage Enrollments: {program.title}",
+        }
+
+        return render(request, "admin/programs/manage_enrollments.html", context)
+
+    def import_enrollments_view(self, request, program_id):
+        """Import enrollments from CSV data."""
+        import csv
+        import io
+
+        program = get_object_or_404(Program, id=program_id)
+
+        if not self.has_change_permission(request, program):
+            return HttpResponse("Permission denied", status=403)
+
+        if request.method != "POST":
+            return redirect("admin:programs_program_manage_enrollments", program_id=program_id)
+
+        csv_data = request.POST.get("csv_data", "").strip()
+        if not csv_data:
+            messages.error(request, "No CSV data provided.")
+            return redirect("admin:programs_program_manage_enrollments", program_id=program_id)
+
+        # Parse CSV
+        reader = csv.DictReader(io.StringIO(csv_data))
+
+        created = 0
+        skipped = 0
+        errors = []
+
+        # Get existing emails for this program to check duplicates
+        existing_emails = set(
+            Enrollment.objects.filter(workshop=program)
+            .exclude(email_snap__isnull=True)
+            .exclude(email_snap="")
+            .values_list("email_snap", flat=True)
+        )
+
+        for row_num, row in enumerate(reader, start=2):  # Start at 2 (header is row 1)
+            try:
+                # Normalize field names (handle various CSV formats)
+                first_name = row.get("first_name") or row.get("First Name") or row.get("firstname") or ""
+                last_name = row.get("last_name") or row.get("Last Name") or row.get("lastname") or ""
+                email = row.get("email") or row.get("Email") or row.get("email_address") or ""
+                funding = row.get("funding") or row.get("Funding") or ""
+
+                email = email.strip().lower()
+
+                if not email:
+                    errors.append(f"Row {row_num}: Missing email address")
+                    continue
+
+                # Skip duplicates
+                if email in existing_emails:
+                    skipped += 1
+                    continue
+
+                # Create enrollment
+                Enrollment.objects.create(
+                    workshop=program,
+                    first_name=first_name.strip(),
+                    last_name=last_name.strip(),
+                    email_snap=email,
+                    funding=funding.strip(),
+                    source=Enrollment.Source.STAFF,
+                    person=None,
+                    invite_sent_at=None,
+                )
+                existing_emails.add(email)
+                created += 1
+
+            except Exception as e:
+                errors.append(f"Row {row_num}: {str(e)}")
+
+        # Show results
+        if created:
+            messages.success(request, f"Created {created} new enrollment(s).")
+        if skipped:
+            messages.info(request, f"Skipped {skipped} duplicate(s).")
+        if errors:
+            messages.warning(request, f"{len(errors)} error(s): {'; '.join(errors[:5])}")
+
+        return redirect("admin:programs_program_manage_enrollments", program_id=program_id)
+
+    def send_enrollment_invites_view(self, request, program_id):
+        """Send invitation emails for selected enrollments."""
+        from django.core.mail import send_mail
+        from django.template.loader import render_to_string
+        from django.conf import settings
+
+        program = get_object_or_404(Program, id=program_id)
+
+        if not self.has_change_permission(request, program):
+            return HttpResponse("Permission denied", status=403)
+
+        if request.method != "POST":
+            return redirect("admin:programs_program_manage_enrollments", program_id=program_id)
+
+        # Get selected enrollment IDs
+        enrollment_ids = request.POST.getlist("enrollment_ids")
+
+        if not enrollment_ids:
+            messages.warning(request, "No enrollments selected.")
+            return redirect("admin:programs_program_manage_enrollments", program_id=program_id)
+
+        enrollments = Enrollment.objects.filter(
+            id__in=enrollment_ids,
+            workshop=program,
+            person__isnull=True,
+            invite_sent_at__isnull=True,
+        )
+
+        sent_count = 0
+        error_count = 0
+
+        for enrollment in enrollments:
+            try:
+                # Generate token for this enrollment
+                enrollment.generate_invite_token()
+                enrollment.save(update_fields=["invite_token"])
+
+                # Build invite URL using enrollment token
+                invite_url = request.build_absolute_uri(
+                    reverse("enrollments:enrollment_respond", args=[enrollment.invite_token])
+                )
+
+                # Send email
+                subject = f"Invitation: {program.title}"
+                context = {
+                    "first_name": enrollment.first_name or "Participant",
+                    "program": program,
+                    "invite_url": invite_url,
+                    "accept_url": f"{invite_url}?action=accept",
+                    "decline_url": f"{invite_url}?action=decline",
+                }
+
+                html_message = render_to_string(
+                    "emails/program_invitation.html", context
+                )
+                plain_message = render_to_string(
+                    "emails/program_invitation.txt", context
+                )
+
+                send_mail(
+                    subject=subject,
+                    message=plain_message,
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[enrollment.email_snap],
+                    html_message=html_message,
+                    fail_silently=False,
+                )
+
+                # Mark as sent using the send_invite method
+                enrollment.send_invite(sent_by=request.user)
+
+                sent_count += 1
+
+            except Exception as e:
+                error_count += 1
+                messages.error(request, f"Failed to send to {enrollment.email_snap}: {e}")
+
+        if sent_count:
+            messages.success(request, f"Sent {sent_count} invitation(s).")
+        if error_count:
+            messages.warning(request, f"{error_count} email(s) failed to send.")
+
+        return redirect("admin:programs_program_manage_enrollments", program_id=program_id)
 
 
 # =============================================================================

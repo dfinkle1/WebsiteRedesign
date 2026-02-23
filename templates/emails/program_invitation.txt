@@ -1,0 +1,18 @@
+Hello {{ first_name }},
+
+You have been invited to participate in:
+
+{{ program.title }}
+{% if program.start_date %}Dates: {{ program.start_date }} - {{ program.end_date }}{% endif %}
+
+To respond to this invitation, please visit:
+{{ invite_url }}
+
+Or use these direct links:
+- Accept: {{ accept_url }}
+- Decline: {{ decline_url }}
+
+If you have any questions, please contact us at info@aimath.org.
+
+Best regards,
+American Institute of Mathematics

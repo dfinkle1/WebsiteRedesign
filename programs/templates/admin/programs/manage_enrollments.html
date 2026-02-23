@@ -1,0 +1,166 @@
+{% extends "admin/base_site.html" %}
+{% load admin_urls %}
+{% block content %}
+    <p>
+        <strong>Code:</strong> {{ program.code }} | <strong>Dates:</strong> {{ program.start_date }} - {{ program.end_date }}
+    </p>
+    <p>
+        <a href="{% url 'admin:programs_program_change' program.id %}">&larr; Back to Program</a>
+    </p>
+    <hr>
+    <!-- Import Section -->
+    <div style="background: #f8f9fa;
+                padding: 20px;
+                margin: 20px 0;
+                border-radius: 8px">
+        <h2>Import Enrollments from CSV</h2>
+        <p>
+            Paste CSV data with headers: <code>first_name,last_name,email,funding</code>
+        </p>
+        <form method="post"
+              action="{% url 'admin:programs_program_import_enrollments' program.id %}">
+            {% csrf_token %}
+            <textarea name="csv_data"
+                      rows="8"
+                      style="width: 100%;
+                             font-family: monospace;
+                             font-size: 13px"
+                      placeholder="first_name,last_name,email,funding John,Smith,john@example.com,full Jane,Doe,jane@example.com,partial"></textarea>
+            <div style="margin-top: 10px;">
+                <input type="submit" value="Import Enrollments" class="default">
+            </div>
+        </form>
+    </div>
+    <hr>
+    <!-- Pending Invites Section -->
+    <div style="margin: 20px 0;">
+        <h2>Pending Invites ({{ pending_invites.count }})</h2>
+        <p class="text-muted">Enrollments added but invitation email not yet sent.</p>
+        {% if pending_invites %}
+            <form method="post"
+                  action="{% url 'admin:programs_program_send_enrollment_invites' program.id %}">
+                {% csrf_token %}
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: #f1f1f1;">
+                            <th style="padding: 8px; text-align: left; width: 30px;">
+                                <input type="checkbox"
+                                       id="select-all-pending"
+                                       onclick="toggleAll(this, 'pending')">
+                            </th>
+                            <th style="padding: 8px; text-align: left;">Name</th>
+                            <th style="padding: 8px; text-align: left;">Email</th>
+                            <th style="padding: 8px; text-align: left;">Funding</th>
+                            <th style="padding: 8px; text-align: left;">Added</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for e in pending_invites %}
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 8px;">
+                                    <input type="checkbox"
+                                           name="enrollment_ids"
+                                           value="{{ e.id }}"
+                                           class="pending-checkbox">
+                                </td>
+                                <td style="padding: 8px;">{{ e.first_name }} {{ e.last_name }}</td>
+                                <td style="padding: 8px;">{{ e.email_snap }}</td>
+                                <td style="padding: 8px;">{{ e.funding|default:"—" }}</td>
+                                <td style="padding: 8px;">{{ e.created_at|date:"M d, Y" }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div style="margin-top: 15px;">
+                    <input type="submit" value="Send Invites to Selected" class="default">
+                </div>
+            </form>
+        {% else %}
+            <p style="color: #666;">No pending invites.</p>
+        {% endif %}
+    </div>
+    <hr>
+    <!-- Invited, Awaiting Response Section -->
+    <div style="margin: 20px 0;">
+        <h2>Invited, Awaiting Response ({{ invited_awaiting.count }})</h2>
+        <p class="text-muted">Invitation sent, waiting for them to accept/decline.</p>
+        {% if invited_awaiting %}
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: #f1f1f1;">
+                        <th style="padding: 8px; text-align: left;">Name</th>
+                        <th style="padding: 8px; text-align: left;">Email</th>
+                        <th style="padding: 8px; text-align: left;">Funding</th>
+                        <th style="padding: 8px; text-align: left;">Invite Sent</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for e in invited_awaiting %}
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 8px;">{{ e.first_name }} {{ e.last_name }}</td>
+                            <td style="padding: 8px;">{{ e.email_snap }}</td>
+                            <td style="padding: 8px;">{{ e.funding|default:"—" }}</td>
+                            <td style="padding: 8px;">{{ e.invite_sent_at|date:"M d, Y H:i" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p style="color: #666;">No invitations awaiting response.</p>
+        {% endif %}
+    </div>
+    <hr>
+    <!-- Confirmed Section -->
+    <div style="margin: 20px 0;">
+        <h2>Confirmed/Linked ({{ confirmed.count }})</h2>
+        <p class="text-muted">Enrollments linked to a person account.</p>
+        {% if confirmed %}
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background: #f1f1f1;">
+                        <th style="padding: 8px; text-align: left;">Name</th>
+                        <th style="padding: 8px; text-align: left;">Email</th>
+                        <th style="padding: 8px; text-align: left;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for e in confirmed %}
+                        <tr style="border-bottom: 1px solid #ddd;">
+                            <td style="padding: 8px;">
+                                {% if e.person %}
+                                    <a href="{% url 'admin:people_people_change' e.person.id %}">{{ e.person.first_name }} {{ e.person.last_name }}</a>
+                                {% else %}
+                                    {{ e.first_name }} {{ e.last_name }}
+                                {% endif %}
+                            </td>
+                            <td style="padding: 8px;">
+                                {% if e.person %}
+                                    {{ e.person.email_address }}
+                                {% else %}
+                                    {{ e.email_snap }}
+                                {% endif %}
+                            </td>
+                            <td style="padding: 8px;">
+                                {% if e.accepted_at %}
+                                    <span style="color: green;">Accepted</span>
+                                {% elif e.declined_at %}
+                                    <span style="color: red;">Declined</span>
+                                {% else %}
+                                    <span style="color: orange;">Pending</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p style="color: #666;">No confirmed enrollments yet.</p>
+        {% endif %}
+    </div>
+    <script>
+function toggleAll(source, group) {
+    const checkboxes = document.querySelectorAll('.' + group + '-checkbox');
+    checkboxes.forEach(cb => cb.checked = source.checked);
+}
+    </script>
+{% endblock %}

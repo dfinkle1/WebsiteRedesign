@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Invitation - {{ program.title }}{% endblock %}
+{% block content %}
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card border-0 shadow">
+                    <div class="card-header bg-primary text-white py-3">
+                        <h1 class="h4 mb-0">You're Invited</h1>
+                    </div>
+                    <div class="card-body p-4">
+                        <h2>Program Registration</h2>
+                        <h3 class="mb-3">{{ program.title }}</h3>
+                        <div>
+                            <p>
+                                You have been invited to participate in this program. Accepting this invitation is an explicit agreement to fully participate in all activities. If you are receiving funding from AIM, it is expected that you will participate in the entire program.
+                            </p>
+                            <p>By accepting, you agree to:</p>
+                            <ol>
+                                <li>Actively participate in the open, collaborative atmosphere of the program activities.</li>
+                                <li>Acknowledge the support of AIM and the NSF in papers arising from work at the program, and contribute those papers to the AIM preprint series.</li>
+                                <li>Give AIM permission to include your papers from the ArXiv in the AIM Collected Works project.</li>
+                                <li>Follow the AIM Code of Conduct.</li>
+                            </ol>
+                        </div>
+                        <div class="mb-4">
+                            {% if program.start_date and program.end_date %}
+                                <p class="text-muted mb-2">
+                                    <strong>Dates:</strong> {{ program.start_date|date:"F j, Y" }} - {{ program.end_date|date:"F j, Y" }}
+                                </p>
+                            {% endif %}
+                            {% if program.location %}
+                                <p class="text-muted mb-2">
+                                    <strong>Location:</strong> {{ program.location }}
+                                </p>
+                            {% endif %}
+                            {% if enrollment.funding %}
+                                <p class="text-muted mb-0">
+                                    <strong>Funding:</strong> {{ enrollment.funding }}
+                                </p>
+                            {% endif %}
+                        </div>
+                        {% if program.description %}
+                            <div class="mb-4">
+                                <h4 class="h6">About this program</h4>
+                                <p class="text-muted small">{{ program.description|truncatewords:100 }}</p>
+                            </div>
+                        {% endif %}
+                        <hr class="my-4">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="d-grid gap-2">
+                                <button type="submit"
+                                        name="action"
+                                        value="accept"
+                                        class="btn btn-success btn-lg">Accept Invitation</button>
+                                <button type="submit"
+                                        name="action"
+                                        value="decline"
+                                        class="btn btn-outline-secondary">Decline</button>
+                            </div>
+                        </form>
+                        {% if not user.is_authenticated %}
+                            <p class="text-muted small mt-3 mb-0 text-center">
+                                You will be asked to sign in with ORCID to accept this invitation.
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

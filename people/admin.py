@@ -37,14 +37,14 @@ class EnrollmentInline(admin.TabularInline):
 
         if obj.accepted_at and obj.declined_at:
             return format_html(
-                '<span style="color: orange;">⚠ Accepted→Declined</span>'
+                '<span style="color: orange;">⚠ Accepted→Declined</span>', "ok"
             )
         elif obj.accepted_at:
-            return format_html('<span style="color: green;">✓ Accepted</span>')
+            return format_html('<span style="color: green;">✓ Accepted</span>', "ok")
         elif obj.declined_at:
-            return format_html('<span style="color: red;">✗ Declined</span>')
+            return format_html('<span style="color: red;">✗ Declined</span>', "ok")
         else:
-            return format_html('<span style="color: gray;">— Pending</span>')
+            return format_html('<span style="color: gray;">— Pending</span>', "ok")
 
     enrollment_status_display.short_description = "Status"
 
@@ -132,9 +132,9 @@ class PeopleAdmin(admin.ModelAdmin):
                 return format_html(
                     '<span style="color: green;" title="{}">✓</span>', username
                 )
-            return format_html('<span style="color: gray;">—</span>')
+            return format_html('<span style="color: gray;">—</span>', "ok")
         except Exception:
-            return format_html('<span style="color: gray;">—</span>')
+            return format_html('<span style="color: gray;">—</span>', "ok")
 
     has_user_account.short_description = "User Account"
 

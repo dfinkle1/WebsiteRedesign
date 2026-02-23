@@ -82,19 +82,38 @@
             {% for enrollment in enrollments %}
             <tr>
                 <td>
-                    <a href="{% url 'admin:people_people_change' enrollment.person.id %}">
+                    {% if enrollment.person %}
                         {{ enrollment.person.first_name }} {{ enrollment.person.last_name }}
-                    </a>
+                    {% else %}
+                        {{ enrollment.first_name }} {{ enrollment.last_name }}
+                        <span style="color: #999; font-size: 0.85em;">(not linked)</span>
+                    {% endif %}
                 </td>
-                <td>{{ enrollment.person.email_address|default:"—" }}</td>
                 <td>
-                    {% if enrollment.person.orcid_id %}
+                    {% if enrollment.person %}
+                        {{ enrollment.person.email_address|default:"—" }}
+                    {% else %}
+                        {{ enrollment.email_snap|default:"—" }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if enrollment.person and enrollment.person.orcid_id %}
                     <a href="https://orcid.org/{{ enrollment.person.orcid_id }}" target="_blank">
                         {{ enrollment.person.orcid_id }}
                     </a>
+                    {% elif enrollment.orcid_snap %}
+                    <a href="https://orcid.org/{{ enrollment.orcid_snap }}" target="_blank">
+                        {{ enrollment.orcid_snap }}
+                    </a>
                     {% else %}—{% endif %}
                 </td>
-                <td>{{ enrollment.person.institution|default:"—" }}</td>
+                <td>
+                    {% if enrollment.person %}
+                        {{ enrollment.person.institution|default:"—" }}
+                    {% else %}
+                        {{ enrollment.institution|default:"—" }}
+                    {% endif %}
+                </td>
                 <td>
                     {% if enrollment.accepted_at %}
                     <span style="color: green;">✓ Accepted</span>
