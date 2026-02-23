@@ -44,7 +44,7 @@ def list_of_workshops(request):
 
 
 def upcoming_workshops(request):
-    workshops = get_upcoming_workshops
+    workshops = get_upcoming_workshops()
     now = timezone.now()
     return render(
         request,
@@ -53,7 +53,7 @@ def upcoming_workshops(request):
     )
 
 
-@ratelimit(key='ip', rate='60/m', method='GET', block=True)
+@ratelimit(key="ip", rate="60/m", method="GET", block=True)
 def past_workshops(request):
     """
     Display past workshops with pagination, year filter, and search.

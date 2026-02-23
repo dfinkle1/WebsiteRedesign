@@ -196,6 +196,76 @@ def withdraw_enrollment(request, enrollment_id):
     })
 
 
+def enrollment_respond(request, token):
+    """
+    View for responding to a staff-added enrollment invitation.
+    Uses the Enrollment.invite_token for authentication.
+
+    GET: Show enrollment/program details and accept/decline options
+    POST: Process accept or decline action
+    """
+    enrollment = get_object_or_404(
+        Enrollment.objects.select_related('workshop'),
+        invite_token=token,
+    )
+
+    program = enrollment.workshop
+
+    # Check if already responded
+    if enrollment.accepted_at:
+        return render(request, 'enrollments/enrollment_already_accepted.html', {
+            'enrollment': enrollment,
+            'program': program,
+        })
+
+    if enrollment.declined_at:
+        return render(request, 'enrollments/enrollment_already_declined.html', {
+            'enrollment': enrollment,
+            'program': program,
+        })
+
+    # Handle direct action from email links (?action=accept or ?action=decline)
+    action = request.GET.get('action') or request.POST.get('action')
+
+    if request.method == 'POST' or action:
+        if action == 'decline':
+            reason = request.POST.get('reason', '').strip() if request.method == 'POST' else None
+            enrollment.decline(reason)
+            messages.info(request, f"You have declined the invitation to {program.title}.")
+            return render(request, 'enrollments/enrollment_declined_confirmation.html', {
+                'enrollment': enrollment,
+                'program': program,
+            })
+
+        elif action == 'accept':
+            # User must be logged in to accept
+            if not request.user.is_authenticated:
+                # Store token in session and redirect to login
+                request.session['pending_enrollment_token'] = token
+                messages.info(request, "Please sign in to accept this invitation.")
+                return redirect('accounts:login')
+
+            # Get or verify person record
+            try:
+                person = request.user.profile.person
+            except AttributeError:
+                messages.error(request, "Your account is not linked to a participant profile. Please contact support.")
+                return redirect('accounts:dashboard')
+
+            # Link enrollment to person and mark as accepted
+            enrollment.accept(person)
+
+            messages.success(request, f"You have accepted the invitation to {program.title}!")
+
+            # Redirect to enrollment details form to complete logistics
+            return redirect('enrollments:enrollment_details', enrollment_id=enrollment.id)
+
+    return render(request, 'enrollments/enrollment_respond.html', {
+        'enrollment': enrollment,
+        'program': program,
+    })
+
+
 @login_required
 def program_apply(request, program_code):
     """

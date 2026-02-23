@@ -35,7 +35,12 @@ class Program(models.Model):
         OPEN = "open", "Open Applications"
         INVITE_ONLY = "invite", "Invite Only"
 
-    code = models.IntegerField(unique=True)
+    class MeetingNumber(models.IntegerChoices):
+        FIRST = 1, "1st Meeting"
+        SECOND = 2, "2nd Meeting"
+        THIRD = 3, "3rd Meeting"
+
+    code = models.IntegerField(unique=True, blank=True)
     title = models.CharField(max_length=255)
     abbreviation = models.CharField(max_length=255, blank=True, null=True)
     organizer1 = models.CharField(max_length=255, blank=True, null=True)
@@ -62,11 +67,24 @@ class Program(models.Model):
         choices=ApplicationMode.choices,
         default=ApplicationMode.CLOSED,
     )
+    meeting_number = models.PositiveSmallIntegerField(
+        choices=MeetingNumber.choices,
+        blank=True,
+        null=True,
+        help_text="For SQuaREs: which meeting (1st, 2nd, or 3rd)",
+    )
     objects = ProgramQuerySet.as_manager()
 
     class Meta:
         indexes = [models.Index(fields=["type", "start_date"])]
         db_table = "program"
+
+    def save(self, *args, **kwargs):
+        if not self.code:
+            # Get the maximum existing code and add 1
+            max_code = Program.objects.aggregate(models.Max("code"))["code__max"]
+            self.code = (max_code or 0) + 1
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.code} — {self.title}"

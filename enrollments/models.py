@@ -50,6 +50,29 @@ class Enrollment(models.Model):
     funding = models.TextField(blank=True, null=True)
     limits_okay = models.TextField(blank=True, null=True)
     limits_insufficient = models.TextField(blank=True, null=True)
+    # Invitation tracking (for staff-added enrollments that need confirmation)
+    invite_token = models.CharField(
+        max_length=64,
+        unique=True,
+        null=True,
+        blank=True,
+        db_index=True,
+        help_text="Secure token for accept/decline links",
+    )
+    invite_sent_at = models.DateTimeField(
+        blank=True,
+        null=True,
+        help_text="When the invitation email was sent",
+    )
+    invited_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="invited_enrollments",
+        help_text="Staff member who sent the invitation",
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -61,7 +84,92 @@ class Enrollment(models.Model):
         ]
 
     def __str__(self):
-        return f"Enrollment(person={self.person_id},workshop={self.workshop_id})"
+        name = f"{self.first_name or ''} {self.last_name or ''}".strip() or self.email_snap or "Unknown"
+        return f"Enrollment({name}, program={self.workshop_id})"
+
+    @property
+    def display_name(self):
+        """Best available name for display."""
+        if self.person:
+            return f"{self.person.first_name} {self.person.last_name}".strip()
+        return f"{self.first_name or ''} {self.last_name or ''}".strip() or self.email_snap
+
+    @property
+    def display_email(self):
+        """Best available email for display."""
+        if self.person and self.person.email_address:
+            return self.person.email_address
+        return self.email_snap
+
+    @property
+    def needs_invite(self):
+        """True if this enrollment needs an invitation sent."""
+        return (
+            self.person is None
+            and self.invite_sent_at is None
+            and self.email_snap
+        )
+
+    @property
+    def awaiting_response(self):
+        """True if invite sent but no response yet."""
+        return (
+            self.person is None
+            and self.invite_sent_at is not None
+            and self.accepted_at is None
+            and self.declined_at is None
+        )
+
+    @property
+    def is_confirmed(self):
+        """True if linked to a person account."""
+        return self.person is not None
+
+    def generate_invite_token(self):
+        """Generate a secure token for invitation links."""
+        if not self.invite_token:
+            self.invite_token = secrets.token_urlsafe(32)
+        return self.invite_token
+
+    def send_invite(self, sent_by=None):
+        """
+        Mark as invited. Call this after successfully sending the email.
+
+        Args:
+            sent_by: The User who triggered the invite
+        """
+        from django.utils import timezone
+        self.generate_invite_token()
+        self.invite_sent_at = timezone.now()
+        self.invited_by = sent_by
+        self.save(update_fields=["invite_token", "invite_sent_at", "invited_by"])
+
+    def accept(self, person):
+        """
+        Accept the enrollment and link to person.
+
+        Args:
+            person: The People record to link
+        """
+        from django.utils import timezone
+        self.person = person
+        self.accepted_at = timezone.now()
+        self.save(update_fields=["person", "accepted_at", "updated_at"])
+
+    def decline(self, reason=None):
+        """
+        Decline the enrollment.
+
+        Args:
+            reason: Optional reason for declining
+        """
+        from django.utils import timezone
+        self.declined_at = timezone.now()
+        if reason:
+            self.declined_reason = reason
+            self.save(update_fields=["declined_at", "declined_reason", "updated_at"])
+        else:
+            self.save(update_fields=["declined_at", "updated_at"])
 
 
 def generate_invite_token():

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Invitation Declined - {{ program.title }}{% endblock %}
+{% block content %}
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card border-0 shadow">
+                    <div class="card-header bg-secondary text-white py-3">
+                        <h1 class="h4 mb-0">Invitation Declined</h1>
+                    </div>
+                    <div class="card-body p-4 text-center">
+                        <h2 class="h5 mb-3">{{ program.title }}</h2>
+                        <p class="text-muted mb-4">
+                            Thank you for letting us know. We hope to see you at a future program.
+                        </p>
+                        <p class="text-muted">
+                            If you have any questions, please contact us at
+                            <a href="mailto:info@aimath.org">info@aimath.org</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

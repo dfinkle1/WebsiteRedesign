@@ -3,7 +3,7 @@ from django.db import models
 
 class People(models.Model):
     first_name = models.TextField(blank=True, null=True)
-    last_name = models.TextField(blank=True, null=True)  # allow NULL if you want
+    last_name = models.TextField(blank=True, null=True)
     middle_name = models.TextField(blank=True, null=True)
     preferred_name = models.TextField(blank=True, null=True)
     email_address = models.TextField(
