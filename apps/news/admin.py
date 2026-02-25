@@ -2,7 +2,28 @@ from django.contrib import admin
 from django.db import models
 from django.utils.html import format_html
 from djangocms_text.widgets import TextEditorWidget
-from .models import NewsArticle, Newsletter
+from .models import NewsArticle, Newsletter, ArticleImage
+
+
+class ArticleImageInline(admin.TabularInline):
+    """Inline for adding multiple images to an article."""
+
+    model = ArticleImage
+    extra = 1
+    fields = ["image", "caption", "order", "image_preview"]
+    readonly_fields = ["image_preview"]
+    ordering = ["order", "id"]
+
+    def image_preview(self, obj):
+        if obj.image:
+            return format_html(
+                '<img src="{}" width="100" height="75" '
+                'style="object-fit: cover; border-radius: 4px;" />',
+                obj.image.url,
+            )
+        return "-"
+
+    image_preview.short_description = "Preview"
 
 
 @admin.register(NewsArticle)
@@ -13,6 +34,7 @@ class NewsArticleAdmin(admin.ModelAdmin):
         "is_published",
         "is_featured",
         "image_preview",
+        "gallery_count",
     ]
     list_filter = ["is_published", "is_featured", "published_at"]
     search_fields = ["title", "excerpt", "body"]
@@ -21,6 +43,7 @@ class NewsArticleAdmin(admin.ModelAdmin):
     ordering = ["-published_at"]
     list_editable = ["is_published", "is_featured"]
     readonly_fields = ["created_at", "updated_at"]
+    inlines = [ArticleImageInline]
 
     fieldsets = (
         (
@@ -64,6 +87,14 @@ class NewsArticleAdmin(admin.ModelAdmin):
         return "-"
 
     image_preview.short_description = "Image"
+
+    def gallery_count(self, obj):
+        count = obj.images.count()
+        if count:
+            return f"{count} image{'s' if count > 1 else ''}"
+        return "-"
+
+    gallery_count.short_description = "Gallery"
 
 
 @admin.register(Newsletter)
