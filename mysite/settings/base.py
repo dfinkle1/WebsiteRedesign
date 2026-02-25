@@ -103,7 +103,7 @@ INSTALLED_APPS = [
     "filer",
 ]
 
-# TEXT_EDITOR = "djangocms_text.contrib.text_ckeditor4.ckeditor4"
+TEXT_EDITOR = "djangocms_text.contrib.text_ckeditor4.ckeditor4"
 # CKEDITOR_CONFIGS = {
 #     "default": {
 #         "toolbar": "Custom",
@@ -374,7 +374,7 @@ STATICFILES_DIRS = [BASE_DIR / "assets"]
 # Static & Media with S3
 USE_S3 = os.getenv("USE_S3")
 
-print(USE_S3)
+
 if USE_S3:
     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")

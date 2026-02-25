@@ -6,7 +6,7 @@
             <div class="card news-card">
                 <h6 class="news-title">{{ article.title | safe }}</h6>
                 {% if article.news_image %}
-                    <img src="{{ article.news_image.url }}"
+                    <img src="{{ article.featured_image.url }}"
                          class="news-image"
                          alt="{{ article.title }}">
                 {% else %}
