@@ -97,6 +97,41 @@ class NewsArticle(models.Model):
     def has_image(self):
         return bool(self.featured_image_id)
 
+    @property
+    def has_gallery(self):
+        return self.images.exists()
+
+
+class ArticleImage(models.Model):
+    """Additional images for news articles (gallery/slideshow)."""
+
+    article = models.ForeignKey(
+        NewsArticle,
+        on_delete=models.CASCADE,
+        related_name="images",
+    )
+    image = FilerImageField(
+        on_delete=models.CASCADE,
+        related_name="article_images",
+    )
+    caption = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="Optional caption displayed below the image.",
+    )
+    order = models.PositiveSmallIntegerField(
+        default=0,
+        help_text="Order in gallery (lower numbers appear first).",
+    )
+
+    class Meta:
+        ordering = ["order", "id"]
+        verbose_name = "Article Image"
+        verbose_name_plural = "Article Images"
+
+    def __str__(self):
+        return f"Image {self.order} for {self.article.title}"
+
 
 class Newsletter(models.Model):
     """Archived newsletter PDFs (digitized historical issues)."""
