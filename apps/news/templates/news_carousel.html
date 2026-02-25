@@ -5,7 +5,7 @@
            class="news-card-link">
             <div class="card news-card">
                 <h6 class="news-title">{{ article.title | safe }}</h6>
-                {% if article.news_image %}
+                {% if article.featured_image %}
                     <img src="{{ article.featured_image.url }}"
                          class="news-image"
                          alt="{{ article.title }}">
