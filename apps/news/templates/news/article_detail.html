@@ -1,132 +1,113 @@
 {% extends "base.html" %}
-
-{% block title %}{{ article.title }} | AIM News{% endblock title %}
-
+{% block title %}
+  {{ article.title }} | AIM News
+{% endblock title %}
 {% block content %}
-<article class="container py-5">
-  <header class="mb-4">
-    <nav class="mb-3" aria-label="Breadcrumb">
-      <a href="{% url 'news:article_list' %}" class="text-decoration-none">&larr; Back to News</a>
-    </nav>
-    <h1>{{ article.title }}</h1>
-    <p class="text-muted">
-      <time datetime="{{ article.published_at|date:'Y-m-d' }}">
-        {{ article.published_at|date:"F j, Y" }}
-      </time>
-    </p>
-  </header>
-
-  {% if article.featured_image %}
-  <figure class="mb-4">
-    <img
-      src="{{ article.featured_image.url }}"
-      alt="{{ article.title }}"
-      class="img-fluid rounded"
-      loading="lazy"
-    >
-  </figure>
-  {% endif %}
-
-  <div class="article-body">
-    {{ article.body|safe }}
-  </div>
-
-  {% if article.images.exists %}
-  <section class="article-gallery mt-5">
-    <h2 class="h5 mb-3">Gallery</h2>
-
-    {% with images=article.images.all %}
-    {% if images|length == 1 %}
-    {# Single image - no carousel needed #}
-    <figure class="mb-3">
-      <img
-        src="{{ images.0.image.url }}"
-        alt="{{ images.0.caption|default:article.title }}"
-        class="img-fluid rounded"
-        loading="lazy"
-      >
-      {% if images.0.caption %}
-      <figcaption class="text-muted mt-2">{{ images.0.caption }}</figcaption>
-      {% endif %}
-    </figure>
-    {% else %}
-    {# Multiple images - use carousel #}
-    <div id="articleGallery" class="carousel slide" data-bs-ride="false">
-      <div class="carousel-indicators">
-        {% for img in images %}
-        <button
-          type="button"
-          data-bs-target="#articleGallery"
-          data-bs-slide-to="{{ forloop.counter0 }}"
-          {% if forloop.first %}class="active" aria-current="true"{% endif %}
-          aria-label="Slide {{ forloop.counter }}"
-        ></button>
-        {% endfor %}
-      </div>
-
-      <div class="carousel-inner rounded">
-        {% for img in images %}
-        <div class="carousel-item {% if forloop.first %}active{% endif %}">
-          <img
-            src="{{ img.image.url }}"
-            alt="{{ img.caption|default:article.title }}"
-            class="d-block w-100"
-            loading="lazy"
-          >
-          {% if img.caption %}
-          <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
-            <p class="mb-0">{{ img.caption }}</p>
-          </div>
-          {% endif %}
-        </div>
-        {% endfor %}
-      </div>
-
-      <button class="carousel-control-prev" type="button" data-bs-target="#articleGallery" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#articleGallery" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
-    </div>
-
-    {# Thumbnail navigation #}
-    <div class="d-flex gap-2 mt-3 flex-wrap">
-      {% for img in images %}
-      <button
-        type="button"
-        data-bs-target="#articleGallery"
-        data-bs-slide-to="{{ forloop.counter0 }}"
-        class="btn p-0 border rounded overflow-hidden"
-        style="width: 60px; height: 45px;"
-      >
-        <img
-          src="{{ img.image.url }}"
-          alt="Thumbnail {{ forloop.counter }}"
-          class="w-100 h-100"
-          style="object-fit: cover;"
-        >
-      </button>
-      {% endfor %}
-    </div>
+  <article class="container py-5">
+    <header class="mb-4">
+      <nav class="mb-3" aria-label="Breadcrumb">
+        <a href="{% url 'news:article_list' %}" class="text-decoration-none">&larr; Back to News</a>
+      </nav>
+      <h1>{{ article.title }}</h1>
+      <p class="text-muted">
+        <time datetime="{{ article.published_at|date:'Y-m-d' }}">
+          {{ article.published_at|date:"F j, Y" }}
+        </time>
+      </p>
+    </header>
+    {% if article.featured_image %}
+      <figure class="mb-4">
+        <img src="{{ article.featured_image.url }}"
+             alt="{{ article.title }}"
+             class="img-fluid rounded"
+             loading="lazy">
+      </figure>
     {% endif %}
-    {% endwith %}
-  </section>
-  {% endif %}
-
-  {% if related_articles %}
-  <aside class="mt-5 pt-5 border-top">
-    <h2 class="h4 mb-4">Related Articles</h2>
-    <div class="row g-4">
-      {% for article in related_articles %}
-      <div class="col-md-4">
-        {% include "news/includes/_article_card.html" %}
-      </div>
-      {% endfor %}
-    </div>
-  </aside>
-  {% endif %}
-</article>
+    <div class="article-body">{{ article.body|safe }}</div>
+    {% if article.images.exists %}
+      <section class="article-gallery mt-5">
+        <h2 class="h5 mb-3">Gallery</h2>
+        {% with images=article.images.all %}
+          {% if images|length == 1 %}
+            {# Single image - no carousel needed #}
+            <figure class="mb-3">
+              <img src="{{ images.0.image.url }}"
+                   alt="{{ images.0.caption|default:article.title }}"
+                   class="img-fluid rounded"
+                   loading="lazy">
+              {% if images.0.caption %}<figcaption class="text-muted mt-2">{{ images.0.caption }}</figcaption>{% endif %}
+            </figure>
+          {% else %}
+            {# Multiple images - use carousel #}
+            <div id="articleGallery" class="carousel slide" data-bs-ride="false">
+              <div class="carousel-indicators">
+                {% for img in images %}
+                  <button type="button"
+                          data-bs-target="#articleGallery"
+                          data-bs-slide-to="{{ forloop.counter0 }}"
+                          {% if forloop.first %}class="active" aria-current="true"{% endif %}
+                          aria-label="Slide {{ forloop.counter }}"></button>
+                {% endfor %}
+              </div>
+              <div class="carousel-inner rounded">
+                {% for img in images %}
+                  <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <img src="{{ img.image.url }}"
+                         alt="{{ img.caption|default:article.title }}"
+                         class="d-block w-100"
+                         loading="lazy">
+                    {% if img.caption %}
+                      <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
+                        <p class="mb-0">{{ img.caption }}</p>
+                      </div>
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              </div>
+              <button class="carousel-control-prev"
+                      type="button"
+                      data-bs-target="#articleGallery"
+                      data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next"
+                      type="button"
+                      data-bs-target="#articleGallery"
+                      data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+            {# Thumbnail navigation #}
+            <div class="d-flex gap-2 mt-3 flex-wrap">
+              {% for img in images %}
+                <button type="button"
+                        data-bs-target="#articleGallery"
+                        data-bs-slide-to="{{ forloop.counter0 }}"
+                        class="btn p-0 border rounded overflow-hidden"
+                        style="width: 60px;
+                               height: 45px">
+                  <img src="{{ img.image.url }}"
+                       alt="Thumbnail {{ forloop.counter }}"
+                       class="w-100 img-fluid"
+                       style="object-fit: cover">
+                </button>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+      </section>
+    {% endif %}
+    {% if related_articles %}
+      <aside class="mt-5 pt-5 border-top">
+        <h2 class="h4 mb-4">Related Articles</h2>
+        <div class="row g-4">
+          {% for article in related_articles %}
+            <div class="col-md-4">{% include "news/includes/_article_card.html" %}</div>
+          {% endfor %}
+        </div>
+      </aside>
+    {% endif %}
+  </article>
 {% endblock content %}

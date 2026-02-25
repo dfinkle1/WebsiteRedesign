@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.db import models
 from django.utils.html import format_html
+from django.contrib import messages
 from djangocms_text.widgets import TextEditorWidget
 from .models import NewsArticle, Newsletter, ArticleImage
 
@@ -95,6 +96,34 @@ class NewsArticleAdmin(admin.ModelAdmin):
         return "-"
 
     gallery_count.short_description = "Gallery"
+
+    def response_change(self, request, obj):
+        """Add a 'View live' link after saving."""
+        response = super().response_change(request, obj)
+        if obj.is_published:
+            view_url = obj.get_absolute_url()
+            messages.info(
+                request,
+                format_html(
+                    '📄 <a href="{}" target="_blank" style="color: #fff; text-decoration: underline;">View live article</a>',
+                    view_url,
+                ),
+            )
+        return response
+
+    def response_add(self, request, obj, post_url_continue=None):
+        """Add a 'View live' link after creating a new article."""
+        response = super().response_add(request, obj, post_url_continue)
+        if obj.is_published:
+            view_url = obj.get_absolute_url()
+            messages.info(
+                request,
+                format_html(
+                    '📄 <a href="{}" target="_blank" style="color: #fff; text-decoration: underline;">View live article</a>',
+                    view_url,
+                ),
+            )
+        return response
 
 
 @admin.register(Newsletter)
