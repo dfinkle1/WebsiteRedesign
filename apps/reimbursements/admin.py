@@ -14,7 +14,7 @@ from django.db.models import Sum
 from django.http import HttpResponse
 from django.urls import path, reverse
 from django.utils import timezone
-from django.utils.html import format_html
+from django.utils.html import format_html, mark_safe
 
 from .models import (
     ReimbursementRequest,
@@ -478,7 +478,7 @@ class ReimbursementRequestAdmin(admin.ModelAdmin):
                 f'?_pay=1">Mark Paid</a>'
             )
 
-        return format_html(" ".join(buttons)) if buttons else "-"
+        return mark_safe(" ".join(buttons)) if buttons else "-"
 
     # -------------------------------------------------------------------------
     # CUSTOM URLS

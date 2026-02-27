@@ -1,0 +1,23 @@
+{# Compact list of upcoming events for use in sidebars/widgets #}
+{% if events %}
+<ul class="list-unstyled">
+  {% for event in events %}
+  <li class="mb-3">
+    <a href="{{ event.get_absolute_url }}" class="text-decoration-none">
+      <strong>{{ event.title }}</strong>
+    </a>
+    <br>
+    <small class="text-muted">
+      {{ event.start|date:"M j, Y" }}
+      {% if event.is_online %}
+        <span class="badge bg-primary">Online</span>
+      {% elif event.city %}
+        &middot; {{ event.city }}
+      {% endif %}
+    </small>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="text-muted">No upcoming events.</p>
+{% endif %}

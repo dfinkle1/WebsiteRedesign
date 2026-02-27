@@ -345,6 +345,13 @@ TIME_ZONE = "America/Vancouver"
 USE_I18N = False
 USE_TZ = True
 
+# Date/Time display formats (12-hour clock)
+USE_L10N = False
+TIME_FORMAT = "g:i A"  # 2:30 PM
+DATE_FORMAT = "N j, Y"  # Feb. 26, 2026
+DATETIME_FORMAT = "N j, Y, g:i A"  # Feb. 26, 2026, 2:30 PM
+SHORT_DATETIME_FORMAT = "m/d/Y g:i A"  # 02/26/2026 2:30 PM
+
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
