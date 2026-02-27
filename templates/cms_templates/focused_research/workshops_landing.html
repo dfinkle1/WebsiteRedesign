@@ -1,16 +1,14 @@
 {% extends "cms_templates/focused_research/base.html" %}
 {% load cms_tags static %}
-
-{% block page_title %}Workshops - AIM{% endblock page_title %}
-
+{% block page_title %}
+    Workshops - AIM
+{% endblock page_title %}
 {% block page_content %}
     <h1>Workshops</h1>
-
     {% comment %}
     Staff can edit this content via CMS admin.
     Default content below can be replaced with placeholder content.
     {% endcomment %}
-
     {% placeholder "workshops_intro" or %}
     <p>
         AIM hosts focused workshops in all areas of the mathematical sciences.
@@ -18,49 +16,35 @@
         such as making progress on a significant unsolved problem, understanding the proof
         of an important new result, or examining the convergence of two distinct areas of mathematics.
     </p>
-    {% endplaceholder %}
-
-    {% placeholder "workshops_details" or %}
-    <p>
-        AIM's process for supporting collaboration has been honed over many years and has
-        evolved into a distinct "AIM-style of workshop." If you will be attending or proposing
-        to organize an AIM workshop, we encourage to read about what to expect here.
-    </p>
-
-    <p>
-        All AIM workshops have an open application process. Upcoming workshops marked with
-        an asterisk (*) are still accepting applications. Successful applicants will communicate
-        the alignment of their research interests with the topics in the workshop and their
-        readiness to enter into collaborative research projects.
-    </p>
-    {% endplaceholder %}
-
-    <!-- Links to dynamic Django app pages -->
-    <div class="mt-4 mb-4">
-        <h3>Explore Workshops</h3>
-        <div class="d-flex gap-3">
-            <a href="{% url 'programs:upcoming_workshops' %}" class="btn btn-primary">
-                View Upcoming Workshops →
-            </a>
-            <a href="{% url 'programs:past-workshops' %}" class="btn btn-outline-primary">
-                Browse Past Workshops →
-            </a>
-        </div>
+{% endplaceholder %}
+{% placeholder "workshops_details" or %}
+<p>
+    AIM's process for supporting collaboration has been honed over many years and has
+    evolved into a distinct "AIM-style of workshop." If you will be attending or proposing
+    to organize an AIM workshop, we encourage to read about what to expect here.
+</p>
+<p>
+    All AIM workshops have an open application process. Upcoming workshops marked with
+    an asterisk (*) are still accepting applications. Successful applicants will communicate
+    the alignment of their research interests with the topics in the workshop and their
+    readiness to enter into collaborative research projects.
+</p>
+{% endplaceholder %}
+<!-- Links to dynamic Django app pages -->
+<div class="mt-4 mb-4">
+    <h3>Explore Workshops</h3>
+    <div class="d-flex gap-3">
+        <a href="{% url 'programs:upcoming_workshops' %}"
+           class="btn btn-primary">View Upcoming Workshops →</a>
+        <a href="{% url 'programs:past-workshops' %}"
+           class="btn btn-outline-primary">Browse Past Workshops →</a>
     </div>
-
-    <!-- Additional editable sections -->
-    {% placeholder "workshops_aim_style" or %}
-    <h3>AIM Style of Workshop</h3>
-    <p>Learn about our unique collaborative approach to mathematical research...</p>
-    {% endplaceholder %}
-
-    {% placeholder "workshops_propose" or %}
-    <div class="mt-4 p-4 bg-light rounded">
-        <h3>Proposing a Workshop</h3>
-        <p>Interested in organizing an AIM workshop? Learn about our proposal process.</p>
-        <a href="/workshops/propose/" class="btn btn-success">
-            Submit a Proposal →
-        </a>
-    </div>
-    {% endplaceholder %}
+</div>
+{% placeholder "workshops_propose" or %}
+<div class="mt-4 p-4 rounded">
+    <h3>Proposing a Workshop</h3>
+    <p>Interested in organizing an AIM workshop? Learn about our proposal process.</p>
+    <a href="/workshops/proposalguide" class="btn btn-success">Workshop Proposal Guide</a>
+</div>
+{% endplaceholder %}
 {% endblock page_content %}
