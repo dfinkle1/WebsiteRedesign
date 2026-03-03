@@ -258,6 +258,99 @@ From the program list or detail page:
 
 ---
 
+## Reimbursements
+
+### Processing a Reimbursement Request
+
+**Location:** Admin → Reimbursements → Reimbursement Requests
+
+**Quick Filters:**
+- Use "Needs Review" to see submitted requests awaiting review
+- Use "Needs Payment" to see approved requests awaiting payment
+
+---
+
+### Review Workflow
+
+1. **Open the request** from the list (click "Review" button or the ID)
+2. **Check line items:**
+   - Verify receipts are attached (click receipt links to view)
+   - Check amounts match receipts
+   - For foreign currency items, enter the exchange rate
+3. **Add per diem** if participant is eligible:
+   - Scroll to Expense Line Items
+   - Fill in a new row: Category = "Meals / Per Diem", amount, date
+   - These are automatically marked as "Staff Added"
+4. **Take action:**
+   - Click **"Approve Request"** - auto-fills approved amounts = requested amounts
+   - Click **"Request Changes"** - sends back to participant with notes
+   - Click **"Cancel Request"** - cancels the request
+
+---
+
+### Foreign Currency Expenses
+
+When participants have expenses in foreign currencies (e.g., GBP flights from UK):
+
+1. The currency is shown in the line item (e.g., "GBP")
+2. Staff enters the **Exchange Rate** field
+3. The **Amount Requested (USD)** should be the converted amount
+4. A warning appears if conversion is needed before approval
+
+**Tip:** Use [xe.com](https://xe.com) for current exchange rates.
+
+---
+
+### Marking as Paid
+
+After a request is approved:
+
+1. Process the payment (check or ACH)
+2. Return to the request in admin
+3. Click **"Mark as Paid"**
+4. The request moves to "Paid" status
+
+---
+
+### Staff-Added Expenses
+
+Staff can add expenses that participants don't submit themselves:
+
+| Type | When to Add |
+|------|-------------|
+| **Per Diem** | Participant is eligible for meal allowance |
+| **Mileage** | Participant drove and didn't claim it |
+| **Other** | Any expense staff needs to add |
+
+Staff-added items are marked with a "STAFF" badge and don't require receipts.
+
+---
+
+### Exporting for Finance
+
+**Bulk Export:**
+1. Select requests using checkboxes
+2. Choose "Export selected to CSV" from Actions dropdown
+3. Click "Go"
+
+**Line Item Export:**
+- Use "Export line items to CSV" to get detailed expense breakdown with currency info
+
+---
+
+### Reimbursement Statuses
+
+| Status | Meaning |
+|--------|---------|
+| **Draft** | Participant is still filling out the form |
+| **Submitted** | Ready for staff review |
+| **Changes Needed** | Sent back to participant for corrections |
+| **Approved** | Approved, waiting for payment |
+| **Paid** | Payment has been processed |
+| **Cancelled** | Request was cancelled |
+
+---
+
 ## Troubleshooting
 
 ### "NoReverseMatch" or URL errors

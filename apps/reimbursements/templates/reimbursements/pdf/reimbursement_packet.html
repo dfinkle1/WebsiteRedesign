@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Reimbursement #{{ reimbursement.pk }}</title>
+    <style>
+        @page {
+            size: letter;
+            margin: 0.75in;
+            @bottom-center {
+                content: "Page " counter(page) " of " counter(pages);
+                font-size: 9px;
+                color: #666;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 11px;
+            line-height: 1.4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 2px solid #1a365d;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .logo-section h1 {
+            margin: 0;
+            font-size: 20px;
+            color: #1a365d;
+        }
+
+        .logo-section p {
+            margin: 3px 0 0 0;
+            color: #666;
+            font-size: 10px;
+        }
+
+        .doc-info {
+            text-align: right;
+        }
+
+        .doc-info h2 {
+            margin: 0;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .doc-info .request-id {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1a365d;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        .status-approved { background: #c6f6d5; color: #22543d; }
+        .status-paid { background: #b2f5ea; color: #134e4a; }
+        .status-submitted { background: #bee3f8; color: #2a4365; }
+        .status-cancelled { background: #fed7d7; color: #742a2a; }
+        .status-draft { background: #e2e8f0; color: #4a5568; }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #1a365d;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .info-box {
+            background: #f7fafc;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .info-box label {
+            display: block;
+            font-size: 9px;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 3px;
+        }
+
+        .info-box .value {
+            font-size: 11px;
+            color: #2d3748;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th {
+            background: #edf2f7;
+            text-align: left;
+            padding: 8px 10px;
+            font-size: 10px;
+            font-weight: 600;
+            color: #4a5568;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #cbd5e0;
+        }
+
+        td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 10px;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .currency-note {
+            font-size: 9px;
+            color: #718096;
+        }
+
+        .totals-row td {
+            font-weight: bold;
+            background: #f7fafc;
+            border-top: 2px solid #cbd5e0;
+        }
+
+        .financial-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .summary-box {
+            text-align: center;
+            padding: 15px;
+            border-radius: 4px;
+        }
+
+        .summary-box.requested {
+            background: #ebf8ff;
+            border: 1px solid #90cdf4;
+        }
+
+        .summary-box.approved {
+            background: #f0fff4;
+            border: 1px solid #9ae6b4;
+        }
+
+        .summary-box.paid {
+            background: #e6fffa;
+            border: 1px solid #81e6d9;
+        }
+
+        .summary-box label {
+            display: block;
+            font-size: 9px;
+            color: #718096;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .summary-box .amount {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .signature-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .signature-box {
+            display: inline-block;
+            width: 45%;
+            margin-right: 5%;
+        }
+
+        .signature-line {
+            border-bottom: 1px solid #333;
+            height: 30px;
+            margin-bottom: 5px;
+        }
+
+        .signature-label {
+            font-size: 9px;
+            color: #718096;
+        }
+
+        .signature-value {
+            font-style: italic;
+            padding-top: 5px;
+        }
+
+        .audit-trail {
+            margin-top: 20px;
+            font-size: 9px;
+            color: #718096;
+        }
+
+        .audit-trail table td {
+            padding: 4px 8px;
+            font-size: 9px;
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 9px;
+            color: #a0aec0;
+            text-align: center;
+        }
+
+        .staff-badge {
+            background: #718096;
+            color: white;
+            padding: 1px 5px;
+            border-radius: 2px;
+            font-size: 8px;
+            margin-left: 5px;
+        }
+
+        .receipt-list {
+            font-size: 9px;
+            color: #718096;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-section">
+            <h1>American Institute of Mathematics</h1>
+            <p>Reimbursement Documentation</p>
+        </div>
+        <div class="doc-info">
+            <h2>Reimbursement Request</h2>
+            <div class="request-id">#{{ reimbursement.pk }}</div>
+            <span class="status-badge status-{{ reimbursement.status }}">
+                {{ reimbursement.get_status_display }}
+            </span>
+        </div>
+    </div>
+
+    {# Tax Status - Prominent Display #}
+    <div class="section">
+        <div style="background: {% if reimbursement.tax_status == 'us_citizen' or reimbursement.tax_status == 'green_card' %}#f0fff4; border: 1px solid #9ae6b4;{% else %}#fefcbf; border: 1px solid #ecc94b;{% endif %} border-radius: 4px; padding: 12px; margin-bottom: 15px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-size: 9px; color: #718096; text-transform: uppercase; letter-spacing: 0.5px;">Tax Status</div>
+                    <div style="font-size: 14px; font-weight: bold; color: #2d3748;">{{ reimbursement.get_tax_status_display }}</div>
+                </div>
+                {% if reimbursement.tax_status == 'visa_resident' or reimbursement.tax_status == 'visa_nonresident' %}
+                <div style="text-align: right;">
+                    {% if reimbursement.citizenship_country %}
+                    <div style="font-size: 10px;"><strong>Citizenship:</strong> {{ reimbursement.citizenship_country }}</div>
+                    {% endif %}
+                    {% if reimbursement.visa_type %}
+                    <div style="font-size: 10px;"><strong>Visa Type:</strong> {{ reimbursement.visa_type }}</div>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">Payee Information</div>
+        <div class="info-grid">
+            <div class="info-box">
+                <label>Name</label>
+                <div class="value">{{ reimbursement.person.first_name }} {{ reimbursement.person.last_name }}</div>
+            </div>
+            <div class="info-box">
+                <label>Email</label>
+                <div class="value">{{ reimbursement.person.email_address }}</div>
+            </div>
+            <div class="info-box">
+                <label>Institution</label>
+                <div class="value">{{ reimbursement.person.institution|default:"—" }}</div>
+            </div>
+            <div class="info-box">
+                <label>Payment Method</label>
+                <div class="value">{{ reimbursement.get_payment_method_display }}</div>
+            </div>
+            {% if reimbursement.payment_method == 'check' %}
+            <div class="info-box" style="grid-column: span 2;">
+                <label>Mailing Address</label>
+                <div class="value">{{ reimbursement.payment_address|linebreaksbr }}</div>
+            </div>
+            {% else %}
+            <div class="info-box">
+                <label>Bank Name</label>
+                <div class="value">{{ reimbursement.bank_name }}</div>
+            </div>
+            <div class="info-box">
+                <label>Account (Last 4)</label>
+                <div class="value">****{{ reimbursement.bank_account_number|slice:"-4:" }}</div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if reimbursement.enrollment and reimbursement.enrollment.workshop %}
+    <div class="section">
+        <div class="section-title">Program Information</div>
+        <div class="info-grid">
+            <div class="info-box">
+                <label>Program Code</label>
+                <div class="value">{{ reimbursement.enrollment.workshop.code }}</div>
+            </div>
+            <div class="info-box">
+                <label>Program Title</label>
+                <div class="value">{{ reimbursement.enrollment.workshop.title }}</div>
+            </div>
+            <div class="info-box">
+                <label>Start Date</label>
+                <div class="value">{{ reimbursement.enrollment.workshop.start_date|date:"F j, Y" }}</div>
+            </div>
+            <div class="info-box">
+                <label>End Date</label>
+                <div class="value">{{ reimbursement.enrollment.workshop.end_date|date:"F j, Y" }}</div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="section">
+        <div class="section-title">Expense Details</div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 15%;">Category</th>
+                    <th style="width: 30%;">Description</th>
+                    <th style="width: 12%;">Date</th>
+                    <th style="width: 13%;" class="text-right">Original</th>
+                    <th style="width: 15%;" class="text-right">Requested (USD)</th>
+                    <th style="width: 15%;" class="text-right">Approved (USD)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in reimbursement.line_items.all %}
+                <tr>
+                    <td>
+                        {{ item.get_category_display }}
+                        {% if item.added_by_staff %}<span class="staff-badge">STAFF</span>{% endif %}
+                    </td>
+                    <td>
+                        {{ item.description }}
+                        {% if item.receipts.exists %}
+                        <div class="receipt-list">
+                            Receipts: {% for r in item.receipts.all %}{{ r.original_filename }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td>{{ item.date_incurred|date:"M j, Y" }}</td>
+                    <td class="text-right">
+                        {% if item.original_currency != 'USD' and item.original_amount %}
+                        {{ item.original_currency }} {{ item.original_amount|floatformat:2 }}
+                        {% if item.exchange_rate %}
+                        <div class="currency-note">@ {{ item.exchange_rate }}</div>
+                        {% endif %}
+                        {% else %}
+                        —
+                        {% endif %}
+                    </td>
+                    <td class="text-right">${{ item.amount_requested|floatformat:2 }}</td>
+                    <td class="text-right">
+                        {% if item.amount_approved %}
+                        ${{ item.amount_approved|floatformat:2 }}
+                        {% else %}
+                        —
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr class="totals-row">
+                    <td colspan="4" class="text-right">TOTALS:</td>
+                    <td class="text-right">${{ reimbursement.total_requested|floatformat:2 }}</td>
+                    <td class="text-right">
+                        {% if reimbursement.total_approved %}
+                        ${{ reimbursement.total_approved|floatformat:2 }}
+                        {% else %}
+                        —
+                        {% endif %}
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="financial-summary">
+            <div class="summary-box requested">
+                <label>Total Requested</label>
+                <div class="amount">${{ reimbursement.total_requested|floatformat:2 }}</div>
+            </div>
+            <div class="summary-box approved">
+                <label>Total Approved</label>
+                <div class="amount">
+                    {% if reimbursement.total_approved %}
+                    ${{ reimbursement.total_approved|floatformat:2 }}
+                    {% else %}
+                    —
+                    {% endif %}
+                </div>
+            </div>
+            <div class="summary-box paid">
+                <label>Total Paid</label>
+                <div class="amount">
+                    {% if reimbursement.total_paid %}
+                    ${{ reimbursement.total_paid|floatformat:2 }}
+                    {% else %}
+                    —
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if reimbursement.submitter_notes %}
+    <div class="section">
+        <div class="section-title">Submitter Notes</div>
+        <p>{{ reimbursement.submitter_notes }}</p>
+    </div>
+    {% endif %}
+
+    {# Certifications Section #}
+    <div class="section" style="margin-top: 25px;">
+        <div class="section-title">Certifications &amp; Digital Signature</div>
+        <div style="background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 15px; margin-bottom: 15px;">
+            <p style="margin: 0 0 10px 0; font-size: 10px;">
+                <strong>By signing below, the submitter certified the following:</strong>
+            </p>
+            <ul style="margin: 0; padding-left: 20px; font-size: 10px; color: #4a5568;">
+                <li style="margin-bottom: 5px;">
+                    <span style="color: #22543d;">&#10003;</span>
+                    All expenses listed are accurate and were incurred for official business.
+                </li>
+                <li style="margin-bottom: 5px;">
+                    <span style="color: #22543d;">&#10003;</span>
+                    I have not received honoraria from more than 5 institutions in the past 6 months.
+                    I declare under the penalties of perjury that all information is correct.
+                </li>
+                <li style="margin-bottom: 0;">
+                    <span style="color: #22543d;">&#10003;</span>
+                    I have not and will not request reimbursement for these expenses from any other source.
+                </li>
+            </ul>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+            <div style="width: 55%;">
+                <div style="border: 2px solid #1a365d; border-radius: 4px; padding: 15px; background: #fff;">
+                    <div style="font-size: 9px; color: #718096; text-transform: uppercase; margin-bottom: 5px;">
+                        Digital Signature
+                    </div>
+                    {% if reimbursement.signature %}
+                    <div style="font-size: 18px; font-style: italic; font-family: 'Georgia', serif; color: #1a365d;">
+                        {{ reimbursement.signature }}
+                    </div>
+                    <div style="font-size: 9px; color: #718096; margin-top: 8px;">
+                        Signed electronically on {{ reimbursement.signed_at|date:"F j, Y" }} at {{ reimbursement.signed_at|date:"g:i A" }}
+                    </div>
+                    {% else %}
+                    <div style="color: #a0aec0; font-style: italic;">Not signed</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div style="width: 40%;">
+                <div style="border: 1px solid #e2e8f0; border-radius: 4px; padding: 15px; background: #fff;">
+                    <div style="font-size: 9px; color: #718096; text-transform: uppercase; margin-bottom: 5px;">
+                        Approved By
+                    </div>
+                    {% if reimbursement.approved_by %}
+                    <div style="font-size: 14px; font-weight: bold; color: #2d3748;">
+                        {{ reimbursement.approved_by.get_full_name }}
+                    </div>
+                    <div style="font-size: 9px; color: #718096; margin-top: 5px;">
+                        {{ reimbursement.approved_at|date:"F j, Y" }} at {{ reimbursement.approved_at|date:"g:i A" }}
+                    </div>
+                    {% else %}
+                    <div style="color: #a0aec0; font-style: italic;">Pending approval</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="audit-trail">
+        <div class="section-title">Audit Trail</div>
+        <table>
+            <tr>
+                <td><strong>Created:</strong></td>
+                <td>{{ reimbursement.created_at|date:"M j, Y g:i A" }}</td>
+                <td><strong>By:</strong></td>
+                <td>{{ reimbursement.submitted_by.get_full_name|default:reimbursement.submitted_by.username }}</td>
+            </tr>
+            {% if reimbursement.submitted_at %}
+            <tr>
+                <td><strong>Submitted:</strong></td>
+                <td>{{ reimbursement.submitted_at|date:"M j, Y g:i A" }}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            {% endif %}
+            {% if reimbursement.approved_at %}
+            <tr>
+                <td><strong>Approved:</strong></td>
+                <td>{{ reimbursement.approved_at|date:"M j, Y g:i A" }}</td>
+                <td><strong>By:</strong></td>
+                <td>{{ reimbursement.approved_by.get_full_name|default:reimbursement.approved_by.username }}</td>
+            </tr>
+            {% endif %}
+            {% if reimbursement.paid_at %}
+            <tr>
+                <td><strong>Paid:</strong></td>
+                <td>{{ reimbursement.paid_at|date:"M j, Y g:i A" }}</td>
+                <td><strong>By:</strong></td>
+                <td>{{ reimbursement.paid_by.get_full_name|default:reimbursement.paid_by.username }}</td>
+            </tr>
+            {% if reimbursement.payment_reference %}
+            <tr>
+                <td><strong>Reference:</strong></td>
+                <td colspan="3">{{ reimbursement.payment_reference }}</td>
+            </tr>
+            {% endif %}
+            {% endif %}
+        </table>
+    </div>
+
+    <div class="footer">
+        Generated on {{ now|date:"F j, Y" }} at {{ now|date:"g:i A" }} |
+        American Institute of Mathematics |
+        Reimbursement #{{ reimbursement.pk }}
+    </div>
+</body>
+</html>

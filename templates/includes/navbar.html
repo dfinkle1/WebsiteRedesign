@@ -1,8 +1,15 @@
 {% load cms_tags sekizai_tags static %}
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
       rel="stylesheet">
-<nav class="navbar navbar-expand-lg rounded" aria-label="Main navigation">
+<nav class="navbar navbar-expand-xl rounded" aria-label="Main navigation">
     <div class="container-fluid">
+        <!-- LEFT: Brand (stays visible on mobile) -->
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}">
+            <img src="{% static 'images/aimlogotransparentnotext.png' %}"
+                 alt="American Institute of Mathematics"
+                 style="max-height: 70px">
+        </a>
+
         <!-- Toggler for Mobile -->
         <button class="navbar-toggler"
                 type="button"
@@ -13,20 +20,10 @@
                 aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse d-lg-flex" id="navbarContent">
-            <!-- LEFT: Brand -->
-            <a class="navbar-brand col-lg-auto me-0 d-flex align-items-center"
-               href="{% url 'index' %}">
-                <img src="{% static 'images/aimlogotransparentnotext.png' %}"
-                     alt="American Institute of Mathematics"
-                     class=""
-                     style="max-height: 90px">
-            </a>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
             <!-- CENTER: Navigation -->
-            <ul class="navbar-nav col-lg-10 justify-content-lg-center gap-3">
-                <!-- <li class="nav-item">
-                    <a class="nav-link" href="{% url 'index' %}">Home</a>
-                </li> -->
+            <ul class="navbar-nav mx-auto gap-3">
                 <!-- Focused Collaborative Research -->
                 <li class="nav-item dropdown">
                     {% page_url 'collaborative' as collaborative_url %}
