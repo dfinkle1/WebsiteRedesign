@@ -514,3 +514,70 @@ def protected_visa_doc(request, pk, doc_type):
             file_field.open('rb'),
             as_attachment=False,
         )
+
+
+# =============================================================================
+# PDF GENERATION
+# =============================================================================
+
+
+@login_required(login_url="/accounts/login/")
+def reimbursement_pdf(request, pk):
+    """
+    Generate a PDF of the reimbursement request.
+
+    Only available for submitted, approved, or paid requests.
+    Only accessible by the submitter or staff.
+    """
+    from django.template.loader import render_to_string
+    from django.http import HttpResponse
+
+    reimbursement = get_object_or_404(
+        ReimbursementRequest.objects.select_related(
+            "person",
+            "enrollment__workshop",
+            "submitted_by",
+            "approved_by",
+            "paid_by",
+        ).prefetch_related("line_items__receipts"),
+        pk=pk
+    )
+
+    # Authorization check
+    if reimbursement.submitted_by != request.user and not request.user.is_staff:
+        raise Http404("Not found")
+
+    # Only generate PDF for submitted+ requests
+    if reimbursement.status == RequestStatus.DRAFT:
+        messages.warning(request, "Cannot generate PDF for draft requests.")
+        return redirect("reimbursements:edit", pk=pk)
+
+    # Render HTML template
+    html_string = render_to_string(
+        "reimbursements/pdf/reimbursement_packet.html",
+        {
+            "reimbursement": reimbursement,
+            "now": timezone.now(),
+        }
+    )
+
+    # Try to use WeasyPrint for PDF generation
+    try:
+        from weasyprint import HTML, CSS
+
+        # Generate PDF
+        pdf_file = HTML(string=html_string, base_url=request.build_absolute_uri('/')).write_pdf()
+
+        # Return as downloadable file
+        response = HttpResponse(pdf_file, content_type="application/pdf")
+        filename = f"reimbursement_{reimbursement.pk}_{reimbursement.person.last_name}.pdf"
+        response["Content-Disposition"] = f'attachment; filename="{filename}"'
+        return response
+
+    except ImportError:
+        # WeasyPrint not installed - return HTML preview instead
+        messages.warning(
+            request,
+            "PDF generation requires WeasyPrint. Install with: pip install weasyprint"
+        )
+        return HttpResponse(html_string)

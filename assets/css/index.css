@@ -318,7 +318,7 @@ p {
 
 /* Image */
 .news-image {
-  max-height: 250px;
+  height: 250px;
   width: 100%;
   object-fit: cover;
   border-radius: 8px;

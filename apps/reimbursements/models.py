@@ -77,6 +77,24 @@ class ExpenseCategory(models.TextChoices):
     OTHER = "other", "Other"
 
 
+class Currency(models.TextChoices):
+    """Common currencies for expense reporting."""
+
+    USD = "USD", "USD - US Dollar"
+    GBP = "GBP", "GBP - British Pound"
+    EUR = "EUR", "EUR - Euro"
+    CAD = "CAD", "CAD - Canadian Dollar"
+    AUD = "AUD", "AUD - Australian Dollar"
+    CHF = "CHF", "CHF - Swiss Franc"
+    JPY = "JPY", "JPY - Japanese Yen"
+    CNY = "CNY", "CNY - Chinese Yuan"
+    INR = "INR", "INR - Indian Rupee"
+    MXN = "MXN", "MXN - Mexican Peso"
+    KRW = "KRW", "KRW - South Korean Won"
+    BRL = "BRL", "BRL - Brazilian Real"
+    OTHER = "OTH", "Other"
+
+
 # =============================================================================
 # MANAGERS / QUERYSETS
 # =============================================================================
@@ -540,6 +558,7 @@ class ExpenseLineItem(TimestampedModel):
     An individual expense within a reimbursement request.
 
     Each line item can have multiple receipts attached.
+    Supports multi-currency expenses with staff-managed conversion.
     """
 
     request = models.ForeignKey(
@@ -561,10 +580,33 @@ class ExpenseLineItem(TimestampedModel):
         help_text="Date the expense was incurred.",
     )
 
+    # Currency support
+    original_currency = models.CharField(
+        max_length=3,
+        choices=Currency.choices,
+        default=Currency.USD,
+        help_text="Currency of the original expense.",
+    )
+    original_amount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        help_text="Amount in original currency (if not USD).",
+    )
+    exchange_rate = models.DecimalField(
+        max_digits=10,
+        decimal_places=6,
+        null=True,
+        blank=True,
+        help_text="Exchange rate to USD (staff enters this for non-USD expenses).",
+    )
+
+    # USD amounts (final)
     amount_requested = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        help_text="Amount being requested for reimbursement (USD).",
+        help_text="Amount in USD being requested for reimbursement.",
     )
     amount_approved = models.DecimalField(
         max_digits=10,
@@ -572,6 +614,12 @@ class ExpenseLineItem(TimestampedModel):
         null=True,
         blank=True,
         help_text="Amount approved by reviewer (may be less than requested).",
+    )
+
+    # Track if added by staff (e.g., per diem)
+    added_by_staff = models.BooleanField(
+        default=False,
+        help_text="True if this expense was added by staff (e.g., per diem).",
     )
 
     reviewer_notes = models.TextField(
@@ -585,7 +633,14 @@ class ExpenseLineItem(TimestampedModel):
         verbose_name_plural = "Expense Line Items"
 
     def __str__(self):
+        if self.original_currency != Currency.USD and self.original_amount:
+            return f"{self.get_category_display()}: {self.original_currency} {self.original_amount} (${self.amount_requested} USD)"
         return f"{self.get_category_display()}: ${self.amount_requested}"
+
+    @property
+    def needs_conversion(self):
+        """True if this is a non-USD expense needing conversion."""
+        return self.original_currency != Currency.USD and not self.amount_requested
 
 
 class Receipt(TimestampedModel):

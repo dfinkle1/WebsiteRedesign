@@ -12,6 +12,7 @@ from .models import (
     TaxStatus,
     PaymentMethod,
     ExpenseCategory,
+    Currency,
 )
 
 
@@ -195,6 +196,8 @@ class ExpenseLineItemForm(forms.ModelForm):
             "category",
             "description",
             "date_incurred",
+            "original_currency",
+            "original_amount",
             "amount_requested",
         ]
         widgets = {
@@ -211,15 +214,66 @@ class ExpenseLineItemForm(forms.ModelForm):
                     "type": "date",
                 }
             ),
+            "original_currency": forms.Select(
+                attrs={
+                    "class": "form-select",
+                }
+            ),
+            "original_amount": forms.NumberInput(
+                attrs={
+                    "class": "form-control",
+                    "step": "0.01",
+                    "min": "0",
+                    "placeholder": "Amount in original currency",
+                }
+            ),
             "amount_requested": forms.NumberInput(
                 attrs={
                     "class": "form-control",
                     "step": "0.01",
                     "min": "0",
-                    "placeholder": "0.00",
+                    "placeholder": "Amount in USD",
                 }
             ),
         }
+        labels = {
+            "original_currency": "Currency",
+            "original_amount": "Amount (in selected currency)",
+            "amount_requested": "Amount in USD",
+        }
+        help_texts = {
+            "original_currency": "Select the currency you paid in",
+            "original_amount": "Enter the amount as shown on your receipt",
+            "amount_requested": "If USD, same as above. If foreign currency, convert to USD (staff will verify)",
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Make original_amount optional (only needed for non-USD)
+        self.fields["original_amount"].required = False
+
+    def clean(self):
+        cleaned_data = super().clean()
+        currency = cleaned_data.get("original_currency")
+        original_amount = cleaned_data.get("original_amount")
+        amount_requested = cleaned_data.get("amount_requested")
+
+        # If non-USD currency, original_amount should be filled
+        if currency and currency != Currency.USD:
+            if not original_amount:
+                self.add_error(
+                    "original_amount",
+                    "Please enter the amount in the original currency."
+                )
+
+        # amount_requested (USD) is always required
+        if not amount_requested:
+            self.add_error(
+                "amount_requested",
+                "Please enter the USD amount."
+            )
+
+        return cleaned_data
 
 
 class ReceiptUploadForm(forms.Form):

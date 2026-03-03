@@ -40,4 +40,7 @@ urlpatterns = [
         views.protected_visa_doc,
         name="protected_visa_doc"
     ),
+
+    # PDF download
+    path("<int:pk>/pdf/", views.reimbursement_pdf, name="pdf"),
 ]

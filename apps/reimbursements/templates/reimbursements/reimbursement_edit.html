@@ -59,7 +59,12 @@
                   <td>{{ item.get_category_display }}</td>
                   <td>{{ item.description }}</td>
                   <td>{{ item.date_incurred|date:"M j, Y" }}</td>
-                  <td class="text-end">${{ item.amount_requested|floatformat:2 }}</td>
+                  <td class="text-end">
+                    {% if item.original_currency != 'USD' and item.original_amount %}
+                    <small class="text-muted d-block">{{ item.original_currency }} {{ item.original_amount|floatformat:2 }}</small>
+                    {% endif %}
+                    ${{ item.amount_requested|floatformat:2 }}
+                  </td>
                   <td>
                     {% for receipt in item.receipts.all %}
                     <span class="badge bg-light text-dark me-1">
@@ -304,10 +309,26 @@
             {{ expense_form.date_incurred }}
           </div>
           <div class="mb-3">
-            <label class="form-label">Amount (USD)</label>
+            <label class="form-label">Currency</label>
+            {{ expense_form.original_currency }}
+            <div class="form-text">Select the currency you paid in</div>
+          </div>
+          <div class="mb-3" id="original-amount-field">
+            <label class="form-label">Amount in Original Currency</label>
+            {{ expense_form.original_amount }}
+            <div class="form-text">Enter the amount as shown on your receipt</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Amount in USD</label>
             <div class="input-group">
               <span class="input-group-text">$</span>
               {{ expense_form.amount_requested }}
+            </div>
+            <div class="form-text" id="currency-help">
+              <span id="usd-help">Enter the amount in US dollars.</span>
+              <span id="convert-help" style="display: none;">
+                Use <a href="https://www.xe.com/currencyconverter/" target="_blank">XE Currency Converter</a> to convert to USD.
+              </span>
             </div>
           </div>
         </div>
@@ -351,6 +372,34 @@ document.addEventListener('DOMContentLoaded', function() {
         visaFields.classList.add('d-none');
       }
     });
+  }
+
+  // Currency toggle for original amount field and help text
+  const currencySelect = document.getElementById('id_original_currency');
+  const originalAmountField = document.getElementById('original-amount-field');
+  const usdHelp = document.getElementById('usd-help');
+  const convertHelp = document.getElementById('convert-help');
+
+  function toggleCurrencyFields() {
+    if (currencySelect) {
+      const isUSD = currencySelect.value === 'USD';
+
+      if (originalAmountField) {
+        originalAmountField.style.display = isUSD ? 'none' : 'block';
+      }
+      if (usdHelp) {
+        usdHelp.style.display = isUSD ? 'inline' : 'none';
+      }
+      if (convertHelp) {
+        convertHelp.style.display = isUSD ? 'none' : 'inline';
+      }
+    }
+  }
+
+  if (currencySelect) {
+    currencySelect.addEventListener('change', toggleCurrencyFields);
+    // Initial state
+    toggleCurrencyFields();
   }
 });
 </script>
