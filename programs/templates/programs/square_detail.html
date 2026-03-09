@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+    {{ square.title }} - SQuaRE - AIM
+{% endblock title %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/pages/workshops.css' %}">
+    <style>
+        .square-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        .square-header h1 {
+            margin-bottom: 0.5rem;
+        }
+        .meeting-timeline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 2rem 0;
+        }
+        .meeting-card {
+            flex: 1;
+            min-width: 200px;
+            max-width: 250px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .meeting-card-header {
+            padding: 12px 15px;
+            color: white;
+            font-weight: 600;
+        }
+        .meeting-card-header.m1 { background: #0d6efd; }
+        .meeting-card-header.m2 { background: #198754; }
+        .meeting-card-header.m3 { background: #dc3545; }
+        .meeting-card-header.m4 { background: #6f42c1; }
+        .meeting-card-header.m5 { background: #fd7e14; }
+        .meeting-card-body {
+            padding: 15px;
+        }
+        .meeting-card-body p {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .participant-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        .participant-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .participant-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        .participant-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .participant-name {
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 2px;
+        }
+        .participant-institution {
+            font-size: 0.85rem;
+            color: #6c757d;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .stats-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        .stat-item {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+        .section-title h2 {
+            margin: 0;
+        }
+        .section-title .badge {
+            font-size: 0.9rem;
+            padding: 5px 12px;
+        }
+    </style>
+{% endblock extra_css %}
+{% block content %}
+    <div class="container py-5">
+        <!-- Back link -->
+        <div class="mb-3">
+            <a href="{% url 'programs:past-squares' %}" class="text-decoration-none">
+                &larr; Back to Past SQuaREs
+            </a>
+        </div>
+
+        <!-- Header -->
+        <div class="square-header">
+            <h1>{{ square.title }}</h1>
+            {% if square.abbreviation %}
+                <p class="mb-2 opacity-75">{{ square.abbreviation }}</p>
+            {% endif %}
+            {% if square.organizer1 %}
+                <p class="mb-0">
+                    <strong>Organizers:</strong>
+                    {{ square.organizer1 }}{% if square.organizer2 %}, {{ square.organizer2 }}{% endif %}{% if square.organizer3 %}, {{ square.organizer3 }}{% endif %}
+                </p>
+            {% endif %}
+            <div class="stats-row">
+                <span class="stat-item">
+                    {{ all_meetings.count }} Meeting{{ all_meetings.count|pluralize }}
+                </span>
+                <span class="stat-item">
+                    {{ participant_count }} Participant{{ participant_count|pluralize }}
+                </span>
+                {% if square.location %}
+                    <span class="stat-item">
+                        {{ square.location }}
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Description -->
+        {% if square.description %}
+            <div class="mb-4">
+                <h2>About This SQuaRE</h2>
+                <p class="text-muted">{{ square.description }}</p>
+            </div>
+        {% endif %}
+
+        <!-- Meeting Timeline -->
+        <div class="mb-5">
+            <div class="section-title">
+                <h2>Meetings</h2>
+            </div>
+            <div class="meeting-timeline">
+                {% for meeting in all_meetings %}
+                    <div class="meeting-card">
+                        <div class="meeting-card-header m{{ meeting.meeting_number|default:forloop.counter }}">
+                            Meeting {{ meeting.meeting_number|default:forloop.counter }}
+                        </div>
+                        <div class="meeting-card-body">
+                            {% if meeting.start_date and meeting.end_date %}
+                                <p>
+                                    <strong>Dates:</strong><br>
+                                    {{ meeting.start_date|date:"M d" }} - {{ meeting.end_date|date:"M d, Y" }}
+                                </p>
+                            {% elif meeting.start_date %}
+                                <p><strong>Start:</strong> {{ meeting.start_date|date:"M d, Y" }}</p>
+                            {% endif %}
+                            {% if meeting.location %}
+                                <p><strong>Location:</strong> {{ meeting.location }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% empty %}
+                    <p class="text-muted">No meeting information available.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Participants -->
+        <div class="mb-4">
+            <div class="section-title">
+                <h2>Participants</h2>
+                <span class="badge bg-secondary">{{ participant_count }}</span>
+            </div>
+            {% if participants %}
+                <div class="participant-grid">
+                    {% for person in participants %}
+                        <div class="participant-card">
+                            <div class="participant-avatar">
+                                {{ person.first_name|slice:":1" }}{{ person.last_name|slice:":1" }}
+                            </div>
+                            <div class="participant-info">
+                                <div class="participant-name">
+                                    {{ person.first_name }} {{ person.last_name }}
+                                </div>
+                                {% if person.institution %}
+                                    <div class="participant-institution" title="{{ person.institution }}">
+                                        {{ person.institution }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    No participant information available for this SQuaRE.
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Info box -->
+        <div class="mt-5 p-3 bg-light rounded">
+            <p class="mb-0 text-muted small">
+                <strong>About SQuaREs:</strong> Structured Quartet Research Ensembles (SQuaREs) are small collaborative research groups
+                that meet at AIM over multiple years to work on focused mathematical problems. Each group typically meets 3-5 times.
+            </p>
+        </div>
+    </div>
+{% endblock content %}

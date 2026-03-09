@@ -30,6 +30,20 @@ except Exception:
             "Generate one with: python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'"
         )
 
+# Field encryption key for sensitive data (bank accounts, etc.)
+# Generate with: python -c 'from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())'
+try:
+    FIELD_ENCRYPTION_KEY = env("FIELD_ENCRYPTION_KEY")
+except Exception:
+    if os.getenv("DEBUG", "0") == "1":
+        # Dev-only key - DO NOT use in production
+        FIELD_ENCRYPTION_KEY = "dev-only-key-not-for-production-use-32b="
+    else:
+        raise Exception(
+            "FIELD_ENCRYPTION_KEY environment variable is required. "
+            "Generate one with: python -c 'from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())'"
+        )
+
 DEBUG = False  # Overridden in dev/prod
 
 
@@ -184,7 +198,6 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.media",
                 "cms.context_processors.cms_settings",
-                "django.template.context_processors.request",
             ],
         },
     },

@@ -287,6 +287,9 @@ def expense_delete(request, pk, expense_pk):
 @login_required(login_url="/accounts/login/")
 def receipt_upload(request, pk, expense_pk):
     """Upload a receipt for an expense line item."""
+    from .validators import validate_uploaded_file
+    from django.core.exceptions import ValidationError
+
     reimbursement = get_object_or_404(ReimbursementRequest, pk=pk)
 
     if reimbursement.submitted_by != request.user and not request.user.is_staff:
@@ -300,6 +303,14 @@ def receipt_upload(request, pk, expense_pk):
 
     if request.method == "POST" and request.FILES.get("file"):
         uploaded_file = request.FILES["file"]
+
+        # Server-side security validation
+        try:
+            validate_uploaded_file(uploaded_file)
+        except ValidationError as e:
+            messages.error(request, str(e.message))
+            return redirect("reimbursements:edit", pk=pk)
+
         Receipt.objects.create(
             line_item=expense,
             file=uploaded_file,

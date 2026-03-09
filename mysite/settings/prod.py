@@ -45,5 +45,9 @@ SECURE_HSTS_PRELOAD = True
 SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 X_FRAME_OPTIONS = "SAMEORIGIN"  # Allow iframes from same origin (needed for django-cms toolbar)
 
+# Additional security headers
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent MIME type sniffing
+SECURE_BROWSER_XSS_FILTER = True  # Enable browser XSS filter (legacy, but harmless)
+
 # URL handling
 APPEND_SLASH = True  # Redirect /about to /about/ automatically

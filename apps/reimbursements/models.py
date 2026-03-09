@@ -17,6 +17,7 @@ from django_fsm import FSMField, transition
 
 from people.models import People
 from enrollments.models import Enrollment
+from .fields import EncryptedCharField
 
 
 # =============================================================================
@@ -268,10 +269,20 @@ class ReimbursementRequest(TimestampedModel):
         help_text="Mailing address for check payments.",
     )
 
-    # ACH payment fields
+    # ACH payment fields (sensitive data encrypted at rest)
     bank_name = models.CharField(max_length=100, blank=True)
-    bank_routing_number = models.CharField(max_length=9, blank=True)
-    bank_account_number = models.CharField(max_length=17, blank=True)
+    bank_routing_number = EncryptedCharField(
+        max_length=9,
+        blank=True,
+        default="",
+        help_text="9-digit ABA routing number (encrypted)",
+    )
+    bank_account_number = EncryptedCharField(
+        max_length=17,
+        blank=True,
+        default="",
+        help_text="Bank account number (encrypted)",
+    )
     bank_account_type = models.CharField(
         max_length=10,
         choices=[("checking", "Checking"), ("savings", "Savings")],
@@ -531,11 +542,14 @@ class ReimbursementRequest(TimestampedModel):
 
     def _freeze_snapshots(self):
         """Freeze tax and payment info at submission time."""
+        # Note: We only store last 4 chars of passport for audit trail
+        # Full passport number remains in the passport_number field (encrypted at rest via DB)
+        passport_last4 = self.passport_number[-4:] if self.passport_number else None
         self.tax_info_snapshot = {
             "tax_status": self.tax_status,
             "citizenship_country": self.citizenship_country,
             "visa_type": self.visa_type,
-            "passport_number": self.passport_number,
+            "passport_last4": passport_last4,  # Only store last 4 for verification
             "us_entry_date": str(self.us_entry_date) if self.us_entry_date else None,
         }
         self.payment_info_snapshot = {

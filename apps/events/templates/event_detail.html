@@ -1,172 +1,161 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}{{ event.title }} | AIM Events{% endblock title %}
+{% block title %}
+    {{ event.title }} | AIM Events
+{% endblock title %}
 {% block content %}
-<div class="container py-4">
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb" class="mb-3">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'events:event-list' %}">Events</a></li>
-            <li class="breadcrumb-item active">{{ event.title|truncatewords:5 }}</li>
-        </ol>
-    </nav>
-
-    <!-- Hero Image -->
-    {% if event.image %}
-    <div class="mb-4">
-        <img src="{{ event.image.url }}"
-             class="img-fluid rounded w-100"
-             style="max-height: 400px; object-fit: cover;"
-             alt="{{ event.title }}">
-    </div>
-    {% endif %}
-
-    <div class="row">
-        <!-- Main Content -->
-        <div class="col-lg-8">
-            <!-- Status badges -->
-            <div class="mb-2">
-                <span class="badge bg-secondary">{{ event.get_event_type_display }}</span>
-                {% if event.is_online %}
-                <span class="badge bg-primary">Online Event</span>
-                {% endif %}
-                {% if event.status == 'cancelled' %}
-                <span class="badge bg-danger">Cancelled</span>
-                {% elif event.status == 'postponed' %}
-                <span class="badge bg-warning text-dark">Postponed</span>
-                {% endif %}
-            </div>
-
-            <!-- Title & Date -->
-            <p class="text-muted mb-1">{{ event.start|date:"l, F j, Y" }}</p>
-            <h1 class="mb-3">{{ event.title }}</h1>
-            <p class="mb-4">By <strong>American Institute of Mathematics</strong></p>
-
-            {% if event.short_summary %}
-            <p class="lead">{{ event.short_summary }}</p>
-            {% endif %}
-
-            <!-- Location Section -->
+    <div class="container py-4">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{% url 'events:event-list' %}">Events</a>
+                </li>
+                <li class="breadcrumb-item active">{{ event.title|truncatewords:5 }}</li>
+            </ol>
+        </nav>
+        <!-- Hero Image -->
+        {% if event.image %}
             <div class="mb-4">
-                <h5>Location</h5>
-                {% if event.is_online %}
-                <p class="mb-2">
-                    <span class="text-primary">This is an online event.</span>
-                    {% if event.online_url %}
-                    <br>
-                    <a href="{{ event.online_url }}" target="_blank" class="btn btn-outline-primary btn-sm mt-2">
-                        Join Online Event
-                    </a>
-                    {% endif %}
-                </p>
-                {% else %}
-                    {% if event.venue_name %}
-                    <p class="mb-1"><strong>{{ event.venue_name }}</strong></p>
-                    {% endif %}
-                    <p class="text-muted mb-2">{{ event.full_address }}</p>
-                    {% if event.maps_url %}
-                    <a href="{{ event.maps_url }}" target="_blank" class="btn btn-outline-secondary btn-sm">
-                        Get Directions
-                    </a>
-                    {% endif %}
-                {% endif %}
+                <img src="{{ event.image.url }}"
+                     class="img-fluid rounded w-100"
+                     style="max-height: 400px;
+                            object-fit: contain"
+                     alt="{{ event.title }}">
             </div>
-
-            <!-- Description -->
-            {% if event.description_html %}
-            <div class="mb-4">
-                <h5>About This Event</h5>
-                <div class="event-description">
-                    {{ event.description_html|safe }}
+        {% endif %}
+        <div class="row">
+            <!-- Main Content -->
+            <div class="col-lg-8">
+                <!-- Status badges -->
+                <div class="mb-2">
+                    <span class="badge bg-secondary">{{ event.get_event_type_display }}</span>
+                    {% if event.is_online %}<span class="badge bg-primary">Online Event</span>{% endif %}
+                    {% if event.status == 'cancelled' %}
+                        <span class="badge bg-danger">Cancelled</span>
+                    {% elif event.status == 'postponed' %}
+                        <span class="badge bg-warning text-dark">Postponed</span>
+                    {% endif %}
                 </div>
-            </div>
-            {% endif %}
-        </div>
-
-        <!-- Sidebar -->
-        <div class="col-lg-4">
-            <!-- Ticket Card -->
-            <div class="card shadow-sm mb-3 sticky-top" style="top: 20px;">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div>
-                            <span class="h5 mb-0">{{ event.price_display }}</span>
-                            {% if event.capacity %}
-                            <br><small class="text-muted">{{ event.capacity }} spots available</small>
+                <!-- Title & Date -->
+                <p class="text-muted mb-1">{{ event.start|date:"l, F j, Y" }}</p>
+                <h1 class="mb-3">{{ event.title }}</h1>
+                <p class="mb-4">
+                    By <strong>American Institute of Mathematics</strong>
+                </p>
+                {% if event.short_summary %}<p class="lead">{{ event.short_summary }}</p>{% endif %}
+                <!-- Location Section -->
+                <div class="mb-4">
+                    <h5>Location</h5>
+                    {% if event.is_online %}
+                        <p class="mb-2">
+                            <span class="text-primary">This is an online event.</span>
+                            {% if event.online_url %}
+                                <br>
+                                <a href="{{ event.online_url }}"
+                                   target="_blank"
+                                   class="btn btn-outline-primary btn-sm mt-2">Join Online Event</a>
                             {% endif %}
+                        </p>
+                    {% else %}
+                        {% if event.venue_name %}
+                            <p class="mb-1">
+                                <strong>{{ event.venue_name }}</strong>
+                            </p>
+                        {% endif %}
+                        <p class="text-muted mb-2">{{ event.full_address }}</p>
+                        {% if event.maps_url %}
+                            <a href="{{ event.maps_url }}"
+                               target="_blank"
+                               class="btn btn-outline-secondary btn-sm">Get Directions</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <!-- Description -->
+                {% if event.description_html %}
+                    <div class="mb-4">
+                        <h5>About This Event</h5>
+                        <div class="event-description">{{ event.description_html|safe }}</div>
+                    </div>
+                {% endif %}
+            </div>
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Ticket Card -->
+                <div class="card shadow-sm mb-3 sticky-top" style="top: 20px;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <span class="h5 mb-0">{{ event.price_display }}</span>
+                                {% if event.capacity %}
+                                    <br>
+                                    <small class="text-muted">{{ event.capacity }} spots available</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% if event.status == 'cancelled' %}
+                            <button class="btn btn-secondary w-100" disabled>Event Cancelled</button>
+                        {% elif event.status == 'postponed' %}
+                            <button class="btn btn-warning w-100" disabled>Event Postponed</button>
+                        {% elif event.is_past %}
+                            <button class="btn btn-secondary w-100" disabled>Event Ended</button>
+                        {% elif event.external_ticket_url %}
+                            <a href="{{ event.external_ticket_url }}"
+                               target="_blank"
+                               class="btn btn-primary w-100">Get Tickets</a>
+                        {% elif event.registration_required %}
+                            <a href="#register" class="btn btn-primary w-100">Register</a>
+                        {% else %}
+                            <span class="text-muted">No registration required</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <!-- Date & Time Card -->
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h6 class="card-title">Date and Time</h6>
+                        <p class="mb-2">
+                            <strong>{{ event.start|date:"l, F j, Y" }}</strong>
+                            <br>
+                            {{ event.start|date:"g:i A" }}
+                            {% if event.end %}- {{ event.end|date:"g:i A" }}{% endif %}
+                        </p>
+                        <!-- Add to Calendar -->
+                        <div class="dropdown">
+                            <button class="btn btn-outline-secondary btn-sm dropdown-toggle"
+                                    type="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false">Add to Calendar</button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item"
+                                       href="{{ event.google_calendar_url }}"
+                                       target="_blank">Google Calendar</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ event.ical_url }}">iCal / Outlook</a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-
-                    {% if event.status == 'cancelled' %}
-                    <button class="btn btn-secondary w-100" disabled>Event Cancelled</button>
-                    {% elif event.status == 'postponed' %}
-                    <button class="btn btn-warning w-100" disabled>Event Postponed</button>
-                    {% elif event.is_past %}
-                    <button class="btn btn-secondary w-100" disabled>Event Ended</button>
-                    {% elif event.external_ticket_url %}
-                    <a href="{{ event.external_ticket_url }}" target="_blank" class="btn btn-primary w-100">
-                        Get Tickets
-                    </a>
-                    {% elif event.registration_required %}
-                    <a href="#register" class="btn btn-primary w-100">Register</a>
-                    {% else %}
-                    <span class="text-muted">No registration required</span>
-                    {% endif %}
                 </div>
-            </div>
-
-            <!-- Date & Time Card -->
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h6 class="card-title">Date and Time</h6>
-                    <p class="mb-2">
-                        <strong>{{ event.start|date:"l, F j, Y" }}</strong><br>
-                        {{ event.start|date:"g:i A" }}{% if event.end %} - {{ event.end|date:"g:i A" }}{% endif %}
-                    </p>
-
-                    <!-- Add to Calendar -->
-                    <div class="dropdown">
-                        <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                            Add to Calendar
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a class="dropdown-item" href="{{ event.google_calendar_url }}" target="_blank">
-                                    Google Calendar
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="{{ event.ical_url }}">
-                                    iCal / Outlook
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Share Card -->
-            <div class="card">
-                <div class="card-body">
-                    <h6 class="card-title">Share This Event</h6>
-                    <div class="d-flex gap-2">
-                        <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text={{ event.title|urlencode }}"
-                           target="_blank" class="btn btn-outline-secondary btn-sm">
-                            Twitter
-                        </a>
-                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"
-                           target="_blank" class="btn btn-outline-secondary btn-sm">
-                            Facebook
-                        </a>
-                        <a href="mailto:?subject={{ event.title|urlencode }}&body=Check out this event: {{ request.build_absolute_uri }}"
-                           class="btn btn-outline-secondary btn-sm">
-                            Email
-                        </a>
+                <!-- Share Card -->
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Share This Event</h6>
+                        <div class="d-flex gap-2">
+                            <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text={{ event.title|urlencode }}"
+                               target="_blank"
+                               class="btn btn-outline-secondary btn-sm">Twitter</a>
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"
+                               target="_blank"
+                               class="btn btn-outline-secondary btn-sm">Facebook</a>
+                            <a href="mailto:?subject={{ event.title|urlencode }}&body=Check out this event: {{ request.build_absolute_uri }}"
+                               class="btn btn-outline-secondary btn-sm">Email</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock content %}

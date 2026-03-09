@@ -114,6 +114,105 @@ def past_workshops(request):
 
 
 def home(request):
-    workshops = get_upcoming_workshops
+    workshops = get_upcoming_workshops()  # Fixed: was missing ()
     now = timezone.now()
     return render(request, "home.html", {"workshops": workshops, "now": now})
+
+
+@ratelimit(key="ip", rate="60/m", method="GET", block=True)
+def past_squares(request):
+    """
+    Display past SQuaREs (completed SQuaRE groups) with their participants.
+    Shows only SQuaREs that have completed meeting 3 or later.
+    """
+    today = timezone.localdate()
+
+    # Get root SQuaRE meetings that have a completed meeting 3+
+    # A SQuaRE is "complete" when it has finished at least meeting 3
+    from django.db.models import Exists, OuterRef
+
+    # Subquery: check if this root has a subsequent meeting with number >= 3 that has ended
+    has_completed_meeting_3_plus = Program.objects.filter(
+        parent_square=OuterRef('pk'),
+        meeting_number__gte=3,
+        end_date__lt=today,
+    )
+
+    squares = Program.objects.filter(
+        type=Program.ProgramType.SQUARE,
+        parent_square__isnull=True,  # Only root meetings
+    ).filter(
+        # Either: root itself is meeting 3+ and ended, OR has a subsequent meeting 3+ that ended
+        Q(meeting_number__gte=3, end_date__lt=today) | Q(Exists(has_completed_meeting_3_plus))
+    )
+
+    # Year filter (optional)
+    year = request.GET.get("year")
+    if year and year.isdigit():
+        squares = squares.filter(start_date__year=int(year))
+
+    # Search filter (optional)
+    search = request.GET.get("search", "").strip()
+    if search:
+        squares = squares.filter(
+            Q(title__icontains=search)
+            | Q(description__icontains=search)
+            | Q(code__icontains=search)
+        )
+
+    # Order by most recent first
+    squares = squares.order_by("-end_date")
+
+    # Pagination
+    paginator = Paginator(squares, 10)
+    squares_page = get_safe_page(request, paginator)
+
+    # Get available years for filter dropdown
+    available_years = (
+        Program.objects.filter(
+            type=Program.ProgramType.SQUARE,
+            end_date__lt=today,
+            parent_square__isnull=True,
+            start_date__isnull=False,
+        )
+        .filter(
+            Q(meeting_number__gte=3, end_date__lt=today) | Q(Exists(has_completed_meeting_3_plus))
+        )
+        .dates("start_date", "year", order="DESC")
+        .values_list("start_date__year", flat=True)
+        .distinct()
+    )
+
+    context = {
+        "squares": squares_page,
+        "available_years": available_years,
+        "selected_year": year,
+        "search_query": search,
+    }
+
+    return render(request, "programs/past_squares.html", context)
+
+
+def square_detail(request, code):
+    """
+    Display details of a SQuaRE including all meetings and participants.
+    """
+    square = get_object_or_404(Program, type=Program.ProgramType.SQUARE, code=code)
+
+    # Get the root SQuaRE
+    root = square.square_root
+
+    # Get all meetings in this SQuaRE group
+    all_meetings = root.all_square_meetings
+
+    # Get all unique participants across all meetings
+    participants = root.get_all_square_participants()
+
+    context = {
+        "square": root,
+        "all_meetings": all_meetings,
+        "participants": participants,
+        "participant_count": participants.count(),
+    }
+
+    return render(request, "programs/square_detail.html", context)

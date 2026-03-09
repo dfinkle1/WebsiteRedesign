@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+    Past SQuaREs - AIM
+{% endblock title %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/pages/workshops.css' %}">
+    <style>
+        .meeting-badges {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .meeting-badge {
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+        }
+        .meeting-badge.m1 { background: #0d6efd; }
+        .meeting-badge.m2 { background: #198754; }
+        .meeting-badge.m3 { background: #dc3545; }
+        .meeting-badge.m4 { background: #6f42c1; }
+        .meeting-badge.m5 { background: #fd7e14; }
+    </style>
+{% endblock extra_css %}
+{% block content %}
+    <div class="container py-5">
+        <div class="row mb-4">
+            <div class="col">
+                <h1 class="display-4">Past SQuaREs</h1>
+                <p class="lead text-muted">Browse our archive of completed Structured Quartet Research Ensembles</p>
+            </div>
+        </div>
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <form method="get"
+                  action="{% url 'programs:past-squares' %}"
+                  class="row g-3">
+                <div class="col-md-4">
+                    <label for="year" class="form-label">Filter by Year</label>
+                    <select name="year" id="year" class="form-select">
+                        <option value="">All Years</option>
+                        {% for year in available_years %}
+                            <option value="{{ year }}"
+                                    {% if selected_year == year|stringformat:"s" %}selected{% endif %}>
+                                {{ year }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="search" class="form-label">Search</label>
+                    <input type="text"
+                           name="search"
+                           id="search"
+                           class="form-control"
+                           placeholder="Search by title, organizer, or code..."
+                           value="{{ search_query }}">
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">Filter</button>
+                </div>
+            </form>
+            {% if selected_year or search_query %}
+                <div class="mt-3">
+                    <a href="{% url 'programs:past-squares' %}"
+                       class="btn btn-sm btn-outline-secondary">Clear Filters</a>
+                </div>
+            {% endif %}
+        </div>
+        <!-- Results -->
+        {% if squares %}
+            <div class="row">
+                {% for square in squares %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card workshop-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="card-title mb-0">
+                                        <a href="{% url 'programs:square-detail' square.code %}"
+                                           class="text-decoration-none">{{ square.title }}</a>
+                                    </h5>
+                                </div>
+                                {% if square.start_date or square.end_date %}
+                                    <p class="workshop-date mb-2">
+                                        {% if square.start_date and square.end_date %}
+                                            {{ square.start_date|date:"M d, Y" }} - {{ square.end_date|date:"M d, Y" }}
+                                        {% elif square.start_date %}
+                                            Started: {{ square.start_date|date:"M d, Y" }}
+                                        {% elif square.end_date %}
+                                            Ended: {{ square.end_date|date:"M d, Y" }}
+                                        {% endif %}
+                                    </p>
+                                {% endif %}
+                                {% if square.location %}
+                                    <p class="card-text mb-2">
+                                        <strong>Location:</strong> {{ square.location }}
+                                    </p>
+                                {% endif %}
+                                <!-- Participants list -->
+                                {% with participants=square.get_all_square_participants %}
+                                    {% if participants %}
+                                        <p class="card-text mb-2">
+                                            <strong>Participants:</strong>
+                                            {% for person in participants %}{{ person.first_name }} {{ person.last_name }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                                        </p>
+                                    {% endif %}
+                                {% endwith %}
+                                {% if square.description %}
+                                    <p class="card-text text-muted">{{ square.description|truncatewords:30 }}</p>
+                                {% endif %}
+                                <!-- Meeting badges -->
+                                <div class="meeting-badges">
+                                    {% for meeting in square.all_square_meetings %}
+                                        <span class="meeting-badge m{{ meeting.meeting_number|default:forloop.counter }}">
+                                            Meeting {{ meeting.meeting_number|default:forloop.counter }}
+                                        </span>
+                                    {% endfor %}
+                                </div>
+                                <div class="mt-3">
+                                    <a href="{% url 'programs:square-detail' square.code %}"
+                                       class="btn btn-sm btn-outline-primary">View Details &rarr;</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <!-- Pagination -->
+            {% if squares.has_other_pages %}
+                <nav aria-label="SQuaRE pagination" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <!-- Previous button -->
+                        {% if squares.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="?page={{ squares.previous_page_number }}{% if selected_year %}&year={{ selected_year }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}"
+                                   aria-label="Previous">
+                                    <span aria-hidden="true">&laquo; Previous</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">&laquo; Previous</span>
+                            </li>
+                        {% endif %}
+                        <!-- Page numbers -->
+                        {% for num in squares.paginator.page_range %}
+                            {% if squares.number == num %}
+                                <li class="page-item active" aria-current="page">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                            {% elif num > squares.number|add:'-3' and num < squares.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       href="?page={{ num }}{% if selected_year %}&year={{ selected_year }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">
+                                        {{ num }}
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        <!-- Next button -->
+                        {% if squares.has_next %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="?page={{ squares.next_page_number }}{% if selected_year %}&year={{ selected_year }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}"
+                                   aria-label="Next">
+                                    <span aria-hidden="true">Next &raquo;</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">Next &raquo;</span>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                <!-- Pagination info -->
+                <p class="text-center text-muted small">
+                    Showing {{ squares.start_index }}-{{ squares.end_index }} of {{ squares.paginator.count }} SQuaRE{{ squares.paginator.count|pluralize }}
+                </p>
+            {% endif %}
+        {% else %}
+            <div class="alert alert-info" role="alert">
+                <h5 class="alert-heading">No SQuaREs found</h5>
+                <p class="mb-0">
+                    {% if selected_year or search_query %}
+                        No SQuaREs match your filters. Try adjusting your search or year filter.
+                    {% else %}
+                        There are no past SQuaREs to display at this time.
+                    {% endif %}
+                </p>
+            </div>
+        {% endif %}
+        <!-- Info box -->
+        <div class="mt-4 p-3 bg-light rounded">
+            <p class="mb-0 text-muted small">
+                <strong>About SQuaREs:</strong> Structured Quartet Research Ensembles (SQuaREs) are small collaborative research groups
+                that meet over multiple years to work on focused mathematical problems.
+            </p>
+        </div>
+    </div>
+{% endblock content %}
