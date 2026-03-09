@@ -9,7 +9,6 @@ class ProgramQuerySet(models.QuerySet):
             self.filter(
                 type=Program.ProgramType.WORKSHOP, start_date__gte=timezone.localdate()
             )
-            .select_related("location", "organizer")
             .only("title", "code", "application_deadline", "start_date", "end_date")
         )
 
@@ -19,6 +18,19 @@ class ProgramQuerySet(models.QuerySet):
             application_mode=Program.ApplicationMode.OPEN,
             application_deadline__gte=timezone.now(),
         )
+
+    def completed_squares(self):
+        """
+        SQuaREs that have completed their final meeting.
+        Returns the root (meeting 1) of each completed SQuaRE group.
+        """
+        today = timezone.localdate()
+        # Get all SQuaRE meetings that have ended
+        return self.filter(
+            type=Program.ProgramType.SQUARE,
+            end_date__lt=today,
+            parent_square__isnull=True,  # Only root meetings
+        ).order_by('-end_date')
 
 
 class Program(models.Model):
@@ -39,8 +51,20 @@ class Program(models.Model):
         FIRST = 1, "1st Meeting"
         SECOND = 2, "2nd Meeting"
         THIRD = 3, "3rd Meeting"
+        FOURTH = 4, "4th Meeting"
+        FIFTH = 5, "5th Meeting"
 
     code = models.IntegerField(unique=True, blank=True)
+
+    # Link SQuaRE meetings together (meeting 2/3/4/5 points to meeting 1)
+    parent_square = models.ForeignKey(
+        'self',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='subsequent_meetings',
+        help_text="For SQuaRE meetings 2-5: link to the 1st meeting of this SQuaRE group.",
+    )
     title = models.CharField(max_length=255)
     abbreviation = models.CharField(max_length=255, blank=True, null=True)
     organizer1 = models.CharField(max_length=255, blank=True, null=True)
@@ -71,9 +95,77 @@ class Program(models.Model):
         choices=MeetingNumber.choices,
         blank=True,
         null=True,
-        help_text="For SQuaREs: which meeting (1st, 2nd, or 3rd)",
+        help_text="For SQuaREs: which meeting (1st through 5th)",
     )
     objects = ProgramQuerySet.as_manager()
+
+    # -------------------------------------------------------------------------
+    # SQuaRE-specific properties
+    # -------------------------------------------------------------------------
+
+    @property
+    def is_square(self):
+        """True if this is a SQuaRE program."""
+        return self.type in [self.ProgramType.SQUARE, self.ProgramType.VSQUARE]
+
+    @property
+    def square_root(self):
+        """
+        Get the root (1st meeting) of this SQuaRE group.
+        Returns self if this is already the root.
+        """
+        if self.parent_square:
+            return self.parent_square
+        return self
+
+    @property
+    def all_square_meetings(self):
+        """
+        Get all meetings in this SQuaRE group (including self).
+        Returns queryset ordered by meeting number.
+        """
+        root = self.square_root
+        # Get root + all subsequent meetings
+        meetings = Program.objects.filter(
+            models.Q(pk=root.pk) | models.Q(parent_square=root)
+        ).order_by('meeting_number', 'start_date')
+        return meetings
+
+    @property
+    def latest_meeting(self):
+        """Get the most recent meeting in this SQuaRE group."""
+        return self.all_square_meetings.order_by('-meeting_number', '-start_date').first()
+
+    @property
+    def is_square_complete(self):
+        """
+        True if this SQuaRE has completed (latest meeting has ended).
+        """
+        if not self.is_square:
+            return False
+        latest = self.latest_meeting
+        if not latest or not latest.end_date:
+            return False
+        return latest.end_date < timezone.localdate()
+
+    def get_all_square_participants(self):
+        """
+        Get all unique participants across all meetings of this SQuaRE.
+        Returns a queryset of People objects.
+        """
+        from people.models import People
+        from enrollments.models import Enrollment
+
+        # Get all meeting IDs in this SQuaRE group
+        meeting_ids = self.all_square_meetings.values_list('id', flat=True)
+
+        # Get unique person IDs from enrollments across all meetings
+        person_ids = Enrollment.objects.filter(
+            workshop_id__in=meeting_ids,
+            person__isnull=False,
+        ).values_list('person_id', flat=True).distinct()
+
+        return People.objects.filter(id__in=person_ids).order_by('last_name', 'first_name')
 
     class Meta:
         indexes = [models.Index(fields=["type", "start_date"])]

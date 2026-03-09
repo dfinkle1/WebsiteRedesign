@@ -11,11 +11,12 @@ charset-normalizer==3.4.3
 click==8.1.7
 cms==0.0.2
 colorama==0.4.6
+cryptography==46.0.5
 cssbeautifier==1.15.1
 cssselect2==0.9.0
 distlib==0.3.9
 dj-database-url==2.2.0
-Django==6.0.2
+Django==6.0.3
 django-admin-sortable2==2.2.4
 django-allauth==65.14.3
 django-classy-tags==4.1.0

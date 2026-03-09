@@ -302,15 +302,20 @@ class HasForeignCurrencyFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() == "foreign":
-            return queryset.filter(line_items__original_currency__isnull=False).exclude(
-                line_items__original_currency=Currency.USD
-            ).distinct()
-        if self.value() == "usd_only":
-            return queryset.exclude(
+            # Requests that have at least one non-USD expense
+            return queryset.filter(
                 line_items__original_currency__isnull=False
             ).exclude(
                 line_items__original_currency=Currency.USD
-            ) | queryset.filter(line_items__original_currency=Currency.USD).distinct()
+            ).distinct()
+        if self.value() == "usd_only":
+            # Requests where ALL expenses are USD (no foreign currency items)
+            foreign_request_ids = queryset.filter(
+                line_items__original_currency__isnull=False
+            ).exclude(
+                line_items__original_currency=Currency.USD
+            ).values_list('id', flat=True)
+            return queryset.exclude(id__in=foreign_request_ids)
         return queryset
 
 

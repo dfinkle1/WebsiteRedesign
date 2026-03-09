@@ -186,6 +186,22 @@ class ReimbursementEditForm(forms.ModelForm):
         for field in self.fields.values():
             field.required = False
 
+    def clean_passport_copy(self):
+        """Validate passport file upload."""
+        from .validators import validate_uploaded_file
+        file = self.cleaned_data.get('passport_copy')
+        if file and hasattr(file, 'read'):  # New upload, not existing file
+            validate_uploaded_file(file)
+        return file
+
+    def clean_i94_document(self):
+        """Validate I-94 document upload."""
+        from .validators import validate_uploaded_file
+        file = self.cleaned_data.get('i94_document')
+        if file and hasattr(file, 'read'):  # New upload, not existing file
+            validate_uploaded_file(file)
+        return file
+
 
 class ExpenseLineItemForm(forms.ModelForm):
     """Form for adding/editing an expense line item."""
@@ -287,6 +303,14 @@ class ReceiptUploadForm(forms.Form):
             }
         )
     )
+
+    def clean_file(self):
+        """Validate receipt file upload."""
+        from .validators import validate_uploaded_file
+        file = self.cleaned_data.get('file')
+        if file:
+            validate_uploaded_file(file)
+        return file
 
 
 class SubmitSignatureForm(forms.Form):

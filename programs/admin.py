@@ -1077,26 +1077,250 @@ class WorkshopAdmin(ProgramAdmin):
         super().save_model(request, obj, form, change)
 
 
+class MeetingNumberFilter(admin.SimpleListFilter):
+    """Filter SQuaREs by meeting number."""
+
+    title = "Meeting"
+    parameter_name = "meeting"
+
+    def lookups(self, request, model_admin):
+        return [
+            ("1", "1st Meeting"),
+            ("2", "2nd Meeting"),
+            ("3", "3rd Meeting"),
+            ("4", "4th Meeting"),
+            ("5", "5th Meeting"),
+        ]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(meeting_number=int(self.value()))
+        return queryset
+
+
 @admin.register(SQuaRE)
 class SQuaREAdmin(ProgramAdmin):
-    """Admin for SQuaREs only - filtered view."""
+    """Admin for SQuaREs only - filtered view with meeting linking support."""
 
     list_display = (
         "code",
         "title",
-        "start_date",
-        "end_date",
-        "application_deadline",
+        "meeting_badge",
+        "parent_link",
+        "dates_display",
         "enrollment_count",
-        "staff_actions",
+        "square_actions",
     )
 
-    list_filter = (UpcomingProgramFilter, "application_mode", "online")
+    list_filter = (UpcomingProgramFilter, MeetingNumberFilter, "application_mode", "online")
+
+    # Add parent_square to fieldsets
+    fieldsets = (
+        (None, {
+            "fields": ("title", "abbreviation", "type", "meeting_number", "parent_square")
+        }),
+        ("Dates", {
+            "fields": ("start_date", "end_date", "application_deadline", "application_mode")
+        }),
+        ("Location", {
+            "fields": ("location", "online")
+        }),
+        ("Organizers", {
+            "fields": (
+                ("organizer1", "organizeremail1"),
+                ("organizer2", "organizeremail2"),
+                ("organizer3", "organizeremail3"),
+                ("scribe", "scribe_email"),
+            ),
+            "classes": ("collapse",),
+        }),
+        ("Description", {
+            "fields": ("description",),
+            "classes": ("collapse",),
+        }),
+    )
+
+    autocomplete_fields = ["parent_square"]
+
+    def get_urls(self):
+        """Add custom URLs for SQuaRE-specific actions."""
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                "<int:program_id>/create-next-meeting/",
+                self.admin_site.admin_view(self.create_next_meeting_view),
+                name="programs_square_create_next_meeting",
+            ),
+        ]
+        return custom_urls + urls
+
+    def meeting_badge(self, obj):
+        """Display meeting number as colored badge."""
+        if not obj.meeting_number:
+            return "—"
+        colors = {
+            1: "#0d6efd",  # Blue
+            2: "#198754",  # Green
+            3: "#dc3545",  # Red
+            4: "#6f42c1",  # Purple
+            5: "#fd7e14",  # Orange
+        }
+        color = colors.get(obj.meeting_number, "#6c757d")
+        return format_html(
+            '<span style="background: {}; color: white; padding: 2px 8px; '
+            'border-radius: 4px; font-size: 11px;">Meeting {}</span>',
+            color, obj.meeting_number
+        )
+    meeting_badge.short_description = "Meeting"
+    meeting_badge.admin_order_field = "meeting_number"
+
+    def parent_link(self, obj):
+        """Show link to parent SQuaRE (meeting 1) if applicable."""
+        if obj.parent_square:
+            url = reverse("admin:programs_square_change", args=[obj.parent_square.id])
+            return format_html(
+                '<a href="{}" title="{}">← Meeting 1</a>',
+                url, obj.parent_square.title
+            )
+        elif obj.meeting_number == 1 or obj.meeting_number is None:
+            # Show count of subsequent meetings
+            subsequent = obj.subsequent_meetings.count()
+            if subsequent > 0:
+                return format_html(
+                    '<span style="color: #198754;">Root ({} linked)</span>',
+                    subsequent
+                )
+            return "Root"
+        return "—"
+    parent_link.short_description = "Group"
+
+    def square_actions(self, obj):
+        """Action links for SQuaREs including Create Next Meeting."""
+        actions = []
+
+        # Standard actions
+        applicants_url = reverse("admin:programs_program_applicants", args=[obj.id])
+        export_url = reverse("admin:programs_program_export_csv", args=[obj.id])
+        manage_url = reverse("admin:programs_program_manage_enrollments", args=[obj.id])
+
+        actions.append(f'<a href="{applicants_url}">👥</a>')
+        actions.append(f'<a href="{export_url}">📥</a>')
+        actions.append(f'<a href="{manage_url}">⚙️</a>')
+
+        # Create Next Meeting button (only for root meetings or those without a next meeting)
+        if obj.meeting_number is None or obj.meeting_number < 5:
+            create_url = reverse("admin:programs_square_create_next_meeting", args=[obj.id])
+            actions.append(
+                f'<a href="{create_url}" style="background: #198754; color: white; '
+                f'padding: 2px 6px; border-radius: 3px; text-decoration: none;" '
+                f'title="Create next meeting with same participants">➕ Next</a>'
+            )
+
+        return format_html(" ".join(actions))
+    square_actions.short_description = "Actions"
+
+    def create_next_meeting_view(self, request, program_id):
+        """Create the next meeting of a SQuaRE, copying participants."""
+        from enrollments.models import Enrollment
+
+        source = get_object_or_404(Program, id=program_id, type=Program.ProgramType.SQUARE)
+
+        # Determine the root and next meeting number
+        root = source.square_root
+        current_max = root.all_square_meetings.order_by('-meeting_number').first()
+        current_meeting_num = current_max.meeting_number if current_max and current_max.meeting_number else 1
+        next_meeting_num = current_meeting_num + 1
+
+        if next_meeting_num > 5:
+            messages.error(request, "Maximum of 5 meetings reached for this SQuaRE.")
+            return redirect("admin:programs_square_change", program_id)
+
+        if request.method == "POST":
+            # Create new meeting
+            new_meeting = Program.objects.create(
+                title=root.title,  # Same title as root
+                abbreviation=root.abbreviation,
+                type=Program.ProgramType.SQUARE,
+                meeting_number=next_meeting_num,
+                parent_square=root,
+                location=source.location,
+                online=source.online,
+                organizer1=source.organizer1,
+                organizeremail1=source.organizeremail1,
+                organizer2=source.organizer2,
+                organizeremail2=source.organizeremail2,
+                organizer3=source.organizer3,
+                organizeremail3=source.organizeremail3,
+                scribe=source.scribe,
+                scribe_email=source.scribe_email,
+                description=source.description,
+                application_mode=Program.ApplicationMode.INVITE_ONLY,
+            )
+
+            # Copy participants from the source meeting
+            copied_count = 0
+            source_enrollments = Enrollment.objects.filter(
+                workshop=source,
+                accepted_at__isnull=False,  # Only accepted participants
+                declined_at__isnull=True,   # Not withdrawn
+            ).select_related("person")
+
+            for enrollment in source_enrollments:
+                # Create new enrollment for the new meeting
+                Enrollment.objects.create(
+                    workshop=new_meeting,
+                    person=enrollment.person,
+                    source=Enrollment.Source.STAFF,
+                    first_name=enrollment.first_name,
+                    middle_name=enrollment.middle_name,
+                    last_name=enrollment.last_name,
+                    email_snap=enrollment.email_snap,
+                    orcid_snap=enrollment.orcid_snap,
+                    institution=enrollment.institution,
+                    accepted_at=timezone.now(),  # Pre-accept them
+                )
+                copied_count += 1
+
+            messages.success(
+                request,
+                f"Created Meeting {next_meeting_num} for '{root.title}' "
+                f"with {copied_count} participant(s) copied."
+            )
+
+            # Redirect to edit the new meeting
+            return redirect("admin:programs_square_change", new_meeting.id)
+
+        # GET request - show confirmation page
+        # Get all unique participants across all meetings
+        all_participants = root.get_all_square_participants()
+
+        # Get participants from source meeting
+        source_participants = Enrollment.objects.filter(
+            workshop=source,
+            accepted_at__isnull=False,
+            declined_at__isnull=True,
+        ).select_related("person")
+
+        context = {
+            **self.admin_site.each_context(request),
+            "source": source,
+            "root": root,
+            "next_meeting_num": next_meeting_num,
+            "all_meetings": root.all_square_meetings,
+            "source_participants": source_participants,
+            "all_participants": all_participants,
+            "title": f"Create Meeting {next_meeting_num} - {root.title}",
+        }
+
+        return render(request, "admin/programs/create_next_meeting.html", context)
 
     def save_model(self, request, obj, form, change):
         """Ensure type is set to SQUARE for new objects."""
         if not change:
             obj.type = Program.ProgramType.SQUARE
+            # Default to meeting 1 if not set and no parent
+            if not obj.meeting_number and not obj.parent_square:
+                obj.meeting_number = 1
         super().save_model(request, obj, form, change)
 
 

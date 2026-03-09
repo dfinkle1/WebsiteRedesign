@@ -1,0 +1,171 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    .info-box {
+        background: #e7f3ff;
+        border: 1px solid #b6d4fe;
+        border-radius: 4px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    .info-box h3 {
+        margin-top: 0;
+        color: #0d6efd;
+    }
+    .warning-box {
+        background: #fff3cd;
+        border: 1px solid #ffecb5;
+        border-radius: 4px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    .meeting-timeline {
+        display: flex;
+        gap: 10px;
+        margin: 15px 0;
+        flex-wrap: wrap;
+    }
+    .meeting-badge {
+        padding: 8px 15px;
+        border-radius: 4px;
+        font-weight: bold;
+        color: white;
+    }
+    .meeting-badge.m1 { background: #0d6efd; }
+    .meeting-badge.m2 { background: #198754; }
+    .meeting-badge.m3 { background: #dc3545; }
+    .meeting-badge.m4 { background: #6f42c1; }
+    .meeting-badge.m5 { background: #fd7e14; }
+    .meeting-badge.new {
+        background: white;
+        border: 2px dashed #198754;
+        color: #198754;
+    }
+    .participant-list {
+        max-height: 300px;
+        overflow-y: auto;
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        padding: 10px;
+    }
+    .participant-list table {
+        width: 100%;
+    }
+    .participant-list td {
+        padding: 5px 10px;
+        border-bottom: 1px solid #eee;
+    }
+    .confirm-form {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        padding: 20px;
+        margin-top: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>Create Next Meeting</h1>
+
+<div class="info-box">
+    <h3>SQuaRE: {{ root.title }}</h3>
+    <p><strong>Creating:</strong> Meeting {{ next_meeting_num }}</p>
+    <p><strong>Source:</strong> Copying participants from Meeting {{ source.meeting_number }}</p>
+</div>
+
+<h2>Meeting Timeline</h2>
+<div class="meeting-timeline">
+    {% for meeting in all_meetings %}
+    <div class="meeting-badge m{{ meeting.meeting_number }}">
+        Meeting {{ meeting.meeting_number }}
+        {% if meeting.start_date %}
+        <br><small>{{ meeting.start_date|date:"M Y" }}</small>
+        {% endif %}
+    </div>
+    {% endfor %}
+    <div class="meeting-badge new">
+        + Meeting {{ next_meeting_num }}
+        <br><small>NEW</small>
+    </div>
+</div>
+
+<h2>Participants to Copy ({{ source_participants.count }})</h2>
+<p>These accepted participants from Meeting {{ source.meeting_number }} will be copied to the new meeting:</p>
+
+<div class="participant-list">
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Institution</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for enrollment in source_participants %}
+            <tr>
+                <td>
+                    {% if enrollment.person %}
+                        {{ enrollment.person.first_name }} {{ enrollment.person.last_name }}
+                    {% else %}
+                        {{ enrollment.first_name }} {{ enrollment.last_name }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if enrollment.person %}
+                        {{ enrollment.person.email_address|default:"—" }}
+                    {% else %}
+                        {{ enrollment.email_snap|default:"—" }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if enrollment.person %}
+                        {{ enrollment.person.institution|default:"—" }}
+                    {% else %}
+                        {{ enrollment.institution|default:"—" }}
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" style="text-align: center; color: #999;">
+                    No accepted participants to copy
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if all_participants.count > source_participants.count %}
+<div class="warning-box" style="margin-top: 15px;">
+    <strong>Note:</strong> There are {{ all_participants.count }} total unique participants across all meetings,
+    but only {{ source_participants.count }} from Meeting {{ source.meeting_number }} will be copied.
+    You can add more participants after creation.
+</div>
+{% endif %}
+
+<div class="confirm-form">
+    <h3>Confirm Creation</h3>
+    <p>This will:</p>
+    <ul>
+        <li>Create a new SQuaRE meeting (Meeting {{ next_meeting_num }})</li>
+        <li>Copy {{ source_participants.count }} participant(s) from Meeting {{ source.meeting_number }}</li>
+        <li>Link the new meeting to the SQuaRE group</li>
+        <li>Copy organizer information</li>
+    </ul>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="submit-row">
+            <input type="submit" value="Create Meeting {{ next_meeting_num }}" class="default" style="background: #198754;">
+            <a href="{% url 'admin:programs_square_change' source.id %}" class="button">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

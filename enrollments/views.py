@@ -224,10 +224,10 @@ def enrollment_respond(request, token):
             'program': program,
         })
 
-    # Handle direct action from email links (?action=accept or ?action=decline)
-    action = request.GET.get('action') or request.POST.get('action')
-
-    if request.method == 'POST' or action:
+    # Handle POST actions only (GET links should show the form, not perform actions)
+    # This prevents CSRF attacks via image tags or links
+    if request.method == 'POST':
+        action = request.POST.get('action')
         if action == 'decline':
             reason = request.POST.get('reason', '').strip() if request.method == 'POST' else None
             enrollment.decline(reason)
