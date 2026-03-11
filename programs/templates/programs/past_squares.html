@@ -84,17 +84,6 @@
                                            class="text-decoration-none">{{ square.title }}</a>
                                     </h5>
                                 </div>
-                                {% if square.start_date or square.end_date %}
-                                    <p class="workshop-date mb-2">
-                                        {% if square.start_date and square.end_date %}
-                                            {{ square.start_date|date:"M d, Y" }} - {{ square.end_date|date:"M d, Y" }}
-                                        {% elif square.start_date %}
-                                            Started: {{ square.start_date|date:"M d, Y" }}
-                                        {% elif square.end_date %}
-                                            Ended: {{ square.end_date|date:"M d, Y" }}
-                                        {% endif %}
-                                    </p>
-                                {% endif %}
                                 {% if square.location %}
                                     <p class="card-text mb-2">
                                         <strong>Location:</strong> {{ square.location }}

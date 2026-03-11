@@ -36,10 +36,19 @@ class EncryptedCharField(models.CharField):
     description = "An encrypted CharField"
 
     def __init__(self, *args, **kwargs):
+        # Store the original max_length for deconstruct()
+        self._original_max_length = kwargs.get('max_length', 255)
         # Encrypted values are longer than the original
         # Fernet adds ~100 bytes of overhead, then base64 encoding adds ~33%
-        kwargs['max_length'] = kwargs.get('max_length', 255) + 200
+        kwargs['max_length'] = self._original_max_length + 200
         super().__init__(*args, **kwargs)
+
+    def deconstruct(self):
+        """Return the original max_length for migrations."""
+        name, path, args, kwargs = super().deconstruct()
+        # Restore original max_length so migrations are stable
+        kwargs['max_length'] = self._original_max_length
+        return name, path, args, kwargs
 
     def get_prep_value(self, value):
         """Encrypt value before saving to database."""
