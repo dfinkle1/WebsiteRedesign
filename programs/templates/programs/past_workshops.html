@@ -64,30 +64,30 @@
                                            class="text-decoration-none">{{ workshop.title }}</a>
                                     </h5>
                                 </div>
-                                {% if workshop.start_date or workshop.end_date %}
-                                    <p class="workshop-date mb-2">
-                                        {% if workshop.start_date and workshop.end_date %}
-                                            {{ workshop.start_date|date:"M d, Y" }} - {{ workshop.end_date|date:"M d, Y" }}
-                                        {% elif workshop.start_date %}
-                                            Started: {{ workshop.start_date|date:"M d, Y" }}
-                                        {% elif workshop.end_date %}
-                                            Ended: {{ workshop.end_date|date:"M d, Y" }}
-                                        {% endif %}
-                                    </p>
-                                {% endif %}
-                                {% if workshop.organizer1 %}
-                                    <p class="card-text mb-2">
-                                        <strong>Organizer:</strong> {{ workshop.organizer1 }}
-                                        {% if workshop.organizer2 %}, {{ workshop.organizer2 }}{% endif %}
-                                    </p>
-                                {% endif %}
-                                {% if workshop.location %}
-                                    <p class="card-text mb-2">
-                                        <strong>Location:</strong> {{ workshop.location }}
-                                    </p>
-                                {% endif %}
+                                <ul class="list-unstyled mb-2 workshop-meta">
+                                    {% if workshop.start_date or workshop.end_date %}
+                                        <li class="workshop-date">
+                                            {% if workshop.start_date and workshop.end_date %}
+                                                {{ workshop.start_date|date:"M d, Y" }} – {{ workshop.end_date|date:"M d, Y" }}
+                                            {% elif workshop.start_date %}
+                                                Started: {{ workshop.start_date|date:"M d, Y" }}
+                                            {% elif workshop.end_date %}
+                                                Ended: {{ workshop.end_date|date:"M d, Y" }}
+                                            {% endif %}
+                                        </li>
+                                    {% endif %}
+                                    {% if workshop.organizer1 %}
+                                        <li>
+                                            <strong>Organizer:</strong> {{ workshop.organizer1 }}
+                                            {% if workshop.organizer2 %}, {{ workshop.organizer2 }}{% endif %}
+                                        </li>
+                                    {% endif %}
+                                    {% if workshop.location %}
+                                        <li><strong>Location:</strong> {{ workshop.location }}</li>
+                                    {% endif %}
+                                </ul>
                                 {% if workshop.description %}
-                                    <p class="card-text text-muted">{{ workshop.description|truncatewords:30 }}</p>
+                                    <div class="card-text text-muted workshop-description">{{ workshop.description|truncatewords:30 }}</div>
                                 {% endif %}
                                 <a href="{% url 'programs:program-page' workshop.code %}"
                                    class="btn btn-sm btn-outline-primary mt-2">View Details →</a>
