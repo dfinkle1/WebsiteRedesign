@@ -124,12 +124,19 @@ def past_squares(request):
     """
     Display past SQuaREs (completed SQuaRE groups) with their participants.
     Shows only SQuaREs that have completed meeting 3 or later.
+    Filters and orders by the final meeting's end date.
     """
+    from django.db.models import Exists, OuterRef, Max, Subquery
+    from django.db.models.functions import Coalesce
+
     today = timezone.localdate()
 
-    # Get root SQuaRE meetings that have a completed meeting 3+
-    # A SQuaRE is "complete" when it has finished at least meeting 3
-    from django.db.models import Exists, OuterRef
+    # Subquery to get the latest meeting's end_date for each root SQuaRE
+    latest_meeting_date = Program.objects.filter(
+        Q(pk=OuterRef('pk')) | Q(parent_square=OuterRef('pk'))
+    ).values('parent_square').annotate(
+        max_end=Max('end_date')
+    ).values('max_end')[:1]
 
     # Subquery: check if this root has a subsequent meeting with number >= 3 that has ended
     has_completed_meeting_3_plus = Program.objects.filter(
@@ -138,18 +145,27 @@ def past_squares(request):
         end_date__lt=today,
     )
 
+    # Get the max end_date across all meetings in the group
+    final_meeting_end = Subquery(
+        Program.objects.filter(
+            Q(pk=OuterRef('pk')) | Q(parent_square=OuterRef('pk'))
+        ).order_by('-end_date').values('end_date')[:1]
+    )
+
     squares = Program.objects.filter(
         type=Program.ProgramType.SQUARE,
         parent_square__isnull=True,  # Only root meetings
     ).filter(
         # Either: root itself is meeting 3+ and ended, OR has a subsequent meeting 3+ that ended
         Q(meeting_number__gte=3, end_date__lt=today) | Q(Exists(has_completed_meeting_3_plus))
+    ).annotate(
+        final_meeting_date=final_meeting_end
     )
 
-    # Year filter (optional)
+    # Year filter - filter by the final meeting's year
     year = request.GET.get("year")
     if year and year.isdigit():
-        squares = squares.filter(start_date__year=int(year))
+        squares = squares.filter(final_meeting_date__year=int(year))
 
     # Search filter (optional)
     search = request.GET.get("search", "").strip()
@@ -160,27 +176,30 @@ def past_squares(request):
             | Q(code__icontains=search)
         )
 
-    # Order by most recent first
-    squares = squares.order_by("-end_date")
+    # Order by final meeting date (most recent first)
+    squares = squares.order_by("-final_meeting_date")
 
     # Pagination
     paginator = Paginator(squares, 10)
     squares_page = get_safe_page(request, paginator)
 
-    # Get available years for filter dropdown
-    available_years = (
-        Program.objects.filter(
-            type=Program.ProgramType.SQUARE,
-            end_date__lt=today,
-            parent_square__isnull=True,
-            start_date__isnull=False,
-        )
-        .filter(
-            Q(meeting_number__gte=3, end_date__lt=today) | Q(Exists(has_completed_meeting_3_plus))
-        )
-        .dates("start_date", "year", order="DESC")
-        .values_list("start_date__year", flat=True)
-        .distinct()
+    # Get available years for filter dropdown based on final meeting dates
+    # We need to get unique years from the final meetings
+    completed_squares = Program.objects.filter(
+        type=Program.ProgramType.SQUARE,
+        parent_square__isnull=True,
+    ).filter(
+        Q(meeting_number__gte=3, end_date__lt=today) | Q(Exists(has_completed_meeting_3_plus))
+    ).annotate(
+        final_meeting_date=final_meeting_end
+    ).exclude(
+        final_meeting_date__isnull=True
+    ).values_list('final_meeting_date', flat=True)
+
+    # Extract unique years from final meeting dates
+    available_years = sorted(
+        set(d.year for d in completed_squares if d),
+        reverse=True
     )
 
     context = {

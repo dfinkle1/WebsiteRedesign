@@ -5,6 +5,7 @@
 *.pyc
 __pycache__
 db.sqlite3
+staticfiles/
 # media
 
 # Backup files # 
@@ -167,3 +168,4 @@ ROUTE_BASED_NAVIGATION_SETUP.md
 REIMBURSEMENT_SYSTEM_REDESIGN.md
 
 CLAUDE.md
+.claude*

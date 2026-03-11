@@ -121,38 +121,25 @@
     <div class="container py-5">
         <!-- Back link -->
         <div class="mb-3">
-            <a href="{% url 'programs:past-squares' %}" class="text-decoration-none">
-                &larr; Back to Past SQuaREs
-            </a>
+            <a href="{% url 'programs:past-squares' %}" class="text-decoration-none">&larr; Back to Past SQuaREs</a>
         </div>
-
         <!-- Header -->
         <div class="square-header">
             <h1>{{ square.title }}</h1>
-            {% if square.abbreviation %}
-                <p class="mb-2 opacity-75">{{ square.abbreviation }}</p>
-            {% endif %}
             {% if square.organizer1 %}
                 <p class="mb-0">
                     <strong>Organizers:</strong>
-                    {{ square.organizer1 }}{% if square.organizer2 %}, {{ square.organizer2 }}{% endif %}{% if square.organizer3 %}, {{ square.organizer3 }}{% endif %}
+                    {{ square.organizer1 }}
+                    {% if square.organizer2 %}, {{ square.organizer2 }}{% endif %}
+                    {% if square.organizer3 %}, {{ square.organizer3 }}{% endif %}
                 </p>
             {% endif %}
             <div class="stats-row">
-                <span class="stat-item">
-                    {{ all_meetings.count }} Meeting{{ all_meetings.count|pluralize }}
-                </span>
-                <span class="stat-item">
-                    {{ participant_count }} Participant{{ participant_count|pluralize }}
-                </span>
-                {% if square.location %}
-                    <span class="stat-item">
-                        {{ square.location }}
-                    </span>
-                {% endif %}
+                <span class="stat-item">{{ all_meetings.count }} Meeting{{ all_meetings.count|pluralize }}</span>
+                <span class="stat-item">{{ participant_count }} Participant{{ participant_count|pluralize }}</span>
+                {% if square.location %}<span class="stat-item">{{ square.location }}</span>{% endif %}
             </div>
         </div>
-
         <!-- Description -->
         {% if square.description %}
             <div class="mb-4">
@@ -160,7 +147,6 @@
                 <p class="text-muted">{{ square.description }}</p>
             </div>
         {% endif %}
-
         <!-- Meeting Timeline -->
         <div class="mb-5">
             <div class="section-title">
@@ -175,14 +161,19 @@
                         <div class="meeting-card-body">
                             {% if meeting.start_date and meeting.end_date %}
                                 <p>
-                                    <strong>Dates:</strong><br>
+                                    <strong>Dates:</strong>
+                                    <br>
                                     {{ meeting.start_date|date:"M d" }} - {{ meeting.end_date|date:"M d, Y" }}
                                 </p>
                             {% elif meeting.start_date %}
-                                <p><strong>Start:</strong> {{ meeting.start_date|date:"M d, Y" }}</p>
+                                <p>
+                                    <strong>Start:</strong> {{ meeting.start_date|date:"M d, Y" }}
+                                </p>
                             {% endif %}
                             {% if meeting.location %}
-                                <p><strong>Location:</strong> {{ meeting.location }}</p>
+                                <p>
+                                    <strong>Location:</strong> {{ meeting.location }}
+                                </p>
                             {% endif %}
                         </div>
                     </div>
@@ -191,7 +182,6 @@
                 {% endfor %}
             </div>
         </div>
-
         <!-- Participants -->
         <div class="mb-4">
             <div class="section-title">
@@ -202,34 +192,25 @@
                 <div class="participant-grid">
                     {% for person in participants %}
                         <div class="participant-card">
-                            <div class="participant-avatar">
-                                {{ person.first_name|slice:":1" }}{{ person.last_name|slice:":1" }}
-                            </div>
+                            <div class="participant-avatar">{{ person.first_name|slice:":1" }}{{ person.last_name|slice:":1" }}</div>
                             <div class="participant-info">
-                                <div class="participant-name">
-                                    {{ person.first_name }} {{ person.last_name }}
-                                </div>
+                                <div class="participant-name">{{ person.first_name }} {{ person.last_name }}</div>
                                 {% if person.institution %}
-                                    <div class="participant-institution" title="{{ person.institution }}">
-                                        {{ person.institution }}
-                                    </div>
+                                    <div class="participant-institution" title="{{ person.institution }}">{{ person.institution }}</div>
                                 {% endif %}
                             </div>
                         </div>
                     {% endfor %}
                 </div>
             {% else %}
-                <div class="alert alert-info">
-                    No participant information available for this SQuaRE.
-                </div>
+                <div class="alert alert-info">No participant information available for this SQuaRE.</div>
             {% endif %}
         </div>
-
         <!-- Info box -->
         <div class="mt-5 p-3 bg-light rounded">
             <p class="mb-0 text-muted small">
                 <strong>About SQuaREs:</strong> Structured Quartet Research Ensembles (SQuaREs) are small collaborative research groups
-                that meet at AIM over multiple years to work on focused mathematical problems. Each group typically meets 3-5 times.
+                that meet at AIM over multiple years to work on focused mathematical problems. Each group typically meets 3 times.
             </p>
         </div>
     </div>

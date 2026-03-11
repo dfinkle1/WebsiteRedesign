@@ -149,7 +149,6 @@ td.column-enrollment_status_display {
 
 /* Better readability for header */
 #result_list thead th {
-    background-color: var(--header-bg, #f5f5f5);
     font-weight: 600;
     border-bottom: 2px solid var(--hairline-color, #ddd);
 }
@@ -179,4 +178,21 @@ td.column-enrollment_status_display {
     #result_list tbody tr:hover {
         background-color: var(--darkened-bg, #2a2a2a);
     }
+}
+
+/* -----------------------------------------------------------------------------
+   CHANGELIST FULL WIDTH - Remove djangocms-admin-style sidebar width constraint
+   ----------------------------------------------------------------------------- */
+
+.change-list #changelist.filtered .changelist-form-container {
+    width: auto !important;
+}
+
+/* -----------------------------------------------------------------------------
+   SEARCH ICON - Prevent Bootstrap/CMS CSS from expanding the SVG
+   ----------------------------------------------------------------------------- */
+
+#changelist-search img {
+    width: 16px !important;
+    height: 16px !important;
 }
