@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "apps.news.apps.NewsConfig",
     "apps.preprints.apps.PreprintsConfig",
     "apps.events",
+    "apps.checklists.apps.ChecklistsConfig",
     "accounts",
     "programs",
     "people",

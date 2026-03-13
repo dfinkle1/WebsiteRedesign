@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}All Open Tasks{% endblock %}
+{% block content %}
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-0">All Open Tasks</h2>
+            <p class="text-muted mb-0">Every incomplete checklist item across all programs.</p>
+        </div>
+        <a href="{% url 'checklists:hub' %}" class="btn btn-sm btn-outline-secondary">← Hub</a>
+    </div>
+
+    <!-- Filters -->
+    <form method="get" class="row g-2 mb-4">
+        <div class="col-md-3">
+            <select name="assignee" class="form-select form-select-sm">
+                <option value="">All Assignees</option>
+                {% for user in staff_users %}
+                <option value="{{ user.pk }}" {% if assignee_filter == user.pk|stringformat:"s" %}selected{% endif %}>
+                    {{ user.get_full_name|default:user.username }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select name="status" class="form-select form-select-sm">
+                <option value="">All Statuses</option>
+                {% for val, label in status_choices %}
+                {% if val != 'done' and val != 'na' %}
+                <option value="{{ val }}" {% if status_filter == val %}selected{% endif %}>{{ label }}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-sm btn-primary">Filter</button>
+            <a href="{% url 'checklists:all_tasks' %}" class="btn btn-sm btn-outline-secondary">Clear</a>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-sm table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Program</th>
+                    <th style="width: 35%;">Task</th>
+                    <th>Category</th>
+                    <th>Assigned To</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr class="{% if item.is_overdue %}table-danger{% elif item.urgency_class == 'urgency-urgent' %}table-warning{% endif %}">
+                    <td class="text-nowrap">
+                        <a href="{% url 'checklists:program_checklist' item.checklist.program.code %}"
+                           class="text-decoration-none small">
+                            {{ item.checklist.program.title|truncatechars:30 }}
+                        </a>
+                    </td>
+                    <td>
+                        <span {% if item.is_required %}class="fw-semibold"{% endif %}>{{ item.title }}</span>
+                        {% if item.is_required %}<span class="badge bg-secondary ms-1" style="font-size:0.65rem;">Required</span>{% endif %}
+                    </td>
+                    <td class="small text-muted">{{ item.get_category_display }}</td>
+                    <td class="small">{% if item.assigned_to %}{{ item.assigned_to.get_full_name|default:item.assigned_to.username }}{% else %}—{% endif %}</td>
+                    <td class="text-nowrap small">
+                        {% if item.due_date %}
+                            <span class="{% if item.is_overdue %}text-danger fw-semibold{% elif item.urgency_class == 'urgency-urgent' %}text-warning fw-semibold{% endif %}">
+                                {{ item.due_date|date:"M d, Y" }}
+                            </span>
+                        {% else %}—{% endif %}
+                    </td>
+                    <td>
+                        <span class="badge
+                            {% if item.status == 'in_progress' %}bg-primary
+                            {% elif item.status == 'blocked' %}bg-danger
+                            {% else %}bg-light text-dark border{% endif %}">
+                            {{ item.get_status_display }}
+                        </span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-4">No open tasks found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

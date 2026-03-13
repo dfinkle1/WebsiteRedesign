@@ -110,6 +110,7 @@ class ProgramAdmin(FrontendEditableAdminMixin, admin.ModelAdmin):
         "type",
         "dates_display",
         "enrollment_count",
+        "checklist_link",
         "quick_actions",
     )
     frontend_editable_fields = ("title",)
@@ -131,6 +132,9 @@ class ProgramAdmin(FrontendEditableAdminMixin, admin.ModelAdmin):
 
     # Show enrollments inline on program detail page
     inlines = [EnrollmentInline]
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related("checklist")
 
     # Bulk actions
     actions = ["export_programs_csv", "export_bulk_name_badges"]
@@ -263,6 +267,20 @@ class ProgramAdmin(FrontendEditableAdminMixin, admin.ModelAdmin):
         return count
 
     enrollment_count.short_description = "#"
+
+    def checklist_link(self, obj):
+        """Link to the program's checklist page."""
+        url = reverse("checklists:program_checklist", args=[obj.code])
+        checklist = getattr(obj, "checklist", None)
+        if checklist:
+            summary = checklist.completion_summary()
+            return format_html(
+                '<a href="{}" style="white-space:nowrap;">✅ Checklist ({}/{})</a>',
+                url, summary["done"], summary["total"],
+            )
+        return format_html('<a href="{}" style="white-space:nowrap;">📋 Checklist</a>', url)
+
+    checklist_link.short_description = "Checklist"
 
     def quick_actions(self, obj):
         """Action links displayed vertically"""
@@ -1135,15 +1153,12 @@ class WorkshopAdmin(ProgramAdmin):
         "dates_display",
         "application_mode",
         "enrollment_count",
+        "checklist_link",
         "staff_actions",
     )
 
     # Simpler filters - no type filter needed
     list_filter = (UpcomingProgramFilter, "application_mode", "online")
-
-    def get_queryset(self, request):
-        """Already filtered by proxy model manager."""
-        return super().get_queryset(request)
 
     def save_model(self, request, obj, form, change):
         """Ensure type is set to WORKSHOP for new objects."""
@@ -1184,6 +1199,7 @@ class SQuaREAdmin(ProgramAdmin):
         "parent_link",
         "dates_display",
         "enrollment_count",
+        "checklist_link",
         "square_actions",
     )
 
