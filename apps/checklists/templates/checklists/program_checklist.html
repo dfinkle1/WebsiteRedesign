@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+{% block title %}Checklist — {{ program.title }}{% endblock %}
+{% block content %}
+<div class="container py-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-start mb-3">
+        <div>
+            <h2 class="mb-0">{{ program.title }}</h2>
+            <p class="text-muted mb-0">
+                {% if program.start_date %}{{ program.start_date|date:"M d, Y" }}{% endif %}
+                {% if program.end_date %} – {{ program.end_date|date:"M d, Y" }}{% endif %}
+            </p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'checklists:hub' %}" class="btn btn-sm btn-outline-secondary">← Hub</a>
+            <a href="{% url 'checklists:all_tasks' %}" class="btn btn-sm btn-outline-secondary">All Tasks</a>
+        </div>
+    </div>
+
+    <!-- No checklist yet — show Apply Template form -->
+    {% if not checklist %}
+    <div class="card border-dashed">
+        <div class="card-body text-center py-5">
+            <h4 class="mb-3">No checklist yet for this program</h4>
+            <p class="text-muted mb-4">Select a template to generate the checklist. Items will be created with due dates calculated from the program start date.</p>
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="apply_template" value="1">
+                <div class="row justify-content-center">
+                    <div class="col-md-5">
+                        {{ form.template }}
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary">Apply Template</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Checklist exists -->
+    {% else %}
+
+    <!-- Summary bar -->
+    <div class="card mb-4">
+        <div class="card-body py-3">
+            <div class="d-flex align-items-center gap-4 flex-wrap">
+                <div>
+                    <span class="fw-semibold">{{ summary.done }}</span>
+                    <span class="text-muted">/ {{ summary.total }} complete</span>
+                </div>
+                <div class="flex-grow-1" style="max-width: 300px;">
+                    <div class="progress" style="height: 10px;">
+                        <div class="progress-bar
+                            {% if health == 'green' %}bg-success
+                            {% elif health == 'yellow' %}bg-warning
+                            {% elif health == 'red' %}bg-danger
+                            {% else %}bg-secondary{% endif %}"
+                            style="width: {{ summary.pct }}%;">
+                        </div>
+                    </div>
+                </div>
+                <div><span class="fw-semibold">{{ summary.pct }}%</span></div>
+                {% if overdue_count %}
+                <div class="text-danger fw-semibold">⚠ {{ overdue_count }} overdue</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Items by category -->
+    {% for label, category_items in grouped_items %}
+    {% if category_items %}
+    <h5 class="mt-4 mb-2 text-uppercase text-muted" style="font-size: 0.8rem; letter-spacing: 0.05em;">{{ label }}</h5>
+    <div class="table-responsive mb-3">
+        <table class="table table-sm table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 40%;">Task</th>
+                    <th>Assigned To</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in category_items %}
+                <tr class="{% if item.is_overdue %}table-danger{% elif item.urgency_class == 'urgency-urgent' %}table-warning{% endif %}">
+                    <td>
+                        <span {% if item.is_required %}class="fw-semibold"{% endif %}>
+                            {{ item.title }}
+                        </span>
+                        {% if item.is_required %}<span class="badge bg-secondary ms-1" style="font-size:0.65rem;">Required</span>{% endif %}
+                        {% if item.notes %}
+                        <div class="text-muted small mt-1">{{ item.notes }}</div>
+                        {% endif %}
+                    </td>
+                    <td>{% if item.assigned_to %}{{ item.assigned_to.get_full_name|default:item.assigned_to.username }}{% else %}—{% endif %}</td>
+                    <td>
+                        {% if item.due_date %}
+                            <span class="{% if item.is_overdue %}text-danger fw-semibold{% elif item.urgency_class == 'urgency-urgent' %}text-warning fw-semibold{% endif %}">
+                                {{ item.due_date|date:"M d" }}
+                            </span>
+                        {% else %}—{% endif %}
+                    </td>
+                    <td>
+                        <span class="badge
+                            {% if item.status == 'done' %}bg-success
+                            {% elif item.status == 'in_progress' %}bg-primary
+                            {% elif item.status == 'blocked' %}bg-danger
+                            {% elif item.status == 'na' %}bg-secondary
+                            {% else %}bg-light text-dark border{% endif %}">
+                            {{ item.get_status_display }}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-secondary"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#item-form-{{ item.pk }}">
+                            Edit
+                        </button>
+                    </td>
+                </tr>
+                <!-- Inline edit row -->
+                <tr class="collapse" id="item-form-{{ item.pk }}">
+                    <td colspan="5" class="bg-light">
+                        <form method="post" action="{% url 'checklists:update_item' item.pk %}" class="p-2">
+                            {% csrf_token %}
+                            <div class="row g-2 align-items-end">
+                                <div class="col-md-3">
+                                    <label class="form-label small mb-1">Status</label>
+                                    <select name="status" class="form-select form-select-sm">
+                                        {% for val, display in status_choices %}
+                                        <option value="{{ val }}" {% if item.status == val %}selected{% endif %}>{{ display }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label small mb-1">Assigned To</label>
+                                    <select name="assigned_to" class="form-select form-select-sm">
+                                        <option value="">— Unassigned —</option>
+                                        {% for user in staff_users %}
+                                        <option value="{{ user.pk }}" {% if item.assigned_to_id == user.pk %}selected{% endif %}>
+                                            {{ user.get_full_name|default:user.username }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label small mb-1">Due Date</label>
+                                    <input type="date" name="due_date" class="form-control form-control-sm"
+                                           value="{{ item.due_date|date:'Y-m-d' }}">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label small mb-1">Notes</label>
+                                    <input type="text" name="notes" class="form-control form-control-sm"
+                                           value="{{ item.notes }}" placeholder="Optional note">
+                                </div>
+                                <div class="col-md-1">
+                                    <button type="submit" class="btn btn-sm btn-primary w-100">Save</button>
+                                </div>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    {% endfor %}
+
+    <!-- Add manual item -->
+    <div class="mt-4">
+        <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#add-item-form">
+            + Add Task
+        </button>
+        <div class="collapse mt-2" id="add-item-form">
+            <div class="card card-body">
+                <form method="post" action="{% url 'checklists:add_item' checklist.pk %}">
+                    {% csrf_token %}
+                    <div class="row g-2">
+                        <div class="col-md-5">
+                            <input type="text" name="title" class="form-control" placeholder="Task title" required>
+                        </div>
+                        <div class="col-md-2">
+                            <select name="category" class="form-select">
+                                {% for val, label in category_choices %}
+                                <option value="{{ val }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="date" name="due_date" class="form-control" placeholder="Due date">
+                        </div>
+                        <div class="col-md-2">
+                            <select name="assigned_to" class="form-select">
+                                <option value="">— Unassigned —</option>
+                                {% for user in staff_users %}
+                                <option value="{{ user.pk }}">{{ user.get_full_name|default:user.username }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-1">
+                            <button type="submit" class="btn btn-primary w-100">Add</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% endif %}{# end checklist exists #}
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+// Pass staff users to template for inline edit rows
+const staffUsers = [
+    {% for user in staff_users %}
+    { id: {{ user.pk }}, name: "{{ user.get_full_name|default:user.username|escapejs }}" },
+    {% endfor %}
+];
+</script>
+{% endblock %}

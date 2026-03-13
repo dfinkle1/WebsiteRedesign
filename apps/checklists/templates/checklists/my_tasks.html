@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}My Tasks{% endblock %}
+{% block content %}
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-0">My Tasks</h2>
+            {% if overdue_count %}
+            <p class="text-danger mb-0 fw-semibold">{{ overdue_count }} overdue item{{ overdue_count|pluralize }}</p>
+            {% else %}
+            <p class="text-muted mb-0">All your assigned checklist items across all programs.</p>
+            {% endif %}
+        </div>
+        <a href="{% url 'checklists:hub' %}" class="btn btn-sm btn-outline-secondary">← Hub</a>
+    </div>
+
+    <!-- Status filter tabs -->
+    <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+            <a class="nav-link {% if not status_filter %}active{% endif %}"
+               href="{% url 'checklists:my_tasks' %}">All Open</a>
+        </li>
+        {% for val, label in status_choices %}
+        {% if val != 'done' and val != 'na' %}
+        <li class="nav-item">
+            <a class="nav-link {% if status_filter == val %}active{% endif %}"
+               href="?status={{ val }}">{{ label }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+
+    {% if grouped %}
+        {% for group in grouped %}
+        <div class="mb-4">
+            <h5 class="d-flex align-items-center gap-2">
+                <a href="{% url 'checklists:program_checklist' group.program.code %}" class="text-decoration-none">
+                    {{ group.program.title }}
+                </a>
+                {% if group.program.start_date %}
+                <span class="text-muted small fw-normal">{{ group.program.start_date|date:"M d, Y" }}</span>
+                {% endif %}
+            </h5>
+
+            <table class="table table-sm table-hover align-middle">
+                <tbody>
+                    {% for item in group.items %}
+                    <tr class="{% if item.is_overdue %}table-danger{% elif item.urgency_class == 'urgency-urgent' %}table-warning{% endif %}">
+                        <td style="width: 45%;">
+                            <span {% if item.is_required %}class="fw-semibold"{% endif %}>{{ item.title }}</span>
+                            {% if item.is_required %}<span class="badge bg-secondary ms-1" style="font-size:0.65rem;">Required</span>{% endif %}
+                        </td>
+                        <td>
+                            <span class="badge
+                                {% if item.status == 'done' %}bg-success
+                                {% elif item.status == 'in_progress' %}bg-primary
+                                {% elif item.status == 'blocked' %}bg-danger
+                                {% elif item.status == 'na' %}bg-secondary
+                                {% else %}bg-light text-dark border{% endif %}">
+                                {{ item.get_status_display }}
+                            </span>
+                        </td>
+                        <td class="text-nowrap small">
+                            {% if item.due_date %}
+                                <span class="{% if item.is_overdue %}text-danger fw-semibold{% elif item.urgency_class == 'urgency-urgent' %}text-warning fw-semibold{% endif %}">
+                                    {{ item.due_date|date:"M d, Y" }}
+                                    {% if item.is_overdue %}(overdue){% endif %}
+                                </span>
+                            {% else %}
+                                <span class="text-muted">No due date</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <!-- Quick status update -->
+                            <form method="post" action="{% url 'checklists:update_item' item.pk %}" class="d-inline">
+                                {% csrf_token %}
+                                <input type="hidden" name="due_date" value="{{ item.due_date|date:'Y-m-d' }}">
+                                <input type="hidden" name="notes" value="{{ item.notes }}">
+                                {% if item.assigned_to_id %}
+                                <input type="hidden" name="assigned_to" value="{{ item.assigned_to_id }}">
+                                {% endif %}
+                                <select name="status" class="form-select form-select-sm d-inline w-auto"
+                                        onchange="this.form.submit()">
+                                    {% for val, label in status_choices %}
+                                    <option value="{{ val }}" {% if item.status == val %}selected{% endif %}>{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-success">
+            🎉 No open tasks assigned to you right now.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
