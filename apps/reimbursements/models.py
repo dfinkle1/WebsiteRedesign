@@ -147,7 +147,8 @@ class ReimbursementRequestQuerySet(models.QuerySet):
 
 def visa_document_upload_path(instance, filename):
     """Upload path for visa-related documents."""
-    return f"reimbursements/{instance.id}/visa_docs/{filename}"
+    pk = instance.pk or "pending"
+    return f"reimbursements/{pk}/visa_docs/{filename}"
 
 
 class ReimbursementRequest(TimestampedModel):
@@ -224,9 +225,10 @@ class ReimbursementRequest(TimestampedModel):
         blank=True,
         help_text="Visa type, e.g., J-1, F-1, H-1B.",
     )
-    passport_number = models.CharField(
+    passport_number = EncryptedCharField(
         max_length=50,
         blank=True,
+        default="",
     )
     passport_copy = models.FileField(
         upload_to=visa_document_upload_path,
@@ -466,15 +468,17 @@ class ReimbursementRequest(TimestampedModel):
 
     def can_submit(self):
         """Check if request can be submitted."""
-        # Must have at least one line item
         if not self.line_items.exists():
             return False
-        # Must have signature
         if not self.signature:
             return False
-        # If visa holder, must have required docs
-        if self.requires_visa_docs and not self.passport_copy:
+        if self.payment_method == "check" and not self.payment_address:
             return False
+        if self.payment_method == "ach" and not all([self.bank_name, self.bank_routing_number, self.bank_account_number]):
+            return False
+        if self.requires_visa_docs:
+            if not self.citizenship_country or not self.visa_type or not self.passport_copy:
+                return False
         return True
 
     @transition(
@@ -531,10 +535,12 @@ class ReimbursementRequest(TimestampedModel):
         ],
         target=RequestStatus.CANCELLED,
     )
-    def cancel(self, reason: str = ""):
+    def cancel(self, reason: str = "", by=None):
         """Cancel the request."""
         self.cancelled_at = timezone.now()
         self.cancellation_reason = reason
+        if by is not None:
+            self.cancelled_by = by
 
     # -------------------------------------------------------------------------
     # PRIVATE METHODS
@@ -653,8 +659,8 @@ class ExpenseLineItem(TimestampedModel):
 
     @property
     def needs_conversion(self):
-        """True if this is a non-USD expense needing conversion."""
-        return self.original_currency != Currency.USD and not self.amount_requested
+        """True if this is a non-USD expense that hasn't had an exchange rate applied yet."""
+        return self.original_currency != Currency.USD and self.exchange_rate is None
 
 
 class Receipt(TimestampedModel):

@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404, JsonResponse, FileResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
+from django.views.decorators.http import require_POST
 from django.conf import settings
 from django.urls import reverse
 from django.utils import timezone
@@ -49,14 +50,15 @@ class MyReimbursementsView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        requests = self.get_queryset()
+        from collections import Counter
+        status_counts = Counter(r.status for r in self.object_list)
         context["summary"] = {
-            "total": requests.count(),
-            "draft": requests.filter(status=RequestStatus.DRAFT).count(),
-            "submitted": requests.filter(status=RequestStatus.SUBMITTED).count(),
-            "changes_needed": requests.filter(status=RequestStatus.CHANGES_NEEDED).count(),
-            "approved": requests.filter(status=RequestStatus.APPROVED).count(),
-            "paid": requests.filter(status=RequestStatus.PAID).count(),
+            "total": len(self.object_list),
+            "draft": status_counts[RequestStatus.DRAFT],
+            "submitted": status_counts[RequestStatus.SUBMITTED],
+            "changes_needed": status_counts[RequestStatus.CHANGES_NEEDED],
+            "approved": status_counts[RequestStatus.APPROVED],
+            "paid": status_counts[RequestStatus.PAID],
         }
         return context
 
@@ -240,6 +242,7 @@ def reimbursement_edit(request, pk):
     })
 
 
+@require_POST
 @login_required(login_url="/accounts/login/")
 def expense_add(request, pk):
     """Add an expense line item to a reimbursement."""
@@ -252,17 +255,17 @@ def expense_add(request, pk):
         messages.error(request, "Cannot add expenses to this reimbursement.")
         return redirect("reimbursements:edit", pk=pk)
 
-    if request.method == "POST":
-        form = ExpenseLineItemForm(request.POST)
-        if form.is_valid():
-            expense = form.save(commit=False)
-            expense.request = reimbursement
-            expense.save()
-            messages.success(request, "Expense added.")
+    form = ExpenseLineItemForm(request.POST)
+    if form.is_valid():
+        expense = form.save(commit=False)
+        expense.request = reimbursement
+        expense.save()
+        messages.success(request, "Expense added.")
 
     return redirect("reimbursements:edit", pk=pk)
 
 
+@require_POST
 @login_required(login_url="/accounts/login/")
 def expense_delete(request, pk, expense_pk):
     """Delete an expense line item."""
@@ -276,14 +279,13 @@ def expense_delete(request, pk, expense_pk):
         return redirect("reimbursements:edit", pk=pk)
 
     expense = get_object_or_404(ExpenseLineItem, pk=expense_pk, request=reimbursement)
-
-    if request.method == "POST":
-        expense.delete()
-        messages.success(request, "Expense removed.")
+    expense.delete()
+    messages.success(request, "Expense removed.")
 
     return redirect("reimbursements:edit", pk=pk)
 
 
+@require_POST
 @login_required(login_url="/accounts/login/")
 def receipt_upload(request, pk, expense_pk):
     """Upload a receipt for an expense line item."""
@@ -301,7 +303,7 @@ def receipt_upload(request, pk, expense_pk):
 
     expense = get_object_or_404(ExpenseLineItem, pk=expense_pk, request=reimbursement)
 
-    if request.method == "POST" and request.FILES.get("file"):
+    if request.FILES.get("file"):
         uploaded_file = request.FILES["file"]
 
         # Server-side security validation
@@ -322,6 +324,7 @@ def receipt_upload(request, pk, expense_pk):
     return redirect("reimbursements:edit", pk=pk)
 
 
+@require_POST
 @login_required(login_url="/accounts/login/")
 def receipt_delete(request, pk, expense_pk, receipt_pk):
     """Delete a receipt."""
@@ -340,11 +343,9 @@ def receipt_delete(request, pk, expense_pk, receipt_pk):
         line_item__pk=expense_pk,
         line_item__request=reimbursement
     )
-
-    if request.method == "POST":
-        receipt.file.delete(save=False)
-        receipt.delete()
-        messages.success(request, "Receipt removed.")
+    receipt.file.delete(save=False)
+    receipt.delete()
+    messages.success(request, "Receipt removed.")
 
     return redirect("reimbursements:edit", pk=pk)
 
@@ -430,6 +431,7 @@ def reimbursement_submit(request, pk):
     })
 
 
+@require_POST
 @login_required(login_url="/accounts/login/")
 def reimbursement_cancel(request, pk):
     """Cancel a reimbursement request."""
@@ -446,15 +448,13 @@ def reimbursement_cancel(request, pk):
         messages.warning(request, "This reimbursement is already cancelled.")
         return redirect("reimbursements:detail", pk=pk)
 
-    if request.method == "POST":
-        reason = request.POST.get("reason", "Cancelled by user")
-        try:
-            reimbursement.cancel(reason=reason)
-            reimbursement.cancelled_by = request.user
-            reimbursement.save()
-            messages.success(request, "Reimbursement request cancelled.")
-        except Exception as e:
-            messages.error(request, f"Could not cancel: {e}")
+    reason = request.POST.get("reason", "Cancelled by user")
+    try:
+        reimbursement.cancel(reason=reason, by=request.user)
+        reimbursement.save()
+        messages.success(request, "Reimbursement request cancelled.")
+    except Exception as e:
+        messages.error(request, f"Could not cancel: {e}")
 
     return redirect("reimbursements:detail", pk=pk)
 
@@ -483,18 +483,7 @@ def protected_receipt(request, pk, expense_pk, receipt_pk):
         line_item__request=reimbursement,
     )
 
-    # For S3 storage, redirect to a signed URL
-    # For local storage, serve the file directly
-    if hasattr(receipt.file.storage, 'url'):
-        # S3 or other cloud storage - redirect to signed URL
-        return HttpResponseRedirect(receipt.file.url)
-    else:
-        # Local filesystem - serve directly
-        return FileResponse(
-            receipt.file.open('rb'),
-            as_attachment=False,
-            filename=receipt.original_filename,
-        )
+    return HttpResponseRedirect(receipt.file.url)
 
 
 @login_required(login_url="/accounts/login/")
@@ -517,14 +506,7 @@ def protected_visa_doc(request, pk, doc_type):
     else:
         raise Http404("File not found")
 
-    # For S3 storage, redirect to a signed URL
-    if hasattr(file_field.storage, 'url'):
-        return HttpResponseRedirect(file_field.url)
-    else:
-        return FileResponse(
-            file_field.open('rb'),
-            as_attachment=False,
-        )
+    return HttpResponseRedirect(file_field.url)
 
 
 # =============================================================================

@@ -30,19 +30,20 @@ except Exception:
             "Generate one with: python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'"
         )
 
-# Field encryption key for sensitive data (bank accounts, etc.)
-# Generate with: python -c 'from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())'
-try:
-    FIELD_ENCRYPTION_KEY = env("FIELD_ENCRYPTION_KEY")
-except Exception:
-    if os.getenv("DEBUG", "0") == "1":
-        # Dev-only key - DO NOT use in production
-        FIELD_ENCRYPTION_KEY = "dev-only-key-not-for-production-use-32b="
-    else:
-        raise Exception(
-            "FIELD_ENCRYPTION_KEY environment variable is required. "
-            "Generate one with: python -c 'from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())'"
-        )
+# Field encryption key for sensitive data (bank accounts, passport numbers, etc.)
+# Required in all environments — generate with:
+#   python -c 'from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())'
+# Add to your .env file as: FIELD_ENCRYPTION_KEY=<generated_key>
+FIELD_ENCRYPTION_KEY = env(
+    "FIELD_ENCRYPTION_KEY",
+    default=None,
+)
+if not FIELD_ENCRYPTION_KEY:
+    raise Exception(
+        "FIELD_ENCRYPTION_KEY environment variable is required in all environments. "
+        "Generate one with: python -c 'from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())' "
+        "and add it to your .env file."
+    )
 
 DEBUG = False  # Overridden in dev/prod
 
@@ -148,7 +149,14 @@ TEXT_EDITOR = "djangocms_text.contrib.text_ckeditor4.ckeditor4"
 # }
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
-CORS_ALLOWED_ORIGINS = ["https://127.0.0.1:8000"]
+
+# Cookie security — applied in all environments
+SESSION_COOKIE_HTTPONLY = True   # JS cannot access session cookie
+SESSION_COOKIE_SAMESITE = "Lax"  # Lax (not Strict) to allow OAuth redirects back to site
+CSRF_COOKIE_HTTPONLY = True      # JS cannot access CSRF cookie
+CSRF_COOKIE_SAMESITE = "Lax"     # Lax required for CSRF to work across OAuth redirects
+
+CORS_ALLOWED_ORIGINS = []  # Overridden in dev.py / prod.py
 CORS_ALLOW_HEADERS = (
     "accept",
     "authorization",
@@ -162,7 +170,7 @@ CORS_ALLOW_HEADERS = (
 DEBUG_TOOLBAR_PANELS = [p for p in PANELS_DEFAULTS if "profiling" not in p]
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
+    # "debug_toolbar.middleware.DebugToolbarMiddleware" — added in dev.py only
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",  # Must be right after SecurityMiddleware
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -354,7 +362,8 @@ CMS_TEMPLATES = [
 # Internationalization
 LANGUAGE_CODE = "en"
 LANGUAGES = [("en", "English")]
-TIME_ZONE = "America/Vancouver"
+# AIM is based in Pasadena, CA. Times stored as UTC, displayed as Pacific Time.
+TIME_ZONE = "America/Los_Angeles"
 USE_I18N = False
 USE_TZ = True
 

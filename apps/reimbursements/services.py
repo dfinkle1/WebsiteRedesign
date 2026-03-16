@@ -447,10 +447,7 @@ def get_program_summary(program):
     )
 
     by_status = dict(
-        requests.values("status").annotate(
-            count=Count("id"),
-            amount=Sum("total_requested"),
-        ).values_list("status", "count")
+        requests.values("status").annotate(count=Count("id")).values_list("status", "count")
     )
 
     return {
