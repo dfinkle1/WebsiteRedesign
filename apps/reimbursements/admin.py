@@ -14,6 +14,7 @@ from datetime import date
 from decimal import Decimal
 
 from django.contrib import admin, messages
+from django.core.exceptions import PermissionDenied
 from django.db.models import Sum
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import path, reverse
@@ -109,7 +110,7 @@ class ExpenseLineItemInline(admin.TabularInline):
 def approve_requests(modeladmin, request, queryset):
     """Bulk approve submitted requests."""
     approved_count = 0
-    for req in queryset.filter(status=RequestStatus.SUBMITTED):
+    for req in queryset.filter(status=RequestStatus.SUBMITTED).prefetch_related("line_items"):
         # Auto-fill approved amounts = requested amounts
         for item in req.line_items.all():
             if item.amount_approved is None:
@@ -714,6 +715,8 @@ class ReimbursementRequestAdmin(admin.ModelAdmin):
 
     def approve_view(self, request, pk):
         """Approve a single request."""
+        if not request.user.has_perm("reimbursements.can_approve"):
+            raise PermissionDenied
         obj = ReimbursementRequest.objects.get(pk=pk)
 
         if obj.status != RequestStatus.SUBMITTED:
@@ -738,6 +741,8 @@ class ReimbursementRequestAdmin(admin.ModelAdmin):
 
     def request_changes_view(self, request, pk):
         """Send request back for changes."""
+        if not request.user.has_perm("reimbursements.can_review"):
+            raise PermissionDenied
         obj = ReimbursementRequest.objects.get(pk=pk)
 
         if obj.status != RequestStatus.SUBMITTED:
@@ -753,6 +758,8 @@ class ReimbursementRequestAdmin(admin.ModelAdmin):
 
     def mark_paid_view(self, request, pk):
         """Mark request as paid."""
+        if not request.user.has_perm("reimbursements.can_mark_paid"):
+            raise PermissionDenied
         obj = ReimbursementRequest.objects.get(pk=pk)
 
         if obj.status != RequestStatus.APPROVED:
@@ -768,6 +775,8 @@ class ReimbursementRequestAdmin(admin.ModelAdmin):
 
     def cancel_view(self, request, pk):
         """Cancel a request."""
+        if not request.user.has_perm("reimbursements.can_review"):
+            raise PermissionDenied
         obj = ReimbursementRequest.objects.get(pk=pk)
 
         if obj.status == RequestStatus.PAID:

@@ -73,11 +73,10 @@ class EncryptedCharField(models.CharField):
             decrypted = fernet.decrypt(value.encode())
             return decrypted.decode()
         except InvalidToken:
-            # Value might not be encrypted (e.g., migrated data)
-            # Or wrong key - return as-is but log warning
-            import logging
-            logging.warning(f"Could not decrypt field value - may be unencrypted or wrong key")
-            return value
+            raise ValueError(
+                "Failed to decrypt field value. The FIELD_ENCRYPTION_KEY may be incorrect "
+                "or the data may be corrupted. Check your encryption key configuration."
+            )
 
     def to_python(self, value):
         """Convert value to Python string."""

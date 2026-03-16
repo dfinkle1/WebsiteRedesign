@@ -5,3 +5,11 @@
 {{ block.super }}
 <link rel="stylesheet" type="text/css" href="{% static 'admin/css/custom_admin.css' %}">
 {% endblock %}
+
+{% block branding %}
+<div id="site-name">
+    <a href="{% url 'admin:index' %}">AIM Administration</a>
+</div>
+{% endblock %}
+
+{% block title %}{{ title }} | AIM Admin{% endblock %}
