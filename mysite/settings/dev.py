@@ -47,6 +47,25 @@ else:
         }
     }
 
+# CSP in report-only mode for dev — violations appear in browser console, nothing is blocked
+MIDDLEWARE = MIDDLEWARE + ["django.middleware.csp.ContentSecurityPolicyMiddleware"]
+
+from django.utils.csp import CSP
+
+SECURE_CSP_REPORT_ONLY = {
+    "default-src": [CSP.SELF],
+    "script-src": [CSP.SELF, CSP.UNSAFE_INLINE, "https://cdn.jsdelivr.net"],
+    "style-src": [CSP.SELF, CSP.UNSAFE_INLINE, "https://fonts.googleapis.com", "https://cdn.jsdelivr.net"],
+    "font-src": [CSP.SELF, "https://fonts.gstatic.com", "https://cdn.jsdelivr.net"],
+    "img-src": [CSP.SELF, "data:", "https:"],
+    "frame-src": [CSP.SELF, "https://www.youtube.com", "http://www.youtube.com", "https://www.youtube-nocookie.com"],
+    "connect-src": [CSP.SELF, "https://orcid.org"],
+    "form-action": [CSP.SELF],
+    "frame-ancestors": [CSP.SELF],
+    "object-src": [CSP.NONE],
+    "base-uri": [CSP.SELF],
+}
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,

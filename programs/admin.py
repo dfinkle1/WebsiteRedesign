@@ -88,7 +88,11 @@ class UpcomingFilter(admin.SimpleListFilter):
     parameter_name = "when"
 
     def lookups(self, request, model_admin):
-        return [("upcoming", "Upcoming"), ("past", "Past"), ("deadline", "Deadline")]
+        return [("upcoming", "Upcoming"), ("past", "Past"), ("deadline", "Deadline"), ("all", "All")]
+
+    def value(self):
+        value = super().value()
+        return value if value is not None else "upcoming"
 
     def queryset(self, request, queryset):
         today = timezone.localdate()
@@ -128,10 +132,18 @@ class ProgramAdmin(FrontendEditableAdminMixin, admin.ModelAdmin):
         "organizer2",
     )
 
-    ordering = ("-start_date",)  # Most recent first
+    ordering = ("start_date",)  # Default; overridden per filter in get_ordering
 
     # Show enrollments inline on program detail page
     inlines = [EnrollmentInline]
+
+    def get_ordering(self, request):
+        # Upcoming: soonest first (Jan → Dec)
+        # Past / All: most recent first (Dec → Jan)
+        when = request.GET.get("when") or request.GET.get("status", "upcoming")
+        if when == "past":
+            return ("-start_date",)
+        return ("start_date",)
 
     def get_queryset(self, request):
         return super().get_queryset(request).select_related("checklist")
@@ -1127,7 +1139,12 @@ class UpcomingProgramFilter(admin.SimpleListFilter):
             ("upcoming", "Upcoming"),
             ("past", "Past"),
             ("accepting", "Accepting Applications"),
+            ("all", "All"),
         ]
+
+    def value(self):
+        value = super().value()
+        return value if value is not None else "upcoming"
 
     def queryset(self, request, queryset):
         today = timezone.localdate()

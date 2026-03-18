@@ -71,6 +71,53 @@ LOGGING = {
 # CORS — restrict to production domains
 CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])
 
+# ---------------------------------------------------------------------------
+# Content Security Policy (Django 6.0 native — no django-csp package needed)
+# ---------------------------------------------------------------------------
+# Middleware is added here rather than base.py so CSP is only enforced in prod.
+# In dev, violations are not blocked — use SECURE_CSP_REPORT_ONLY in dev.py
+# to test without breaking anything.
+MIDDLEWARE = MIDDLEWARE + ["django.middleware.csp.ContentSecurityPolicyMiddleware"]
+
+from django.utils.csp import CSP
+
+SECURE_CSP = {
+    # Default: only load resources from our own domain
+    "default-src": [CSP.SELF],
+
+    # Scripts: self + Bootstrap CDN
+    # unsafe-inline required for Django CMS toolbar inline scripts
+    "script-src": [CSP.SELF, CSP.UNSAFE_INLINE, "https://cdn.jsdelivr.net"],
+
+    # Styles: self + Google Fonts + Bootstrap CDN
+    # unsafe-inline required for Django CMS toolbar (writes inline style= attributes dynamically)
+    "style-src": [CSP.SELF, CSP.UNSAFE_INLINE, "https://fonts.googleapis.com", "https://cdn.jsdelivr.net"],
+
+    # Fonts: self + Google Fonts file server
+    "font-src": [CSP.SELF, "https://fonts.gstatic.com", "https://cdn.jsdelivr.net"],
+
+    # Images: self + data URIs (Bootstrap icons, CMS image widgets)
+    "img-src": [CSP.SELF, "data:", "https:"],
+
+    # Iframes from YouTube (djangocms-video embeds)
+    "frame-src": [CSP.SELF, "https://www.youtube.com", "http://www.youtube.com", "https://www.youtube-nocookie.com"],
+
+    # Connect (fetch/XHR): self + ORCID for OAuth
+    "connect-src": [CSP.SELF, "https://orcid.org"],
+
+    # Forms: only submit to self
+    "form-action": [CSP.SELF],
+
+    # Iframes: same origin only (Django CMS toolbar uses iframes)
+    "frame-ancestors": [CSP.SELF],
+
+    # No plugins
+    "object-src": [CSP.NONE],
+
+    # No base tag hijacking
+    "base-uri": [CSP.SELF],
+}
+
 USE_S3 = True
 
 ALLOWED_HOSTS = [

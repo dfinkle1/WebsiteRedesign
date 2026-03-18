@@ -162,6 +162,11 @@ workshop*.sql
 # Configuration files
 config.sh
 .env.local
+.env.docker.local
+
+# Docker — keep initdb dir but not actual dump files (sensitive data)
+docker/initdb/*.sql
+docker/initdb/*.dump
 SELF_SERVICE_REPORTING_OPTIONS.md
 FOCUSED_RESEARCH_MIGRATION_GUIDE.md
 ROUTE_BASED_NAVIGATION_SETUP.md
