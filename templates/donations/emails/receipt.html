@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Donation Receipt {{ donation.receipt_number }}</title>
+  <style>
+    body { font-family: Georgia, serif; color: #222; margin: 0; padding: 0; background: #f4f4f4; }
+    .wrapper { max-width: 620px; margin: 0 auto; background: #fff; }
+    .header { background: #003366; padding: 28px 36px; }
+    .header h1 { color: #fff; margin: 0; font-size: 20px; font-weight: normal; letter-spacing: 1px; }
+    .header p { color: rgba(255,255,255,.7); margin: 4px 0 0; font-size: 13px; }
+    .amount-block { background: #f0f6ff; padding: 24px 36px; border-left: 4px solid #003366; }
+    .amount-block .amount { font-size: 36px; font-weight: bold; color: #003366; }
+    .amount-block .fund { color: #555; margin-top: 4px; }
+    .section { padding: 24px 36px; border-bottom: 1px solid #eee; }
+    .section h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #888; margin: 0 0 14px; }
+    table { width: 100%; border-collapse: collapse; }
+    td { padding: 5px 0; font-size: 14px; vertical-align: top; }
+    td:first-child { color: #666; width: 160px; }
+    td:last-child { font-weight: 500; }
+    .tax-box { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; padding: 16px; font-size: 13px; line-height: 1.7; }
+    .footer { padding: 20px 36px; font-size: 11px; color: #aaa; text-align: center; }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+
+  <div class="header">
+    <h1>DONATION RECEIPT</h1>
+    <p>American Institute of Mathematics</p>
+  </div>
+
+  <div class="amount-block">
+    <div class="amount">${{ donation.amount }}</div>
+    <div class="fund">{{ donation.category.name }}</div>
+  </div>
+
+  <div class="section">
+    <p style="margin:0 0 4px;">Dear {{ donation.donor_name }},</p>
+    <p style="margin:0; color:#555; font-size:14px;">
+      Thank you for your generous gift to {{ org.legal_name }}.
+      This letter serves as your official tax receipt — please keep it for your records.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2>Donation Details</h2>
+    <table>
+      <tr><td>Receipt Number</td><td>{{ donation.receipt_number }}</td></tr>
+      <tr><td>Date</td><td>{{ donation.completed_at|date:"F j, Y" }}</td></tr>
+      <tr><td>Amount</td><td>${{ donation.amount }} {{ donation.currency }}</td></tr>
+      <tr><td>Designation</td><td>{{ donation.category.name }}</td></tr>
+      <tr><td>Payment Method</td><td>PayPal</td></tr>
+      <tr><td>Transaction ID</td><td style="font-size:12px; font-family:monospace;">{{ donation.paypal_capture_id }}</td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Organization</h2>
+    <table>
+      <tr><td>Legal Name</td><td>{{ org.legal_name }}</td></tr>
+      <tr><td>EIN</td><td>{{ org.ein }}</td></tr>
+      {% if org.address_line1 %}
+      <tr>
+        <td>Address</td>
+        <td>
+          {{ org.address_line1 }}<br>
+          {% if org.address_line2 %}{{ org.address_line2 }}<br>{% endif %}
+          {{ org.city }}, {{ org.state }} {{ org.zip_code }}
+        </td>
+      </tr>
+      {% endif %}
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Tax Information</h2>
+    <div class="tax-box">
+      {% if tax_deductible %}
+        <strong>{{ org.legal_name }}</strong> is a 501(c)(3) nonprofit organization
+        (EIN: {{ org.ein }}).<br><br>
+        Your donation of <strong>${{ donation.amount }}</strong> is
+        <strong>tax-deductible to the extent allowed by law.</strong>
+        No goods or services were provided in exchange for this contribution.
+      {% else %}
+        Goods or services were provided in exchange for this donation.
+        Please consult your tax advisor regarding the deductible portion.
+      {% endif %}
+    </div>
+    {% if org.receipt_footer %}
+      <p style="font-size:12px; color:#777; margin-top:14px;">{{ org.receipt_footer }}</p>
+    {% endif %}
+  </div>
+
+  <div class="footer">
+    {{ org.legal_name }} &nbsp;·&nbsp; EIN {{ org.ein }}<br>
+    Please retain this receipt for your tax records.
+  </div>
+
+</div>
+</body>
+</html>

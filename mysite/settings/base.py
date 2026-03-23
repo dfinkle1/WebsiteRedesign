@@ -51,6 +51,7 @@ DEBUG = False  # Overridden in dev/prod
 INSTALLED_APPS = [
     # Project apps
     "mysite",
+    "apps.donations.apps.DonationsConfig",
     "apps.reimbursements.apps.ReimbursementsConfig",
     "apps.frg.apps.FrgConfig",
     # "apps.core.apps.CoreConfig",
@@ -450,3 +451,17 @@ else:
             "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"
         },
     }
+
+# ---------------------------------------------------------------------------
+# PayPal
+# ---------------------------------------------------------------------------
+PAYPAL_CLIENT_ID = env("PAYPAL_CLIENT_ID", default="")
+PAYPAL_CLIENT_SECRET = env("PAYPAL_CLIENT_SECRET", default="")
+PAYPAL_WEBHOOK_ID = env("PAYPAL_WEBHOOK_ID", default="")
+PAYPAL_MODE = env("PAYPAL_MODE", default="sandbox")  # "sandbox" or "live"
+
+# Absolute base URL for building PayPal return/cancel URLs
+SITE_URL = env("SITE_URL", default="http://localhost:8000")
+
+# From address for donation receipt emails
+DONATION_RECEIPT_FROM_EMAIL = env("DONATION_RECEIPT_FROM_EMAIL", default="donations@aimath.org")

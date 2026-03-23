@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Thank You — American Institute of Mathematics{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 text-center">
+
+      <div class="mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" fill="#16a34a"
+             class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+        </svg>
+      </div>
+
+      <h1 class="fw-bold mb-2">Thank you, {{ donation.donor_name|default:"Friend" }}!</h1>
+      <p class="lead text-muted mb-4">
+        Your gift of <strong>${{ donation.amount }}</strong> to the
+        <strong>{{ donation.category.name }}</strong> fund means the world to us.
+      </p>
+
+      <div class="card border-0 bg-body-secondary rounded-3 p-4 mb-4 text-start">
+        <h6 class="fw-bold mb-3">What happens next</h6>
+        <ul class="mb-0 ps-3">
+          <li class="mb-2">PayPal is processing your payment — this usually takes a few seconds.</li>
+          <li class="mb-2">Once confirmed, you'll receive an official tax receipt at <strong>{{ donation.donor_email }}</strong>.</li>
+          <li>The receipt includes our EIN and a tax-deductibility statement for your records.</li>
+        </ul>
+      </div>
+
+      <p class="text-muted small mb-4">
+        Didn't receive an email within a few minutes?
+        Check your spam folder or <a href="mailto:info@aimath.org">contact us</a>.
+      </p>
+
+      <a href="/" class="btn btn-primary px-4">Return to AIM Home</a>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

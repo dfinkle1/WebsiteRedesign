@@ -1,0 +1,318 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Donate — American Institute of Mathematics{% endblock %}
+
+{% block extra_css %}
+<style>
+  .donate-hero {
+    background: linear-gradient(135deg, #003366 0%, #0066cc 100%);
+    color: white;
+    padding: 3rem 0;
+  }
+  .donate-card {
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 8px 40px rgba(0,0,0,.12);
+  }
+  .fund-option {
+    cursor: pointer;
+    border: 2px solid var(--bs-border-color);
+    border-radius: 10px;
+    padding: 12px 16px;
+    transition: border-color .15s, background .15s;
+  }
+  .fund-option:hover { border-color: #0066cc; }
+  .fund-option.selected {
+    border-color: #0066cc;
+    background: rgba(0,102,204,.06);
+  }
+  .fund-option input[type=radio] { display: none; }
+  .amount-btn {
+    border-radius: 50px;
+    padding: 8px 22px;
+    font-weight: 600;
+    font-size: .95rem;
+    transition: all .15s;
+  }
+  .amount-btn.selected {
+    background: #003366;
+    border-color: #003366;
+    color: white;
+  }
+  .paypal-btn {
+    background: #ffc439;
+    border: none;
+    color: #000;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    padding: 14px;
+    transition: filter .15s;
+  }
+  .paypal-btn:hover { filter: brightness(.95); }
+  .trust-badge { font-size: .8rem; color: var(--bs-secondary-color); }
+
+  /* Sidebar */
+  .sidebar-sticky {
+    position: sticky;
+    top: 80px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+  }
+  .sidebar-sticky::-webkit-scrollbar { width: 4px; }
+  .sidebar-sticky::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+
+  .fund-desc {
+    border-left: 3px solid transparent;
+    padding: 12px 14px;
+    border-radius: 0 8px 8px 0;
+    transition: border-color .2s, background .2s;
+    margin-bottom: 4px;
+  }
+  .fund-desc.active {
+    border-left-color: #0066cc;
+    background: rgba(0,102,204,.05);
+  }
+  .fund-desc h6 { font-size: .9rem; font-weight: 700; margin-bottom: 4px; }
+  .fund-desc p { font-size: .82rem; color: var(--bs-secondary-color); margin: 0; line-height: 1.55; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="donate-hero text-center">
+  <div class="container">
+    <img src="{% static 'images/aim_white.png' %}" alt="AIM Logo" height="65" class="mb-3">
+    <h1 class="fw-bold mb-2">Support Mathematics</h1>
+    <p class="lead mb-0" style="opacity:.85;">
+      Every dollar advances research, education, and the mathematicians of tomorrow.
+    </p>
+  </div>
+</div>
+
+<div class="container-xl py-5">
+
+  {% if messages %}
+    <div class="row justify-content-center mb-3">
+      <div class="col-lg-10">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="row g-5 justify-content-center">
+
+    {# ------------------------------------------------------------------ #}
+    {# SIDEBAR — fund descriptions                                         #}
+    {# Shows below form on mobile (order-2), left on desktop (order-lg-1) #}
+    {# ------------------------------------------------------------------ #}
+    <div class="col-lg-5 order-2 order-lg-1">
+      <div class="sidebar-sticky">
+
+        <h5 class="fw-bold mb-1">AIM Fundraising</h5>
+        <p class="text-muted small mb-4">
+          The American Institute of Mathematics seeks to foster collaborative work in all aspects of mathematics.
+          We welcome your contribution in any amount and thank you in advance for your support!
+        </p>
+        <p class="text-muted small mb-4">
+          Please select a purpose for your donation. The various AIM projects are described below.
+        </p>
+
+        <h6 class="text-uppercase text-muted fw-bold small mb-3" style="letter-spacing:.08em;">Our Funds</h6>
+
+        {% for cat in form.category.field.queryset %}
+          <div class="fund-desc" data-fund="{{ cat.pk }}" id="sidebar-fund-{{ cat.pk }}">
+            <h6>{{ cat.name }}</h6>
+            {% if cat.description %}
+              <p>{{ cat.description }}</p>
+            {% endif %}
+          </div>
+        {% empty %}
+          <p class="text-muted small fst-italic">Fund descriptions will appear here once categories are added in admin.</p>
+        {% endfor %}
+
+      </div>
+    </div>
+
+    {# ------------------------------------------------------------------ #}
+    {# FORM                                                                #}
+    {# ------------------------------------------------------------------ #}
+    <div class="col-lg-7 order-1 order-lg-2">
+      <div class="donate-card card p-4 p-md-5">
+        <form method="post" novalidate id="donate-form">
+          {% csrf_token %}
+
+          {# Step 1: Choose a fund #}
+          <h6 class="text-uppercase text-muted fw-bold mb-3 small" style="letter-spacing:.08em;">
+            1. Choose a fund
+            {% if form.category.errors %}<span class="text-danger ms-1">*</span>{% endif %}
+          </h6>
+
+          <div class="mb-4" id="fund-options">
+            {% for cat in form.category.field.queryset %}
+              <label class="fund-option d-flex align-items-start gap-3 mb-2 w-100 {% if form.category.errors %}border-danger{% endif %}">
+                <input type="radio" name="category" value="{{ cat.pk }}"
+                       {% if form.category.value == cat.pk|stringformat:"s" %}checked{% endif %}>
+                <div>
+                  <div class="fw-semibold">{{ cat.name }}</div>
+                </div>
+              </label>
+            {% endfor %}
+            {% if form.category.errors %}
+              <div class="text-danger small mt-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor"
+                     class="bi bi-exclamation-circle me-1" viewBox="0 0 16 16">
+                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                  <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/>
+                </svg>
+                {{ form.category.errors.0 }}
+              </div>
+            {% endif %}
+          </div>
+
+          {# Step 2: Choose amount #}
+          <h6 class="text-uppercase text-muted fw-bold mb-3 small" style="letter-spacing:.08em;">
+            2. Select an amount
+            {% if form.amount.errors %}<span class="text-danger ms-1">*</span>{% endif %}
+          </h6>
+
+          <div class="d-flex flex-wrap gap-2 mb-3">
+            <button type="button" class="btn btn-outline-primary amount-btn" data-amount="25">$25</button>
+            <button type="button" class="btn btn-outline-primary amount-btn" data-amount="50">$50</button>
+            <button type="button" class="btn btn-outline-primary amount-btn" data-amount="100">$100</button>
+            <button type="button" class="btn btn-outline-primary amount-btn" data-amount="250">$250</button>
+            <button type="button" class="btn btn-outline-primary amount-btn" data-amount="500">$500</button>
+            <button type="button" class="btn btn-outline-primary amount-btn" data-amount="1000">$1,000</button>
+          </div>
+
+          <div class="input-group mb-4">
+            <span class="input-group-text fw-bold {% if form.amount.errors %}border-danger{% endif %}">$</span>
+            {{ form.amount }}
+            {% if form.amount.errors %}
+              <div class="invalid-feedback d-block w-100">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor"
+                     class="bi bi-exclamation-circle me-1" viewBox="0 0 16 16">
+                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                  <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/>
+                </svg>
+                {{ form.amount.errors.0 }}
+              </div>
+            {% endif %}
+          </div>
+
+          {# Step 3: Your information #}
+          <h6 class="text-uppercase text-muted fw-bold mb-3 small" style="letter-spacing:.08em;">
+            3. Your information
+            {% if form.donor_name.errors or form.donor_email.errors %}<span class="text-danger ms-1">*</span>{% endif %}
+          </h6>
+
+          <div class="row g-3 mb-4">
+            <div class="col-sm-6">
+              <label for="{{ form.donor_name.id_for_label }}" class="form-label fw-semibold">
+                {{ form.donor_name.label }}
+                {% if form.donor_name.errors %}<span class="text-danger ms-1">*</span>{% endif %}
+              </label>
+              {{ form.donor_name }}
+              {% if form.donor_name.errors %}
+                <div class="invalid-feedback d-block">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor"
+                       class="bi bi-exclamation-circle me-1" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                    <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/>
+                  </svg>
+                  {{ form.donor_name.errors.0 }}
+                </div>
+              {% endif %}
+            </div>
+            <div class="col-sm-6">
+              <label for="{{ form.donor_email.id_for_label }}" class="form-label fw-semibold">
+                {{ form.donor_email.label }}
+                {% if form.donor_email.errors %}<span class="text-danger ms-1">*</span>{% endif %}
+              </label>
+              {{ form.donor_email }}
+              {% if form.donor_email.errors %}
+                <div class="invalid-feedback d-block">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor"
+                       class="bi bi-exclamation-circle me-1" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                    <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/>
+                  </svg>
+                  {{ form.donor_email.errors.0 }}
+                </div>
+              {% else %}
+                <div class="form-text">Your tax receipt will be emailed here.</div>
+              {% endif %}
+            </div>
+          </div>
+
+          {# Submit #}
+          <div class="d-grid mb-3">
+            <button type="submit" class="paypal-btn w-100">
+              <svg viewBox="0 0 24 24" height="20" fill="#003087" xmlns="http://www.w3.org/2000/svg"
+                   class="me-2" style="vertical-align:middle;">
+                <path d="M20.067 7.301c.278-1.775-.001-2.985-.958-4.078C18.05 2.05 16.22 1.5 13.875 1.5H7.01a.998.998 0 0 0-.988.845L3.52 19.748a.6.6 0 0 0 .592.702h4.31l-.298 1.88a.524.524 0 0 0 .517.614h3.629c.43 0 .797-.313.864-.738l.036-.185.685-4.342.044-.239a.872.872 0 0 1 .861-.738h.542c3.515 0 6.267-1.428 7.07-5.56.336-1.727.162-3.17-.726-4.18a3.47 3.47 0 0 0-.979-.661z"/>
+              </svg>
+              Donate with PayPal
+            </button>
+          </div>
+
+          <div class="trust-badge text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor"
+                 class="bi bi-shield-check me-1" viewBox="0 0 16 16">
+              <path d="M5.338 1.59a61 61 0 0 0-2.837.856.48.48 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.7 10.7 0 0 0 2.287 2.233c.346.244.652.42.893.533q.18.085.293.118a1 1 0 0 0 .101.025 1 1 0 0 0 .1-.025q.114-.034.294-.118c.24-.113.547-.29.893-.533a10.7 10.7 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.8 11.8 0 0 1-2.517 2.453 7 7 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7 7 0 0 1-1.048-.625 11.8 11.8 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 63 63 0 0 1 5.072.56"/>
+              <path d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+            </svg>
+            Secured by PayPal &nbsp;·&nbsp; AIM is a 501(c)(3) nonprofit &nbsp;·&nbsp; Gifts are tax-deductible
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Preset amount buttons
+  document.querySelectorAll(".amount-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.getElementById("{{ form.amount.id_for_label }}").value = btn.dataset.amount;
+      document.querySelectorAll(".amount-btn").forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
+    });
+  });
+
+  // Fund selection — highlights card in form AND matching description in sidebar
+  function syncFundSelection(fundPk) {
+    // Form cards
+    document.querySelectorAll(".fund-option").forEach(el => el.classList.remove("selected"));
+    const radio = document.querySelector(`.fund-option input[value="${fundPk}"]`);
+    if (radio) radio.closest(".fund-option").classList.add("selected");
+
+    // Sidebar descriptions
+    document.querySelectorAll(".fund-desc").forEach(el => el.classList.remove("active"));
+    const desc = document.getElementById(`sidebar-fund-${fundPk}`);
+    if (desc) {
+      desc.classList.add("active");
+      // Smooth scroll sidebar to the active description on mobile
+      if (window.innerWidth < 992) {
+        desc.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+    }
+  }
+
+  document.querySelectorAll(".fund-option input[type=radio]").forEach(radio => {
+    radio.addEventListener("change", () => syncFundSelection(radio.value));
+    if (radio.checked) syncFundSelection(radio.value);
+  });
+</script>
+{% endblock %}
