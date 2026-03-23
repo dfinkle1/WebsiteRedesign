@@ -1,0 +1,44 @@
+DONATION RECEIPT
+================
+
+Receipt Number: {{ donation.receipt_number }}
+Date: {{ donation.completed_at|date:"F j, Y" }}
+
+Dear {{ donation.donor_name }},
+
+Thank you for your generous donation to {{ org.legal_name }}.
+
+DONATION DETAILS
+----------------
+Amount:       ${{ donation.amount }} {{ donation.currency }}
+Designation:  {{ donation.category.name }}
+Receipt No:   {{ donation.receipt_number }}
+Payment:      PayPal (Capture ID: {{ donation.paypal_capture_id }})
+
+ORGANIZATION
+------------
+{{ org.legal_name }}
+EIN: {{ org.ein }}
+{% if org.address_line1 %}{{ org.address_line1 }}{% endif %}
+{% if org.address_line2 %}{{ org.address_line2 }}{% endif %}
+{% if org.city %}{{ org.city }}, {{ org.state }} {{ org.zip_code }}{% endif %}
+
+TAX INFORMATION
+---------------
+{% if tax_deductible %}
+{{ org.legal_name }} is a 501(c)(3) nonprofit organization.
+Your donation of ${{ donation.amount }} is tax-deductible to the extent allowed
+by law. No goods or services were provided in exchange for this contribution.
+{% else %}
+Goods or services were provided in exchange for this donation.
+Please consult your tax advisor regarding the deductible portion.
+{% endif %}
+
+Please retain this receipt for your tax records.
+{% if org.receipt_footer %}
+
+{{ org.receipt_footer }}
+{% endif %}
+
+Thank you for supporting mathematics.
+{{ org.legal_name }}
