@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+    Research Communities - AIM
+{% endblock title %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/pages/workshops.css' %}">
+{% endblock extra_css %}
+{% block content %}
+    <div class="container py-5">
+        <div class="row mb-4">
+            <div class="col">
+                <h1 class="display-4">Research Communities</h1>
+                <p class="lead text-muted">
+                    AIM Research Communities bring together mathematicians working on related problems over an extended period.
+                </p>
+            </div>
+        </div>
+
+        <!-- Current Communities -->
+        <h3 class="mb-3">Current Communities</h3>
+        {% if current_communities %}
+            <div class="row mb-5">
+                {% for community in current_communities %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card workshop-card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title mb-1">
+                                    <a href="{% url 'programs:community-detail' community.code %}"
+                                       class="text-decoration-none">{{ community.title }}</a>
+                                </h5>
+                                <ul class="list-unstyled mb-2 workshop-meta">
+                                    {% if community.start_date %}
+                                        <li class="workshop-date">
+                                            Started: {{ community.start_date|date:"M d, Y" }}
+                                            {% if community.end_date %} – {{ community.end_date|date:"M d, Y" }}{% endif %}
+                                        </li>
+                                    {% endif %}
+                                    {% if community.organizer1 %}
+                                        <li>
+                                            <strong>Organizer:</strong> {{ community.organizer1 }}
+                                            {% if community.organizer2 %}, {{ community.organizer2 }}{% endif %}
+                                        </li>
+                                    {% endif %}
+                                    {% if community.location %}
+                                        <li><strong>Location:</strong> {{ community.location }}</li>
+                                    {% endif %}
+                                </ul>
+                                {% if community.description %}
+                                    <div class="card-text text-muted workshop-description">
+                                        {{ community.description|truncatewords:30 }}
+                                    </div>
+                                {% endif %}
+                                <a href="{% url 'programs:community-detail' community.code %}"
+                                   class="btn btn-sm btn-outline-primary mt-2">View Details →</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-muted mb-5">There are no active research communities at this time.</p>
+        {% endif %}
+
+        <!-- Past Communities -->
+        <h3 class="mb-3">Past Communities</h3>
+        {% if past_communities %}
+            <div class="row">
+                {% for community in past_communities %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card workshop-card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title mb-1">
+                                    <a href="{% url 'programs:community-detail' community.code %}"
+                                       class="text-decoration-none">{{ community.title }}</a>
+                                </h5>
+                                <ul class="list-unstyled mb-2 workshop-meta">
+                                    {% if community.start_date or community.end_date %}
+                                        <li class="workshop-date">
+                                            {% if community.start_date and community.end_date %}
+                                                {{ community.start_date|date:"M d, Y" }} – {{ community.end_date|date:"M d, Y" }}
+                                            {% elif community.start_date %}
+                                                Started: {{ community.start_date|date:"M d, Y" }}
+                                            {% elif community.end_date %}
+                                                Ended: {{ community.end_date|date:"M d, Y" }}
+                                            {% endif %}
+                                        </li>
+                                    {% endif %}
+                                    {% if community.organizer1 %}
+                                        <li>
+                                            <strong>Organizer:</strong> {{ community.organizer1 }}
+                                            {% if community.organizer2 %}, {{ community.organizer2 }}{% endif %}
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                                {% if community.description %}
+                                    <div class="card-text text-muted workshop-description">
+                                        {{ community.description|truncatewords:30 }}
+                                    </div>
+                                {% endif %}
+                                <a href="{% url 'programs:community-detail' community.code %}"
+                                   class="btn btn-sm btn-outline-secondary mt-2">View Details →</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-muted">There are no past research communities to display.</p>
+        {% endif %}
+    </div>
+{% endblock content %}

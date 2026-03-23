@@ -351,6 +351,170 @@ Staff-added items are marked with a "STAFF" badge and don't require receipts.
 
 ---
 
+## Donations
+
+The donation system accepts one-time gifts via PayPal and sends automated tax receipts by email. Staff manage fund categories, view/search donations, resend receipts, export records, and process refunds — all from the admin.
+
+---
+
+### Initial Setup (Do Once)
+
+Before the donation page goes live, two things must be configured:
+
+#### 1. Organization Settings
+
+**Location:** Admin → Donations → Organization Settings
+
+Fill in:
+- **Legal name** — e.g., "American Institute of Mathematics"
+- **EIN** — e.g., "77-0378584" (appears on every receipt for IRS compliance)
+- **Address** — full mailing address
+- **Receipt footer** — optional extra text at the bottom of receipts (e.g., "No goods or services were provided in exchange for this gift.")
+
+Only one row of Organization Settings exists. Click it to edit; you cannot add or delete it.
+
+#### 2. PayPal Credentials
+
+A developer must enter these in the server's `.env` file — staff do not manage these directly:
+- `PAYPAL_CLIENT_ID`
+- `PAYPAL_CLIENT_SECRET`
+- `PAYPAL_WEBHOOK_ID`
+- `PAYPAL_MODE` (set to `live` in production, `sandbox` for testing)
+
+---
+
+### Managing Fund Categories
+
+**Location:** Admin → Donations → Donation Categories
+
+Each fund (e.g., "General Fund", "Endowment") is a category that donors choose from on the donation page.
+
+**To add a fund:**
+1. Click "Add Donation Category"
+2. Fill in:
+   - **Name** — displayed to donors (e.g., "Endowment Fund")
+   - **Slug** — auto-generated URL-safe identifier (do not change after creation)
+   - **Description** — shown in the sidebar on the donation page explaining the fund's purpose
+   - **Sort order** — lower numbers appear first in the list
+   - **Is active** — uncheck to hide a fund from donors without deleting it
+3. Save
+
+**To remove a fund from the donation page:** Uncheck "Is active" and save. The fund remains in the database for historical records but donors can no longer select it.
+
+---
+
+### Viewing and Searching Donations
+
+**Location:** Admin → Donations → Donations
+
+**Columns shown:**
+| Column | Meaning |
+|--------|---------|
+| Donor Name | Name entered at checkout |
+| Donor Email | Email entered at checkout |
+| Amount | Gift amount in USD |
+| Category | Fund/designation chosen |
+| Status | Current state (see table below) |
+| Receipt Number | e.g., AIM-2025-00042 |
+| Receipt Sent At | Timestamp receipt email was sent |
+| Created At | When donor submitted the form |
+
+**Donation Statuses:**
+| Status | Meaning |
+|--------|---------|
+| **Pending** | Donor started checkout but PayPal hasn't confirmed payment yet |
+| **Completed** | PayPal confirmed payment received |
+| **Failed** | PayPal declined or connection error occurred |
+| **Refunded** | Full refund was processed via admin |
+| **Cancelled** | Donor clicked Cancel on the PayPal page |
+
+**To find a specific donation:**
+- Use the search bar — searches donor name, email, receipt number, or PayPal order ID
+- Use the filters on the right: Status, Category, Date
+
+---
+
+### Resending a Receipt Email
+
+Use this when a donor says they never received their receipt.
+
+1. Find the donation(s) in the list
+2. Check the box(es) next to them
+3. Select "Resend receipt email to selected donors" from the Actions dropdown
+4. Click "Go"
+
+**Notes:**
+- Only donations with **Completed** status will receive a receipt — others are skipped
+- The receipt is re-sent to the original donor email address
+- A message at the top will confirm how many were sent and how many were skipped
+
+---
+
+### Exporting Donations to CSV
+
+Use this for finance reporting, audits, or donor records.
+
+1. Select the donations you want to export (check boxes), or use the search/filter to narrow the list first
+2. Select "Export selected donations to CSV" from Actions
+3. Click "Go"
+4. A CSV file downloads automatically
+
+**CSV columns:** Receipt Number, Date, Donor Name, Donor Email, Amount, Currency, Fund, Status, PayPal Order ID, PayPal Capture ID, Goods/Services Provided, Receipt Sent At
+
+**Tip:** To export all donations for a date range, use the "Created At" date filter on the right to narrow the list, then select all and export.
+
+---
+
+### Processing a Refund
+
+Use this to issue a full refund through PayPal.
+
+1. Find the completed donation in the admin list
+2. Check the box next to it
+3. Select "Process full refund via PayPal for selected donations" from Actions
+4. Click "Go"
+
+The system will:
+- Call PayPal's API to issue the refund to the donor's original payment method
+- Mark the donation status as **Refunded** in the database
+
+**Important notes:**
+- Only **Completed** donations can be refunded — pending/cancelled/already-refunded are skipped
+- This issues a **full refund** — partial refunds must be done directly in the PayPal dashboard
+- Refunds typically appear in the donor's account within 3–5 business days
+- The system does **not** automatically email the donor about the refund — notify them separately
+- If a refund fails (PayPal error), the donation stays as Completed and an error message is shown — try again or contact the developer
+
+---
+
+### Troubleshooting: Donor Didn't Receive Receipt
+
+1. Search for their donation by email or name
+2. Confirm status is **Completed** — if it shows Pending, the payment may not have cleared yet (wait a few minutes and refresh)
+3. If Completed, use the "Resend receipt email" action (see above)
+4. If the email still doesn't arrive, ask the donor to check spam/junk folders
+5. Check the receipt email address is correct on the donation record
+
+---
+
+### Webhook Event Log
+
+**Location:** Admin → Donations → Webhook Events
+
+This is a technical audit log of all PayPal notifications received. Staff generally don't need to use this, but it can help diagnose issues.
+
+| Column | Meaning |
+|--------|---------|
+| Event Type | e.g., PAYMENT.CAPTURE.COMPLETED |
+| PayPal Event ID | Unique ID from PayPal |
+| Processed | Whether the system acted on this event |
+| Received At | Timestamp |
+| Error? | Whether processing raised an error |
+
+If a donation is stuck in Pending and you don't see a corresponding Completed webhook event, notify the developer — the webhook may be misconfigured.
+
+---
+
 ## Troubleshooting
 
 ### "NoReverseMatch" or URL errors

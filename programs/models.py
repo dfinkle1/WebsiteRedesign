@@ -191,8 +191,15 @@ class Program(models.Model):
         return timezone.now() <= self.application_deadline
 
     @property
+    def has_ended(self):
+        """True if the program's end date is in the past."""
+        return bool(self.end_date and self.end_date < timezone.localdate())
+
+    @property
     def applications_closed(self):
-        """True if application deadline has passed or mode is closed."""
+        """True if application deadline has passed or mode is closed, but program hasn't ended yet."""
+        if self.has_ended:
+            return False
         if self.application_mode == self.ApplicationMode.CLOSED:
             return True
         if self.application_deadline and timezone.now() > self.application_deadline:

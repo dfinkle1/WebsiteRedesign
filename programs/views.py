@@ -9,7 +9,7 @@ from mysite.utils import get_safe_page
 
 
 def program_page(request, code):
-    program = get_object_or_404(Program, type=Program.ProgramType.WORKSHOP, code=code)
+    program = get_object_or_404(Program, code=code)
     now = timezone.now()
 
     # Check if user is enrolled or has applied
@@ -210,6 +210,33 @@ def past_squares(request):
     }
 
     return render(request, "programs/past_squares.html", context)
+
+
+def communities(request):
+    """
+    Display Research Communities split into current and past.
+    Current: no end_date or end_date >= today.
+    Past: end_date < today.
+    """
+    today = timezone.localdate()
+
+    current_communities = Program.objects.filter(
+        type=Program.ProgramType.COMMUNITY,
+    ).filter(
+        Q(end_date__isnull=True) | Q(end_date__gte=today)
+    ).order_by("title")
+
+    past_communities = Program.objects.filter(
+        type=Program.ProgramType.COMMUNITY,
+        end_date__lt=today,
+    ).order_by("-end_date")
+
+    context = {
+        "current_communities": current_communities,
+        "past_communities": past_communities,
+    }
+
+    return render(request, "programs/communities.html", context)
 
 
 def square_detail(request, code):
