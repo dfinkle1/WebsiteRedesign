@@ -84,36 +84,42 @@ from django.utils.csp import CSP
 SECURE_CSP = {
     # Default: only load resources from our own domain
     "default-src": [CSP.SELF],
-
     # Scripts: self + Bootstrap CDN
     # unsafe-inline required for Django CMS toolbar inline scripts
-    "script-src": [CSP.SELF, CSP.UNSAFE_INLINE, "https://cdn.jsdelivr.net"],
-
+    "script-src": [
+        CSP.SELF,
+        CSP.UNSAFE_INLINE,
+        "https://cdn.jsdelivr.net",
+        "https://dk87yvhh7cphv.cloudfront.net",
+    ],
     # Styles: self + Google Fonts + Bootstrap CDN
     # unsafe-inline required for Django CMS toolbar (writes inline style= attributes dynamically)
-    "style-src": [CSP.SELF, CSP.UNSAFE_INLINE, "https://fonts.googleapis.com", "https://cdn.jsdelivr.net"],
-
+    "style-src": [
+        CSP.SELF,
+        CSP.UNSAFE_INLINE,
+        "https://fonts.googleapis.com",
+        "https://cdn.jsdelivr.net",
+        "https://dk87yvhh7cphv.cloudfront.net",
+    ],
     # Fonts: self + Google Fonts file server
     "font-src": [CSP.SELF, "https://fonts.gstatic.com", "https://cdn.jsdelivr.net"],
-
     # Images: self + data URIs (Bootstrap icons, CMS image widgets)
     "img-src": [CSP.SELF, "data:", "https:"],
-
     # Iframes from YouTube (djangocms-video embeds)
-    "frame-src": [CSP.SELF, "https://www.youtube.com", "http://www.youtube.com", "https://www.youtube-nocookie.com"],
-
+    "frame-src": [
+        CSP.SELF,
+        "https://www.youtube.com",
+        "http://www.youtube.com",
+        "https://www.youtube-nocookie.com",
+    ],
     # Connect (fetch/XHR): self + ORCID for OAuth
     "connect-src": [CSP.SELF, "https://orcid.org"],
-
     # Forms: only submit to self
     "form-action": [CSP.SELF],
-
     # Iframes: same origin only (Django CMS toolbar uses iframes)
     "frame-ancestors": [CSP.SELF],
-
     # No plugins
     "object-src": [CSP.NONE],
-
     # No base tag hijacking
     "base-uri": [CSP.SELF],
 }
@@ -157,7 +163,9 @@ SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
-X_FRAME_OPTIONS = "SAMEORIGIN"  # Allow iframes from same origin (needed for django-cms toolbar)
+X_FRAME_OPTIONS = (
+    "SAMEORIGIN"  # Allow iframes from same origin (needed for django-cms toolbar)
+)
 
 # Additional security headers
 SECURE_CONTENT_TYPE_NOSNIFF = True  # Prevent MIME type sniffing

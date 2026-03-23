@@ -1,0 +1,122 @@
+<ul class="nav nav-pills mb-4" id="communitiesTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active"
+                id="current-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#current"
+                type="button"
+                role="tab"
+                aria-controls="current"
+                aria-selected="true">
+            Active Communities
+            {% if current_communities %}
+                <span class="badge bg-primary ms-1">{{ current_communities|length }}</span>
+            {% endif %}
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link"
+                id="past-tab"
+                data-bs-toggle="pill"
+                data-bs-target="#past"
+                type="button"
+                role="tab"
+                aria-controls="past"
+                aria-selected="false">
+            Past Communities
+            {% if past_communities %}
+                <span class="badge bg-secondary ms-1">{{ past_communities|length }}</span>
+            {% endif %}
+        </button>
+    </li>
+</ul>
+
+<div class="tab-content" id="communitiesTabContent">
+    <!-- Active Communities -->
+    <div class="tab-pane fade show active" id="current" role="tabpanel" aria-labelledby="current-tab">
+        {% if current_communities %}
+            <div class="list-group list-group-flush">
+                {% for community in current_communities %}
+                    <div class="list-group-item px-0 py-3">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="mb-1">
+                                    <a href="/communities/{{ community.code }}/" class="text-decoration-none">
+                                        {{ community.title }}
+                                    </a>
+                                </h6>
+                                {% if community.organizer1 %}
+                                    <small class="text-muted">
+                                        {{ community.organizer1 }}{% if community.organizer2 %}, {{ community.organizer2 }}{% endif %}
+                                    </small>
+                                {% endif %}
+                                {% if community.start_date %}
+                                    <div class="mt-1">
+                                        <small class="text-muted">
+                                            Started {{ community.start_date|date:"M Y" }}{% if community.end_date %} &ndash; {{ community.end_date|date:"M Y" }}{% endif %}
+                                        </small>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <a href="/communities/{{ community.code }}/"
+                               class="btn btn-sm btn-outline-primary ms-3 flex-shrink-0">
+                                View &rarr;
+                            </a>
+                        </div>
+                        {% if community.description %}
+                            <p class="mb-0 mt-2 text-muted small">{{ community.description|truncatewords:25 }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-muted">There are no active research communities at this time.</p>
+        {% endif %}
+    </div>
+
+    <!-- Past Communities -->
+    <div class="tab-pane fade" id="past" role="tabpanel" aria-labelledby="past-tab">
+        {% if past_communities %}
+            <div class="list-group list-group-flush">
+                {% for community in past_communities %}
+                    <div class="list-group-item px-0 py-3">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="mb-1">
+                                    <a href="/communities/{{ community.code }}/" class="text-decoration-none">
+                                        {{ community.title }}
+                                    </a>
+                                </h6>
+                                {% if community.organizer1 %}
+                                    <small class="text-muted">
+                                        {{ community.organizer1 }}{% if community.organizer2 %}, {{ community.organizer2 }}{% endif %}
+                                    </small>
+                                {% endif %}
+                                {% if community.start_date or community.end_date %}
+                                    <div class="mt-1">
+                                        <small class="text-muted">
+                                            {% if community.start_date and community.end_date %}
+                                                {{ community.start_date|date:"M Y" }} &ndash; {{ community.end_date|date:"M Y" }}
+                                            {% elif community.end_date %}
+                                                Ended {{ community.end_date|date:"M Y" }}
+                                            {% endif %}
+                                        </small>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <a href="/communities/{{ community.code }}/"
+                               class="btn btn-sm btn-outline-secondary ms-3 flex-shrink-0">
+                                View &rarr;
+                            </a>
+                        </div>
+                        {% if community.description %}
+                            <p class="mb-0 mt-2 text-muted small">{{ community.description|truncatewords:25 }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-muted">There are no past research communities to display.</p>
+        {% endif %}
+    </div>
+</div>

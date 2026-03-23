@@ -1,5 +1,5 @@
 {% extends "cms_templates/focused_research/base.html" %}
-{% load cms_tags %}
+{% load cms_tags program_tags %}
 
 {% block page_title %}Research Communities - AIM{% endblock page_title %}
 
@@ -7,4 +7,6 @@
     <h1>Research Communities</h1>
 
     {% placeholder "research_communities_content" %}
+
+    {% show_communities %}
 {% endblock page_content %}

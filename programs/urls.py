@@ -9,4 +9,6 @@ urlpatterns = [
     path("workshops/upcoming/", views.upcoming_workshops, name="upcoming_workshops"),
     path("squares/past/", views.past_squares, name="past-squares"),
     path("squares/<int:code>/", views.square_detail, name="square-detail"),
+    path("communities/", views.communities, name="communities"),
+    path("communities/<int:code>/", views.program_page, name="community-detail"),
 ]
