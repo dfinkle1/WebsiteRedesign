@@ -216,8 +216,9 @@ p {
 .h-100 {
   height: 100%;
 }
-.prev-btn {
-  background: none;
+.prev-btn,
+.next-btn {
+  background: rgba(255, 255, 255, 0.7);
   cursor: pointer;
   position: absolute;
   z-index: 1;
@@ -227,20 +228,31 @@ p {
   align-items: center;
   justify-content: center;
   border: 0;
-  left: -50px;
+  padding: 0 0.4rem;
+  transition: background 0.2s ease;
+}
+
+.prev-btn:hover,
+.next-btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+[data-bs-theme="dark"] .prev-btn,
+[data-bs-theme="dark"] .next-btn {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+[data-bs-theme="dark"] .prev-btn:hover,
+[data-bs-theme="dark"] .next-btn:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.prev-btn {
+  left: 0;
 }
 
 .next-btn {
-  background: none;
-  position: absolute;
-  z-index: 1;
-  top: 0;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 0;
-  right: -50px;
+  right: 0;
 }
 
 .corner-position {
@@ -389,6 +401,43 @@ p {
   font-weight: bold; /* Bold font */
   text-transform: uppercase; /* Uppercase text */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow */
+}
+
+/* ======================================
+   WORKSHOP CARD
+====================================== */
+.workshop-card-new {
+  border-left: 3px solid var(--aimblue);
+  border-radius: 6px;
+  background-color: var(--color-card);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.2s ease, border-left-color 0.2s ease;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.workshop-card-new:hover {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+  border-left-color: var(--color-accent);
+}
+
+.workshop-card-body {
+  padding: 0.6rem 0.75rem;
+}
+
+.workshop-card-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.workshop-card-date {
+  font-size: 0.78rem;
+  color: #6c757d;
+}
+
+[data-bs-theme="dark"] .workshop-card-date {
+  color: #adb5bd;
 }
 
 /* ======================================
