@@ -5,12 +5,9 @@ from django.utils import timezone
 
 class ProgramQuerySet(models.QuerySet):
     def upcoming_workshops(self):
-        return (
-            self.filter(
-                type=Program.ProgramType.WORKSHOP, start_date__gte=timezone.localdate()
-            )
-            .only("title", "code", "application_deadline", "start_date", "end_date")
-        )
+        return self.filter(
+            type=Program.ProgramType.WORKSHOP, start_date__gte=timezone.localdate()
+        ).only("title", "code", "application_deadline", "start_date", "end_date")
 
     def accepting_applications(self):
         """Programs currently open for public applications."""
@@ -30,7 +27,7 @@ class ProgramQuerySet(models.QuerySet):
             type=Program.ProgramType.SQUARE,
             end_date__lt=today,
             parent_square__isnull=True,  # Only root meetings
-        ).order_by('-end_date')
+        ).order_by("-end_date")
 
 
 class Program(models.Model):
@@ -58,11 +55,11 @@ class Program(models.Model):
 
     # Link SQuaRE meetings together (meeting 2/3/4/5 points to meeting 1)
     parent_square = models.ForeignKey(
-        'self',
+        "self",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='subsequent_meetings',
+        related_name="subsequent_meetings",
         help_text="For SQuaRE meetings 2-5: link to the 1st meeting of this SQuaRE group.",
     )
     title = models.CharField(max_length=255)
@@ -84,7 +81,7 @@ class Program(models.Model):
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
     description = models.TextField(blank=True, null=True)
-    workshop_email_description = models.CharField(max_length=255, blank=True, null=True)
+    workshop_email_description = models.CharField(max_length=300, blank=True, null=True)
     online = models.BooleanField(default=True, blank=True, null=True)
     application_mode = models.CharField(
         max_length=10,
@@ -128,13 +125,15 @@ class Program(models.Model):
         # Get root + all subsequent meetings
         meetings = Program.objects.filter(
             models.Q(pk=root.pk) | models.Q(parent_square=root)
-        ).order_by('meeting_number', 'start_date')
+        ).order_by("meeting_number", "start_date")
         return meetings
 
     @property
     def latest_meeting(self):
         """Get the most recent meeting in this SQuaRE group."""
-        return self.all_square_meetings.order_by('-meeting_number', '-start_date').first()
+        return self.all_square_meetings.order_by(
+            "-meeting_number", "-start_date"
+        ).first()
 
     @property
     def is_square_complete(self):
@@ -157,15 +156,21 @@ class Program(models.Model):
         from enrollments.models import Enrollment
 
         # Get all meeting IDs in this SQuaRE group
-        meeting_ids = self.all_square_meetings.values_list('id', flat=True)
+        meeting_ids = self.all_square_meetings.values_list("id", flat=True)
 
         # Get unique person IDs from enrollments across all meetings
-        person_ids = Enrollment.objects.filter(
-            workshop_id__in=meeting_ids,
-            person__isnull=False,
-        ).values_list('person_id', flat=True).distinct()
+        person_ids = (
+            Enrollment.objects.filter(
+                workshop_id__in=meeting_ids,
+                person__isnull=False,
+            )
+            .values_list("person_id", flat=True)
+            .distinct()
+        )
 
-        return People.objects.filter(id__in=person_ids).order_by('last_name', 'first_name')
+        return People.objects.filter(id__in=person_ids).order_by(
+            "last_name", "first_name"
+        )
 
     class Meta:
         indexes = [models.Index(fields=["type", "start_date"])]
@@ -208,6 +213,49 @@ class Program(models.Model):
 
 
 # =============================================================================
+# TALK / SCHEDULE
+# =============================================================================
+
+
+class Talk(models.Model):
+    class Day(models.TextChoices):
+        MONDAY = "MON", "Monday"
+        TUESDAY = "TUE", "Tuesday"
+        WEDNESDAY = "WED", "Wednesday"
+        THURSDAY = "THU", "Thursday"
+        FRIDAY = "FRI", "Friday"
+
+    class Slot(models.TextChoices):
+        MORNING = "AM", "Morning (9:00 AM)"
+        AFTERNOON = "PM", "Afternoon (2:00 PM)"
+
+    program = models.ForeignKey(Program, on_delete=models.CASCADE, related_name="talks")
+    day = models.CharField(max_length=3, choices=Day.choices)
+    slot = models.CharField(max_length=2, choices=Slot.choices)
+    order = models.PositiveSmallIntegerField(
+        default=1, help_text="Order within the slot (1, 2, 3)"
+    )
+    speaker_name = models.CharField(max_length=255)
+    speaker_institution = models.CharField(max_length=255, blank=True)
+    speaker_url = models.URLField(
+        blank=True, help_text="Speaker's homepage or talk URL"
+    )
+    talk_title = models.CharField(max_length=500, blank=True)
+    abstract = models.TextField(blank=True)
+
+    class Meta:
+        db_table = "program_talk"
+        ordering = ["day", "slot", "order"]
+        verbose_name = "Talk"
+        verbose_name_plural = "Talks"
+
+    def __str__(self):
+        return (
+            f"{self.get_day_display()} {self.get_slot_display()} — {self.speaker_name}"
+        )
+
+
+# =============================================================================
 # PROXY MODELS FOR ADMIN
 # These don't create new database tables - they're just filtered views
 # =============================================================================
@@ -220,6 +268,7 @@ class WorkshopManager(models.Manager):
 
 class Workshop(Program):
     """Proxy model for Workshops - appears as separate admin entry."""
+
     objects = WorkshopManager()
 
     class Meta:
@@ -235,6 +284,7 @@ class SQuaREManager(models.Manager):
 
 class SQuaRE(Program):
     """Proxy model for SQuaREs - appears as separate admin entry."""
+
     objects = SQuaREManager()
 
     class Meta:
@@ -250,6 +300,7 @@ class ResearchCommunityManager(models.Manager):
 
 class ResearchCommunity(Program):
     """Proxy model for Research Communities."""
+
     objects = ResearchCommunityManager()
 
     class Meta:

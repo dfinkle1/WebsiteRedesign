@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-    <div class="container mt-5 mb-5 theme-bg">
+    <div class="container mt-5 mb-5 p-3 theme-bg">
         <!-- Application Status Banner -->
         {% if user_enrollment %}
             {% if user_enrollment.accepted_at %}
@@ -73,6 +73,41 @@
                 </div>
             </div>
         </div>
+        {% if participants %}
+            {# ------------------------------------------------------------ #}
+            {# VERSION 4: Three-column with stacked name + institution +     #}
+            {# email, subtle left border accent                              #}
+            {# ------------------------------------------------------------ #}
+            <div class="mt-5" id="participants-v4">
+                <h3 class="mb-3">Participants</h3>
+                <div class="row row-cols-1 row-cols-md-3 g-3">
+                    {% for e in participants %}
+                        {% with person=e.person %}
+                            <div class="col">
+                                <div class="ps-3 border-start border-2 border-primary">
+                                    {% if person and person.home_page %}
+                                        <a href="{{ person.home_page }}"
+                                           target="_blank"
+                                           rel="noopener"
+                                           class="fw-semibold text-decoration-none d-block lh-sm">
+                                            {{ e.display_name }}
+                                        </a>
+                                    {% else %}
+                                        <span class="fw-semibold d-block lh-sm">{{ e.display_name }}</span>
+                                    {% endif %}
+                                    {% with inst=person.institution|default:e.institution %}
+                                        {% if inst %}<small class="text-muted d-block">{{ inst }}</small>{% endif %}
+                                    {% endwith %}
+                                    {% with email=e.display_email %}
+                                        {% if email %}<small><a href="mailto:{{ email }}" class="text-muted">{{ email }}</a></small>{% endif %}
+                                    {% endwith %}
+                                </div>
+                            </div>
+                        {% endwith %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
     </div>
 {% endblock content %}
 {% block scripts %}
