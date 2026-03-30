@@ -102,7 +102,7 @@ SECURE_CSP = {
         "https://dk87yvhh7cphv.cloudfront.net",
     ],
     # Fonts: self + Google Fonts file server
-    "font-src": [CSP.SELF, "https://fonts.gstatic.com", "https://cdn.jsdelivr.net"],
+    "font-src": [CSP.SELF, "https://fonts.gstatic.com", "https://cdn.jsdelivr.net", "https://dk87yvhh7cphv.cloudfront.net"],
     # Images: self + data URIs (Bootstrap icons, CMS image widgets)
     "img-src": [CSP.SELF, "data:", "https:"],
     # Iframes from YouTube (djangocms-video embeds)
@@ -113,9 +113,9 @@ SECURE_CSP = {
         "https://www.youtube-nocookie.com",
     ],
     # Connect (fetch/XHR): self + ORCID for OAuth
-    "connect-src": [CSP.SELF, "https://orcid.org"],
+    "connect-src": [CSP.SELF, "https://orcid.org", "https://cdn.jsdelivr.net"],
     # Forms: only submit to self
-    "form-action": [CSP.SELF],
+    "form-action": [CSP.SELF, "https://orcid.org"],
     # Iframes: same origin only (Django CMS toolbar uses iframes)
     "frame-ancestors": [CSP.SELF],
     # No plugins
