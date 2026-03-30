@@ -25,14 +25,24 @@ def program_page(request, code):
         except AttributeError:
             pass
 
+    participants = []
+    if program.has_ended:
+        from enrollments.models import Enrollment
+        participants = (
+            Enrollment.objects.filter(workshop=program, accepted_at__isnull=False)
+            .select_related("person")
+            .order_by("last_name", "first_name")
+        )
+
     return render(
         request,
         "program_page.html",
         {
             "program_page": program,
-            "program": program,  # alias for cleaner template code
+            "program": program,
             "now": now,
             "user_enrollment": user_enrollment,
+            "participants": participants,
         },
     )
 

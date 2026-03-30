@@ -568,12 +568,13 @@ class ProgramAdmin(FrontendEditableAdminMixin, admin.ModelAdmin):
 
     def _send_reminder_email(self, email, program, message):
         """Send reminder email using Django's email backend"""
+        from django.conf import settings
         from django.core.mail import send_mail
 
         send_mail(
             subject=f"Reminder: {program.title}",
             message=message,
-            from_email="noreply@example.com",  # Update with your from email
+            from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[email],
             fail_silently=False,
         )
