@@ -6,24 +6,22 @@
 {% endblock title %}
 {% block content %}
   <section aria-label="American Institute of Mathematics Banner">
-    <a href="/">
-      <div class="home-banner">
-        <img src="{% static 'images/logo.jpeg' %}"
-             class="img-fluid"
-             width="100%"
-             height="auto"
-             alt="American Institute of Mathematics home banner" />
-      </div>
-    </a>
+    <div class="home-banner">
+      <img src="{% static 'images/logo.jpeg' %}"
+           class="img-fluid"
+           width="100%"
+           height="auto"
+           alt="American Institute of Mathematics home banner" />
+    </div>
   </section>
-  <!-- <section aria-label="propose a research activity announcement">
+  {% comment %} <section aria-label="propose a research activity announcement">
     <div class="p-3" id="propose-activity-banner">
       <div class="container fs-3">
         <div class="row justify-content-around">
           <div class="col-md-4 col-xs-12">
             <a href="#" class="text-decoration-none text-reset">Call For Proposals</a>
           </div>
-          <div class="col-md-4 col-xs-12 s">
+          <div class="col-md-4 col-xs-12">
             <a href="#" class="text-decoration-none text-reset">Deadline: November 1st</a>
           </div>
         </div>
@@ -40,10 +38,10 @@
         </div>
       </div>
     </div>
-  </section> -->
+  </section> {% endcomment %}
   <div class="container">
     <section aria-label="NSF Logo Contribution">
-      <div class="row mb-2 align-items-center">
+      <div class="row mb-2 mt-3 pt-3 border-top align-items-center">
         <div class="col-auto">
           <img src="{% static 'images/NSFlogo.png' %}"
                class="img-fluid"
@@ -66,35 +64,39 @@
       <div class="row g-3 mb-3">
         <!-- Column 1: News -->
         <div class="col-md-8">
-          <div class="p-4 theme-bg rounded ">
+          <div class="p-2 theme-bg rounded ">
             <h3 class="pb-0 mb-3 fst-italic border-bottom">Recent News</h3>
             {% render_featured_article %}
           </div>
         </div>
         <!-- Column 2: Workshops -->
         <div class="col-md-4 col-sm-12">
-          <div class="p-4 theme-bg rounded d-flex flex-column" style="height: 100%;">
+          <div class="p-2 theme-bg rounded d-flex flex-column" style="height: 100%;">
             <h3 class="pb-0 mb-3 fst-italic border-bottom">Upcoming Workshops</h3>
             <div class="flex-grow-1" id="workshopTabsContent">
               <div>
                 <ul class="list-unstyled pt-2">
                   <section aria-label="Workshop List">
                     {% for w in workshops %}
-                      <li>
-                        <article class="card">
-                          <h5 class="card-title">
-                            <a href="{% url 'programs:program-page' w.code %}">
-                              {% if w.application_deadline > now %}<span aria-label="Applications open">*</span>{% endif %}
-                              {{ w.title }}
-                              {% if w.title_abbreviation %}<small class="opacity-70">({{ w.title_abbreviation }})</small>{% endif %}
-                            </a>
-                          </h5>
-                          <div class="card-content">
-                            <time datetime="{{ w.start_date|date:'c' }}">
-                              {{ w.start_date|date:"M j, Y" }} - {{ w.end_date|date:"M j, Y" }}
-                            </time>
-                          </div>
-                        </article>
+                      <li class="mb-2">
+                        <a href="{% url 'programs:program-page' w.code %}"
+                           class="text-decoration-none text-reset">
+                          <article class="workshop-card-new">
+                            <div class="workshop-card-body">
+                              <div class="d-flex align-items-start justify-content-between gap-2 mb-1">
+                                <span class="workshop-card-title">{{ w.title }}
+                                  {% if w.title_abbreviation %}<small class="opacity-60">({{ w.title_abbreviation }})</small>{% endif %}
+                                </span>
+                                {% if w.application_deadline > now %}
+                                  <span class="badge bg-success text-nowrap flex-shrink-0">Accepting Apps</span>
+                                {% endif %}
+                              </div>
+                              <time class="workshop-card-date" datetime="{{ w.start_date|date:'c' }}">
+                                {{ w.start_date|date:"M j" }} – {{ w.end_date|date:"M j, Y" }}
+                              </time>
+                            </div>
+                          </article>
+                        </a>
                       </li>
                     {% empty %}
                       <li>
@@ -104,37 +106,39 @@
                   </section>
                 </ul>
               </div>
+              <div class="mt-2 pt-2 border-top">
+                <a href="/workshops/" class="small text-muted text-decoration-none">View all workshops →</a>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-    <section aria-label="News carousel">
-      <div class="mb-3 position-relative">
-        <button id="prev-btn" class="prev-btn" aria-label="Previous slide">
-          <svg xmlns="http://www.w3.org/2000/svg"
-               width="50"
-               height="50"
-               fill="currentColor"
-               class="bi bi-chevron-compact-left"
-               viewBox="0 0 16 16"
-               aria-hidden="true">
-            <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223" />
-          </svg>
-        </button>
-        {% render_news_carousel %}
-        <button id="next-btn" class="next-btn" aria-label="Next slide">
-          <svg xmlns="http://www.w3.org/2000/svg"
-               width="50"
-               height="50"
-               fill="currentColor"
-               class="bi bi-chevron-compact-right"
-               viewBox="0 0 16 16"
-               aria-hidden="true">
-            <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671" />
-          </svg>
-        </button>
-      </div>
-    </section>
-  </div>
-{% endblock content %}
+      </section>
+      <section aria-label="News carousel">
+        <div class="mb-3 position-relative">
+          <button id="prev-btn" class="prev-btn" aria-label="Previous slide">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="50"
+                 height="50"
+                 fill="currentColor"
+                 class="bi bi-chevron-compact-left"
+                 viewBox="0 0 16 16"
+                 aria-hidden="true">
+              <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223" />
+            </svg>
+          </button>
+          {% render_news_carousel %}
+          <button id="next-btn" class="next-btn" aria-label="Next slide">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="50"
+                 height="50"
+                 fill="currentColor"
+                 class="bi bi-chevron-compact-right"
+                 viewBox="0 0 16 16"
+                 aria-hidden="true">
+              <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671" />
+            </svg>
+          </button>
+        </div>
+      </section>
+    </div>
+  {% endblock content %}
