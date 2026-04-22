@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
-from programs.views import home
+from programs.views import home, home2
 from mysite.views import robots_txt, view_404, view_403, view_500, health_check
 import debug_toolbar
 
@@ -28,6 +28,7 @@ urlpatterns = [
     path("checklists/", include("apps.checklists.urls")),
     path("timeeffort/", include("apps.timeeffort.urls")),
     path("", include("apps.donations.urls")),
+    path("home2/", home2, name="home2"),
     path("", home, name="index"),
     # CMS handles everything else - must be last
     path("", include("cms.urls")),

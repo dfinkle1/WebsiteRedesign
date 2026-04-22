@@ -60,85 +60,120 @@
         </div>
       </div>
     </section>
-    <section>
-      <div class="row g-3 mb-3">
-        <!-- Column 1: News -->
-        <div class="col-md-8">
-          <div class="p-2 theme-bg rounded ">
-            <h3 class="pb-0 mb-3 fst-italic border-bottom">Recent News</h3>
-            {% render_featured_article %}
+  {# ── Latest News + Upcoming Programs ── #}
+  <section class="py-4" aria-label="Programs and latest news">
+    <div class="row g-4 align-items-stretch">
+      {# News column — left, drives row height #}
+      <div class="col-lg-8">
+        <div class="news-block">
+          <p class="section-label">Latest News</p>
+          <h2 class="section-heading" style="font-size:1.35rem; margin-bottom:1.25rem">From AIM</h2>
+          {% render_featured_article %}
+          <div class="mt-3 pt-3 border-top">
+            <a href="/news/"
+               class="text-decoration-none small fw-semibold"
+               style="color: var(--aimblue)">All news &amp; newsletters →</a>
           </div>
         </div>
-        <!-- Column 2: Workshops -->
-        <div class="col-md-4 col-sm-12">
-          <div class="p-2 theme-bg rounded d-flex flex-column" style="height: 100%;">
-            <h3 class="pb-0 mb-3 fst-italic border-bottom">Upcoming Workshops</h3>
-            <div class="flex-grow-1" id="workshopTabsContent">
-              <div>
-                <ul class="list-unstyled pt-2">
-                  <section aria-label="Workshop List">
-                    {% for w in workshops %}
-                      <li class="mb-2">
-                        <a href="{% url 'programs:program-page' w.code %}"
-                           class="text-decoration-none text-reset">
-                          <article class="workshop-card-new">
-                            <div class="workshop-card-body">
-                              <div class="d-flex align-items-start justify-content-between gap-2 mb-1">
-                                <span class="workshop-card-title">{{ w.title }}
-                                  {% if w.title_abbreviation %}<small class="opacity-60">({{ w.title_abbreviation }})</small>{% endif %}
-                                </span>
-                                {% if w.application_deadline > now %}
-                                  <span class="badge bg-success text-nowrap flex-shrink-0">Accepting Apps</span>
-                                {% endif %}
-                              </div>
-                              <time class="workshop-card-date" datetime="{{ w.start_date|date:'c' }}">
-                                {{ w.start_date|date:"M j" }} – {{ w.end_date|date:"M j, Y" }}
-                              </time>
-                            </div>
-                          </article>
-                        </a>
-                      </li>
-                    {% empty %}
-                      <li>
-                        <p>No upcoming workshops yet—check back soon.</p>
-                      </li>
-                    {% endfor %}
-                  </section>
+      </div>
+      {# Programs column — right, scrolls within fixed height #}
+      <div class="col-lg-4">
+        <div class="programs-block d-flex flex-column">
+          <div class="d-flex justify-content-between align-items-baseline mb-3">
+            <div>
+              <p class="section-label mb-0">Upcoming Programs</p>
+              <h2 class="section-heading mb-0" style="font-size:1.2rem;">Open for Applications</h2>
+            </div>
+            <a href="/workshops/"
+               class="text-decoration-none small fw-semibold flex-shrink-0 ms-2"
+               style="color: var(--aimblue)">View all →</a>
+          </div>
+          {% if workshops %}
+            {% for w in workshops %}
+              {% if forloop.first and w.application_deadline > now %}
+                <div class="deadline-strip mb-3">
+                  <strong>Deadline approaching:</strong>
+                  {{ w.application_deadline|date:"M j" }} — {{ w.title|truncatechars:50 }}
+                </div>
+              {% endif %}
+            {% endfor %}
+            <div class="programs-scroll-wrap">
+              <div class="programs-scroll">
+                <ul class="list-unstyled mb-4">
+                  {% for w in workshops %}
+                    <li class="mb-2">
+                      <a href="{% url 'programs:program-page' w.code %}"
+                         class="program-card d-block text-decoration-none">
+                        <div class="program-type">Workshop</div>
+                        <div class="program-title">
+                          {{ w.title }}
+                          {% if w.title_abbreviation %}<span class="fw-normal opacity-75">({{ w.title_abbreviation }})</span>{% endif %}
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between gap-2 mt-1 flex-wrap">
+                          <div class="program-dates">
+                            <time datetime="{{ w.start_date|date:'c' }}">
+                              {{ w.start_date|date:"M j" }} – {{ w.end_date|date:"M j, Y" }}
+                            </time>
+                          </div>
+                          {% if w.application_deadline > now %}
+                            <span class="badge bg-success" style="font-size:0.68rem;">Accepting Apps</span>
+                          {% endif %}
+                        </div>
+                      </a>
+                    </li>
+                  {% endfor %}
                 </ul>
               </div>
-              <div class="mt-2 pt-2 border-top">
-                <a href="/workshops/" class="small text-muted text-decoration-none">View all workshops →</a>
-              </div>
             </div>
-          </div>
+          {% else %}
+            <div class="text-center py-4 text-muted small">
+              <p class="mb-1">No programs currently open.</p>
+              <a href="/workshops/" style="color: var(--aimblue);">Browse all workshops →</a>
+            </div>
+          {% endif %}
         </div>
-      </section>
-      <section aria-label="News carousel">
-        <div class="mb-3 position-relative">
-          <button id="prev-btn" class="prev-btn" aria-label="Previous slide">
-            <svg xmlns="http://www.w3.org/2000/svg"
-                 width="50"
-                 height="50"
-                 fill="currentColor"
-                 class="bi bi-chevron-compact-left"
-                 viewBox="0 0 16 16"
-                 aria-hidden="true">
-              <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223" />
-            </svg>
-          </button>
-          {% render_news_carousel %}
-          <button id="next-btn" class="next-btn" aria-label="Next slide">
-            <svg xmlns="http://www.w3.org/2000/svg"
-                 width="50"
-                 height="50"
-                 fill="currentColor"
-                 class="bi bi-chevron-compact-right"
-                 viewBox="0 0 16 16"
-                 aria-hidden="true">
-              <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671" />
-            </svg>
-          </button>
-        </div>
-      </section>
+      </div>
     </div>
+  </section>
+  </div>{# /container #}
+
+  {# ── News Carousel ── #}
+  <section class="carousel-section" aria-label="Recent stories">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <p class="section-label mb-1">From the Archive</p>
+          <h2 class="section-heading mb-0" style="font-size:1.3rem;">Recent Stories</h2>
+        </div>
+        <a href="/news/"
+           class="text-decoration-none small fw-semibold"
+           style="color: var(--aimblue)">All stories →</a>
+      </div>
+      <div class="position-relative">
+        <button id="prev-btn" class="prev-btn" aria-label="Previous slide">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="50"
+               height="50"
+               fill="currentColor"
+               class="bi bi-chevron-compact-left"
+               viewBox="0 0 16 16"
+               aria-hidden="true">
+            <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223" />
+          </svg>
+        </button>
+        {% render_news_carousel %}
+        <button id="next-btn" class="next-btn" aria-label="Next slide">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="50"
+               height="50"
+               fill="currentColor"
+               class="bi bi-chevron-compact-right"
+               viewBox="0 0 16 16"
+               aria-hidden="true">
+            <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
   {% endblock content %}

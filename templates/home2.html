@@ -1,0 +1,470 @@
+{% extends "base.html" %}
+{% load static %}
+{% load cms_tags article_tags %}
+{% block title %}American Institute of Mathematics{% endblock %}
+{% block extra_css %}
+  <style>
+  /* ── Hero ── */
+  .hero {
+    position: relative;
+    min-height: 420px;
+    display: flex;
+    align-items: center;
+    background-image: url("{% static 'images/logo.jpeg' %}");
+    background-size: cover;
+    background-position: center top;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      rgba(15, 30, 50, 0.82) 0%,
+      rgba(15, 30, 50, 0.55) 55%,
+      rgba(15, 30, 50, 0.15) 100%
+    );
+  }
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    padding: 3rem 2rem;
+  }
+  .hero-eyebrow {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 0.75rem;
+  }
+  .hero-heading {
+    font-family: var(--font-heading);
+    font-size: clamp(1.9rem, 4vw, 2.8rem);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+  .hero-sub {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.82);
+    line-height: 1.6;
+    margin-bottom: 1.75rem;
+    max-width: 480px;
+  }
+  .hero-actions .btn-primary-hero {
+    background-color: var(--aimblue);
+    border: none;
+    color: #fff;
+    padding: 0.65rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-block;
+  }
+  .hero-actions .btn-primary-hero:hover {
+    background-color: #3d6e9e;
+    transform: translateY(-1px);
+    color: #fff;
+  }
+  .hero-actions .btn-outline-hero {
+    border: 1.5px solid rgba(255,255,255,0.55);
+    color: rgba(255,255,255,0.9);
+    padding: 0.65rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+    display: inline-block;
+  }
+  .hero-actions .btn-outline-hero:hover {
+    border-color: #fff;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+  }
+
+  /* ── Impact bar ── */
+  .impact-bar {
+    background-color: #1f4467;
+    color: #fff;
+    padding: 1.25rem 0;
+  }
+  .impact-bar .stat-number {
+    font-family: var(--font-heading);
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+  }
+  .impact-bar .stat-label {
+    font-size: 0.78rem;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.65);
+    margin-top: 0.2rem;
+  }
+  .impact-bar .stat-divider {
+    width: 1px;
+    background: rgba(255,255,255,0.18);
+    align-self: stretch;
+  }
+
+  /* ── About strip (full-width, slim) ── */
+  .about-strip {
+    background: var(--color-card);
+    border-top: 1px solid rgba(0,0,0,0.06);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    padding: 1.25rem 0;
+  }
+  .about-strip-text {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--color-text);
+    opacity: 0.85;
+    margin: 0;
+  }
+
+  /* ── Support AIM ── */
+  .support-section {
+    background: linear-gradient(135deg, #1f4467 0%, #2c5f8a 100%);
+    color: #fff;
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+  .support-section h2 {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    color: #fff;
+    margin-bottom: 0.75rem;
+  }
+  .support-section p {
+    color: rgba(255,255,255,0.8);
+    max-width: 540px;
+    margin: 0 auto 1.5rem;
+    font-size: 1rem;
+  }
+  .btn-support {
+    background: #fff;
+    color: #1f4467;
+    font-weight: 700;
+    padding: 0.7rem 2rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-block;
+  }
+  .btn-support:hover {
+    background: #e8f0f8;
+    color: #1f4467;
+    transform: translateY(-1px);
+    text-decoration: none;
+  }
+
+  /* ── Newsletter ── */
+  .newsletter-strip {
+    background-color: var(--color-card);
+    border-top: 1px solid rgba(0,0,0,0.07);
+    padding: 1.5rem 0;
+  }
+  .newsletter-strip input[type="email"] {
+    border-radius: 6px 0 0 6px;
+    border: 1px solid rgba(0,0,0,0.15);
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    min-width: 240px;
+  }
+  .newsletter-strip .btn-subscribe {
+    background: var(--aimblue);
+    color: #fff;
+    border: none;
+    border-radius: 0 6px 6px 0;
+    padding: 0.5rem 1.2rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .newsletter-strip .btn-subscribe:hover {
+    background: #3d6e9e;
+  }
+
+  </style>
+{% endblock extra_css %}
+{% block content %}
+  {# ══════════════════════════════════════════════════ #}
+  {# 1. HERO                                           #}
+  {# ══════════════════════════════════════════════════ #}
+  <section class="hero" aria-label="AIM homepage hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-heading">The American Institute of Mathematics</h1>
+        <p class="hero-sub">
+          Advancing pure and applied mathematics through focused collaboration.
+          We bring small groups of researchers together to make meaningful progress
+          on the field's most significant open problems.
+        </p>
+        <div class="hero-actions d-flex flex-wrap gap-3">
+          <a href="/workshops/" class="btn-primary-hero">Browse Programs</a>
+          <a href="#" class="btn-outline-hero">Propose a Program</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  {# ══════════════════════════════════════════════════ #}
+  {# 2. IMPACT BAR                                     #}
+  {# ══════════════════════════════════════════════════ #}
+  <div class="impact-bar" aria-label="AIM by the numbers">
+    <div class="container">
+      <div class="d-flex justify-content-around align-items-center flex-wrap gap-3 text-center">
+        <div>
+          <div class="stat-number">475+</div>
+          <div class="stat-label">Workshops Held</div>
+        </div>
+        <div class="stat-divider d-none d-md-block"></div>
+        <div>
+          <div class="stat-number">8,000+</div>
+          <div class="stat-label">Researchers Served</div>
+        </div>
+        <div class="stat-divider d-none d-md-block"></div>
+        <div>
+          <div class="stat-number">40+</div>
+          <div class="stat-label">Countries Represented</div>
+        </div>
+        <div class="stat-divider d-none d-md-block"></div>
+        <div>
+          <div class="stat-number">Since 1994</div>
+          <div class="stat-label">Years of Impact</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {# ══════════════════════════════════════════════════ #}
+  {# 3. ABOUT STRIP (full-width, slim)                 #}
+  {# ══════════════════════════════════════════════════ #}
+  <div class="about-strip" aria-label="About AIM">
+    <div class="container">
+      <div class="d-flex align-items-center gap-4 flex-wrap">
+        <img src="{% static 'images/NSFlogo.png' %}"
+             alt="National Science Foundation logo"
+             style="max-height: 80px;
+                    width: auto;
+                    flex-shrink: 0">
+        <p class="about-strip-text">
+          AIM is one of eight NSF-funded mathematical sciences research institutes in the U.S. —
+          convening small, problem-focused groups of mathematicians to make collaborative progress
+          on significant open problems since 1994.
+          <a href="/mission/"
+             class="fw-semibold ms-1 text-decoration-none"
+             style="color: var(--aimblue)">Our mission →</a>
+        </p>
+      </div>
+    </div>
+  </div>
+  {# ══════════════════════════════════════════════════ #}
+  {# 5. CALL FOR PROPOSALS (activate when open)        #}
+  {# ══════════════════════════════════════════════════ #}
+  <section class="py-4">
+    <div class="container">
+      <div style="background:#17324c;
+                  border-radius:10px;
+                  padding:2rem;
+                  color:#fff;
+                  display:flex;
+                  align-items:center;
+                  justify-content:space-between;
+                  flex-wrap:wrap;
+                  gap:1.5rem">
+        <div>
+          <p style="font-size:0.72rem;
+                    letter-spacing:2px;
+                    text-transform:uppercase;
+                    color:rgba(255,255,255,0.55);
+                    margin-bottom:0.3rem">Now Open</p>
+          <h3 style="font-family:var(--font-heading);
+                     color:#fff;
+                     font-size:1.4rem;
+                     margin-bottom:0.4rem">Call for Workshop Proposals</h3>
+          <p style="color:rgba(255,255,255,0.75);
+                    margin-bottom:0;
+                    font-size:0.9rem">
+            Deadline: November 1, 2025 &nbsp;·&nbsp; Workshops &nbsp;·&nbsp; SQuaREs &nbsp;·&nbsp; Research Communities
+          </p>
+        </div>
+        <a href="#"
+           style="background:#fff;
+                  color:#17324c;
+                  font-weight:700;
+                  padding:0.6rem 1.5rem;
+                  border-radius:6px;
+                  text-decoration:none;
+                  white-space:nowrap">Submit a Proposal →</a>
+      </div>
+    </div>
+  </section>
+  {# ══════════════════════════════════════════════════ #}
+  {# 4. PROGRAMS + NEWS (two columns)                  #}
+  {# ══════════════════════════════════════════════════ #}
+  <section class="py-4" aria-label="Programs and latest news">
+    <div class="container">
+      <div class="row g-4 align-items-stretch">
+        {# News column — left, drives row height #}
+        <div class="col-lg-8">
+          <div class="news-block">
+            <p class="section-label">Latest News</p>
+            <h2 class="section-heading"
+                style="font-size:1.35rem;
+                       margin-bottom:1.25rem">From AIM</h2>
+            {% render_featured_article %}
+            <div class="mt-3 pt-3 border-top">
+              <a href="/news/"
+                 class="text-decoration-none small fw-semibold"
+                 style="color: var(--aimblue)">All news &amp; newsletters →</a>
+            </div>
+          </div>
+        </div>
+        {# Programs column — right, stretches to match news then scrolls within #}
+        <div class="col-lg-4">
+          <div class="programs-block d-flex flex-column">
+            <div class="d-flex justify-content-between align-items-baseline mb-3">
+              <div>
+                <p class="section-label mb-0">Upcoming Programs</p>
+                <h2 class="section-heading mb-0" style="font-size:1.2rem;">Open for Applications</h2>
+              </div>
+              <a href="/workshops/"
+                 class="text-decoration-none small fw-semibold flex-shrink-0 ms-2"
+                 style="color: var(--aimblue)">View all →</a>
+            </div>
+            {% if workshops %}
+              {# Nearest deadline strip #}
+              {% for w in workshops %}
+                {% if forloop.first and w.application_deadline > now %}
+                  <div class="deadline-strip mb-3">
+                    <strong>Deadline approaching:</strong>
+                    {{ w.application_deadline|date:"M j" }} — {{ w.title|truncatechars:50 }}
+                  </div>
+                {% endif %}
+              {% endfor %}
+              <div class="programs-scroll-wrap">
+                <div class="programs-scroll">
+                  <ul class="list-unstyled mb-4">
+                    {% for w in workshops %}
+                      <li class="mb-2">
+                        <a href="{% url 'programs:program-page' w.code %}"
+                           class="program-card d-block text-decoration-none">
+                          <div class="program-type">Workshop</div>
+                          <div class="program-title">
+                            {{ w.title }}
+                            {% if w.title_abbreviation %}<span class="fw-normal opacity-75">({{ w.title_abbreviation }})</span>{% endif %}
+                          </div>
+                          <div class="d-flex align-items-center justify-content-between gap-2 mt-1 flex-wrap">
+                            <div class="program-dates">
+                              <time datetime="{{ w.start_date|date:'c' }}">
+                                {{ w.start_date|date:"M j" }} – {{ w.end_date|date:"M j, Y" }}
+                              </time>
+                            </div>
+                            {% if w.application_deadline > now %}
+                              <span class="badge bg-success" style="font-size:0.68rem;">Accepting Apps</span>
+                            {% endif %}
+                          </div>
+                        </a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            {% else %}
+              <div class="text-center py-4 text-muted small">
+                <p class="mb-1">No programs currently open.</p>
+                <a href="/workshops/" style="color: var(--aimblue);">Browse all workshops →</a>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  {# ══════════════════════════════════════════════════ #}
+  {# 8. NEWS CAROUSEL (reduced prominence)             #}
+  {# ══════════════════════════════════════════════════ #}
+  <section class="carousel-section" aria-label="Recent stories">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <p class="section-label mb-1">From the Archive</p>
+          <h2 class="section-heading mb-0" style="font-size:1.3rem;">Recent Stories</h2>
+        </div>
+        <a href="/news/"
+           class="text-decoration-none small fw-semibold"
+           style="color: var(--aimblue)">All stories →</a>
+      </div>
+      <div class="position-relative">
+        <button id="prev-btn" class="prev-btn" aria-label="Previous slide">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="50"
+               height="50"
+               fill="currentColor"
+               class="bi bi-chevron-compact-left"
+               viewBox="0 0 16 16"
+               aria-hidden="true">
+            <path fill-rule="evenodd" d="M9.224 1.553a.5.5 0 0 1 .223.67L6.56 8l2.888 5.776a.5.5 0 1 1-.894.448l-3-6a.5.5 0 0 1 0-.448l3-6a.5.5 0 0 1 .67-.223" />
+          </svg>
+        </button>
+        {% render_news_carousel %}
+        <button id="next-btn" class="next-btn" aria-label="Next slide">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="50"
+               height="50"
+               fill="currentColor"
+               class="bi bi-chevron-compact-right"
+               viewBox="0 0 16 16"
+               aria-hidden="true">
+            <path fill-rule="evenodd" d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
+  {# ══════════════════════════════════════════════════ #}
+  {# 7. NEWSLETTER SIGNUP                              #}
+  {# ══════════════════════════════════════════════════ #}
+  <div class="newsletter-strip" aria-label="Newsletter signup">
+    <div class="container">
+      <div class="d-flex align-items-center justify-content-center flex-wrap gap-3">
+        <div>
+          <span class="fw-semibold" style="font-size:0.95rem;">Stay connected with AIM</span>
+          <span class="text-muted small ms-2">Join researchers and educators on our mailing list.</span>
+        </div>
+        <form class="d-flex" action="#" method="post" aria-label="Email signup">
+          {% csrf_token %}
+          <input type="email"
+                 name="email"
+                 placeholder="your@email.edu"
+                 aria-label="Email address"
+                 required>
+          <button type="submit" class="btn-subscribe">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  {# ══════════════════════════════════════════════════ #}
+  {# 6. SUPPORT AIM                                    #}
+  {# ══════════════════════════════════════════════════ #}
+  <section class="support-section" aria-label="Support AIM">
+    <div class="container">
+      <h2>Support Mathematical Discovery</h2>
+      <p>
+        AIM's programs depend on the generosity of donors who believe in the power of
+        collaborative mathematics. Your gift helps fund workshops, fellowships, and
+        outreach programs that shape the future of the field.
+      </p>
+      <a href="/donate/" class="btn-support">Support AIM →</a>
+    </div>
+  </section>
+{% endblock content %}
