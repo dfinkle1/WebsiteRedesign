@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  @page {
+    size: letter;
+    margin: 2cm 2.2cm 2.2cm 2.2cm;
+    @bottom-center {
+      content: "AIM Time & Effort Report  |  Report ID: R-{{ report.id }}  |  Page " counter(page) " of " counter(pages);
+      font-size: 7.5pt;
+      color: #666;
+    }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 10.5pt;
+    color: #000;
+    line-height: 1.5;
+  }
+
+  .header { text-align: center; margin-bottom: 16pt; padding-bottom: 10pt; border-bottom: 2.5pt solid #000; }
+  .header h1 { font-size: 15pt; font-weight: bold; letter-spacing: 0.8pt; text-transform: uppercase; }
+  .header h2 { font-size: 12pt; font-weight: normal; margin-top: 3pt; letter-spacing: 0.3pt; }
+
+  .meta-block { margin-bottom: 14pt; }
+  .meta-row { display: flex; gap: 0; margin-bottom: 3pt; font-size: 10pt; }
+  .meta-label { font-weight: bold; min-width: 120pt; }
+
+  .section-title {
+    font-size: 10.5pt;
+    font-weight: bold;
+    background-color: #d0d0d0;
+    padding: 3pt 6pt;
+    margin-top: 10pt;
+    margin-bottom: 0;
+    border: 1pt solid #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5pt;
+  }
+
+  table { width: 100%; border-collapse: collapse; margin-bottom: 0; font-size: 9.5pt; }
+  th { border: 1pt solid #888; padding: 4pt 6pt; font-weight: bold; text-align: left; background-color: #ebebeb; }
+  th.center { text-align: center; }
+  td { border: 1pt solid #ccc; padding: 4pt 6pt; vertical-align: top; }
+  td.center { text-align: center; vertical-align: middle; }
+  tr.total-row { background-color: #e0e0e0; font-weight: bold; }
+  tr.none-row td { font-style: italic; color: #888; font-size: 9pt; }
+
+  .sig-section { margin-top: 20pt; }
+  .sig-section h3 { font-size: 11pt; font-weight: bold; border-bottom: 1.5pt solid #000; padding-bottom: 4pt; margin-bottom: 10pt; }
+
+  .certification-box {
+    border: 1pt solid #888;
+    padding: 10pt 12pt;
+    margin-bottom: 18pt;
+    font-size: 10pt;
+    line-height: 1.7;
+    background-color: #fafafa;
+  }
+
+  .sig-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16pt; margin-top: 6pt; }
+  .sig-field-label { font-size: 9pt; font-weight: bold; margin-bottom: 3pt; }
+  .sig-line { border-bottom: 1pt solid #000; min-height: 26pt; display: block; }
+
+  .footnote-block { margin-top: 12pt; font-size: 8.5pt; color: #444; font-style: italic; border-top: 0.5pt solid #aaa; padding-top: 6pt; }
+
+  .report-meta { font-size: 8pt; color: #666; text-align: right; margin-bottom: 4pt; }
+</style>
+</head>
+<body>
+
+<div class="report-meta">
+  Report ID: R-{{ report.id }} &nbsp;|&nbsp; Generated: {{ generated_at|date:"m/d/Y H:i" }}
+  {% if report.pdfs.count > 1 %}&nbsp;|&nbsp; <strong>Version {{ report.pdfs.latest.version }}</strong>{% endif %}
+</div>
+
+<div class="header">
+  <h1>American Institute of Mathematics</h1>
+  <h2>Time and Effort Report</h2>
+</div>
+
+<div class="meta-block">
+  <div class="meta-row"><span class="meta-label">Employee:</span> {{ report.employee_name_snapshot }}</div>
+  <div class="meta-row"><span class="meta-label">Title:</span> {{ report.employee_title_snapshot|default:"—" }}</div>
+  <div class="meta-row"><span class="meta-label">Supervisor:</span> {{ report.supervisor_name_snapshot|default:"—" }}</div>
+  <div class="meta-row"><span class="meta-label">Report Period:</span> {{ period.start_date|date:"m/d/y" }} – {{ period.end_date|date:"m/d/y" }}</div>
+  <div class="meta-row"><span class="meta-label">Staff Type:</span> {{ report.staff.get_staff_type_display }}</div>
+  <div class="meta-row"><span class="meta-label">Total Hours:</span> {{ report.total_hours }}</div>
+</div>
+
+<!-- DIRECT ACTIVITIES -->
+<div class="section-title">Direct Activities</div>
+<table>
+  <thead>
+    <tr>
+      <th style="width:30%">Activity</th>
+      <th style="width:15%">Grant / Code</th>
+      <th>Duties, Activity, and Work Performed</th>
+      <th class="center" style="width:8%">Hours</th>
+      <th class="center" style="width:8%">% of Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for line in direct_lines %}
+    <tr>
+      <td>{{ line.activity_name_snapshot }}</td>
+      <td class="center">{{ line.grant_code_snapshot|default:"—" }}</td>
+      <td>{{ line.duties_description }}</td>
+      <td class="center">{{ line.total_hours }}</td>
+      <td class="center">{{ line.percentage }}%</td>
+    </tr>
+    {% empty %}
+    <tr class="none-row"><td colspan="5">No direct activities reported this period.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!-- INDIRECT ACTIVITIES -->
+<div class="section-title">Indirect Activities</div>
+<table>
+  <thead>
+    <tr>
+      <th style="width:30%">Activity</th>
+      <th style="width:15%">Grant / Code</th>
+      <th>Duties, Activity, and Work Performed</th>
+      <th class="center" style="width:8%">Hours</th>
+      <th class="center" style="width:8%">% of Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for line in indirect_lines %}
+    <tr>
+      <td>{{ line.activity_name_snapshot }}</td>
+      <td class="center">{{ line.grant_code_snapshot|default:"—" }}</td>
+      <td>{{ line.duties_description }}</td>
+      <td class="center">{{ line.total_hours }}</td>
+      <td class="center">{{ line.percentage }}%</td>
+    </tr>
+    {% endfor %}
+    {% for line in leave_lines %}
+    <tr>
+      <td>{{ line.activity_name_snapshot }}</td>
+      <td class="center">—</td>
+      <td>{{ line.duties_description }}</td>
+      <td class="center">{{ line.total_hours }}</td>
+      <td class="center">{{ line.percentage }}%</td>
+    </tr>
+    {% endfor %}
+    {% if not indirect_lines and not leave_lines %}
+    <tr class="none-row"><td colspan="5">No indirect activities reported this period.</td></tr>
+    {% endif %}
+  </tbody>
+</table>
+
+<!-- UNALLOWABLE ACTIVITIES -->
+<div class="section-title">Unallowable Activities</div>
+<table>
+  <thead>
+    <tr>
+      <th style="width:30%">Activity</th>
+      <th style="width:15%">Grant / Code</th>
+      <th>Duties, Activity, and Work Performed</th>
+      <th class="center" style="width:8%">Hours</th>
+      <th class="center" style="width:8%">% of Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for line in unallowable_lines %}
+    <tr>
+      <td>{{ line.activity_name_snapshot }}</td>
+      <td class="center">{{ line.grant_code_snapshot|default:"—" }}</td>
+      <td>{{ line.duties_description }}</td>
+      <td class="center">{{ line.total_hours }}</td>
+      <td class="center">{{ line.percentage }}%</td>
+    </tr>
+    {% empty %}
+    <tr class="none-row"><td colspan="5">No unallowable activities reported this period.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!-- TOTALS -->
+<table style="margin-top: 0;">
+  <tbody>
+    <tr class="total-row">
+      <td style="width:30%">TOTAL</td>
+      <td style="width:15%"></td>
+      <td></td>
+      <td class="center" style="width:8%">{{ report.total_hours }}</td>
+      <td class="center" style="width:8%">100%</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- CERTIFICATION & SIGNATURES -->
+<div class="sig-section">
+  <h3>Certification</h3>
+
+  <div class="certification-box">
+    I hereby certify that this is an accurate statement of the actual effort and time expended
+    by me for the pay period(s) indicated, and that said effort and time were devoted to
+    activities as described herein. This is an after-the-fact determination of my actual
+    activity for the above pay period.
+  </div>
+
+  <div class="sig-grid">
+    <div>
+      <div class="sig-field-label">Employee Signature</div>
+      <span class="sig-line">&nbsp;</span>
+    </div>
+    <div>
+      <div class="sig-field-label">Date Signed</div>
+      <span class="sig-line">&nbsp;</span>
+    </div>
+    <div>
+      <div class="sig-field-label">Employee Printed Name</div>
+      <span class="sig-line">&nbsp;</span>
+    </div>
+    <div></div>
+  </div>
+
+  <div class="sig-grid" style="margin-top: 18pt;">
+    <div>
+      <div class="sig-field-label">Supervisor Signature *</div>
+      <span class="sig-line">&nbsp;</span>
+    </div>
+    <div>
+      <div class="sig-field-label">Date Signed</div>
+      <span class="sig-line">&nbsp;</span>
+    </div>
+    <div>
+      <div class="sig-field-label">Supervisor Printed Name</div>
+      <span class="sig-line">&nbsp;</span>
+    </div>
+    <div></div>
+  </div>
+</div>
+
+<div class="footnote-block">
+  * Supervisory official having first-hand knowledge of the activity performed by employee.
+</div>
+
+</body>
+</html>

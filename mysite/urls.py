@@ -26,6 +26,7 @@ urlpatterns = [
     path("reimbursements/", include("apps.reimbursements.urls")),
     path("enrollments/", include("enrollments.urls")),
     path("checklists/", include("apps.checklists.urls")),
+    path("timeeffort/", include("apps.timeeffort.urls")),
     path("", include("apps.donations.urls")),
     path("", home, name="index"),
     # CMS handles everything else - must be last

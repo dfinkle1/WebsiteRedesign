@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Report Locked — {{ period.label }}{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h4>{{ period.label }} — Submission Locked</h4>
+  <p class="text-muted">{{ period.start_date|date:"F j, Y" }} – {{ period.end_date|date:"F j, Y" }}</p>
+  <div class="alert alert-secondary">
+    The submission deadline has passed. This effort report is locked and can no longer be edited.
+    Contact your administrator if a correction is required.
+  </div>
+  <div class="d-flex gap-2">
+    <a href="{% url 'timeeffort:download_director_pdf' submission.id %}" class="btn btn-outline-success">Download PDF ↓</a>
+    <a href="{% url 'timeeffort:dashboard' %}" class="btn btn-outline-secondary">← Dashboard</a>
+  </div>
+</div>
+{% endblock %}
