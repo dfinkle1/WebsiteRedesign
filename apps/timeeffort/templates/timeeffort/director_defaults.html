@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% block title %}My Default Allocations{% endblock %}
+{% block content %}
+<div class="container py-4" style="max-width: 680px;">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0">My Default Allocations</h4>
+    <a href="{% url 'timeeffort:dashboard' %}" class="btn btn-sm btn-outline-secondary">← Dashboard</a>
+  </div>
+  <p class="text-muted small mb-4">
+    These percentages pre-fill your effort form each period. You can adjust them before submitting.
+    The employer holiday deduction is calculated automatically and is not part of your defaults.
+    The primary grant code is determined automatically from AIM's primary activity and cannot be changed here.
+  </p>
+
+  {% if messages %}
+    {% for msg in messages %}
+      <div class="alert alert-{{ msg.tags }} alert-dismissible fade show">
+        {{ msg }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="card mb-3">
+      <div class="card-header fw-semibold">Direct Effort</div>
+      <div class="card-body p-0">
+        <table class="table table-sm mb-0 align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Grant Code</th>
+              <th style="width:140px">Default % of Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="table-light">
+              <td>
+                {% if primary_grant_code %}
+                  <span class="fw-semibold">{{ primary_grant_code }}</span>
+                {% else %}
+                  <span class="text-muted fst-italic">No primary activity configured (sort order 0)</span>
+                {% endif %}
+                <div class="text-muted" style="font-size:0.75rem; margin-top:2px;">Primary grant — set by AIM admin</div>
+              </td>
+              <td>
+                <div class="input-group input-group-sm">
+                  {{ form.main_grant_pct }}
+                  <span class="input-group-text">%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>{{ form.extra_grant_code_1 }}</td>
+              <td>
+                <div class="input-group input-group-sm">
+                  {{ form.extra_grant_pct_1 }}
+                  <span class="input-group-text">%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>{{ form.extra_grant_code_2 }}</td>
+              <td>
+                <div class="input-group input-group-sm">
+                  {{ form.extra_grant_pct_2 }}
+                  <span class="input-group-text">%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>{{ form.extra_grant_code_3 }}</td>
+              <td>
+                <div class="input-group input-group-sm">
+                  {{ form.extra_grant_pct_3 }}
+                  <span class="input-group-text">%</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>{{ form.extra_grant_code_4 }}</td>
+              <td>
+                <div class="input-group input-group-sm">
+                  {{ form.extra_grant_pct_4 }}
+                  <span class="input-group-text">%</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header fw-semibold">Indirect &amp; Other</div>
+      <div class="card-body">
+        {% with fields=form %}
+        <div class="row g-2 align-items-center mb-2">
+          <label class="col-sm-6 col-form-label col-form-label-sm">Administrative</label>
+          <div class="col-sm-3">{{ form.pct_administrative }}</div>
+          <div class="col-sm-1 text-muted small">%</div>
+        </div>
+        <div class="row g-2 align-items-center mb-2">
+          <label class="col-sm-6 col-form-label col-form-label-sm">Other Activity</label>
+          <div class="col-sm-3">{{ form.pct_other_activity }}</div>
+          <div class="col-sm-1 text-muted small">%</div>
+        </div>
+        <div class="row g-2 align-items-center mb-2">
+          <label class="col-sm-6 col-form-label col-form-label-sm">Sick or Personal Day</label>
+          <div class="col-sm-3">{{ form.pct_sick_personal }}</div>
+          <div class="col-sm-1 text-muted small">%</div>
+        </div>
+        <div class="row g-2 align-items-center mb-2">
+          <label class="col-sm-6 col-form-label col-form-label-sm">Vacation</label>
+          <div class="col-sm-3">{{ form.pct_vacation }}</div>
+          <div class="col-sm-1 text-muted small">%</div>
+        </div>
+        <div class="row g-2 align-items-center mb-2">
+          <label class="col-sm-6 col-form-label col-form-label-sm">Fundraising / PR</label>
+          <div class="col-sm-3">{{ form.pct_fundraising_pr }}</div>
+          <div class="col-sm-1 text-muted small">%</div>
+        </div>
+        <div class="row g-2 align-items-center">
+          <label class="col-sm-6 col-form-label col-form-label-sm">Other Unallowable Activity</label>
+          <div class="col-sm-3">{{ form.pct_other_unallowable }}</div>
+          <div class="col-sm-1 text-muted small">%</div>
+        </div>
+        {% endwith %}
+      </div>
+    </div>
+
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    <button type="submit" class="btn btn-primary">Save Defaults</button>
+  </form>
+</div>
+{% endblock %}

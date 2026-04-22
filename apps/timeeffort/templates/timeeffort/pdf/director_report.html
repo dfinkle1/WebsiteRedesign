@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  @page {
+    size: letter;
+    margin: 1.8cm 2cm 2cm 2cm;
+    @bottom-right {
+      content: "Page " counter(page) " of " counter(pages);
+      font-size: 8pt;
+      color: #666;
+    }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 10pt;
+    color: #000;
+    line-height: 1.4;
+  }
+
+  .header { text-align: center; margin-bottom: 14pt; border-bottom: 2px solid #000; padding-bottom: 8pt; }
+  .header h1 { font-size: 14pt; font-weight: bold; letter-spacing: 0.5pt; }
+  .header h2 { font-size: 11pt; font-weight: normal; margin-top: 2pt; }
+
+  .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4pt; margin-bottom: 14pt; font-size: 9.5pt; }
+  .meta-grid .field { padding: 2pt 0; border-bottom: 0.5pt solid #ccc; }
+  .meta-grid .label { font-weight: bold; }
+
+  .section-title { font-size: 10pt; font-weight: bold; border-bottom: 1pt solid #000; padding-bottom: 3pt; margin: 12pt 0 6pt; }
+
+  table { width: 100%; border-collapse: collapse; margin-bottom: 10pt; font-size: 9.5pt; }
+  thead tr { background-color: #e8e8e8; }
+  th { border: 1pt solid #888; padding: 4pt 6pt; font-weight: bold; text-align: left; }
+  th.right { text-align: right; }
+  td { border: 1pt solid #ccc; padding: 3pt 6pt; vertical-align: middle; }
+  td.right { text-align: right; }
+  tr.total-row { background-color: #f0f0f0; font-weight: bold; }
+  tr.locked-row { background-color: #f8f8f8; color: #555; font-style: italic; }
+
+  .cert-box {
+    border: 1pt solid #000;
+    padding: 10pt;
+    margin-top: 18pt;
+    font-size: 9.5pt;
+    line-height: 1.6;
+  }
+  .cert-box p { margin-bottom: 6pt; }
+
+  .sig-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16pt; margin-top: 14pt; }
+  .sig-block .sig-line { border-bottom: 1pt solid #000; min-height: 24pt; margin-bottom: 3pt; }
+  .sig-block .sig-label { font-size: 8.5pt; color: #333; }
+
+  .report-id { font-size: 8pt; color: #666; text-align: right; margin-bottom: 4pt; }
+  .footnote { font-size: 8pt; color: #444; margin-top: 6pt; }
+</style>
+</head>
+<body>
+
+<div class="report-id">Report ID: D-{{ submission.id }} &nbsp;|&nbsp; Generated: {{ generated_at|date:"m/d/Y H:i" }}</div>
+
+<div class="header">
+  <h1>AMERICAN INSTITUTE OF MATHEMATICS</h1>
+  <h2>Effort Certification — Period Report</h2>
+</div>
+
+<div class="meta-grid">
+  <div class="field"><span class="label">Employee:</span> {{ submission.employee_name_snapshot }}</div>
+  <div class="field"><span class="label">Title:</span> {{ submission.employee_title_snapshot|default:"—" }}</div>
+  <div class="field"><span class="label">Period:</span> {{ period.label }}</div>
+  <div class="field"><span class="label">Dates:</span> {{ period.start_date|date:"m/d/Y" }} – {{ period.end_date|date:"m/d/Y" }}</div>
+  <div class="field"><span class="label">Staff Type:</span> Director</div>
+  <div class="field"><span class="label">Supervisor:</span> {{ submission.supervisor_name_snapshot|default:"—" }}</div>
+  <div class="field"><span class="label">Status:</span> SUBMITTED — {{ submission.submitted_at|date:"m/d/Y H:i" }}</div>
+</div>
+
+<!-- Direct Effort -->
+<div class="section-title">Direct Effort</div>
+<table>
+  <thead>
+    <tr>
+      <th style="width:25%">Grant / Project</th>
+      <th class="right" style="width:12%">% of Time</th>
+      <th style="width:63%">Work Performed / Duties</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for line in direct_lines %}
+    <tr>
+      <td>{{ line.grant_code|default:"—" }}</td>
+      <td class="right">{{ line.percentage }}%</td>
+      <td>{{ line.description|default:"" }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="3" style="font-style:italic; color:#999;">No direct effort recorded.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!-- Indirect & Other -->
+<div class="section-title">Indirect &amp; Other</div>
+<table>
+  <thead>
+    <tr>
+      <th style="width:25%">Category</th>
+      <th class="right" style="width:12%">% of Time</th>
+      <th style="width:63%">Work Performed / Duties</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for line in indirect_lines %}
+    <tr {% if line.is_locked %}class="locked-row"{% endif %}>
+      <td>{{ line.get_category_display }}{% if line.is_locked %} (auto){% endif %}</td>
+      <td class="right">{{ line.percentage }}%</td>
+      <td>{{ line.description|default:"" }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="3" style="font-style:italic; color:#999;">No indirect effort recorded.</td></tr>
+    {% endfor %}
+  </tbody>
+  <tfoot>
+    <tr class="total-row">
+      <td>TOTAL</td>
+      <td class="right">{{ total_pct }}%</td>
+      <td></td>
+    </tr>
+  </tfoot>
+</table>
+
+<!-- Certification -->
+<div class="cert-box">
+  <p>
+    I certify that the above represents a reasonable estimate of the effort I expended during
+    this reporting period. This is an after-the-fact determination of my actual activity.
+  </p>
+
+  <div style="margin-top: 10pt; padding: 8pt; background: #f8f8f8; border: 0.5pt solid #ccc;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6pt; font-size: 9.5pt;">
+      <div><span style="font-weight:bold;">Submitted by:</span> {{ submission.employee_name_snapshot }}</div>
+      <div><span style="font-weight:bold;">Date submitted:</span> {{ submission.submitted_at|date:"m/d/Y" }}</div>
+      <div style="grid-column: span 2; font-size: 8.5pt; color: #555;">
+        Submitted electronically via the AIM Staff Portal. Authentication via ORCID account serves as the employee's certification.
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 16pt; border-top: 0.5pt solid #ccc; padding-top: 10pt;">
+    <p style="font-size: 9.5pt; margin-bottom: 8pt;"><strong>Supervisor Review *</strong></p>
+    <div class="sig-grid">
+      <div class="sig-block">
+        <div class="sig-line">&nbsp;</div>
+        <div class="sig-label">Supervisor Signature</div>
+      </div>
+      <div class="sig-block">
+        <div class="sig-line">&nbsp;</div>
+        <div class="sig-label">Date Signed</div>
+      </div>
+      <div class="sig-block">
+        <div class="sig-line" style="padding-top:4pt; font-size:9.5pt;">{{ submission.supervisor_name_snapshot|default:"" }}</div>
+        <div class="sig-label">Supervisor Printed Name</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footnote">* Supervisory official having first-hand knowledge of the activity performed by employee.</div>
+
+</body>
+</html>

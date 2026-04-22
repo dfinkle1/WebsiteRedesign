@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "apps.preprints.apps.PreprintsConfig",
     "apps.events",
     "apps.checklists.apps.ChecklistsConfig",
+    "apps.timeeffort.apps.TimeEffortConfig",
     "accounts",
     "programs",
     "people",

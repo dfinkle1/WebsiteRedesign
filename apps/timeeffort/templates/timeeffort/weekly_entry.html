@@ -1,0 +1,276 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Week {{ week.week_number }} Entry — {{ week.start_date|date:"M j" }}–{{ week.end_date|date:"M j, Y" }}{% endblock %}
+{% block content %}
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h4 class="mb-0">Weekly Time Entry — Week {{ week.week_number }}</h4>
+      <small class="text-muted">{{ week.start_date|date:"F j, Y" }} – {{ week.end_date|date:"F j, Y" }}</small>
+    </div>
+    <a href="{% url 'timeeffort:dashboard' %}" class="btn btn-sm btn-outline-secondary">← Dashboard</a>
+  </div>
+
+  {% if timesheet.status == "SUBMITTED" and edits_allowed %}
+    <div class="alert alert-warning d-flex align-items-center gap-2">
+      <strong>This week is already submitted.</strong>
+      You can still make changes until
+      <strong>{{ submission_deadline|date:"M j, Y" }} at {{ submission_deadline|date:"g:i A" }}</strong>.
+      Re-saving will update your submission.
+    </div>
+  {% endif %}
+
+  {% if messages %}
+    {% for msg in messages %}
+      <div class="alert alert-{{ msg.tags }} alert-dismissible fade show">
+        {{ msg }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <form method="post" id="timesheet-form">
+    {% csrf_token %}
+    {{ formset.management_form }}
+
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle" id="entry-table">
+        <thead class="table-light">
+          <tr>
+            <th style="min-width:200px">Activity</th>
+            <th style="min-width:120px">Grant Code</th>
+            {% for day in day_labels %}
+              <th class="text-center" style="width:70px">{{ day }}</th>
+            {% endfor %}
+            <th class="text-center" style="width:70px">Total</th>
+            <th style="min-width:160px">Description</th>
+            <th style="width:40px"></th>
+          </tr>
+        </thead>
+        <tbody id="formset-rows">
+          {% for form in formset %}
+            {% if forloop.counter0 < num_preset_rows %}
+              {# Preset row — activity locked, no delete button #}
+              <tr class="entry-row table-light">
+                <td>
+                  <span class="fw-semibold small">{{ form.initial.activity|default:form.fields.activity.queryset.none }}</span>
+                  {# Render the select hidden but keep it in the form #}
+                  <div style="display:none">{{ form.activity }}</div>
+                  {% if form.activity.errors %}<div class="text-danger small">{{ form.activity.errors }}</div>{% endif %}
+                  {# Show the activity name from the queryset #}
+                  {% with act_id=form.initial.activity %}
+                    {% if act_id %}
+                      <span class="fw-semibold small text-secondary">
+                        {% for a in form.fields.activity.queryset %}{% if a.id == act_id %}{{ a }}{% endif %}{% endfor %}
+                      </span>
+                    {% endif %}
+                  {% endwith %}
+                  {{ form.activity.as_hidden }}
+                </td>
+                <td>{{ form.grant_code }}</td>
+                <td>{{ form.hours_sun }}</td>
+                <td>{{ form.hours_mon }}</td>
+                <td>{{ form.hours_tue }}</td>
+                <td>{{ form.hours_wed }}</td>
+                <td>{{ form.hours_thu }}</td>
+                <td>{{ form.hours_fri }}</td>
+                <td>{{ form.hours_sat }}</td>
+                <td class="text-center fw-bold row-total">0</td>
+                <td>{{ form.description }}</td>
+                <td><span class="text-muted small">preset</span>{{ form.DELETE.as_hidden }}</td>
+              </tr>
+            {% else %}
+              {# Custom row — fully editable, can be removed #}
+              <tr class="entry-row">
+                <td>
+                  {{ form.activity }}
+                  {% if form.activity.errors %}<div class="text-danger small">{{ form.activity.errors }}</div>{% endif %}
+                </td>
+                <td>{{ form.grant_code }}</td>
+                <td>{{ form.hours_sun }}</td>
+                <td>{{ form.hours_mon }}</td>
+                <td>{{ form.hours_tue }}</td>
+                <td>{{ form.hours_wed }}</td>
+                <td>{{ form.hours_thu }}</td>
+                <td>{{ form.hours_fri }}</td>
+                <td>{{ form.hours_sat }}</td>
+                <td class="text-center fw-bold row-total">0</td>
+                <td>{{ form.description }}</td>
+                <td>
+                  <button type="button" class="btn btn-sm btn-outline-danger remove-row" title="Remove row">×</button>
+                  {{ form.DELETE }}
+                </td>
+              </tr>
+            {% endif %}
+          {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr class="table-light fw-bold">
+            <td colspan="2">Daily Total</td>
+            <td class="text-center col-total" id="total-sun">0</td>
+            <td class="text-center col-total" id="total-mon">0</td>
+            <td class="text-center col-total" id="total-tue">0</td>
+            <td class="text-center col-total" id="total-wed">0</td>
+            <td class="text-center col-total" id="total-thu">0</td>
+            <td class="text-center col-total" id="total-fri">0</td>
+            <td class="text-center col-total" id="total-sat">0</td>
+            <td class="text-center" id="grand-total">0</td>
+            <td colspan="2"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <button type="button" class="btn btn-outline-secondary btn-sm mb-3" id="add-row">+ Add Activity Row</button>
+
+    <div class="d-flex gap-2 mt-3">
+      <button type="submit" name="action" value="save" class="btn btn-outline-primary">Save Draft</button>
+      <button type="submit" name="action" value="submit" class="btn btn-success">Submit Week</button>
+    </div>
+  </form>
+</div>
+
+<!-- Zero-week confirmation modal -->
+<div class="modal fade {% if show_zero_modal %}show d-block{% endif %}" id="zeroWeekModal" tabindex="-1" role="dialog" {% if show_zero_modal %}style="background:rgba(0,0,0,0.5)"{% endif %}>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm Zero-Hour Week</h5>
+      </div>
+      <div class="modal-body">
+        <p>You are submitting a week with <strong>no hours worked</strong>. Please select a reason.</p>
+        <form method="post" id="zero-confirm-form">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="confirm_zero">
+          {% for field in zero_form %}
+            <div class="mb-3">
+              <label class="form-label">{{ field.label }}</label>
+              {{ field }}
+              {% if field.errors %}<div class="text-danger small">{{ field.errors }}</div>{% endif %}
+            </div>
+          {% endfor %}
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-warning">Confirm &amp; Submit</button>
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                    onclick="document.getElementById('zeroWeekModal').style.display='none'">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Row template for JS cloning -->
+<template id="row-template">
+  <tr class="entry-row">
+    <td>
+      <select name="lines-__prefix__-activity" class="form-select form-select-sm activity-select">
+        <option value="">— Select activity —</option>
+        {% for activity in formset.forms.0.fields.activity.queryset %}
+          <option value="{{ activity.id }}" data-grant="{{ activity.default_grant_code }}">{{ activity }}</option>
+        {% endfor %}
+      </select>
+    </td>
+    <td><input type="text" name="lines-__prefix__-grant_code" class="form-control form-control-sm" placeholder="Grant code"></td>
+    <td><input type="number" name="lines-__prefix__-hours_sun" class="form-control form-control-sm text-center hours-input" min="0" max="24" step="0.25"></td>
+    <td><input type="number" name="lines-__prefix__-hours_mon" class="form-control form-control-sm text-center hours-input" min="0" max="24" step="0.25"></td>
+    <td><input type="number" name="lines-__prefix__-hours_tue" class="form-control form-control-sm text-center hours-input" min="0" max="24" step="0.25"></td>
+    <td><input type="number" name="lines-__prefix__-hours_wed" class="form-control form-control-sm text-center hours-input" min="0" max="24" step="0.25"></td>
+    <td><input type="number" name="lines-__prefix__-hours_thu" class="form-control form-control-sm text-center hours-input" min="0" max="24" step="0.25"></td>
+    <td><input type="number" name="lines-__prefix__-hours_fri" class="form-control form-control-sm text-center hours-input" min="0" max="24" step="0.25"></td>
+    <td><input type="number" name="lines-__prefix__-hours_sat" class="form-control form-control-sm text-center hours-input" min="0" max="24" step="0.25"></td>
+    <td class="text-center fw-bold row-total">0</td>
+    <td><textarea name="lines-__prefix__-description" class="form-control form-control-sm" rows="2" placeholder="Brief description of work (optional)"></textarea></td>
+    <td>
+      <button type="button" class="btn btn-sm btn-outline-danger remove-row">×</button>
+      <input type="hidden" name="lines-__prefix__-DELETE" value="">
+    </td>
+  </tr>
+</template>
+
+<script>
+(function () {
+  const DAY_COLS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+
+  function parseHours(val) {
+    const n = parseFloat(val);
+    return isNaN(n) ? 0 : Math.max(0, n);
+  }
+
+  function updateTotals() {
+    let grandTotal = 0;
+    const colTotals = [0, 0, 0, 0, 0, 0, 0];
+
+    document.querySelectorAll("#formset-rows .entry-row").forEach(function (row) {
+      let rowTotal = 0;
+      row.querySelectorAll(".hours-input").forEach(function (inp, i) {
+        const h = parseHours(inp.value);
+        rowTotal += h;
+        colTotals[i] += h;
+      });
+      const rt = row.querySelector(".row-total");
+      if (rt) rt.textContent = rowTotal % 1 === 0 ? rowTotal : rowTotal.toFixed(2);
+      grandTotal += rowTotal;
+    });
+
+    DAY_COLS.forEach(function (d, i) {
+      const el = document.getElementById("total-" + d);
+      if (el) el.textContent = colTotals[i] % 1 === 0 ? colTotals[i] : colTotals[i].toFixed(2);
+    });
+
+    const gt = document.getElementById("grand-total");
+    if (gt) gt.textContent = grandTotal % 1 === 0 ? grandTotal : grandTotal.toFixed(2);
+  }
+
+  function getFormCount() {
+    return parseInt(document.getElementById("id_lines-TOTAL_FORMS").value, 10);
+  }
+
+  function setFormCount(n) {
+    document.getElementById("id_lines-TOTAL_FORMS").value = n;
+  }
+
+  document.getElementById("add-row").addEventListener("click", function () {
+    const tmpl = document.getElementById("row-template");
+    const idx = getFormCount();
+    const clone = tmpl.content.cloneNode(true);
+    clone.querySelectorAll("[name]").forEach(function (el) {
+      el.name = el.name.replace("__prefix__", idx);
+      if (el.id) el.id = el.id.replace("__prefix__", idx);
+    });
+    document.getElementById("formset-rows").appendChild(clone);
+    setFormCount(idx + 1);
+    attachRowListeners(document.querySelector("#formset-rows tr:last-child"));
+    updateTotals();
+  });
+
+  function attachRowListeners(row) {
+    row.querySelectorAll(".hours-input").forEach(function (inp) {
+      inp.addEventListener("input", updateTotals);
+    });
+    const removeBtn = row.querySelector(".remove-row");
+    if (removeBtn) {
+      removeBtn.addEventListener("click", function () {
+        const deleteField = row.querySelector("[name$='-DELETE']");
+        if (deleteField) deleteField.value = "on";
+        row.style.display = "none";
+        updateTotals();
+      });
+    }
+    // Auto-fill grant code from activity selection
+    const activitySelect = row.querySelector(".activity-select");
+    const grantInput = row.querySelector("[name$='-grant_code']");
+    if (activitySelect && grantInput) {
+      activitySelect.addEventListener("change", function () {
+        const opt = activitySelect.options[activitySelect.selectedIndex];
+        if (opt && opt.dataset.grant && !grantInput.value) {
+          grantInput.value = opt.dataset.grant;
+        }
+      });
+    }
+  }
+
+  document.querySelectorAll("#formset-rows .entry-row").forEach(attachRowListeners);
+  updateTotals();
+})();
+</script>
+{% endblock %}

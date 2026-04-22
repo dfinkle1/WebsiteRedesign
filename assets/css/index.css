@@ -441,6 +441,145 @@ p {
 }
 
 /* ======================================
+   HOME PAGE SECTIONS
+====================================== */
+.section-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--aimblue);
+  margin-bottom: 0.35rem;
+}
+
+.section-heading {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+/* News column */
+.news-block {
+  padding: 1.5rem;
+  background: var(--color-card);
+  border-radius: 10px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+/* Programs column (scrollable) */
+.programs-block {
+  padding: 1.5rem;
+  background: var(--color-card);
+  border-radius: 10px;
+  height: 100%;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+.programs-scroll-wrap {
+  height: 100px;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.programs-scroll {
+  overflow-y: auto;
+  height: 100%;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(87, 139, 191, 0.3) transparent;
+}
+
+.programs-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.programs-scroll::-webkit-scrollbar-thumb {
+  background: rgba(87, 139, 191, 0.35);
+  border-radius: 4px;
+}
+
+/* Program cards */
+.program-card {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-left: 4px solid var(--aimblue);
+  border-radius: 8px;
+  background: var(--color-card);
+  padding: 1rem 1.1rem;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: box-shadow 0.2s, border-left-color 0.2s, transform 0.15s;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.program-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border-left-color: var(--color-accent);
+  transform: translateY(-2px);
+  color: inherit;
+  text-decoration: none;
+}
+
+.program-card .program-type {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--aimblue);
+  margin-bottom: 0.35rem;
+}
+
+.program-card .program-title {
+  font-weight: 600;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+
+.program-card .program-dates {
+  font-size: 0.78rem;
+  color: #6c757d;
+}
+
+.program-card .program-deadline {
+  font-size: 0.75rem;
+  margin-top: 0.4rem;
+}
+
+[data-bs-theme="dark"] .program-card {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-bs-theme="dark"] .program-card .program-dates {
+  color: #adb5bd;
+}
+
+/* Deadline strip */
+.deadline-strip {
+  background: #fff8e6;
+  border-left: 4px solid #f5a623;
+  border-radius: 6px;
+  padding: 0.65rem 1rem;
+  font-size: 0.88rem;
+  color: #7a4f00;
+}
+
+[data-bs-theme="dark"] .deadline-strip {
+  background: rgba(245, 166, 35, 0.12);
+  color: #ffc96b;
+}
+
+/* Carousel section wrapper */
+.carousel-section {
+  background: var(--color-bg);
+  padding: 2.5rem 0;
+}
+
+/* ======================================
    7. FOOTER
 ====================================== */
 footer {

@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Period Summary — {{ period.label }}{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h4 class="mb-0">{{ period.label }}</h4>
+      <small class="text-muted">{{ period.start_date|date:"F j, Y" }} – {{ period.end_date|date:"F j, Y" }}</small>
+    </div>
+    <a href="{% url 'timeeffort:dashboard' %}" class="btn btn-sm btn-outline-secondary">← Dashboard</a>
+  </div>
+
+  {% if messages %}
+    {% for msg in messages %}
+      <div class="alert alert-{{ msg.tags }} alert-dismissible fade show">
+        {{ msg }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <h5>Weekly Submissions</h5>
+  <table class="table table-bordered table-sm mb-4">
+    <thead class="table-light">
+      <tr>
+        <th>Week</th><th>Dates</th><th>Status</th><th>Total Hours</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for ws in week_statuses %}
+      <tr>
+        <td>Week {{ ws.week.week_number }}</td>
+        <td>{{ ws.week.start_date|date:"M j" }} – {{ ws.week.end_date|date:"M j, Y" }}</td>
+        <td>
+          {% if ws.timesheet %}
+            {% if ws.timesheet.status == "SUBMITTED" %}
+              <span class="badge bg-success">Submitted</span>
+            {% else %}
+              <span class="badge bg-warning text-dark">Draft</span>
+            {% endif %}
+          {% else %}
+            <span class="badge bg-danger">Not Started</span>
+          {% endif %}
+        </td>
+        <td>
+          {% if ws.timesheet %}{{ ws.timesheet.total_hours }}{% else %}—{% endif %}
+        </td>
+        <td>
+          {% if ws.timesheet and ws.timesheet.status == "SUBMITTED" %}
+            <a href="{% url 'timeeffort:download_weekly_pdf' ws.timesheet.id %}" class="btn btn-sm btn-outline-success">Download PDF</a>
+          {% else %}
+            <a href="{% url 'timeeffort:weekly_entry' ws.week.id %}" class="btn btn-sm btn-outline-primary">
+              {% if ws.timesheet %}Continue{% else %}Start{% endif %}
+            </a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Final Period Report</h5>
+      {% if not all_submitted %}
+        <div class="alert alert-warning mb-2">
+          All weeks must be submitted before generating the final report.
+          Outstanding weeks are highlighted above.
+        </div>
+        <button class="btn btn-secondary" disabled>Generate Final Report</button>
+      {% elif report and report.status == "GENERATED" %}
+        <p class="text-success mb-2">✓ Final report generated on {{ report.generated_at|date:"F j, Y" }}.</p>
+        {% if latest_pdf %}
+          <a href="{% url 'timeeffort:download_final_pdf' report.id %}" class="btn btn-success me-2">Download PDF (v{{ latest_pdf.version }})</a>
+        {% endif %}
+        <a href="{% url 'timeeffort:final_report_describe' period.id %}" class="btn btn-outline-secondary btn-sm">Regenerate</a>
+      {% else %}
+        <p class="text-muted mb-2">All weeks submitted. Review and add activity descriptions, then generate your PDF.</p>
+        <a href="{% url 'timeeffort:final_report_describe' period.id %}" class="btn btn-primary">Generate Final Report →</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

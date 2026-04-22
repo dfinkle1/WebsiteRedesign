@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Final Report — Add Descriptions{% endblock %}
+{% block content %}
+<div class="container py-4" style="max-width: 900px;">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h4 class="mb-0">Final Report — Review &amp; Describe</h4>
+      <small class="text-muted">{{ period.label }} · {{ period.start_date|date:"M j, Y" }} – {{ period.end_date|date:"M j, Y" }}</small>
+    </div>
+    <a href="{% url 'timeeffort:period_summary' period.id %}" class="btn btn-sm btn-outline-secondary">← Back</a>
+  </div>
+
+  {% if messages %}
+    {% for msg in messages %}
+      <div class="alert alert-{{ msg.tags }} alert-dismissible fade show">
+        {{ msg }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="alert alert-info">
+    For each activity below, add a brief description of the work performed this period
+    (e.g. "Meetings / Excel / Website"). This will appear on your certified report.
+    Descriptions are optional but recommended.
+  </div>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ formset.management_form }}
+
+    <table class="table table-bordered align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Activity</th>
+          <th>Grant Code</th>
+          <th class="text-center">Hours</th>
+          <th class="text-center">%</th>
+          <th>Duties / Work Performed</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for form in formset %}
+          <tr>
+            <td>
+              {{ form.instance.activity_name_snapshot }}
+              {{ form.id }}
+            </td>
+            <td class="text-muted small">{{ form.instance.grant_code_snapshot|default:"—" }}</td>
+            <td class="text-center">{{ form.instance.total_hours }}</td>
+            <td class="text-center">{{ form.instance.percentage }}%</td>
+            <td>
+              {{ form.duties_description }}
+              {% if form.duties_description.errors %}
+                <div class="text-danger small">{{ form.duties_description.errors }}</div>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr class="table-light fw-bold">
+          <td colspan="2">TOTAL</td>
+          <td class="text-center">{{ report.total_hours }}</td>
+          <td class="text-center">100%</td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <div class="d-flex gap-2">
+      <button type="submit" class="btn btn-primary">Generate PDF →</button>
+      <a href="{% url 'timeeffort:period_summary' period.id %}" class="btn btn-outline-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

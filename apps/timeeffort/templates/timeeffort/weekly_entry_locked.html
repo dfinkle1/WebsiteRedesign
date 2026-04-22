@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Week Locked — Week {{ week.week_number }}{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h4>Week {{ week.week_number }} — Submission Locked</h4>
+  <p class="text-muted">{{ week.start_date|date:"F j, Y" }} – {{ week.end_date|date:"F j, Y" }}</p>
+  <div class="alert alert-secondary">
+    The submission deadline has passed. This week's timesheet is locked and can no longer be edited.
+    Contact your administrator if a correction is required.
+  </div>
+  <div class="d-flex gap-2">
+    <a href="{% url 'timeeffort:download_weekly_pdf' timesheet.id %}" class="btn btn-outline-success">Download Weekly PDF</a>
+    <a href="{% url 'timeeffort:dashboard' %}" class="btn btn-outline-secondary">← Dashboard</a>
+  </div>
+</div>
+{% endblock %}
