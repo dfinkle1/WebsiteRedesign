@@ -39,104 +39,104 @@
       </div>
     </div>
   </section> {% endcomment %}
+  <div class="container"></div>
+  <div class="about-strip" aria-label="About AIM">
+    <div class="container">
+      <div class="d-flex align-items-center gap-4 flex-wrap">
+        <img src="{% static 'images/NSFlogo.png' %}"
+             alt="National Science Foundation logo"
+             style="max-height:80px;
+                    width:auto;
+                    flex-shrink:0">
+        <p class="about-strip-text">
+          AIM's goal is to advance mathematical knowledge through collaboration, to broaden participation in the mathematical endeavor, and to increase the awareness of the contributions of the mathematical sciences to society. We are a U.S. National Science Foundation (NSF) supported research institute
+          <a href="/mission/"
+             class="fw-semibold ms-1 text-decoration-none"
+             style="color:var(--aimblue)">Our mission →</a>
+        </p>
+      </div>
+    </div>
+  </div>
   <div class="container">
-    <section aria-label="NSF Logo Contribution">
-      <div class="row mb-2 mt-3 pt-3 border-top align-items-center">
-        <div class="col-auto">
-          <img src="{% static 'images/NSFlogo.png' %}"
-               class="img-fluid"
-               alt="National Science Foundation logo"
-               width="200px"
-               height="auto" />
+    {# ── Latest News + Upcoming Programs ── #}
+    <section class="py-4" aria-label="Programs and latest news">
+      <div class="row g-4 align-items-stretch">
+        {# News column — left, drives row height #}
+        <div class="col-lg-8">
+          <div class="news-block">
+            <p class="section-label">Latest News</p>
+            <h2 class="section-heading"
+                style="font-size:1.35rem;
+                       margin-bottom:1.25rem">From AIM</h2>
+            {% render_featured_article %}
+            <div class="mt-3 pt-3 border-top">
+              <a href="/news/"
+                 class="text-decoration-none small fw-semibold"
+                 style="color: var(--aimblue)">All news &amp; newsletters →</a>
+            </div>
+          </div>
         </div>
-        <div class="col">
-          <p class="fs-6 fw-bold">
-            AIM's goal is to advance mathematical knowledge through
-            collaboration, to broaden participation in the mathematical
-            endeavor, and to increase the awareness of the contributions of
-            the mathematical sciences to society. We are a U.S. National
-            Science Foundation (NSF) supported research institute
-          </p>
+        {# Programs column — right, scrolls within fixed height #}
+        <div class="col-lg-4">
+          <div class="programs-block d-flex flex-column">
+            <div class="d-flex justify-content-between align-items-baseline mb-3">
+              <div>
+                <p class="section-label mb-0">Upcoming Programs</p>
+                <h2 class="section-heading mb-0" style="font-size:1.2rem;">Open for Applications</h2>
+              </div>
+              <a href="/workshops/"
+                 class="text-decoration-none small fw-semibold flex-shrink-0 ms-2"
+                 style="color: var(--aimblue)">View all →</a>
+            </div>
+            {% if workshops %}
+              {% for w in workshops %}
+                {% if forloop.first and w.application_deadline > now %}
+                  <div class="deadline-strip mb-3">
+                    <strong>Deadline approaching:</strong>
+                    {{ w.application_deadline|date:"M j" }} — {{ w.title|truncatechars:50 }}
+                  </div>
+                {% endif %}
+              {% endfor %}
+              <div class="programs-scroll-wrap">
+                <div class="programs-scroll">
+                  <ul class="list-unstyled mb-4">
+                    {% for w in workshops %}
+                      <li class="mb-2">
+                        <a href="{% url 'programs:program-page' w.code %}"
+                           class="program-card d-block text-decoration-none">
+                          <div class="program-type">Workshop</div>
+                          <div class="program-title">
+                            {{ w.title }}
+                            {% if w.title_abbreviation %}<span class="fw-normal opacity-75">({{ w.title_abbreviation }})</span>{% endif %}
+                          </div>
+                          <div class="d-flex align-items-center justify-content-between gap-2 mt-1 flex-wrap">
+                            <div class="program-dates">
+                              <time datetime="{{ w.start_date|date:'c' }}">
+                                {{ w.start_date|date:"M j" }} – {{ w.end_date|date:"M j, Y" }}
+                              </time>
+                            </div>
+                            {% if w.application_deadline > now %}
+                              <span class="badge bg-success" style="font-size:0.68rem;">Accepting Apps</span>
+                            {% endif %}
+                          </div>
+                        </a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            {% else %}
+              <div class="text-center py-4 text-muted small">
+                <p class="mb-1">No programs currently open.</p>
+                <a href="/workshops/" style="color: var(--aimblue);">Browse all workshops →</a>
+              </div>
+            {% endif %}
+          </div>
         </div>
       </div>
     </section>
-  {# ── Latest News + Upcoming Programs ── #}
-  <section class="py-4" aria-label="Programs and latest news">
-    <div class="row g-4 align-items-stretch">
-      {# News column — left, drives row height #}
-      <div class="col-lg-8">
-        <div class="news-block">
-          <p class="section-label">Latest News</p>
-          <h2 class="section-heading" style="font-size:1.35rem; margin-bottom:1.25rem">From AIM</h2>
-          {% render_featured_article %}
-          <div class="mt-3 pt-3 border-top">
-            <a href="/news/"
-               class="text-decoration-none small fw-semibold"
-               style="color: var(--aimblue)">All news &amp; newsletters →</a>
-          </div>
-        </div>
-      </div>
-      {# Programs column — right, scrolls within fixed height #}
-      <div class="col-lg-4">
-        <div class="programs-block d-flex flex-column">
-          <div class="d-flex justify-content-between align-items-baseline mb-3">
-            <div>
-              <p class="section-label mb-0">Upcoming Programs</p>
-              <h2 class="section-heading mb-0" style="font-size:1.2rem;">Open for Applications</h2>
-            </div>
-            <a href="/workshops/"
-               class="text-decoration-none small fw-semibold flex-shrink-0 ms-2"
-               style="color: var(--aimblue)">View all →</a>
-          </div>
-          {% if workshops %}
-            {% for w in workshops %}
-              {% if forloop.first and w.application_deadline > now %}
-                <div class="deadline-strip mb-3">
-                  <strong>Deadline approaching:</strong>
-                  {{ w.application_deadline|date:"M j" }} — {{ w.title|truncatechars:50 }}
-                </div>
-              {% endif %}
-            {% endfor %}
-            <div class="programs-scroll-wrap">
-              <div class="programs-scroll">
-                <ul class="list-unstyled mb-4">
-                  {% for w in workshops %}
-                    <li class="mb-2">
-                      <a href="{% url 'programs:program-page' w.code %}"
-                         class="program-card d-block text-decoration-none">
-                        <div class="program-type">Workshop</div>
-                        <div class="program-title">
-                          {{ w.title }}
-                          {% if w.title_abbreviation %}<span class="fw-normal opacity-75">({{ w.title_abbreviation }})</span>{% endif %}
-                        </div>
-                        <div class="d-flex align-items-center justify-content-between gap-2 mt-1 flex-wrap">
-                          <div class="program-dates">
-                            <time datetime="{{ w.start_date|date:'c' }}">
-                              {{ w.start_date|date:"M j" }} – {{ w.end_date|date:"M j, Y" }}
-                            </time>
-                          </div>
-                          {% if w.application_deadline > now %}
-                            <span class="badge bg-success" style="font-size:0.68rem;">Accepting Apps</span>
-                          {% endif %}
-                        </div>
-                      </a>
-                    </li>
-                  {% endfor %}
-                </ul>
-              </div>
-            </div>
-          {% else %}
-            <div class="text-center py-4 text-muted small">
-              <p class="mb-1">No programs currently open.</p>
-              <a href="/workshops/" style="color: var(--aimblue);">Browse all workshops →</a>
-            </div>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-  </section>
-  </div>{# /container #}
-
+  </div>
+  {# /container #}
   {# ── News Carousel ── #}
   <section class="carousel-section" aria-label="Recent stories">
     <div class="container">
@@ -176,4 +176,4 @@
       </div>
     </div>
   </section>
-  {% endblock content %}
+{% endblock content %}

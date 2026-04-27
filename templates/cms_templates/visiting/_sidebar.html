@@ -1,36 +1,10 @@
-{% comment %}
-Reusable sidebar navigation for Visiting section.
-Auto-detects active section from request.path.
-{% endcomment %}
-<div class="nav flex-column nav-pills me-3"
-     id="v-pills-tab"
-     role="tablist"
-     aria-orientation="vertical">
-    <a class="nav-link {% if request.path == '/visiting/' %}active{% endif %}"
-       href="/visiting/"
-       role="tab">Visiting</a>
-    <a class="nav-link {% if request.path == '/visiting/code-of-conduct/' %}active{% endif %}"
-       href="/visiting/code-of-conduct/"
-       role="tab">Code of Conduct</a>
-    <a class="nav-link {% if request.path == '/visiting/local-information/' %}active{% endif %}"
-       href="/visiting/local-information/"
-       role="tab">Local Information</a>
-    <a class="nav-link {% if request.path == '/visiting/travel-guidelines/' %}active{% endif %}"
-       href="/visiting/travel-guidelines/"
-       role="tab">Travel Guidelines</a>
-    <a class="nav-link {% if request.path == '/visiting/child-care/' %}active{% endif %}"
-       href="/visiting/child-care/"
-       role="tab">Child Care</a>
-    <a class="nav-link {% if request.path == '/visiting/explore-pasadena/' %}active{% endif %}"
-       href="/visiting/explore-pasadena/"
-       role="tab">Explore Pasadena</a>
-    <a class="nav-link {% if request.path == '/visiting/facilities/' %}active{% endif %}"
-       href="/visiting/facilities/"
-       role="tab">Facilities</a>
-    <a class="nav-link {% if request.path == '/visiting/accessibility/' %}active{% endif %}"
-       href="/visiting/accessibility/"
-       role="tab">Accessibility</a>
-    <a class="nav-link {% if request.path == '/visiting/faq/' %}active{% endif %}"
-       href="/visiting/faq/"
-       role="tab">FAQ</a>
-</div>
+{% comment %}Sidebar navigation for Visiting section. Auto-detects active page.{% endcomment %}
+<a href="/visiting/" class="{% if request.path == '/visiting/' %}active{% endif %}">Visiting</a>
+<a href="/visiting/local-information/" class="{% if request.path == '/visiting/local-information/' %}active{% endif %}">Map &amp; Directions</a>
+<a href="/visiting/facilities/" class="{% if request.path == '/visiting/facilities/' %}active{% endif %}">The AIM Facility in Pasadena</a>
+<a href="/visiting/accessibility/" class="{% if request.path == '/visiting/accessibility/' %}active{% endif %}">Access to the Facility</a>
+<a href="/visiting/code-of-conduct/" class="{% if request.path == '/visiting/code-of-conduct/' %}active{% endif %}">Code of Conduct</a>
+<a href="/visiting/travel-guidelines/" class="{% if request.path == '/visiting/travel-guidelines/' %}active{% endif %}">Travel Reimbursement Policy</a>
+<a href="/visiting/child-care/" class="{% if request.path == '/visiting/child-care/' %}active{% endif %}">Child Care</a>
+<a href="/visiting/explore-pasadena/" class="{% if request.path == '/visiting/explore-pasadena/' %}active{% endif %}">Explore Pasadena</a>
+<a href="/visiting/faq/" class="{% if request.path == '/visiting/faq/' %}active{% endif %}">FAQ</a>
