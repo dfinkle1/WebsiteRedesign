@@ -1,7 +1,11 @@
 {% comment %}Sidebar navigation for About section. Auto-detects active page.{% endcomment %}
-<a href="/about/" class="{% if request.path == '/about/' %}active{% endif %}">About</a>
-<a href="/mission/" class="{% if request.path == '/mission/' %}active{% endif %}">Mission &amp; History</a>
-<a href="/staff/" class="{% if request.path == '/staff/' %}active{% endif %}">People</a>
-<a href="/governance/" class="{% if request.path == '/governance/' %}active{% endif %}">Governance</a>
-<a href="/contact/" class="{% if request.path == '/contact/' %}active{% endif %}">Contact</a>
-<a href="/past-programs/" class="{% if request.path == '/past-programs/' %}active{% endif %}">Past Programs</a>
+<a href="/about/"
+   class="{% if request.path == '/about/' %}active{% endif %}">About</a>
+<a href="/mission/"
+   class="{% if request.path == '/mission/' %}active{% endif %}">Mission &amp; History</a>
+<a href="/staff/"
+   class="{% if request.path == '/staff/' %}active{% endif %}">People</a>
+<a href="/governance/"
+   class="{% if request.path == '/governance/' %}active{% endif %}">Governance</a>
+<a href="/contact/"
+   class="{% if request.path == '/contact/' %}active{% endif %}">Contact</a>

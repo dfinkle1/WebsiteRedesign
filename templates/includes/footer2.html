@@ -1,0 +1,584 @@
+{% load cms_tags static %}
+<style>
+/* ── Footer mock switcher ── */
+.footer-switcher {
+  position: fixed;
+  bottom: 3.5rem;
+  left: 1rem;
+  z-index: 9999;
+  display: flex;
+  gap: 0.35rem;
+  background: rgba(20,20,30,0.85);
+  backdrop-filter: blur(6px);
+  border-radius: 999px;
+  padding: 0.35rem 0.6rem;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.35);
+}
+.footer-switcher button {
+  border: none;
+  border-radius: 999px;
+  padding: 0.28rem 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  background: transparent;
+  color: rgba(255,255,255,0.55);
+  transition: background 0.18s, color 0.18s;
+}
+.footer-switcher button.fs-active {
+  background: #578bbf;
+  color: #fff;
+}
+
+/* ── Hide all mocks by default ── */
+#footer-mock-a, #footer-mock-b, #footer-mock-c { display: none; }
+
+/* ══════════════════════════════════════════════════════════
+   MOCK A — Full Navigation Footer
+   Navy background, 4-column sitemap, bottom accreditation bar
+═══════════════════════════════════════════════════════════ */
+#footer-mock-a {
+  background: #1f4467;
+  color: rgba(255,255,255,0.82);
+  font-size: 0.875rem;
+}
+#footer-mock-a .footer-top {
+  padding: 3rem 0 2rem;
+}
+#footer-mock-a .footer-col-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 0.85rem;
+}
+#footer-mock-a .footer-brand-name {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.4rem;
+  line-height: 1.3;
+}
+#footer-mock-a .footer-tagline {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.52);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+#footer-mock-a address {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.7;
+  font-style: normal;
+  margin: 0;
+}
+#footer-mock-a ul { list-style: none; padding: 0; margin: 0; }
+#footer-mock-a ul li { margin-bottom: 0.45rem; }
+#footer-mock-a ul li a {
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+#footer-mock-a ul li a:hover { color: #fff; }
+#footer-mock-a .footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding: 1.1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+#footer-mock-a .footer-bottom .funding {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.45);
+}
+#footer-mock-a .footer-bottom .copyright {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.35);
+}
+#footer-mock-a .footer-divider {
+  width: 1px;
+  background: rgba(255,255,255,0.1);
+  align-self: stretch;
+  min-height: 120px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   MOCK B — Minimal / Compact
+   Deeper navy, single-row feel, slim bottom bar
+═══════════════════════════════════════════════════════════ */
+#footer-mock-b {
+  background: #17324c;
+  color: rgba(255,255,255,0.78);
+  font-size: 0.875rem;
+}
+#footer-mock-b .footer-top {
+  padding: 2.25rem 0;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+@media (max-width: 768px) {
+  #footer-mock-b .footer-top { grid-template-columns: 1fr; gap: 1.5rem; }
+}
+#footer-mock-b .brand-name {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.3rem;
+}
+#footer-mock-b .brand-tagline {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.42);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+#footer-mock-b address {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.42);
+  font-style: normal;
+  line-height: 1.7;
+  margin: 0;
+}
+#footer-mock-b .links-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 2rem;
+}
+#footer-mock-b .link-group-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 0.6rem;
+}
+#footer-mock-b ul { list-style: none; padding: 0; margin: 0 0 1.25rem; }
+#footer-mock-b ul li { margin-bottom: 0.38rem; }
+#footer-mock-b ul li a {
+  color: rgba(255,255,255,0.65);
+  text-decoration: none;
+  font-size: 0.82rem;
+  transition: color 0.15s;
+}
+#footer-mock-b ul li a:hover { color: #fff; }
+#footer-mock-b .cta-col { display: flex; flex-direction: column; gap: 0.6rem; }
+#footer-mock-b .btn-footer-cta {
+  display: block;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.18s, color 0.18s;
+}
+#footer-mock-b .btn-footer-primary {
+  background: #578bbf;
+  color: #fff;
+}
+#footer-mock-b .btn-footer-primary:hover { background: #3d6e9e; color: #fff; }
+#footer-mock-b .btn-footer-outline {
+  border: 1px solid rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.75);
+}
+#footer-mock-b .btn-footer-outline:hover {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+}
+#footer-mock-b .footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 0.9rem 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+#footer-mock-b .footer-bottom .funding {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.38);
+}
+#footer-mock-b .footer-bottom .copyright {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.3);
+}
+
+/* ══════════════════════════════════════════════════════════
+   MOCK C — Mission-Forward / Two-Tone
+   Bold top strip with tagline + CTAs, darker bottom with links
+═══════════════════════════════════════════════════════════ */
+#footer-mock-c .footer-mission-strip {
+  background: #1f4467;
+  padding: 2.5rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+#footer-mock-c .mission-headline {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.4rem;
+  line-height: 1.3;
+}
+#footer-mock-c .mission-sub {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.55);
+  margin: 0;
+}
+#footer-mock-c .mission-ctas {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+#footer-mock-c .btn-mc-primary {
+  background: #fff;
+  color: #1f4467;
+  font-weight: 700;
+  padding: 0.55rem 1.4rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: background 0.18s;
+  white-space: nowrap;
+}
+#footer-mock-c .btn-mc-primary:hover { background: #e8f0f8; color: #1f4467; }
+#footer-mock-c .btn-mc-outline {
+  border: 1.5px solid rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.85);
+  padding: 0.55rem 1.4rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 0.18s, background 0.18s;
+  white-space: nowrap;
+}
+#footer-mock-c .btn-mc-outline:hover {
+  border-color: #fff;
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+}
+#footer-mock-c .footer-links-strip {
+  background: #12283d;
+  padding: 2rem 0 1.25rem;
+  color: rgba(255,255,255,0.72);
+  font-size: 0.85rem;
+}
+#footer-mock-c .link-col-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.32);
+  margin-bottom: 0.7rem;
+}
+#footer-mock-c ul { list-style: none; padding: 0; margin: 0; }
+#footer-mock-c ul li { margin-bottom: 0.42rem; }
+#footer-mock-c ul li a {
+  color: rgba(255,255,255,0.62);
+  text-decoration: none;
+  font-size: 0.82rem;
+  transition: color 0.15s;
+}
+#footer-mock-c ul li a:hover { color: #fff; }
+#footer-mock-c .footer-base {
+  border-top: 1px solid rgba(255,255,255,0.07);
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+#footer-mock-c .footer-base .funding {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.32);
+}
+#footer-mock-c .footer-base .copyright {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.25);
+}
+</style>
+
+{# ════════════════════════════════════════════════
+   FOOTER MOCK A — Full Navigation Footer
+════════════════════════════════════════════════ #}
+<footer id="footer-mock-a" aria-label="Footer mock A">
+  <div class="footer-top">
+    <div class="container">
+      <div class="d-flex gap-4 flex-wrap">
+
+        {# Brand + Address #}
+        <div style="min-width:200px; flex:1.2">
+          <img src="{% static 'images/aimlogotransparentnotext.png' %}"
+               alt="AIM logo"
+               style="max-height:52px; filter:brightness(0) invert(1); opacity:0.85; margin-bottom:0.75rem">
+          <div class="footer-brand-name">American Institute of Mathematics</div>
+          <p class="footer-tagline">
+            Advancing mathematics through focused collaboration since 1994.
+          </p>
+          <address>
+            1200 E. California Blvd<br>
+            Pasadena, CA 91125<br>
+            <a href="/contact/" style="color:rgba(255,255,255,0.5); text-decoration:none;">contact@aimath.org</a>
+          </address>
+        </div>
+
+        <div class="footer-divider d-none d-lg-block"></div>
+
+        {# Research Programs #}
+        <div style="min-width:160px; flex:1">
+          <p class="footer-col-label">Research Programs</p>
+          <ul>
+            <li><a href="/workshops/">Workshops</a></li>
+            <li><a href="/squares/">SQuaREs</a></li>
+            <li><a href="/research-communities/">Research Communities</a></li>
+            <li><a href="#">REUF</a></li>
+            <li><a href="#">Alexanderson Award</a></li>
+            <li><a href="#">Past Programs</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-divider d-none d-lg-block"></div>
+
+        {# Resources #}
+        <div style="min-width:160px; flex:1">
+          <p class="footer-col-label">Resources</p>
+          <ul>
+            <li><a href="/problem-list/">Problem Lists</a></li>
+            <li><a href="/open-textbook-initiative/">Open Textbook Initiative</a></li>
+            <li><a href="/preprint-series/">Preprint Series</a></li>
+            <li><a href="/videos/">Videos</a></li>
+            <li><a href="/careers-advice/">Math Careers Advice</a></li>
+            <li><a href="/library/books/">Library</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-divider d-none d-lg-block"></div>
+
+        {# About & Connect #}
+        <div style="min-width:160px; flex:1">
+          <p class="footer-col-label">About AIM</p>
+          <ul>
+            <li><a href="/mission/">Mission &amp; History</a></li>
+            <li><a href="/staff/">People</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li><a href="/news/">News</a></li>
+            <li><a href="/news/newsletters/">Newsletter</a></li>
+            <li><a href="/donate/" style="color:#7ec8e3; font-weight:600;">Support AIM →</a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom container">
+    <div class="d-flex align-items-center gap-3">
+      <img src="{% static 'images/NSFlogo.png' %}"
+           alt="NSF"
+           style="max-height:36px; filter:brightness(0) invert(1); opacity:0.5">
+      <span class="funding">
+        Supported by the National Science Foundation and the Fry Foundation
+      </span>
+    </div>
+    <span class="copyright">&copy; {% now "Y" %} American Institute of Mathematics</span>
+  </div>
+</footer>
+
+{# ════════════════════════════════════════════════
+   FOOTER MOCK B — Minimal / Compact
+════════════════════════════════════════════════ #}
+<footer id="footer-mock-b" aria-label="Footer mock B">
+  <div class="container">
+    <div class="footer-top">
+
+      {# Left: Identity #}
+      <div>
+        <img src="{% static 'images/aimlogotransparentnotext.png' %}"
+             alt="AIM logo"
+             style="max-height:44px; filter:brightness(0) invert(1); opacity:0.8; margin-bottom:0.6rem">
+        <div class="brand-name">American Institute of Mathematics</div>
+        <p class="brand-tagline">NSF-funded mathematical sciences research institute</p>
+        <address>
+          1200 E. California Blvd<br>
+          Pasadena, CA 91125
+        </address>
+      </div>
+
+      {# Center: Links grid #}
+      <div class="links-grid">
+        <div>
+          <p class="link-group-label">Programs</p>
+          <ul>
+            <li><a href="/workshops/">Workshops</a></li>
+            <li><a href="/squares/">SQuaREs</a></li>
+            <li><a href="/research-communities/">Research Communities</a></li>
+            <li><a href="#">REUF</a></li>
+            <li><a href="#">Past Programs</a></li>
+          </ul>
+          <p class="link-group-label">Visit</p>
+          <ul>
+            <li><a href="#">Map &amp; Directions</a></li>
+            <li><a href="#">Facilities</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="link-group-label">Resources</p>
+          <ul>
+            <li><a href="/problem-list/">Problem Lists</a></li>
+            <li><a href="/open-textbook-initiative/">Open Textbook Initiative</a></li>
+            <li><a href="/videos/">Videos</a></li>
+            <li><a href="/preprint-series/">Preprints</a></li>
+          </ul>
+          <p class="link-group-label">About</p>
+          <ul>
+            <li><a href="/mission/">Mission</a></li>
+            <li><a href="/staff/">People</a></li>
+            <li><a href="/news/">News</a></li>
+            <li><a href="/contact/">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+
+      {# Right: CTAs #}
+      <div class="cta-col">
+        <a href="#" class="btn-footer-cta btn-footer-primary">Propose a Program</a>
+        <a href="/donate/" class="btn-footer-cta btn-footer-outline">Support AIM</a>
+        <a href="/accounts/login/" class="btn-footer-cta btn-footer-outline">Sign In</a>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <div class="d-flex align-items-center gap-2">
+        <img src="{% static 'images/NSFlogo.png' %}"
+             alt="NSF"
+             style="max-height:28px; filter:brightness(0) invert(1); opacity:0.4">
+        <span class="funding">Supported by the National Science Foundation and the Fry Foundation</span>
+      </div>
+      <span class="copyright">&copy; {% now "Y" %} American Institute of Mathematics</span>
+    </div>
+  </div>
+</footer>
+
+{# ════════════════════════════════════════════════
+   FOOTER MOCK C — Mission-Forward / Two-Tone
+════════════════════════════════════════════════ #}
+<footer id="footer-mock-c" aria-label="Footer mock C">
+
+  {# Top: Mission strip with CTAs #}
+  <div class="footer-mission-strip">
+    <div class="container">
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <div>
+          <p class="mission-headline">Advancing mathematics<br>through collaboration.</p>
+          <p class="mission-sub">
+            AIM convenes small, focused groups of mathematicians to make meaningful<br>
+            progress on the field's most significant open problems.
+          </p>
+        </div>
+        <div class="mission-ctas">
+          <a href="#" class="btn-mc-outline">Propose a Program</a>
+          <a href="/donate/" class="btn-mc-primary">Support AIM</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {# Bottom: Links + legal #}
+  <div class="footer-links-strip">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-6 col-md-3">
+          <p class="link-col-label">Research</p>
+          <ul>
+            <li><a href="/workshops/">Workshops</a></li>
+            <li><a href="/squares/">SQuaREs</a></li>
+            <li><a href="/research-communities/">Research Communities</a></li>
+            <li><a href="#">REUF</a></li>
+            <li><a href="#">Past Programs</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-3">
+          <p class="link-col-label">Joyful Math</p>
+          <ul>
+            <li><a href="#">Math Circle Network</a></li>
+            <li><a href="#">Math Communities</a></li>
+            <li><a href="#">Morgan Hill Math</a></li>
+            <li><a href="#">SoCal Ecosystem</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-3">
+          <p class="link-col-label">Resources</p>
+          <ul>
+            <li><a href="/problem-list/">Problem Lists</a></li>
+            <li><a href="/open-textbook-initiative/">Open Textbooks</a></li>
+            <li><a href="/videos/">Videos</a></li>
+            <li><a href="/preprint-series/">Preprints</a></li>
+            <li><a href="/careers-advice/">Careers Advice</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-3">
+          <p class="link-col-label">About &amp; Visit</p>
+          <ul>
+            <li><a href="/mission/">Mission &amp; History</a></li>
+            <li><a href="/staff/">People</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li><a href="/news/">News</a></li>
+            <li><a href="#">Map &amp; Directions</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-base">
+        <div class="d-flex align-items-center gap-3 flex-wrap">
+          <img src="{% static 'images/NSFlogo.png' %}"
+               alt="NSF"
+               style="max-height:30px; filter:brightness(0) invert(1); opacity:0.35">
+          <address style="font-style:normal; margin:0;">
+            <span class="funding">1200 E. California Blvd, Pasadena, CA 91125</span>
+          </address>
+          <span class="funding">·</span>
+          <span class="funding">Supported by the National Science Foundation and the Fry Foundation</span>
+        </div>
+        <span class="copyright">&copy; {% now "Y" %} American Institute of Mathematics</span>
+      </div>
+    </div>
+  </div>
+
+</footer>
+
+{# ── Switcher pill ── #}
+<div class="footer-switcher" role="group" aria-label="Footer mock switcher">
+  <button onclick="switchFooter('a')" id="fsw-a">Mock A</button>
+  <button onclick="switchFooter('b')" id="fsw-b">Mock B</button>
+  <button onclick="switchFooter('c')" id="fsw-c">Mock C</button>
+</div>
+<script>
+(function () {
+  function switchFooter(id) {
+    ["a","b","c"].forEach(function(x) {
+      document.getElementById("footer-mock-" + x).style.display = "none";
+      document.getElementById("fsw-" + x).classList.remove("fs-active");
+    });
+    document.getElementById("footer-mock-" + id).style.display = "block";
+    document.getElementById("fsw-" + id).classList.add("fs-active");
+    localStorage.setItem("footerMock", id);
+  }
+  var saved = localStorage.getItem("footerMock") || "a";
+  switchFooter(saved);
+  window.switchFooter = switchFooter;
+})();
+</script>

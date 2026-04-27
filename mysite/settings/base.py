@@ -153,10 +153,12 @@ TEXT_EDITOR = "djangocms_text.contrib.text_ckeditor4.ckeditor4"
 X_FRAME_OPTIONS = "SAMEORIGIN"
 
 # Cookie security — applied in all environments
-SESSION_COOKIE_HTTPONLY = True   # JS cannot access session cookie
-SESSION_COOKIE_SAMESITE = "Lax"  # Lax (not Strict) to allow OAuth redirects back to site
-CSRF_COOKIE_HTTPONLY = True      # JS cannot access CSRF cookie
-CSRF_COOKIE_SAMESITE = "Lax"     # Lax required for CSRF to work across OAuth redirects
+SESSION_COOKIE_HTTPONLY = True  # JS cannot access session cookie
+SESSION_COOKIE_SAMESITE = (
+    "Lax"  # Lax (not Strict) to allow OAuth redirects back to site
+)
+CSRF_COOKIE_HTTPONLY = True  # JS cannot access CSRF cookie
+CSRF_COOKIE_SAMESITE = "Lax"  # Lax required for CSRF to work across OAuth redirects
 
 CORS_ALLOWED_ORIGINS = []  # Overridden in dev.py / prod.py
 CORS_ALLOW_HEADERS = (
@@ -299,6 +301,10 @@ CMS_TEMPLATES = [
         "cms_templates/focused_research/alexanderson_award.html",
         "Focused Research - Alexanderson Award",
     ),
+    (
+        "cms_templates/focused_research/past_programs.html",
+        "Focused Research - Past Programs",
+    ),
     # === JOYFUL MATHEMATICS SECTION ===
     ("cms_templates/joyful_math/landing.html", "Joyful Math - Overview"),
     (
@@ -350,7 +356,6 @@ CMS_TEMPLATES = [
     ("cms_templates/about/governance.html", "About - Governance"),
     ("cms_templates/about/diversity_statement.html", "About - Diversity"),
     ("cms_templates/about/mission_history.html", "About - Mission & History"),
-    ("cms_templates/about/past_programs.html", "About - Past Programs"),
     # === OTHER ===
     ("cms_templates/news.html", "News Template"),
     ("FRG/frg-resources.html", "FRG Resources"),
@@ -465,4 +470,6 @@ PAYPAL_MODE = env("PAYPAL_MODE", default="sandbox")  # "sandbox" or "live"
 SITE_URL = env("SITE_URL", default="http://localhost:8000")
 
 # From address for donation receipt emails
-DONATION_RECEIPT_FROM_EMAIL = env("DONATION_RECEIPT_FROM_EMAIL", default="donations@aimath.org")
+DONATION_RECEIPT_FROM_EMAIL = env(
+    "DONATION_RECEIPT_FROM_EMAIL", default="donations@aimath.org"
+)
