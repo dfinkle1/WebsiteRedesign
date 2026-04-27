@@ -1,6 +1,6 @@
 {% load cms_tags sekizai_tags static %}
 <style>
-nav#navbar2 { background: #1f4467; }
+nav#navbar2 { background: #1f4467; box-shadow: 0 2px 12px rgba(0,0,0,0.2); }
 nav#navbar2 .navbar-brand img { filter: brightness(0) invert(1); opacity: 0.9; }
 nav#navbar2 .nav-link { font-size: 0.9rem; font-weight: 600; letter-spacing: 0.2px; color: rgba(255,255,255,0.88) !important; padding: 0.65rem 0.85rem; }
 nav#navbar2 .nav-link:hover { color: #fff !important; }
@@ -14,7 +14,6 @@ nav#navbar2 .dropdown-divider { border-color: rgba(255,255,255,0.1); }
 nav#navbar2 .propose-link { color: #7ec8e3 !important; font-weight: 700; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 0.25rem; padding-top: 0.5rem !important; }
 nav#navbar2 .nav-item.dropdown:hover > .dropdown-menu { display: block; }
 </style>
-
 {% page_url 'collaborative' as collaborative_url %}
 {% page_url 'joyful' as joyful_url %}
 {% page_url 'visiting' as visiting_url %}
@@ -22,129 +21,237 @@ nav#navbar2 .nav-item.dropdown:hover > .dropdown-menu { display: block; }
 {% page_url 'about' as about_url %}
 {% page_url 'news' as news_url %}
 {% page_url 'donate' as donate_url %}
-
-<nav id="navbar2" class="navbar navbar-expand-xl navbar-dark" aria-label="Main navigation">
+<nav id="navbar2"
+     class="navbar navbar-expand-xl navbar-dark"
+     aria-label="Main navigation">
   <div class="container-fluid">
-    <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}">
-      <img src="{% static 'images/aimlogotransparentnotext.png' %}" alt="American Institute of Mathematics" style="max-height:70px">
+    <a class="navbar-brand d-flex align-items-center"
+       href="{% url 'index' %}">
+      <img src="{% static 'images/aimlogotransparentnotext.png' %}"
+           alt="American Institute of Mathematics"
+           style="max-height:70px">
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar2-content" aria-controls="navbar2-content" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbar2-content"
+            aria-controls="navbar2-content"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbar2-content">
       <ul class="navbar-nav mx-auto gap-1">
-
         {# Research Programs #}
         {% if collaborative_url %}
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="{{ collaborative_url }}" aria-haspopup="true" aria-expanded="false">Research Programs</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="/workshops/">Workshops</a></li>
-            <li><a class="dropdown-item" href="/squares/">SQuaREs</a></li>
-            <li><a class="dropdown-item" href="/research-communities/">Research Communities</a></li>
-            <li><a class="dropdown-item" href="{{ collaborative_url }}reuf/">Research Experiences for Undergraduate Faculty</a></li>
-            <li><a class="dropdown-item" href="{{ collaborative_url }}alexanderson-award/">Alexanderson Award</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Past Programs</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item propose-link" href="#">Propose a Research Program →</a></li>
-          </ul>
-        </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle"
+               href="{{ collaborative_url }}"
+               aria-haspopup="true"
+               aria-expanded="false">Research Programs</a>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" href="/workshops/">Workshops</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="/squares/">SQuaREs</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="/research-communities/">Research Communities</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ collaborative_url }}reuf/">Research Experiences for Undergraduate Faculty</a>
+              </li>
+              <li>
+                <a class="dropdown-item"
+                   href="{{ collaborative_url }}alexanderson-award/">Alexanderson Award</a>
+              </li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">Past Programs</a>
+              </li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li>
+                <a class="dropdown-item propose-link" href="#">Propose a Research Program →</a>
+              </li>
+            </ul>
+          </li>
         {% endif %}
-
         {# Joyful Math #}
         {% if joyful_url %}
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="{{ joyful_url }}" aria-haspopup="true" aria-expanded="false">Joyful Math</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{{ joyful_url }}math-circles/">Math Circle Network</a></li>
-            <li><a class="dropdown-item" href="{{ joyful_url }}math-communities/">Math Communities</a></li>
-            <li><a class="dropdown-item" href="{{ joyful_url }}match/">SoCal Joyful Math Ecosystem</a></li>
-            <li><a class="dropdown-item" href="{{ joyful_url }}morgan-hill-math/">Morgan Hill Math</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{{ joyful_url }}">Past Programs</a></li>
-          </ul>
-        </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle"
+               href="{{ joyful_url }}"
+               aria-haspopup="true"
+               aria-expanded="false">Joyful Math</a>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" href="{{ joyful_url }}math-circles/">Math Circle Network</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ joyful_url }}math-communities/">Math Communities</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ joyful_url }}socal-ecosystem/">SoCal Joyful Math Ecosystem</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ joyful_url }}morgan-hill-math/">Morgan Hill Math</a>
+              </li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ joyful_url }}affiliated-programs/">Past Programs</a>
+              </li>
+            </ul>
+          </li>
         {% endif %}
-
         {# Resources #}
         {% if resources_url %}
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="{{ resources_url }}" aria-haspopup="true" aria-expanded="false">Resources</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="/problem-list/">Problem Lists</a></li>
-            <li><a class="dropdown-item" href="/preprint-series/">Preprint Series</a></li>
-            <li><a class="dropdown-item" href="/videos/">Videos</a></li>
-            <li><a class="dropdown-item" href="/open-textbook-initiative/">Open Textbook Initiative</a></li>
-            <li><a class="dropdown-item" href="/pretex/">PreTeXt</a></li>
-            <li><a class="dropdown-item" href="/careers-advice/">Math Careers Advice</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><h6 class="dropdown-header">Library</h6></li>
-            <li><a class="dropdown-item ps-4" href="/library/books/">Books</a></li>
-            <li><a class="dropdown-item ps-4" href="/published-papers/">Reprint Collection</a></li>
-            <li><a class="dropdown-item ps-4" href="/published-papers/">Published Papers</a></li>
-          </ul>
-        </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle"
+               href="{{ resources_url }}"
+               aria-haspopup="true"
+               aria-expanded="false">Resources</a>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" href="/problem-list/">Problem Lists</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="/preprint-series/">Preprint Series</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="/videos/">Videos</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="/open-textbook-initiative/">Open Textbook Initiative</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="/pretex/">PreTeXt</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="/careers-advice/">Math Careers Advice</a>
+              </li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li>
+                <h6 class="dropdown-header">Library</h6>
+              </li>
+              <li>
+                <a class="dropdown-item ps-4" href="/library/books/">Books</a>
+              </li>
+              <li>
+                <a class="dropdown-item ps-4" href="/library/reprint-collection/">Reprint Collection</a>
+              </li>
+              <li>
+                <a class="dropdown-item ps-4" href="/library/published-papers/">Published Papers</a>
+              </li>
+            </ul>
+          </li>
         {% endif %}
-
         {# Your Visit #}
         {% if visiting_url %}
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="{{ visiting_url }}" aria-haspopup="true" aria-expanded="false">Your Visit</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{{ visiting_url }}local-information/">Map &amp; Directions</a></li>
-            <li><a class="dropdown-item" href="{{ visiting_url }}facilities/">The AIM Facility in Pasadena</a></li>
-            <li><a class="dropdown-item" href="{{ visiting_url }}accessibility/">Access to the Facility</a></li>
-            <li><a class="dropdown-item" href="{{ visiting_url }}code-of-conduct/">Code of Conduct</a></li>
-            <li><a class="dropdown-item" href="{{ visiting_url }}travel-guidelines/">Travel Reimbursement Policy</a></li>
-            <li><a class="dropdown-item" href="{{ visiting_url }}child-care/">Child Care</a></li>
-            <li><a class="dropdown-item" href="{{ visiting_url }}faq/">FAQ</a></li>
-          </ul>
-        </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle"
+               href="{{ visiting_url }}"
+               aria-haspopup="true"
+               aria-expanded="false">Your Visit</a>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" href="{{ visiting_url }}local-information/">Map &amp; Directions</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ visiting_url }}facilities/">The AIM Facility in Pasadena</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ visiting_url }}accessibility/">Access to the Facility</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ visiting_url }}code-of-conduct/">Code of Conduct</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ visiting_url }}travel-guidelines/">Travel Reimbursement Policy</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ visiting_url }}child-care/">Child Care</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ visiting_url }}faq/">FAQ</a>
+              </li>
+            </ul>
+          </li>
         {% endif %}
-
         {# News #}
         {% if news_url %}
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="{{ news_url }}" aria-haspopup="true" aria-expanded="false">News</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{{ news_url }}">News Stories</a></li>
-            <li><a class="dropdown-item" href="{{ news_url }}newsletters/">The View from AIM Newsletter</a></li>
-          </ul>
-        </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle"
+               href="{{ news_url }}"
+               aria-haspopup="true"
+               aria-expanded="false">News</a>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" href="{{ news_url }}">In the Media</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ news_url }}newsletters/">The View from AIM Newsletter</a>
+              </li>
+            </ul>
+          </li>
         {% endif %}
-
         {# About #}
         {% if about_url %}
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="{{ about_url }}" aria-haspopup="true" aria-expanded="false">About</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="/mission/">Mission &amp; History</a></li>
-            <li><a class="dropdown-item" href="/staff/">People</a></li>
-            <li><a class="dropdown-item" href="/contact/">Contact</a></li>
-            {% if donate_url %}
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{{ donate_url }}">Support AIM</a></li>
-            {% endif %}
-          </ul>
-        </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle"
+               href="{{ about_url }}"
+               aria-haspopup="true"
+               aria-expanded="false">About</a>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" href="/mission/">Mission &amp; History</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="/staff/">People</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="/contact/">Contact</a>
+              </li>
+              {% if donate_url %}
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li>
+                  <a class="dropdown-item" href="{{ donate_url }}">Support AIM</a>
+                </li>
+              {% endif %}
+            </ul>
+          </li>
         {% endif %}
-
       </ul>
-
       {# Auth #}
       <div class="d-flex align-items-center ms-3">
         {% if request.user.is_authenticated %}
           <div class="dropdown">
-            <button class="btn btn-sm btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-              {{ request.user.get_full_name|default:request.user.username }}
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="/accounts/dashboard">Dashboard</a></li>
+            <button class="btn btn-sm btn-outline-light dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">{{ request.user.get_full_name|default:request.user.username }}</button>
+            <ul class="dropdown-menu dropdown-menu-xl-end">
+              <li>
+                <a class="dropdown-item" href="/accounts/dashboard">Dashboard</a>
+              </li>
               {% if request.user.is_staff %}
-                <li><a class="dropdown-item" href="/admin/">Admin</a></li>
+                <li>
+                  <a class="dropdown-item" href="/admin/">Admin</a>
+                </li>
               {% endif %}
-              <li><hr class="dropdown-divider"></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
               <li>
                 <form method="post" action="/accounts/logout/">
                   {% csrf_token %}
@@ -157,7 +264,6 @@ nav#navbar2 .nav-item.dropdown:hover > .dropdown-menu { display: block; }
           <a href="/accounts/login/" class="btn btn-sm btn-outline-light">Sign In</a>
         {% endif %}
       </div>
-
     </div>
   </div>
 </nav>
