@@ -387,9 +387,36 @@ p {
 }
 
 .header-banner {
-  background-color: #1f4467;
-  color: #fff;
+  background-color: #eef3f8;
+  color: #1f4467;
   padding: 2.5rem;
+  border-bottom: 1px solid rgba(31, 68, 103, 0.12);
+}
+
+.header-banner h1,
+.header-banner h2,
+.header-banner h3 {
+  color: #1f4467;
+}
+
+.header-banner .fst-italic {
+  color: rgba(31, 68, 103, 0.65);
+}
+
+[data-bs-theme="dark"] .header-banner {
+  background-color: #1a2a3a;
+  color: rgba(255,255,255,0.88);
+  border-bottom-color: rgba(255,255,255,0.06);
+}
+
+[data-bs-theme="dark"] .header-banner h1,
+[data-bs-theme="dark"] .header-banner h2,
+[data-bs-theme="dark"] .header-banner h3 {
+  color: #fff;
+}
+
+[data-bs-theme="dark"] .header-banner .fst-italic {
+  color: rgba(255,255,255,0.5);
 }
 
 .banner {
@@ -401,6 +428,117 @@ p {
   font-weight: bold; /* Bold font */
   text-transform: uppercase; /* Uppercase text */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow */
+}
+
+/* ======================================
+   SECTION LAYOUT (sidebar + content)
+====================================== */
+.section-sidebar {
+  position: sticky;
+  top: 1.5rem;
+}
+
+.section-sidebar-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--aimblue);
+  padding: 0 1rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.section-nav {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-card);
+  border-radius: 10px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.section-nav a {
+  display: block;
+  padding: 0.6rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text);
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.section-nav a + a {
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.section-nav a:hover {
+  background: rgba(87, 139, 191, 0.06);
+  border-left-color: rgba(87, 139, 191, 0.4);
+  color: var(--aimblue);
+}
+
+.section-nav a.active {
+  border-left-color: var(--aimblue);
+  color: var(--aimblue);
+  font-weight: 600;
+  background: rgba(87, 139, 191, 0.08);
+}
+
+[data-bs-theme="dark"] .section-nav {
+  border-color: rgba(255, 255, 255, 0.07);
+}
+
+[data-bs-theme="dark"] .section-nav a + a {
+  border-top-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-bs-theme="dark"] .section-nav a:hover {
+  background: rgba(87, 139, 191, 0.12);
+}
+
+[data-bs-theme="dark"] .section-nav a.active {
+  background: rgba(87, 139, 191, 0.15);
+}
+
+.section-content {
+  background: var(--color-card);
+  border-radius: 10px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+  padding: 2rem 2.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  min-height: 400px;
+}
+
+[data-bs-theme="dark"] .section-content {
+  border-color: rgba(255, 255, 255, 0.07);
+}
+
+@media (max-width: 991px) {
+  .section-sidebar {
+    position: static;
+    margin-bottom: 1.5rem;
+  }
+  .section-nav {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    border-radius: 8px;
+    scrollbar-width: none;
+  }
+  .section-nav::-webkit-scrollbar { display: none; }
+  .section-nav a {
+    white-space: nowrap;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+    flex-shrink: 0;
+  }
+  .section-nav a + a { border-top: none; border-left: 1px solid rgba(0,0,0,0.05); }
+  .section-nav a:hover { border-left-color: transparent; border-bottom-color: rgba(87,139,191,0.4); }
+  .section-nav a.active { border-left-color: transparent; border-bottom-color: var(--aimblue); }
+  .section-content { padding: 1.5rem; }
 }
 
 /* ======================================
@@ -443,6 +581,21 @@ p {
 /* ======================================
    HOME PAGE SECTIONS
 ====================================== */
+.about-strip {
+  background: var(--color-card);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 1.25rem 0;
+}
+
+.about-strip-text {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--color-text);
+  opacity: 0.85;
+  margin: 0;
+}
+
 .section-label {
   font-size: 0.72rem;
   font-weight: 700;

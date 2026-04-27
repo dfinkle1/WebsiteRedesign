@@ -8,9 +8,7 @@ Child templates should:
 3. Override 'page_content' block
 {% endcomment %}
 {% block title %}
-    {% block page_title %}
-        Focused Collaborative Research - AIM
-    {% endblock page_title %}
+    {% block page_title %}Focused Collaborative Research - AIM{% endblock page_title %}
 {% endblock title %}
 {% block content %}
     <section class="header-banner" tag="banner">
@@ -24,17 +22,18 @@ Child templates should:
         </div>
     </section>
     <div class="container">
-        <div class="row mt-5 mb-4">
-            <!-- Side Navigation -->
+        <div class="row mt-4 mb-5 g-4 align-items-start">
             <div class="col-lg-3">
-                <div class="d-flex align-items-start">{% include "cms_templates/focused_research/_sidebar.html" %}</div>
+                <div class="section-sidebar">
+                    <span class="section-sidebar-label">Research Programs</span>
+                    <nav class="section-nav" aria-label="Research programs navigation">
+                        {% include "cms_templates/focused_research/_sidebar.html" %}
+                    </nav>
+                </div>
             </div>
-            <!-- Content Area -->
-            <div class="col theme-bg rounded">
-                <div class="p-3">
-                    {% block page_content %}
-                        <!-- Child templates override this block -->
-                    {% endblock page_content %}
+            <div class="col-lg-9">
+                <div class="section-content">
+                    {% block page_content %}{% endblock page_content %}
                 </div>
             </div>
         </div>

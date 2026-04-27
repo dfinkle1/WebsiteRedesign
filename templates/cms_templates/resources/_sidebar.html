@@ -1,30 +1,11 @@
-{% comment %}
-Reusable sidebar navigation for Resources section.
-Auto-detects active section from request.path.
-{% endcomment %}
-<div class="nav flex-column nav-pills me-3"
-     id="v-pills-tab"
-     role="tablist"
-     aria-orientation="vertical">
-   <a class="nav-link {% if request.path == '/resources/' %}active{% endif %}"
-      href="/resources/"
-      role="tab">Resources</a>
-   <a class="nav-link {% if request.path == '/careers-advice/' %}active{% endif %}"
-      href="/careers-advice/"
-      role="tab">Careers Advice</a>
-   <a class="nav-link {% if request.path == '/open-textbook-initiative/' %}active{% endif %}"
-      href="/open-textbook-initiative/"
-      role="tab">Open Textbook Initiative</a>
-   <a class="nav-link {% if request.path == '/videos/' %}active{% endif %}"
-      href="/videos/"
-      role="tab">Videos</a>
-   <a class="nav-link {% if request.path == '/problem-list/' %}active{% endif %}"
-      href="/problem-list/"
-      role="tab">Problem Lists</a>
-   <a class="nav-link {% if request.path == '/preprint-series/' %}active{% endif %}"
-      href="/preprint-series/"
-      role="tab">Preprint Series</a>
-   <a class="nav-link {% if request.path == '/published-papers/' %}active{% endif %}"
-      href="/published-papers/"
-      role="tab">Published Papers</a>
-</div>
+{% comment %}Sidebar navigation for Resources section. Auto-detects active page.{% endcomment %}
+<a href="/resources/" class="{% if request.path == '/resources/' %}active{% endif %}">Resources</a>
+<a href="/problem-list/" class="{% if request.path == '/problem-list/' %}active{% endif %}">Problem Lists</a>
+<a href="/preprint-series/" class="{% if request.path == '/preprint-series/' %}active{% endif %}">Preprint Series</a>
+<a href="/videos/" class="{% if request.path == '/videos/' %}active{% endif %}">Videos</a>
+<a href="/open-textbook-initiative/" class="{% if request.path == '/open-textbook-initiative/' %}active{% endif %}">Open Textbook Initiative</a>
+<a href="/preTeXt/" class="{% if request.path == '/preTeXt/' %}active{% endif %}">PreTeXt</a>
+<a href="/careers-advice/" class="{% if request.path == '/careers-advice/' %}active{% endif %}">Careers Advice</a>
+<a href="/library/books/" class="{% if request.path == '/library/books/' %}active{% endif %}">Books</a>
+<a href="/reprint-collection/" class="{% if request.path == '/reprint-collection/' %}active{% endif %}">Reprint Collection</a>
+<a href="/published-papers/" class="{% if request.path == '/published-papers/' %}active{% endif %}">Published Papers</a>
