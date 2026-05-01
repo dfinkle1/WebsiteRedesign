@@ -7,9 +7,9 @@
     <a href="{% url 'timeeffort:dashboard' %}" class="btn btn-sm btn-outline-secondary">← Dashboard</a>
   </div>
   <p class="text-muted small mb-4">
-    These percentages pre-fill your effort form each period. You can adjust them before submitting.
+    These values pre-fill your effort form each period. You can adjust them before submitting.
+    Enter your primary grant code directly — update it whenever your grant assignment changes.
     The employer holiday deduction is calculated automatically and is not part of your defaults.
-    The primary grant code is determined automatically from AIM's primary activity and cannot be changed here.
   </p>
 
   {% if messages %}
@@ -36,12 +36,8 @@
           <tbody>
             <tr class="table-light">
               <td>
-                {% if primary_grant_code %}
-                  <span class="fw-semibold">{{ primary_grant_code }}</span>
-                {% else %}
-                  <span class="text-muted fst-italic">No primary activity configured (sort order 0)</span>
-                {% endif %}
-                <div class="text-muted" style="font-size:0.75rem; margin-top:2px;">Primary grant — set by AIM admin</div>
+                {{ form.main_grant_code }}
+                <div class="text-muted" style="font-size:0.75rem; margin-top:2px;">Primary grant</div>
               </td>
               <td>
                 <div class="input-group input-group-sm">

@@ -1369,11 +1369,6 @@ def director_period_entry(request, period_id):
     holiday_pct = Decimal(str(holiday_count * 5))
     holidays = AIMHoliday.objects.filter(date__range=[period.start_date, end_date])
 
-    from .models import Activity
-
-    primary_activity = Activity.objects.filter(sort_order=0).first()
-    main_grant_code = primary_activity.default_grant_code if primary_activity else ""
-
     report, _ = PeriodReport.objects.get_or_create(
         staff=profile,
         period=period,
@@ -1396,7 +1391,7 @@ def director_period_entry(request, period_id):
         form = DirectorPeriodEntryForm(request.POST, holiday_pct=holiday_pct)
         if form.is_valid():
             _save_director_report_lines(
-                report, form.cleaned_data, holiday_pct, main_grant_code
+                report, form.cleaned_data, holiday_pct, form.cleaned_data.get("main_grant_code", "")
             )
             if action == "submit":
                 report.submit()
@@ -1429,7 +1424,6 @@ def director_period_entry(request, period_id):
             "holidays": holidays,
             "edits_allowed": edits_allowed,
             "submission_deadline": period.submission_deadline,
-            "main_grant_code": main_grant_code,
         },
     )
 
@@ -1562,6 +1556,7 @@ def _report_lines_to_form_data(report):
     for line in report.lines.order_by("sort_order"):
         if line.classification_snapshot == Activity.Classification.DIRECT:
             if "main_grant_pct" not in data:
+                data["main_grant_code"] = line.grant_code_snapshot
                 data["main_grant_pct"] = line.percentage
                 data["main_grant_desc"] = line.duties_description
             elif extra_idx <= 4:
@@ -1596,19 +1591,12 @@ def director_set_defaults(request):
     if not profile or profile.staff_type != StaffTimesheetProfile.StaffType.DIRECTOR:
         raise Http404
 
-    from .models import Activity
-
-    primary_activity = Activity.objects.filter(sort_order=0).first()
-    primary_grant_code = primary_activity.default_grant_code if primary_activity else ""
-
     defaults, _ = DirectorDefaultAllocation.objects.get_or_create(profile=profile)
 
     if request.method == "POST":
         form = DirectorDefaultsForm(request.POST, instance=defaults)
         if form.is_valid():
-            obj = form.save(commit=False)
-            obj.main_grant_code = primary_grant_code
-            obj.save()
+            form.save()
             messages.success(request, "Default allocations saved.")
             return redirect("timeeffort:dashboard")
     else:
@@ -1620,7 +1608,6 @@ def director_set_defaults(request):
         {
             "profile": profile,
             "form": form,
-            "primary_grant_code": primary_grant_code,
         },
     )
 
@@ -1632,6 +1619,7 @@ def _defaults_to_form_data(profile, holiday_pct):
     try:
         d = profile.director_defaults
         data = {
+            "main_grant_code": d.main_grant_code,
             "main_grant_pct": d.main_grant_pct,
             "pct_administrative": max(Decimal("0"), d.pct_administrative - holiday_pct),
             "pct_other_activity": d.pct_other_activity,

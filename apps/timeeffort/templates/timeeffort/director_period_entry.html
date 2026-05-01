@@ -59,14 +59,8 @@
             <tbody>
               <tr class="table-light">
                 <td>
-                  {% if main_grant_code %}
-                    <span class="fw-semibold">{{ main_grant_code }}</span>
-                    <div class="text-muted" style="font-size:0.75rem;">(primary)</div>
-                  {% else %}
-                    <span class="text-danger small">No primary grant —
-                      <a href="{% url 'timeeffort:director_set_defaults' %}">set defaults →</a>
-                    </span>
-                  {% endif %}
+                  {{ form.main_grant_code }}
+                  <div class="text-muted" style="font-size:0.75rem; margin-top:2px;">Primary grant</div>
                 </td>
                 <td>
                   <div class="input-group input-group-sm">
@@ -239,45 +233,37 @@
     </form>
   </div>
   <script>
-(function () {
-  var HOLIDAY_PCT = parseFloat("{{ holiday_pct }}") || 0;
-
-  function parsePct(val) {
-    var n = parseFloat(val);
-    return isNaN(n) ? 0 : Math.max(0, n);
-  }
+(() => {
+  const HOLIDAY_PCT = parseFloat("{{ holiday_pct }}") || 0;
+  const parsePct = val => { const n = parseFloat(val); return isNaN(n) ? 0 : Math.max(0, n); };
 
   function updateTotals() {
-    var directTotal = 0;
-    var indirectTotal = HOLIDAY_PCT;
+    let directTotal = 0;
+    let indirectTotal = HOLIDAY_PCT;
 
-    document.querySelectorAll(".pct-input").forEach(function (inp) {
-      var name = inp.name || "";
-      var val = parsePct(inp.value);
-      if (name.indexOf("extra_grant") !== -1 || name.indexOf("main_grant_pct") !== -1) {
+    document.querySelectorAll(".pct-input").forEach(inp => {
+      const name = inp.name || "";
+      const val = parsePct(inp.value);
+      if (name.includes("extra_grant") || name.includes("main_grant_pct")) {
         directTotal += val;
       } else {
         indirectTotal += val;
       }
     });
 
-    var grand = directTotal + indirectTotal;
+    const grand = directTotal + indirectTotal;
 
-    document.getElementById("direct-subtotal").textContent = directTotal.toFixed(2) + "%";
-    document.getElementById("indirect-subtotal").textContent = indirectTotal.toFixed(2) + "%";
+    document.getElementById("direct-subtotal").textContent = `${directTotal.toFixed(2)}%`;
+    document.getElementById("indirect-subtotal").textContent = `${indirectTotal.toFixed(2)}%`;
 
-    var gtEl = document.getElementById("grand-total");
-    gtEl.textContent = grand.toFixed(2) + "%";
-    gtEl.className = "fs-5 fw-bold " + (Math.abs(grand - 100) <= 0.5 ? "text-success" : "text-danger");
+    const gtEl = document.getElementById("grand-total");
+    gtEl.textContent = `${grand.toFixed(2)}%`;
+    gtEl.className = `fs-5 fw-bold ${Math.abs(grand - 100) <= 0.5 ? "text-success" : "text-danger"}`;
 
-    var warn = document.getElementById("total-warning");
-    warn.style.display = Math.abs(grand - 100) > 0.5 ? "inline" : "none";
+    document.getElementById("total-warning").style.display = Math.abs(grand - 100) > 0.5 ? "inline" : "none";
   }
 
-  document.querySelectorAll(".pct-input").forEach(function (inp) {
-    inp.addEventListener("input", updateTotals);
-  });
-
+  document.querySelectorAll(".pct-input").forEach(inp => inp.addEventListener("input", updateTotals));
   updateTotals();
 })();
   </script>

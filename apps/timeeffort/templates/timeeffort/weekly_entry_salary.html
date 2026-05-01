@@ -2,208 +2,209 @@
 {% load static %}
 {% block title %}Week Entry — {{ week.start_date|date:"M j" }}–{{ week.end_date|date:"M j, Y" }}{% endblock %}
 {% block content %}
-<div class="container py-4">
-
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <div>
-      <h4 class="mb-0">Weekly Time Entry</h4>
-      <small class="text-muted">
-        {{ week.start_date|date:"F j, Y" }} – {{ week.end_date|date:"F j, Y" }}
-        &nbsp;·&nbsp; Week {{ week.week_number }} of {{ week.period.label }}
-      </small>
-    </div>
-    <div class="d-flex align-items-center gap-2">
-      {% if timesheet.status == "SUBMITTED" %}
-        <span class="badge bg-success">Submitted</span>
-      {% else %}
-        <span class="badge bg-warning text-dark">Draft</span>
-      {% endif %}
-      <a href="{% url 'timeeffort:dashboard' %}" class="btn btn-sm btn-outline-secondary">← Dashboard</a>
-    </div>
-  </div>
-
-  {% if messages %}
-    {% for msg in messages %}
-      <div class="alert alert-{{ msg.tags }} alert-dismissible fade show">
-        {{ msg }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  <div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h4 class="mb-0">Weekly Time Entry</h4>
+        <small class="text-muted">
+          {{ week.start_date|date:"F j, Y" }} – {{ week.end_date|date:"F j, Y" }}
+          &nbsp;·&nbsp; Week {{ week.week_number }} of {{ week.period.label }}
+        </small>
       </div>
-    {% endfor %}
-  {% endif %}
-
-  {% if holiday_dates %}
-  <div class="alert alert-info py-2 mb-3">
-    <small>
-      <strong>Holiday(s) this week:</strong>
-      {% for d in holiday_dates %}{{ d|date:"l, M j" }}{% if not forloop.last %}, {% endif %}{% endfor %}
-    </small>
-  </div>
-  {% endif %}
-
-  <form method="post" id="salary-entry-form">
-    {% csrf_token %}
-
-    <div class="table-responsive">
-    <table class="table table-bordered table-sm mb-0" id="hours-table">
-      <thead class="table-light">
-        <tr>
-          <th style="min-width:180px">Activity</th>
-          <th style="width:90px">Grant Code</th>
-          {% for lbl in day_labels %}
-          <th class="text-center" style="width:58px">{{ lbl }}</th>
-          {% endfor %}
-          <th class="text-center" style="width:55px">Total</th>
-        </tr>
-      </thead>
-      <tbody>
-
-        {% if direct_rows %}
-        <tr class="table-secondary">
-          <td colspan="10" class="fw-bold small text-uppercase py-1 px-2">Direct Activities</td>
-        </tr>
-        {% for row in direct_rows %}
-        <tr>
-          <td class="align-middle py-1 ps-2">
-            <small class="fw-semibold">{{ row.activity.name }}</small>
-          </td>
-          <td class="py-1">
-            <input type="text" class="form-control form-control-sm"
-              name="act_{{ row.activity.id }}_grant"
-              value="{{ row.grant_code }}"
-              placeholder="Code">
-          </td>
-          {% for dk, h in row.hours_pairs %}
-          <td class="p-1">
-            <input type="number" class="form-control form-control-sm text-center hours-input"
-              name="act_{{ row.activity.id }}_{{ dk }}"
-              value="{% if h %}{{ h }}{% endif %}"
-              min="0" max="24" step="0.25"
-              placeholder="0">
-          </td>
-          {% endfor %}
-          <td class="text-center align-middle py-1 fw-semibold row-total small">0</td>
-        </tr>
-        {% endfor %}
-
-        <!-- Custom grant slots -->
-        <tr class="table-light">
-          <td colspan="10" class="small text-muted py-1 px-2 fst-italic">Additional grants (optional)</td>
-        </tr>
-        {% for slot in custom_rows %}
-        <tr>
-          <td class="py-1">
-            <input type="text" class="form-control form-control-sm"
-              name="custom_{{ slot.slot }}_name"
-              value="{{ slot.name }}"
-              placeholder="Activity name (optional)">
-          </td>
-          <td class="py-1">
-            <input type="text" class="form-control form-control-sm"
-              name="custom_{{ slot.slot }}_grant"
-              value="{{ slot.grant_code }}"
-              placeholder="Code">
-          </td>
-          {% for dk, h in slot.hours_pairs %}
-          <td class="p-1">
-            <input type="number" class="form-control form-control-sm text-center hours-input"
-              name="custom_{{ slot.slot }}_{{ dk }}"
-              value="{% if h %}{{ h }}{% endif %}"
-              min="0" max="24" step="0.25"
-              placeholder="0">
-          </td>
-          {% endfor %}
-          <td class="text-center align-middle py-1 fw-semibold row-total small">0</td>
-        </tr>
-        {% endfor %}
+      <div class="d-flex align-items-center gap-2">
+        {% if timesheet.status == "SUBMITTED" %}
+          <span class="badge bg-success">Submitted</span>
+        {% else %}
+          <span class="badge bg-warning text-dark">Draft</span>
         {% endif %}
-
-        {% if indirect_rows %}
-        <tr class="table-secondary">
-          <td colspan="10" class="fw-bold small text-uppercase py-1 px-2">Indirect / Leave / Unallowable</td>
-        </tr>
-        {% for row in indirect_rows %}
-        <tr>
-          <td class="align-middle py-1 ps-2" colspan="2">
-            <small class="fw-semibold">{{ row.activity.name }}</small>
-            <input type="hidden" name="act_{{ row.activity.id }}_grant" value="">
-          </td>
-          {% for dk, h in row.hours_pairs %}
-          <td class="p-1">
-            <input type="number" class="form-control form-control-sm text-center hours-input"
-              name="act_{{ row.activity.id }}_{{ dk }}"
-              value="{% if h %}{{ h }}{% endif %}"
-              min="0" max="24" step="0.25"
-              placeholder="0">
-          </td>
-          {% endfor %}
-          <td class="text-center align-middle py-1 fw-semibold row-total small">0</td>
-        </tr>
-        {% endfor %}
-        {% endif %}
-
-      </tbody>
-      <tfoot class="table-light">
-        <tr>
-          <td colspan="2" class="fw-bold text-end py-1 small">Daily Total</td>
-          {% for dk in day_keys %}
-          <td class="text-center fw-bold py-1 small" id="col-total-{{ dk }}">0</td>
-          {% endfor %}
-          <td class="text-center fw-bold py-1 small" id="grand-total">0</td>
-        </tr>
-      </tfoot>
-    </table>
-    </div>
-
-    <div class="d-flex gap-2 mt-3">
-      <button type="submit" name="action" value="save" class="btn btn-outline-secondary">Save Draft</button>
-      <button type="submit" name="action" value="submit" class="btn btn-primary">Submit Week →</button>
-    </div>
-  </form>
-
-</div>
-
-{% if show_zero_modal %}
-<div class="modal fade show d-block" tabindex="-1" style="background:rgba(0,0,0,.5)">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Zero-Hour Week</h5>
-      </div>
-      <div class="modal-body">
-        <p class="mb-3">No hours were entered. If you were away this whole week, select a reason and confirm.</p>
-        <form method="post">
-          {% csrf_token %}
-          <div class="mb-3">
-            {{ zero_form.zero_week_reason.label_tag }}
-            {{ zero_form.zero_week_reason }}
-            {% if zero_form.zero_week_reason.errors %}
-              <div class="text-danger small mt-1">{{ zero_form.zero_week_reason.errors }}</div>
-            {% endif %}
-          </div>
-          <div class="form-check mb-3">
-            {{ zero_form.confirm }}
-            <label class="form-check-label" for="{{ zero_form.confirm.id_for_label }}">
-              {{ zero_form.confirm.label }}
-            </label>
-            {% if zero_form.confirm.errors %}
-              <div class="text-danger small mt-1">{{ zero_form.confirm.errors }}</div>
-            {% endif %}
-          </div>
-          <div class="d-flex gap-2">
-            <button type="submit" name="action" value="confirm_zero" class="btn btn-warning">
-              Confirm Zero Week
-            </button>
-            <a href="{% url 'timeeffort:weekly_entry' week.id %}" class="btn btn-outline-secondary">
-              Go Back
-            </a>
-          </div>
-        </form>
+        <a href="{% url 'timeeffort:dashboard' %}"
+           class="btn btn-sm btn-outline-secondary">← Dashboard</a>
       </div>
     </div>
+    {% if messages %}
+      {% for msg in messages %}
+        <div class="alert alert-{{ msg.tags }} alert-dismissible fade show">
+          {{ msg }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+    {% if holiday_dates %}
+      <div class="alert alert-info py-2 mb-3">
+        <small>
+          <strong>Holiday(s) this week:</strong>
+          {% for d in holiday_dates %}
+            {{ d|date:"l, M j" }}
+            {% if not forloop.last %},{% endif %}
+          {% endfor %}
+        </small>
+      </div>
+    {% endif %}
+    <form method="post" id="salary-entry-form">
+      {% csrf_token %}
+      <div class="table-responsive">
+        <table class="table table-bordered table-sm mb-0" id="hours-table">
+          <thead class="table-light">
+            <tr>
+              <th style="min-width:180px">Activity</th>
+              <th style="width:135px">Grant Code</th>
+              {% for lbl in day_labels %}<th class="text-center" style="width:58px">{{ lbl }}</th>{% endfor %}
+              <th class="text-center" style="width:55px">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if direct_rows %}
+              <tr class="table-secondary">
+                <td colspan="10" class="fw-bold small text-uppercase py-1 px-2">Direct Activities</td>
+              </tr>
+              {% for row in direct_rows %}
+                <tr>
+                  <td class="align-middle py-1 ps-2">
+                    <small class="fw-semibold">{{ row.activity.name }}</small>
+                  </td>
+                  <td class="py-1">
+                    <input type="text"
+                           class="form-control form-control-sm"
+                           name="act_{{ row.activity.id }}_grant"
+                           value="{{ row.grant_code }}"
+                           placeholder="Code">
+                  </td>
+                  {% for dk, h in row.hours_pairs %}
+                    <td class="p-1">
+                      <input type="number"
+                             class="form-control form-control-sm text-center hours-input"
+                             name="act_{{ row.activity.id }}_{{ dk }}"
+                             value="{% if h %}{{ h }}{% endif %}"
+                             min="0"
+                             max="24"
+                             step="0.25"
+                             placeholder="0">
+                    </td>
+                  {% endfor %}
+                  <td class="text-center align-middle py-1 fw-semibold row-total small">0</td>
+                </tr>
+              {% endfor %}
+              <!-- Custom grant slots -->
+              <tr class="table-light">
+                <td colspan="10" class="small text-muted py-1 px-2 fst-italic">Additional grants (optional)</td>
+              </tr>
+              {% for slot in custom_rows %}
+                <tr>
+                  <td class="py-1">
+                    <input type="text"
+                           class="form-control form-control-sm"
+                           name="custom_{{ slot.slot }}_name"
+                           value="{{ slot.name }}"
+                           placeholder="Activity name (optional)">
+                  </td>
+                  <td class="py-1">
+                    <input type="text"
+                           class="form-control form-control-sm"
+                           name="custom_{{ slot.slot }}_grant"
+                           value="{{ slot.grant_code }}"
+                           placeholder="Code">
+                  </td>
+                  {% for dk, h in slot.hours_pairs %}
+                    <td class="p-1">
+                      <input type="number"
+                             class="form-control form-control-sm text-center hours-input"
+                             name="custom_{{ slot.slot }}_{{ dk }}"
+                             value="{% if h %}{{ h }}{% endif %}"
+                             min="0"
+                             max="24"
+                             step="0.25"
+                             placeholder="0">
+                    </td>
+                  {% endfor %}
+                  <td class="text-center align-middle py-1 fw-semibold row-total small">0</td>
+                </tr>
+              {% endfor %}
+            {% endif %}
+            {% if indirect_rows %}
+              <tr class="table-secondary">
+                <td colspan="10" class="fw-bold small text-uppercase py-1 px-2">Indirect / Leave / Unallowable</td>
+              </tr>
+              {% for row in indirect_rows %}
+                <tr>
+                  <td class="align-middle py-1 ps-2" colspan="2">
+                    <small class="fw-semibold">{{ row.activity.name }}</small>
+                    <input type="hidden" name="act_{{ row.activity.id }}_grant" value="">
+                  </td>
+                  {% for dk, h in row.hours_pairs %}
+                    <td class="p-1">
+                      <input type="number"
+                             class="form-control form-control-sm text-center hours-input"
+                             name="act_{{ row.activity.id }}_{{ dk }}"
+                             value="{% if h %}{{ h }}{% endif %}"
+                             min="0"
+                             max="24"
+                             step="0.25"
+                             placeholder="0">
+                    </td>
+                  {% endfor %}
+                  <td class="text-center align-middle py-1 fw-semibold row-total small">0</td>
+                </tr>
+              {% endfor %}
+            {% endif %}
+          </tbody>
+          <tfoot class="table-light">
+            <tr>
+              <td colspan="2" class="fw-bold text-end py-1 small">Daily Total</td>
+              {% for dk in day_keys %}<td class="text-center fw-bold py-1 small" id="col-total-{{ dk }}">0</td>{% endfor %}
+              <td class="text-center fw-bold py-1 small" id="grand-total">0</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <div class="d-flex gap-2 mt-3">
+        <button type="submit"
+                name="action"
+                value="save"
+                class="btn btn-outline-secondary">Save Draft</button>
+        <button type="submit" name="action" value="submit" class="btn btn-primary">Submit Week →</button>
+      </div>
+    </form>
   </div>
-</div>
-{% endif %}
-
-<script>
+  {% if show_zero_modal %}
+    <div class="modal fade show d-block"
+         tabindex="-1"
+         style="background:rgba(0,0,0,.5)">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Zero-Hour Week</h5>
+          </div>
+          <div class="modal-body">
+            <p class="mb-3">No hours were entered. If you were away this whole week, select a reason and confirm.</p>
+            <form method="post">
+              {% csrf_token %}
+              <div class="mb-3">
+                {{ zero_form.zero_week_reason.label_tag }}
+                {{ zero_form.zero_week_reason }}
+                {% if zero_form.zero_week_reason.errors %}
+                  <div class="text-danger small mt-1">{{ zero_form.zero_week_reason.errors }}</div>
+                {% endif %}
+              </div>
+              <div class="form-check mb-3">
+                {{ zero_form.confirm }}
+                <label class="form-check-label" for="{{ zero_form.confirm.id_for_label }}">{{ zero_form.confirm.label }}</label>
+                {% if zero_form.confirm.errors %}<div class="text-danger small mt-1">{{ zero_form.confirm.errors }}</div>{% endif %}
+              </div>
+              <div class="d-flex gap-2">
+                <button type="submit"
+                        name="action"
+                        value="confirm_zero"
+                        class="btn btn-warning">Confirm Zero Week</button>
+                <a href="{% url 'timeeffort:weekly_entry' week.id %}"
+                   class="btn btn-outline-secondary">Go Back</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  <script>
 (() => {
   const dayKeys = [{% for dk in day_keys %}"{{ dk }}"{% if not forloop.last %},{% endif %}{% endfor %}];
   const fmt = n => n % 1 === 0 ? String(n) : n.toFixed(2);
@@ -238,5 +239,5 @@
   document.querySelectorAll(".hours-input").forEach(inp => inp.addEventListener("input", updateTotals));
   updateTotals();
 })();
-</script>
+  </script>
 {% endblock %}

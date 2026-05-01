@@ -140,6 +140,7 @@ class DirectorDefaultsForm(forms.ModelForm):
     class Meta:
         model = DirectorDefaultAllocation
         fields = [
+            "main_grant_code",
             "main_grant_pct",
             "extra_grant_code_1", "extra_grant_pct_1",
             "extra_grant_code_2", "extra_grant_pct_2",
@@ -149,6 +150,7 @@ class DirectorDefaultsForm(forms.ModelForm):
             "pct_vacation", "pct_fundraising_pr", "pct_other_unallowable",
         ]
         widgets = {
+            "main_grant_code": forms.TextInput(attrs={"class": "form-control form-control-sm", "placeholder": "e.g. DMS-2425344"}),
             "main_grant_pct": forms.NumberInput(attrs=PCT_FIELD_ATTRS),
             "extra_grant_code_1": forms.TextInput(attrs={"class": "form-control form-control-sm", "placeholder": "Grant code (optional)"}),
             "extra_grant_pct_1": forms.NumberInput(attrs=PCT_FIELD_ATTRS),
@@ -190,8 +192,7 @@ class DirectorPeriodEntryForm(forms.Form):
         self.holiday_pct = Decimal(str(holiday_pct))
         super().__init__(*args, **kwargs)
 
-    # main_grant_code is intentionally excluded — it is locked to the director's
-    # default allocation and displayed as read-only text in the template.
+    main_grant_code = _grant()
     main_grant_pct = _pct()
     main_grant_desc = _desc()
 
