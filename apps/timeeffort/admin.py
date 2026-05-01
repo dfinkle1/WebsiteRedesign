@@ -1,25 +1,24 @@
-from datetime import timedelta
+from datetime import datetime, time, timedelta
 
-from django import forms
 from django.contrib import admin
+from django.utils import timezone
 from django.utils.html import format_html
 
 from .models import (
     Activity,
     AIMHoliday,
     DirectorDefaultAllocation,
-    DirectorPeriodSubmission,
-    DirectorSubmissionLine,
     PDFSnapshot,
     PeriodReport,
     PeriodReportLine,
+    ReportingCalendar,
     ReportingPeriod,
     ReportingWeek,
+    SalaryIndirectAllocation,
     StaffTimesheetProfile,
     WeeklyTimesheet,
     WeeklyTimesheetLine,
 )
-from .services import initialize_period_report
 
 
 # =============================================================================
@@ -29,9 +28,20 @@ from .services import initialize_period_report
 
 @admin.register(Activity)
 class ActivityAdmin(admin.ModelAdmin):
-    list_display = ["name", "default_grant_code", "classification", "is_preset", "is_grant_addon", "is_active", "sort_order"]
-    list_editable = ["sort_order", "is_active", "is_preset"]
-    list_filter = ["classification", "is_preset", "is_active"]
+    list_display = [
+        "name",
+        "default_grant_code",
+        "classification",
+        "valid_from",
+        "valid_to",
+        "is_preset",
+        "is_grant_addon",
+        "is_holiday_activity",
+        "is_active",
+        "sort_order",
+    ]
+    list_editable = ["valid_from", "valid_to", "sort_order", "is_active", "is_preset", "is_holiday_activity"]
+    list_filter = ["classification", "is_preset", "is_holiday_activity", "is_active"]
     ordering = ["sort_order", "name"]
 
 
@@ -42,7 +52,14 @@ class ActivityAdmin(admin.ModelAdmin):
 
 @admin.register(StaffTimesheetProfile)
 class StaffTimesheetProfileAdmin(admin.ModelAdmin):
-    list_display = ["user", "staff_type", "supervisor", "title", "hire_date", "is_active"]
+    list_display = [
+        "user",
+        "staff_type",
+        "supervisor",
+        "title",
+        "hire_date",
+        "is_active",
+    ]
     list_filter = ["staff_type", "is_active"]
     search_fields = ["user__first_name", "user__last_name", "user__email"]
     raw_id_fields = ["user", "supervisor"]
@@ -53,26 +70,36 @@ class StaffTimesheetProfileAdmin(admin.ModelAdmin):
 # =============================================================================
 
 
-class ReportingPeriodForm(forms.ModelForm):
-    class Meta:
-        model = ReportingPeriod
-        fields = "__all__"
+@admin.register(ReportingCalendar)
+class ReportingCalendarAdmin(admin.ModelAdmin):
+    list_display = ["anchor_start_date", "created_at", "period_count"]
+    readonly_fields = ["created_at"]
+    actions = ["generate_periods_action"]
 
-    def clean(self):
-        cleaned = super().clean()
-        start = cleaned.get("start_date")
-        end = cleaned.get("end_date")
-        staff_type = cleaned.get("staff_type")
-        if start and end and staff_type:
-            delta = (end - start).days + 1
-            expected = 28 if staff_type == ReportingPeriod.StaffType.SALARY else 14
-            week_count = 4 if staff_type == ReportingPeriod.StaffType.SALARY else 2
-            if delta != expected:
-                raise forms.ValidationError(
-                    f"{staff_type.title()} periods must span exactly {expected} days ({week_count} weeks). "
-                    f"Selected range is {delta} day(s). Adjust the end date to {start + timedelta(days=expected - 1)}."
-                )
-        return cleaned
+    def period_count(self, obj):
+        return obj.periods.count()
+
+    period_count.short_description = "Periods Generated"
+
+    @admin.action(
+        description="Generate reporting periods (24 months back, 13 months forward)"
+    )
+    def generate_periods_action(self, request, queryset):
+        total_created = 0
+        for calendar in queryset:
+            created, skipped = calendar.generate_periods(
+                months_back=24, months_forward=13
+            )
+            total_created += created
+        self.message_user(
+            request,
+            f"Created {total_created} new period(s) across {queryset.count()} calendar(s).",
+        )
+
+
+# =============================================================================
+# REPORTING PERIODS
+# =============================================================================
 
 
 class ReportingWeekInline(admin.TabularInline):
@@ -84,17 +111,26 @@ class ReportingWeekInline(admin.TabularInline):
 
 @admin.register(ReportingPeriod)
 class ReportingPeriodAdmin(admin.ModelAdmin):
-    form = ReportingPeriodForm
-    list_display = ["label", "staff_type", "period_type", "start_date", "end_date", "submission_deadline", "is_locked", "week_count"]
-    list_filter = ["staff_type", "period_type", "is_locked"]
+    list_display = [
+        "label",
+        "period_index",
+        "start_date",
+        "end_date",
+        "submission_deadline",
+        "is_locked",
+        "week_count",
+    ]
+    list_filter = ["is_locked", "calendar"]
+    search_fields = ["label"]
     inlines = [ReportingWeekInline]
     actions = ["lock_periods", "unlock_periods"]
+    readonly_fields = ["period_index"]
 
     def save_model(self, request, obj, form, change):
         if not obj.submission_deadline:
-            from datetime import datetime, time
-            from django.utils import timezone
-            deadline_naive = datetime.combine(obj.end_date + timedelta(days=3), time(14, 0))
+            deadline_naive = datetime.combine(
+                obj.end_date + timedelta(days=3), time(14, 0)
+            )
             obj.submission_deadline = timezone.make_aware(deadline_naive)
         super().save_model(request, obj, form, change)
         if not obj.weeks.exists():
@@ -117,15 +153,18 @@ class ReportingPeriodAdmin(admin.ModelAdmin):
 
     def week_count(self, obj):
         return obj.weeks.count()
+
     week_count.short_description = "Weeks"
 
-    @admin.action(description="Lock selected periods")
+    @admin.action(description="Lock selected periods (prevent edits)")
     def lock_periods(self, request, queryset):
-        queryset.update(is_locked=True)
+        updated = queryset.update(is_locked=True)
+        self.message_user(request, f"{updated} period(s) locked.")
 
     @admin.action(description="Unlock selected periods")
     def unlock_periods(self, request, queryset):
-        queryset.update(is_locked=False)
+        updated = queryset.update(is_locked=False)
+        self.message_user(request, f"{updated} period(s) unlocked.")
 
 
 # =============================================================================
@@ -136,27 +175,71 @@ class ReportingPeriodAdmin(admin.ModelAdmin):
 class WeeklyTimesheetLineInline(admin.TabularInline):
     model = WeeklyTimesheetLine
     extra = 0
-    fields = ["activity", "grant_code", "hours_sun", "hours_mon", "hours_tue", "hours_wed", "hours_thu", "hours_fri", "hours_sat", "description"]
-    readonly_fields = []
+    fields = [
+        "activity",
+        "custom_activity_name",
+        "grant_code",
+        "hours_sun",
+        "hours_mon",
+        "hours_tue",
+        "hours_wed",
+        "hours_thu",
+        "hours_fri",
+        "hours_sat",
+        "description",
+    ]
 
 
 @admin.register(WeeklyTimesheet)
 class WeeklyTimesheetAdmin(admin.ModelAdmin):
-    list_display = ["staff", "week", "status", "total_hours_display", "submitted_at"]
-    list_filter = ["status", "week__period__staff_type"]
+    list_display = [
+        "staff",
+        "week",
+        "status",
+        "total_hours_display",
+        "submitted_at",
+        "supervisor_approved_at",
+    ]
+    list_filter = ["status"]
     search_fields = ["staff__user__first_name", "staff__user__last_name"]
-    readonly_fields = ["submitted_at", "created_at", "updated_at"]
+    readonly_fields = [
+        "submitted_at",
+        "supervisor_approved_at",
+        "supervisor_approved_by",
+        "created_at",
+        "updated_at",
+    ]
     inlines = [WeeklyTimesheetLineInline]
-    actions = ["unlock_to_draft"]
+    actions = ["unlock_to_draft", "supervisor_approve_timesheets"]
 
     def total_hours_display(self, obj):
         return obj.total_hours
+
     total_hours_display.short_description = "Total Hours"
 
-    @admin.action(description="Unlock selected timesheets back to Draft (use with care)")
+    @admin.action(
+        description="Unlock selected timesheets back to Draft (use with care)"
+    )
     def unlock_to_draft(self, request, queryset):
-        updated = queryset.update(status=WeeklyTimesheet.Status.DRAFT, submitted_at=None)
+        updated = queryset.update(
+            status=WeeklyTimesheet.Status.DRAFT,
+            submitted_at=None,
+        )
         self.message_user(request, f"{updated} timesheet(s) reverted to Draft.")
+
+    @admin.action(description="Supervisor-approve selected submitted timesheets")
+    def supervisor_approve_timesheets(self, request, queryset):
+        submitted = queryset.filter(status=WeeklyTimesheet.Status.SUBMITTED)
+        now = timezone.now()
+        updated = submitted.update(
+            supervisor_approved_at=now,
+            supervisor_approved_by=request.user,
+        )
+        skipped = queryset.count() - updated
+        msg = f"Approved {updated} timesheet(s)."
+        if skipped:
+            msg += f" {skipped} skipped (not in Submitted status)."
+        self.message_user(request, msg)
 
 
 # =============================================================================
@@ -164,44 +247,145 @@ class WeeklyTimesheetAdmin(admin.ModelAdmin):
 # =============================================================================
 
 
+STATUS_COLOURS = {
+    PeriodReport.Status.DRAFT: "#6c757d",
+    PeriodReport.Status.SUBMITTED: "#0d6efd",
+    PeriodReport.Status.SUPERVISOR_APPROVED: "#198754",
+    PeriodReport.Status.PROCESSED: "#6f42c1",
+}
+
+
 class PeriodReportLineInline(admin.TabularInline):
     model = PeriodReportLine
     extra = 0
-    fields = ["activity_name_snapshot", "grant_code_snapshot", "classification_snapshot", "total_hours", "percentage", "duties_description"]
-    readonly_fields = ["activity_name_snapshot", "grant_code_snapshot", "classification_snapshot", "total_hours", "percentage"]
+    fields = [
+        "activity_name_snapshot",
+        "grant_code_snapshot",
+        "classification_snapshot",
+        "total_hours",
+        "percentage",
+        "duties_description",
+    ]
+    readonly_fields = [
+        "activity_name_snapshot",
+        "grant_code_snapshot",
+        "classification_snapshot",
+        "total_hours",
+        "percentage",
+    ]
 
 
 @admin.register(PeriodReport)
 class PeriodReportAdmin(admin.ModelAdmin):
-    list_display = ["staff", "period", "status", "total_hours", "generated_at"]
-    list_filter = ["status", "period__staff_type"]
+    list_display = [
+        "staff",
+        "period",
+        "submission_type",
+        "status_badge",
+        "supervisor_approved_at",
+        "processed_at",
+    ]
+    list_filter = ["status", "submission_type"]
     search_fields = ["staff__user__first_name", "staff__user__last_name"]
-    readonly_fields = ["generated_at", "supervisor_name_snapshot", "employee_title_snapshot", "employee_name_snapshot"]
+    readonly_fields = [
+        "status",
+        "submission_type",
+        "supervisor_approved_at",
+        "supervisor_approved_by",
+        "processed_at",
+        "processed_by",
+        "generated_at",
+        "created_at",
+        "updated_at",
+        "supervisor_name_snapshot",
+        "employee_title_snapshot",
+        "employee_name_snapshot",
+    ]
     inlines = [PeriodReportLineInline]
-    actions = ["reinitialize_report"]
+    actions = [
+        "action_supervisor_approve",
+        "action_mark_processed",
+        "action_unlock_to_draft",
+    ]
 
-    @admin.action(description="Re-initialize rollup for selected reports (recomputes lines)")
-    def reinitialize_report(self, request, queryset):
-        for report in queryset:
-            initialize_period_report(report.staff, report.period)
-        self.message_user(request, f"Re-initialized {queryset.count()} report(s).")
+    def status_badge(self, obj):
+        colour = STATUS_COLOURS.get(obj.status, "#6c757d")
+        return format_html(
+            '<span style="background:{};color:#fff;padding:2px 8px;border-radius:4px;font-size:0.8em">{}</span>',
+            colour,
+            obj.get_status_display(),
+        )
+
+    status_badge.short_description = "Status"
+
+    @admin.action(description="Supervisor-approve selected submitted reports")
+    def action_supervisor_approve(self, request, queryset):
+        eligible = queryset.filter(status=PeriodReport.Status.SUBMITTED)
+        count = 0
+        for report in eligible:
+            report.supervisor_approve(approved_by=request.user)
+            count += 1
+        skipped = queryset.count() - count
+        msg = f"Supervisor-approved {count} report(s)."
+        if skipped:
+            msg += f" {skipped} skipped (must be in Submitted status)."
+        self.message_user(request, msg)
+
+    @admin.action(description="Mark selected supervisor-approved reports as Processed")
+    def action_mark_processed(self, request, queryset):
+        eligible = queryset.filter(status=PeriodReport.Status.SUPERVISOR_APPROVED)
+        count = 0
+        for report in eligible:
+            report.mark_processed(processed_by=request.user)
+            count += 1
+        skipped = queryset.count() - count
+        msg = f"Marked {count} report(s) as Processed."
+        if skipped:
+            msg += f" {skipped} skipped (must be in Supervisor Approved status)."
+        self.message_user(request, msg)
+
+    @admin.action(description="Unlock selected reports back to Draft (admin override)")
+    def action_unlock_to_draft(self, request, queryset):
+        updated = queryset.update(
+            status=PeriodReport.Status.DRAFT,
+            supervisor_approved_at=None,
+            supervisor_approved_by=None,
+            processed_at=None,
+            processed_by=None,
+        )
+        self.message_user(request, f"{updated} report(s) reverted to Draft.")
+
+
+# =============================================================================
+# PDF SNAPSHOTS
+# =============================================================================
 
 
 @admin.register(PDFSnapshot)
 class PDFSnapshotAdmin(admin.ModelAdmin):
-    list_display = ["__str__", "pdf_type", "version", "generated_by", "generated_at", "file_link"]
+    list_display = [
+        "__str__",
+        "pdf_type",
+        "version",
+        "generated_by",
+        "generated_at",
+        "file_link",
+    ]
     list_filter = ["pdf_type"]
     readonly_fields = ["checksum", "generated_at", "version"]
 
     def file_link(self, obj):
         if obj.file:
-            return format_html('<a href="{}" target="_blank">Download</a>', obj.file.url)
+            return format_html(
+                '<a href="{}" target="_blank">Download</a>', obj.file.url
+            )
         return "—"
+
     file_link.short_description = "File"
 
 
 # =============================================================================
-# DIRECTOR EFFORT REPORTING
+# HOLIDAYS & DIRECTOR DEFAULTS
 # =============================================================================
 
 
@@ -218,24 +402,16 @@ class DirectorDefaultAllocationAdmin(admin.ModelAdmin):
     raw_id_fields = ["profile"]
 
 
-class DirectorSubmissionLineInline(admin.TabularInline):
-    model = DirectorSubmissionLine
-    extra = 0
-    fields = ["category", "grant_code", "slot", "percentage", "is_locked"]
-    readonly_fields = ["is_locked"]
-
-
-@admin.register(DirectorPeriodSubmission)
-class DirectorPeriodSubmissionAdmin(admin.ModelAdmin):
-    list_display = ["staff", "period", "status", "submitted_at"]
-    list_filter = ["status"]
-    search_fields = ["staff__user__first_name", "staff__user__last_name"]
-    readonly_fields = ["submitted_at", "created_at", "updated_at",
-                       "employee_name_snapshot", "supervisor_name_snapshot", "employee_title_snapshot"]
-    inlines = [DirectorSubmissionLineInline]
-    actions = ["unlock_to_draft"]
-
-    @admin.action(description="Unlock selected submissions back to Draft")
-    def unlock_to_draft(self, request, queryset):
-        updated = queryset.update(status=DirectorPeriodSubmission.Status.DRAFT, submitted_at=None)
-        self.message_user(request, f"{updated} submission(s) reverted to Draft.")
+@admin.register(SalaryIndirectAllocation)
+class SalaryIndirectAllocationAdmin(admin.ModelAdmin):
+    list_display = [
+        "profile",
+        "hours_administrative",
+        "hours_other_activity",
+        "hours_sick_personal",
+        "hours_vacation",
+        "hours_fundraising_pr",
+        "hours_other_unallowable",
+    ]
+    search_fields = ["profile__user__first_name", "profile__user__last_name"]
+    raw_id_fields = ["profile"]

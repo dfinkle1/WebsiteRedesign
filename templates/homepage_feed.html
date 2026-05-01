@@ -1,0 +1,36 @@
+{% if items %}
+  <ul class="list-unstyled mb-0">
+    {% for item in items %}
+      <li class="feed-item {% if not forloop.last %}border-bottom{% endif %} pb-3 mb-3">
+        {% if item.url %}
+          <a href="{{ item.url }}" class="feed-title-link">{{ item.title }}</a>
+        {% else %}
+          <p class="feed-title">{{ item.title }}</p>
+        {% endif %}
+        {% if item.excerpt %}
+          <p class="feed-excerpt mb-0">{{ item.excerpt }}</p>
+        {% endif %}
+        {% if item.body %}
+          <div class="feed-body mt-1">{{ item.body|safe }}</div>
+        {% endif %}
+        {% if item.image %}
+          <div class="feed-hero mt-2">
+            {% if item.url %}
+              <a href="{{ item.url }}" class="d-block">
+                <img src="{{ item.image.url }}"
+                     alt="{{ item.title }}"
+                     class="feed-hero-img">
+              </a>
+            {% else %}
+              <img src="{{ item.image.url }}"
+                   alt="{{ item.title }}"
+                   class="feed-hero-img">
+            {% endif %}
+          </div>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="text-muted small mb-0">No recent updates.</p>
+{% endif %}

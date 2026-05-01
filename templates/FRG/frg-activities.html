@@ -1,54 +1,35 @@
 {% extends "base.html" %}
 {% load cms_tags sekizai_tags %}
 {% load static %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-  <head>
-    <meta name="generator" content="jemdoc, see http://jemdoc.jaboc.net/" />
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-    <link rel="stylesheet" href="{% static 'css/jemdoc.css' %}" />
-    <title>FRG Activities</title>
-    <!-- MathJax -->
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
-    <script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-	  TeX: { equationNumbers: { autoNumber: "AMS" } }
-});
-    </script>
-    <!-- End MathJax -->
-  </head>
-  {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/jemdoc.css' %}" />
-  {% endblock extra_css %}
-  {% block content %}
-    <body>
-      <table summary="Table for page layout." id="tlayout">
-        <tr valign="top">
-          <td id="layout-menu">
-            <div class="menu-category">AIM FRG</div>
-            <div class="menu-item">
-              <a href="{% page_url 'frg' %}">Home</a>
-            </div>
-            <div class="menu-item">
-              <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1854398">NSF&nbsp;Grant</a>
-            </div>
-            <div class="menu-item">
-              <a href="{% page_url 'frg' %}papers">Publications</a>
-            </div>
-            <div class="menu-item">
-              <a href="{% page_url 'frg' %}activities" class="current">Activities</a>
-            </div>
-            <div class="menu-item">
-              <a href="https://vimeo.com/showcase/7398886">Videos</a>
-            </div>
-            <div class="menu-item">
-              <a href="./references/">References</a>
-            </div>
-          </td>
-          <td id="layout-content">
-            <div id="toptitle">
-              <h1>FRG Activities</h1>
-            </div>
+{% block title %}FRG Activities{% endblock %}
+{% block extra_css %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML" async></script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "AMS" } } });
+  </script>
+{% endblock extra_css %}
+{% block content %}
+  <div class="header-banner">
+    <div class="container py-3">
+      <p class="section-label mb-1">Past Programs</p>
+      <h1 class="h3 mb-0">FRG Activities</h1>
+    </div>
+  </div>
+  <div class="container py-4">
+    <div class="row g-4">
+      <div class="col-lg-3">
+        <nav class="section-sidebar">
+          <div class="section-nav">
+            <a href="{% page_url 'frg' %}">Home</a>
+            <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1854398" target="_blank" rel="noopener">NSF Grant</a>
+            <a href="{% page_url 'frg' %}papers">Papers</a>
+            <a href="{% page_url 'frg' %}activities" class="active">Activities</a>
+            <a href="https://vimeo.com/showcase/7398886" target="_blank" rel="noopener">Videos</a>
+          </div>
+        </nav>
+      </div>
+      <div class="col-lg-9">
+        <div class="section-content">
             <p>
               The following activities were organized as part of the <a href="aimfrg.html" target=&ldquo;blank&rdquo;>AIM FRG</a>:
             </p>
@@ -1356,15 +1337,8 @@ MathJax.Hub.Config({
    blank
    rdquo>video</a>)
             </p>
-            <div id="footer">
-              <div id="footer-text">
-                Page generated 2024-12-12 02:47:08 EST, by <a href="https://github.com/wsshin/jemdoc_mathjax" target="blank">jemdoc+MathJax</a>.
-                (<a href="activities.jemdoc">source</a>)
-              </div>
-            </div>
-          </td>
-        </tr>
-      </table>
-    </body>
-  </html>
+        </div>{# /section-content #}
+      </div>
+    </div>
+  </div>
 {% endblock content %}

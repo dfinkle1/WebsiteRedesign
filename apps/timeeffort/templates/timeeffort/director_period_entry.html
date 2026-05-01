@@ -2,240 +2,243 @@
 {% load static %}
 {% block title %}{{ period.label }} — Effort Report{% endblock %}
 {% block content %}
-<div class="container py-4" style="max-width: 760px;">
-
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <div>
-      <h4 class="mb-0">{{ period.label }}</h4>
-      <small class="text-muted">{{ period.start_date|date:"F j, Y" }} – {{ period.end_date|date:"F j, Y" }}</small>
-    </div>
-    <a href="{% url 'timeeffort:dashboard' %}" class="btn btn-sm btn-outline-secondary">← Dashboard</a>
-  </div>
-
-  {% if submission.status == "SUBMITTED" and edits_allowed %}
-    <div class="alert alert-warning">
-      <strong>Already submitted.</strong>
-      You can still make changes until
-      <strong>{{ submission_deadline|date:"M j, Y" }} at {{ submission_deadline|date:"g:i A" }}</strong>.
-      Re-saving will update your submission.
-    </div>
-  {% endif %}
-
-  {% if messages %}
-    {% for msg in messages %}
-      <div class="alert alert-{{ msg.tags }} alert-dismissible fade show">
-        {{ msg }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  <div class="container py-4" style="max-width: 760px;">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h4 class="mb-0">{{ period.start_date|date:"F j, Y" }} – {{ end_date|date:"F j, Y" }}</h4>
       </div>
-    {% endfor %}
-  {% endif %}
-
-  {% if holiday_count %}
-  <div class="alert alert-info py-2 small">
-    <strong>{{ holiday_count }} AIM holiday(s)</strong> fall in this period
-    ({% for h in holidays %}{{ h.name }}{% if not forloop.last %}, {% endif %}{% endfor %}).
-    <strong>{{ holiday_pct }}%</strong> has been automatically deducted from your direct allocation.
-  </div>
-  {% endif %}
-
-  <form method="post" id="director-form">
-    {% csrf_token %}
-
-    {% if form.non_field_errors %}
-      <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+      <a href="{% url 'timeeffort:dashboard' %}"
+         class="btn btn-sm btn-outline-secondary">← Dashboard</a>
+    </div>
+    {% if report.status != "DRAFT" and edits_allowed %}
+      <div class="alert alert-warning">
+        <strong>Already submitted.</strong>
+        You can still make changes until
+        <strong>{{ submission_deadline|date:"M j, Y" }} at {{ submission_deadline|date:"g:i A" }}</strong>.
+        Re-saving will update your submission.
+      </div>
     {% endif %}
-
-    <!-- DIRECT SECTION -->
-    <div class="card mb-3">
-      <div class="card-header d-flex justify-content-between align-items-center">
-        <span class="fw-semibold">Direct Effort</span>
-        <span class="text-muted small" id="direct-subtotal">0%</span>
+    {% if messages %}
+      {% for msg in messages %}
+        <div class="alert alert-{{ msg.tags }} alert-dismissible fade show">
+          {{ msg }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+    {% if holiday_count %}
+      <div class="alert alert-info py-2 small">
+        <strong>{{ holiday_count }} AIM holiday(s)</strong> fall in this period
+        (
+        {% for h in holidays %}
+          {{ h.name }}
+          {% if not forloop.last %},{% endif %}
+        {% endfor %}
+        ).
+        <strong>{{ holiday_pct }}%</strong> has been automatically deducted from your indirect administrative allocation.
       </div>
-      <div class="card-body p-0">
-        <table class="table table-sm mb-0 align-middle">
-          <thead class="table-light">
-            <tr>
-              <th style="width:22%">Grant Code</th>
-              <th style="width:110px">% of Time</th>
-              <th>Work Performed / Duties</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="table-light">
-              <td>
-                {% if main_grant_code %}
-                  <span class="fw-semibold">{{ main_grant_code }}</span>
-                  <div class="text-muted" style="font-size:0.75rem;">(primary)</div>
-                {% else %}
-                  <span class="text-danger small">No primary grant —
-                    <a href="{% url 'timeeffort:director_set_defaults' %}">set defaults →</a>
-                  </span>
-                {% endif %}
-              </td>
-              <td>
-                <div class="input-group input-group-sm">
-                  {{ form.main_grant_pct }}
-                  <span class="input-group-text">%</span>
-                </div>
-                {% if form.main_grant_pct.errors %}<div class="text-danger small">{{ form.main_grant_pct.errors }}</div>{% endif %}
-              </td>
-              <td>{{ form.main_grant_desc }}</td>
-            </tr>
-            <tr>
-              <td>{{ form.extra_grant_code_1 }}</td>
-              <td>
-                <div class="input-group input-group-sm">
-                  {{ form.extra_grant_pct_1 }}
-                  <span class="input-group-text">%</span>
-                </div>
-              </td>
-              <td>{{ form.extra_grant_desc_1 }}</td>
-            </tr>
-            <tr>
-              <td>{{ form.extra_grant_code_2 }}</td>
-              <td>
-                <div class="input-group input-group-sm">
-                  {{ form.extra_grant_pct_2 }}
-                  <span class="input-group-text">%</span>
-                </div>
-              </td>
-              <td>{{ form.extra_grant_desc_2 }}</td>
-            </tr>
-            <tr>
-              <td>{{ form.extra_grant_code_3 }}</td>
-              <td>
-                <div class="input-group input-group-sm">
-                  {{ form.extra_grant_pct_3 }}
-                  <span class="input-group-text">%</span>
-                </div>
-              </td>
-              <td>{{ form.extra_grant_desc_3 }}</td>
-            </tr>
-            <tr>
-              <td>{{ form.extra_grant_code_4 }}</td>
-              <td>
-                <div class="input-group input-group-sm">
-                  {{ form.extra_grant_pct_4 }}
-                  <span class="input-group-text">%</span>
-                </div>
-              </td>
-              <td>{{ form.extra_grant_desc_4 }}</td>
-            </tr>
-          </tbody>
-        </table>
+    {% endif %}
+    <form method="post" id="director-form">
+      {% csrf_token %}
+      {% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+      <!-- DIRECT SECTION -->
+      <div class="card mb-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <span class="fw-semibold">Direct Effort</span>
+          <span class="text-muted small" id="direct-subtotal">0%</span>
+        </div>
+        <div class="card-body p-0">
+          <table class="table table-sm mb-0 align-middle">
+            <thead class="table-light">
+              <tr>
+                <th style="width:22%">Grant Code</th>
+                <th style="width:110px">% of Time</th>
+                <th>Work Performed / Duties</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-light">
+                <td>
+                  {% if main_grant_code %}
+                    <span class="fw-semibold">{{ main_grant_code }}</span>
+                    <div class="text-muted" style="font-size:0.75rem;">(primary)</div>
+                  {% else %}
+                    <span class="text-danger small">No primary grant —
+                      <a href="{% url 'timeeffort:director_set_defaults' %}">set defaults →</a>
+                    </span>
+                  {% endif %}
+                </td>
+                <td>
+                  <div class="input-group input-group-sm">
+                    {{ form.main_grant_pct }}
+                    <span class="input-group-text">%</span>
+                  </div>
+                  {% if form.main_grant_pct.errors %}<div class="text-danger small">{{ form.main_grant_pct.errors }}</div>{% endif %}
+                </td>
+                <td>{{ form.main_grant_desc }}</td>
+              </tr>
+              <tr>
+                <td>{{ form.extra_grant_code_1 }}</td>
+                <td>
+                  <div class="input-group input-group-sm">
+                    {{ form.extra_grant_pct_1 }}
+                    <span class="input-group-text">%</span>
+                  </div>
+                </td>
+                <td>{{ form.extra_grant_desc_1 }}</td>
+              </tr>
+              <tr>
+                <td>{{ form.extra_grant_code_2 }}</td>
+                <td>
+                  <div class="input-group input-group-sm">
+                    {{ form.extra_grant_pct_2 }}
+                    <span class="input-group-text">%</span>
+                  </div>
+                </td>
+                <td>{{ form.extra_grant_desc_2 }}</td>
+              </tr>
+              <tr>
+                <td>{{ form.extra_grant_code_3 }}</td>
+                <td>
+                  <div class="input-group input-group-sm">
+                    {{ form.extra_grant_pct_3 }}
+                    <span class="input-group-text">%</span>
+                  </div>
+                </td>
+                <td>{{ form.extra_grant_desc_3 }}</td>
+              </tr>
+              <tr>
+                <td>{{ form.extra_grant_code_4 }}</td>
+                <td>
+                  <div class="input-group input-group-sm">
+                    {{ form.extra_grant_pct_4 }}
+                    <span class="input-group-text">%</span>
+                  </div>
+                </td>
+                <td>{{ form.extra_grant_desc_4 }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-
-    <!-- INDIRECT & OTHER SECTION -->
-    <div class="card mb-4">
-      <div class="card-header d-flex justify-content-between align-items-center">
-        <span class="fw-semibold">Indirect &amp; Other</span>
-        <span class="text-muted small" id="indirect-subtotal">0%</span>
+      <!-- INDIRECT & OTHER SECTION -->
+      <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <span class="fw-semibold">Indirect &amp; Other</span>
+          <span class="text-muted small" id="indirect-subtotal">0%</span>
+        </div>
+        <div class="card-body p-0">
+          <table class="table table-sm mb-0 align-middle">
+            <thead class="table-light">
+              <tr>
+                <th style="width:22%">Category</th>
+                <th style="width:110px">% of Time</th>
+                <th>Work Performed / Duties</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Administrative</td>
+                <td>
+                  <div class="input-group input-group-sm">
+                    {{ form.pct_administrative }}
+                    <span class="input-group-text">%</span>
+                  </div>
+                </td>
+                <td>{{ form.desc_administrative }}</td>
+              </tr>
+              <tr>
+                <td>Other Activity</td>
+                <td>
+                  <div class="input-group input-group-sm">
+                    {{ form.pct_other_activity }}
+                    <span class="input-group-text">%</span>
+                  </div>
+                </td>
+                <td>{{ form.desc_other_activity }}</td>
+              </tr>
+              <tr>
+                <td>Sick or Personal Day</td>
+                <td>
+                  <div class="input-group input-group-sm">
+                    {{ form.pct_sick_personal }}
+                    <span class="input-group-text">%</span>
+                  </div>
+                </td>
+                <td>{{ form.desc_sick_personal }}</td>
+              </tr>
+              <tr>
+                <td>Vacation</td>
+                <td>
+                  <div class="input-group input-group-sm">
+                    {{ form.pct_vacation }}
+                    <span class="input-group-text">%</span>
+                  </div>
+                </td>
+                <td>{{ form.desc_vacation }}</td>
+              </tr>
+              {% if holiday_pct %}
+                <tr class="table-light">
+                  <td>
+                    Employer Holiday
+                    <span class="text-muted small">(auto — {{ holiday_count }} day{{ holiday_count|pluralize }})</span>
+                  </td>
+                  <td>
+                    <div class="input-group input-group-sm">
+                      <input type="text"
+                             class="form-control form-control-sm text-end"
+                             value="{{ holiday_pct }}"
+                             disabled>
+                      <span class="input-group-text">%</span>
+                    </div>
+                  </td>
+                  <td></td>
+                </tr>
+              {% endif %}
+              <tr>
+                <td>Fundraising / PR</td>
+                <td>
+                  <div class="input-group input-group-sm">
+                    {{ form.pct_fundraising_pr }}
+                    <span class="input-group-text">%</span>
+                  </div>
+                </td>
+                <td>{{ form.desc_fundraising_pr }}</td>
+              </tr>
+              <tr>
+                <td>Other Unallowable Activity</td>
+                <td>
+                  <div class="input-group input-group-sm">
+                    {{ form.pct_other_unallowable }}
+                    <span class="input-group-text">%</span>
+                  </div>
+                </td>
+                <td>{{ form.desc_other_unallowable }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div class="card-body p-0">
-        <table class="table table-sm mb-0 align-middle">
-          <thead class="table-light">
-            <tr>
-              <th style="width:22%">Category</th>
-              <th style="width:110px">% of Time</th>
-              <th>Work Performed / Duties</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Administrative</td>
-              <td>
-                <div class="input-group input-group-sm">
-                  {{ form.pct_administrative }}
-                  <span class="input-group-text">%</span>
-                </div>
-              </td>
-              <td>{{ form.desc_administrative }}</td>
-            </tr>
-            <tr>
-              <td>Other Activity</td>
-              <td>
-                <div class="input-group input-group-sm">
-                  {{ form.pct_other_activity }}
-                  <span class="input-group-text">%</span>
-                </div>
-              </td>
-              <td>{{ form.desc_other_activity }}</td>
-            </tr>
-            <tr>
-              <td>Sick or Personal Day</td>
-              <td>
-                <div class="input-group input-group-sm">
-                  {{ form.pct_sick_personal }}
-                  <span class="input-group-text">%</span>
-                </div>
-              </td>
-              <td>{{ form.desc_sick_personal }}</td>
-            </tr>
-            <tr>
-              <td>Vacation</td>
-              <td>
-                <div class="input-group input-group-sm">
-                  {{ form.pct_vacation }}
-                  <span class="input-group-text">%</span>
-                </div>
-              </td>
-              <td>{{ form.desc_vacation }}</td>
-            </tr>
-            {% if holiday_pct %}
-            <tr class="table-light">
-              <td>
-                Employer Holiday
-                <span class="text-muted small">(auto — {{ holiday_count }} day{{ holiday_count|pluralize }})</span>
-              </td>
-              <td>
-                <div class="input-group input-group-sm">
-                  <input type="text" class="form-control form-control-sm text-end" value="{{ holiday_pct }}" disabled>
-                  <span class="input-group-text">%</span>
-                </div>
-              </td>
-              <td></td>
-            </tr>
-            {% endif %}
-            <tr>
-              <td>Fundraising / PR</td>
-              <td>
-                <div class="input-group input-group-sm">
-                  {{ form.pct_fundraising_pr }}
-                  <span class="input-group-text">%</span>
-                </div>
-              </td>
-              <td>{{ form.desc_fundraising_pr }}</td>
-            </tr>
-            <tr>
-              <td>Other Unallowable Activity</td>
-              <td>
-                <div class="input-group input-group-sm">
-                  {{ form.pct_other_unallowable }}
-                  <span class="input-group-text">%</span>
-                </div>
-              </td>
-              <td>{{ form.desc_other_unallowable }}</td>
-            </tr>
-          </tbody>
-        </table>
+      <!-- GRAND TOTAL -->
+      <div class="d-flex justify-content-end align-items-center mb-3 gap-3">
+        <span class="fw-semibold">Total:</span>
+        <span id="grand-total" class="fs-5 fw-bold">0%</span>
+        <span id="total-warning" class="text-danger small" style="display:none">Must equal 100%</span>
       </div>
-    </div>
-
-    <!-- GRAND TOTAL -->
-    <div class="d-flex justify-content-end align-items-center mb-3 gap-3">
-      <span class="fw-semibold">Total:</span>
-      <span id="grand-total" class="fs-5 fw-bold">0%</span>
-      <span id="total-warning" class="text-danger small" style="display:none">Must equal 100%</span>
-    </div>
-
-    <div class="d-flex gap-2">
-      <button type="submit" name="action" value="save" class="btn btn-outline-primary">Save Draft</button>
-      <button type="submit" name="action" value="submit" class="btn btn-success" id="submit-btn">Submit</button>
-    </div>
-  </form>
-</div>
-
-<script>
+      <div class="d-flex gap-2">
+        <button type="submit"
+                name="action"
+                value="save"
+                class="btn btn-outline-primary">Save Draft</button>
+        <button type="submit"
+                name="action"
+                value="submit"
+                class="btn btn-success"
+                id="submit-btn">Submit</button>
+      </div>
+    </form>
+  </div>
+  <script>
 (function () {
   var HOLIDAY_PCT = parseFloat("{{ holiday_pct }}") || 0;
 
@@ -277,5 +280,5 @@
 
   updateTotals();
 })();
-</script>
+  </script>
 {% endblock %}

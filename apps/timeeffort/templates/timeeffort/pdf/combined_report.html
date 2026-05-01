@@ -42,10 +42,20 @@
     letter-spacing: 0.5pt;
   }
 
+  .week-title {
+    font-size: 10pt;
+    font-weight: bold;
+    background-color: #ebebeb;
+    padding: 3pt 6pt;
+    margin-top: 8pt;
+    margin-bottom: 0;
+    border: 1pt solid #bbb;
+  }
+
   table { width: 100%; border-collapse: collapse; margin-bottom: 0; font-size: 9.5pt; }
-  th { border: 1pt solid #888; padding: 4pt 6pt; font-weight: bold; text-align: left; background-color: #ebebeb; }
+  th { border: 1pt solid #888; padding: 3pt 5pt; font-weight: bold; text-align: left; background-color: #ebebeb; }
   th.center { text-align: center; }
-  td { border: 1pt solid #ccc; padding: 4pt 6pt; vertical-align: top; }
+  td { border: 1pt solid #ccc; padding: 3pt 5pt; vertical-align: top; }
   td.center { text-align: center; vertical-align: middle; }
   tr.total-row { background-color: #e0e0e0; font-weight: bold; }
   tr.none-row td { font-style: italic; color: #888; font-size: 9pt; }
@@ -78,6 +88,8 @@
   .footnote-block { margin-top: 12pt; font-size: 8.5pt; color: #444; font-style: italic; border-top: 0.5pt solid #aaa; padding-top: 6pt; }
 
   .report-meta { font-size: 8pt; color: #666; text-align: right; margin-bottom: 4pt; }
+
+  .page-break { page-break-before: always; }
     </style>
   </head>
   <body>
@@ -85,10 +97,13 @@
       Report ID: R-{{ report.id }} &nbsp;|&nbsp; Generated: {{ generated_at|date:"m/d/Y H:i" }}
       {% if report.pdfs.count > 1 %}&nbsp;|&nbsp; <strong>Version {{ report.pdfs.latest.version }}</strong>{% endif %}
     </div>
+
+    <!-- ── COVER / HEADER ──────────────────────────────────────── -->
     <div class="header">
       <h1>American Institute of Mathematics</h1>
       <h2>Time and Effort Report</h2>
     </div>
+
     <div class="meta-block">
       <div class="meta-row">
         <span class="meta-label">Employee:</span> {{ report.employee_name_snapshot }}
@@ -97,15 +112,62 @@
         <span class="meta-label">Supervisor:</span> {{ report.supervisor_name_snapshot|default:"—" }}
       </div>
       <div class="meta-row">
-        <span class="meta-label">Report Period:</span> {{ period.start_date|date:"m/d/y" }} – {{ period.end_date|date:"m/d/y" }}
+        <span class="meta-label">Report Period:</span>
+        {{ period.start_date|date:"m/d/y" }} –
+        {% with last=weekly_data|last %}{{ last.week.end_date|date:"m/d/y" }}{% endwith %}
+      </div>
+      <div class="meta-row">
+        <span class="meta-label">Total Hours:</span> {{ total_hours }}
       </div>
     </div>
-    <!-- DIRECT ACTIVITIES -->
-    <div class="section-title">Direct Activities</div>
+
+    <!-- ── WEEKLY GRIDS ─────────────────────────────────────────── -->
+    {% for wd in weekly_data %}
+    <div class="week-title">
+      Week {{ wd.week.week_number }} of {{ wd.week.period.label }}
+      &nbsp;·&nbsp; {{ wd.week.start_date|date:"M j" }} – {{ wd.week.end_date|date:"M j, Y" }}
+      &nbsp;·&nbsp; Total: {{ wd.total }}h
+    </div>
     <table>
       <thead>
         <tr>
-          <th style="width:30%">Activity</th>
+          <th style="width:35%">Activity</th>
+          <th style="width:14%">Grant / Code</th>
+          {% for lbl in day_labels %}
+          <th class="center" style="width:6%">{{ lbl }}</th>
+          {% endfor %}
+          <th class="center" style="width:7%">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for line in wd.lines %}
+        <tr>
+          <td>{% if line.activity %}{{ line.activity.name }}{% else %}{{ line.custom_activity_name|default:"Custom" }}{% endif %}</td>
+          <td class="center">{% if line.activity %}{{ line.grant_code|default:line.activity.default_grant_code|default:"—" }}{% else %}{{ line.grant_code|default:"—" }}{% endif %}</td>
+          <td class="center">{% if line.hours_sun %}{{ line.hours_sun }}{% else %}—{% endif %}</td>
+          <td class="center">{% if line.hours_mon %}{{ line.hours_mon }}{% else %}—{% endif %}</td>
+          <td class="center">{% if line.hours_tue %}{{ line.hours_tue }}{% else %}—{% endif %}</td>
+          <td class="center">{% if line.hours_wed %}{{ line.hours_wed }}{% else %}—{% endif %}</td>
+          <td class="center">{% if line.hours_thu %}{{ line.hours_thu }}{% else %}—{% endif %}</td>
+          <td class="center">{% if line.hours_fri %}{{ line.hours_fri }}{% else %}—{% endif %}</td>
+          <td class="center">{% if line.hours_sat %}{{ line.hours_sat }}{% else %}—{% endif %}</td>
+          <td class="center">{{ line.total_hours }}</td>
+        </tr>
+        {% empty %}
+        <tr class="none-row">
+          <td colspan="10">No hours recorded this week.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endfor %}
+
+    <!-- ── ROLLED-UP EFFORT REPORT ─────────────────────────────── -->
+    <div class="section-title" style="margin-top:18pt;">Direct Activities</div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:35%">Activity</th>
           <th style="width:15%">Grant / Code</th>
           <th>Duties, Activity, and Work Performed</th>
           <th class="center" style="width:8%">Hours</th>
@@ -114,26 +176,24 @@
       </thead>
       <tbody>
         {% for line in direct_lines %}
-          <tr>
-            <td>{{ line.activity_name_snapshot }}</td>
-            <td class="center">{{ line.grant_code_snapshot|default:"—" }}</td>
-            <td>{{ line.duties_description }}</td>
-            <td class="center">{{ line.total_hours }}</td>
-            <td class="center">{{ line.percentage }}%</td>
-          </tr>
+        <tr>
+          <td>{{ line.activity_name_snapshot }}</td>
+          <td class="center">{{ line.grant_code_snapshot|default:"—" }}</td>
+          <td>{{ line.duties_description }}</td>
+          <td class="center">{{ line.total_hours }}</td>
+          <td class="center">{{ line.percentage }}%</td>
+        </tr>
         {% empty %}
-          <tr class="none-row">
-            <td colspan="5">No direct activities reported this period.</td>
-          </tr>
+        <tr class="none-row"><td colspan="5">No direct activities reported this period.</td></tr>
         {% endfor %}
       </tbody>
     </table>
-    <!-- INDIRECT ACTIVITIES -->
+
     <div class="section-title">Indirect Activities</div>
     <table>
       <thead>
         <tr>
-          <th style="width:30%">Activity</th>
+          <th style="width:35%">Activity</th>
           <th style="width:15%">Grant / Code</th>
           <th>Duties, Activity, and Work Performed</th>
           <th class="center" style="width:8%">Hours</th>
@@ -142,69 +202,69 @@
       </thead>
       <tbody>
         {% for line in indirect_lines %}
-          <tr>
-            <td>{{ line.activity_name_snapshot }}</td>
-            <td class="center">{{ line.grant_code_snapshot|default:"—" }}</td>
-            <td>{{ line.duties_description }}</td>
-            <td class="center">{{ line.total_hours }}</td>
-            <td class="center">{{ line.percentage }}%</td>
-          </tr>
+        <tr>
+          <td>{{ line.activity_name_snapshot }}</td>
+          <td class="center">{{ line.grant_code_snapshot|default:"—" }}</td>
+          <td>{{ line.duties_description }}</td>
+          <td class="center">{{ line.total_hours }}</td>
+          <td class="center">{{ line.percentage }}%</td>
+        </tr>
         {% endfor %}
         {% for line in leave_lines %}
-          <tr>
-            <td>{{ line.activity_name_snapshot }}</td>
-            <td class="center">—</td>
-            <td>{{ line.duties_description }}</td>
-            <td class="center">{{ line.total_hours }}</td>
-            <td class="center">{{ line.percentage }}%</td>
-          </tr>
+        <tr>
+          <td>{{ line.activity_name_snapshot }}</td>
+          <td class="center">—</td>
+          <td>{{ line.duties_description }}</td>
+          <td class="center">{{ line.total_hours }}</td>
+          <td class="center">{{ line.percentage }}%</td>
+        </tr>
         {% endfor %}
         {% if not indirect_lines and not leave_lines %}
-          <tr class="none-row">
-            <td colspan="5">No indirect activities reported this period.</td>
-          </tr>
+        <tr class="none-row"><td colspan="5">No indirect activities reported this period.</td></tr>
         {% endif %}
       </tbody>
     </table>
-    <!-- UNALLOWABLE ACTIVITIES -->
+
     <div class="section-title">Unallowable Activities</div>
     <table>
       <thead>
         <tr>
-          <th style="width:30%">Activity</th>
+          <th style="width:35%">Activity</th>
           <th style="width:15%">Grant / Code</th>
           <th>Duties, Activity, and Work Performed</th>
+          <th class="center" style="width:8%">Hours</th>
           <th class="center" style="width:8%">% of Time</th>
         </tr>
       </thead>
       <tbody>
         {% for line in unallowable_lines %}
-          <tr>
-            <td>{{ line.activity_name_snapshot }}</td>
-            <td class="center">{{ line.grant_code_snapshot|default:"—" }}</td>
-            <td>{{ line.duties_description }}</td>
-            <td class="center">{{ line.percentage }}%</td>
-          </tr>
+        <tr>
+          <td>{{ line.activity_name_snapshot }}</td>
+          <td class="center">{{ line.grant_code_snapshot|default:"—" }}</td>
+          <td>{{ line.duties_description }}</td>
+          <td class="center">{{ line.total_hours }}</td>
+          <td class="center">{{ line.percentage }}%</td>
+        </tr>
         {% empty %}
-          <tr class="none-row">
-            <td colspan="5">No unallowable activities reported this period.</td>
-          </tr>
+        <tr class="none-row"><td colspan="5">No unallowable activities reported this period.</td></tr>
         {% endfor %}
       </tbody>
     </table>
-    <!-- TOTALS -->
-    <table style="margin-top: 0;">
+
+    <!-- TOTALS row -->
+    <table style="margin-top:0;">
       <tbody>
         <tr class="total-row">
-          <td style="width:30%">TOTAL</td>
+          <td style="width:35%">TOTAL</td>
           <td style="width:15%"></td>
           <td></td>
-          <td class="center" style="width:8%">{{ report.total_hours }}</td>
+          <td class="center" style="width:8%">{{ total_hours }}</td>
           <td class="center" style="width:8%">100%</td>
         </tr>
       </tbody>
     </table>
-    <!-- CERTIFICATION & SIGNATURES -->
+
+    <!-- ── CERTIFICATION & SIGNATURES ──────────────────────────── -->
     <div class="sig-section">
       <h3>Certification</h3>
       <div class="certification-box">
@@ -213,10 +273,11 @@
         activities as described herein. This is an after-the-fact determination of my actual
         activity for the above pay period.
       </div>
+
       <div class="esig-box">
         <div class="sig-field-label">Employee Electronic Signature</div>
         <div class="esig-name">{{ report.employee_name_snapshot }}</div>
-        <div class="sig-grid" style="margin-top: 4pt;">
+        <div class="sig-grid" style="margin-top:4pt;">
           <div>
             <div class="sig-field-label">Employee Name</div>
             <span class="sig-line" style="padding-top:3pt; font-size:9.5pt;">{{ report.employee_name_snapshot }}</span>
@@ -231,7 +292,8 @@
           Authentication via ORCID account serves as this employee's binding certification.
         </div>
       </div>
-      <div class="sig-grid" style="margin-top: 18pt;">
+
+      <div class="sig-grid" style="margin-top:18pt;">
         <div>
           <div class="sig-field-label">Supervisor Signature *</div>
           <span class="sig-line">&nbsp;</span>
@@ -247,6 +309,7 @@
         <div></div>
       </div>
     </div>
+
     <div class="footnote-block">
       * Supervisory official having first-hand knowledge of the activity performed by employee.
     </div>

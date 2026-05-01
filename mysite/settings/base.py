@@ -315,7 +315,7 @@ CMS_TEMPLATES = [
         "cms_templates/joyful_math/math_communities.html",
         "Joyful Math - Math Communities",
     ),
-    ("cms_templates/joyful_math/socal-ecosystem.html", "Joyful Math - SoCal Joyful"),
+    ("cms_templates/joyful_math/socal_ecosystem.html", "Joyful Math - SoCal Joyful"),
     (
         "cms_templates/joyful_math/math_on_the_border.html",
         "Joyful Math - Math On The Border",

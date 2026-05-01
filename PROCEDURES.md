@@ -4,6 +4,114 @@ This document describes workflows for AIM staff using the admin system.
 
 ---
 
+## Homepage Feed
+
+The homepage "Latest Updates" column is a **two-stream feed** that combines automatic news surfacing with manual control over announcements and pinned items.
+
+**Location:** Admin → News → Homepage Feed Items
+
+---
+
+### How the Feed Works
+
+The homepage shows up to **5 items**, drawn from two sources and merged:
+
+**Stream 1 — News Articles (automatic)**
+Any published news article with **"Is Featured"** checked appears in the feed automatically. You do not need to create a feed item — just publish the article and check the box.
+
+**Stream 2 — Manual Feed Items**
+Items you create explicitly in Admin → News → Homepage Feed Items. Use these for:
+- Announcements with no backing article ("Call for Proposals open", grant awards, etc.)
+- Pinning a specific article to the top of the feed
+- Milestones, event callouts, or any custom content
+
+**Merge order:**
+1. Pinned manual items first (sorted by Pin Order lowest-first)
+2. All remaining items (both auto-surfaced articles and unpinned manual items) sorted most-recent-first
+
+---
+
+### Publishing a News Article to the Feed
+
+1. Go to Admin → News → News Articles → [Select or create article]
+2. Check **"Is Featured"**
+3. Set status to **Published**
+4. Save — the article will appear in the homepage feed immediately
+
+No further action needed. To remove it from the feed, uncheck "Is Featured" or unpublish the article.
+
+---
+
+### Creating a Manual Feed Item
+
+Use this for standalone announcements or to pin/override an existing article's placement.
+
+**Location:** Admin → News → Homepage Feed Items → Add
+
+#### Option A — Standalone announcement (no article)
+
+1. Leave **Linked Article** blank
+2. Fill in:
+   - **Title** — headline shown on the homepage
+   - **Item Type** — News (blue), Announcement (amber), Event (green), Milestone (purple)
+   - **Excerpt** — 1–2 sentence summary (max 300 characters)
+   - **Body** — optional rich text shown below the excerpt
+   - **URL** — where "Read more" links. Use `/path/` for internal, `https://` for external
+   - **Image** — optional hero image
+   - **Published At** — item won't appear until this date/time
+   - **Pin Order** — see Ordering below
+   - **Is Active** — uncheck to hide without deleting
+3. Save
+
+#### Option B — Linked to an existing article (e.g. to pin it)
+
+1. Set **Linked Article** by searching for the article
+2. Leave Title, Excerpt, Image, and URL **blank** — they will automatically use the article's values
+3. Set a **Pin Order** to control placement
+4. Save
+
+When a manual item links to an article, that article is excluded from the automatic stream — it will not appear twice.
+
+You can also selectively override fields: for example, set a custom Title while leaving Image blank (the article's image will be used).
+
+---
+
+### Ordering Items
+
+| Scenario | How to control it |
+|----------|-------------------|
+| Pin an item to always appear first | Set Pin Order = 1 |
+| Pin a second item below that | Set Pin Order = 2 |
+| Let an item sort by date | Leave Pin Order blank |
+
+Pinned items always appear before unpinned ones. Unpinned items (both manual and auto-surfaced articles) are sorted by date, most recent first.
+
+---
+
+### Editing and Deactivating Items
+
+- **Temporarily hide a manual item:** Uncheck "Is Active" — it disappears from the homepage but stays in the database
+- **Remove an auto-surfaced article from the feed:** Uncheck "Is Featured" on the article
+- **Pin Order** and **Is Active** are editable inline directly from the feed items list view
+
+---
+
+### How Many Items Show
+
+The homepage displays the top **5 items**. If more than 5 are active, only the top 5 by pin order then date are shown. Visitors can click "All news & newsletters →" to see everything.
+
+---
+
+### Troubleshooting
+
+- **Article not appearing:** Confirm both "Is Published" and "Is Featured" are checked, and "Published At" is in the past
+- **Manual item not appearing:** Check "Is Active" is checked and "Published At" is in the past
+- **Item appearing twice:** A manual feed item is linked to the same article — the system deduplicates, so this shouldn't happen. If it does, check whether the linked article field is set correctly
+- **Wrong order:** Verify Pin Order values — items without a Pin Order always appear after pinned ones
+- **Broken link:** Make sure the URL starts with `/` for internal pages or `https://` for external
+
+---
+
 ## News Articles
 
 ### Adding a Gallery/Slideshow to an Article
@@ -512,6 +620,179 @@ This is a technical audit log of all PayPal notifications received. Staff genera
 | Error? | Whether processing raised an error |
 
 If a donation is stuck in Pending and you don't see a corresponding Completed webhook event, notify the developer — the webhook may be misconfigured.
+
+---
+
+## Time & Effort Reporting
+
+The Time & Effort system lets AIM staff record and certify how their time was spent across grant-funded and indirect activities each pay period. It produces signed PDF reports suitable for federal grant compliance.
+
+---
+
+### Staff Types
+
+| Type | Reporting cadence | How they report |
+|------|-------------------|-----------------|
+| **Salary** | 28-day windows (4 weeks) | Fill in hours by day per activity each week; generate a combined PDF at period end |
+| **Hourly** | 14-day periods (2 weeks) | Same weekly form; one PDF per period |
+| **Director** | 28-day windows | Enter percentages directly (no weekly timesheets); one PDF per period |
+
+---
+
+### Initial Admin Setup (Do Once Per Employee)
+
+#### 1. Create a Staff Timesheet Profile
+
+**Location:** Admin → Timeeffort → Staff Timesheet Profiles → Add
+
+- **User** — link to the employee's Django user account
+- **Staff Type** — Salary, Hourly, or Director
+- **Supervisor** — the person with first-hand knowledge of their work (signs the paper PDF)
+- **Title** — appears on generated PDFs
+- **Is Active** — uncheck to remove from all dashboards
+
+#### 2. Set Up the Reporting Calendar (One-time, already done)
+
+**Location:** Admin → Timeeffort → Reporting Calendar
+
+One calendar exists. If periods are missing, select it and run the action **"Generate reporting periods"**. This creates all 14-day periods and their weekly slots.
+
+#### 3. Configure Activities
+
+**Location:** Admin → Timeeffort → Activities
+
+Activities are the rows that appear on weekly entry forms and in PDF reports.
+
+| Field | Meaning |
+|-------|---------|
+| **Classification** | Direct, Indirect, Leave, or Unallowable |
+| **Default Grant Code** | Pre-fills the grant code field (e.g. DMS-2425344) |
+| **Valid From / Valid To** | Date range this grant is active. Leave blank for no restriction. Salary forms automatically hide expired activities. |
+| **Is Active** | Uncheck to remove from all forms |
+| **Is Holiday Activity** | Check on exactly one activity (e.g. "AIM Holiday"). This row is auto-filled on salary/hourly weekly forms for any week containing an AIM holiday. |
+| **Sort Order** | Controls display order on forms and PDFs |
+
+**Important:** Salary staff see all active direct activities and all active indirect/leave/unallowable activities. There is no "preset" toggle needed for salary — just keep the activity active.
+
+#### 4. Configure AIM Holidays
+
+**Location:** Admin → Timeeffort → AIM Holidays → Add
+
+Add one row per holiday with the exact date. On any weekly form covering that date:
+- Salary/hourly forms: the holiday activity row auto-appears with 8 hours pre-filled for that day
+- Director reports: the holiday percentage is automatically subtracted from the Administrative allocation
+
+The salary dashboard shows a yellow warning on any period card that contains holidays.
+
+#### 5. Set Salary Indirect Defaults (Optional)
+
+**Location:** Admin → Timeeffort → Salary Indirect Allocations → Add
+
+For each salary employee, you can set weekly default hours for each indirect/leave/unallowable category. These pre-fill when the employee opens a new week for the first time. The employee can change them freely.
+
+If no allocation is set, all indirect rows default to 0 — the employee fills them in manually.
+
+---
+
+### Salary Staff Workflow
+
+#### Week-by-Week Entry
+
+1. Staff go to **Staff Portal → Time & Effort**
+2. Each 28-day period card shows progress (e.g. "2 of 4 weeks submitted")
+3. Click a week button to open the weekly entry form
+4. The form shows:
+   - **Direct activities** — one row per active grant, with a grant code field and daily hour inputs
+   - **Additional grants** — 2 free-text custom slots for supplemental grants
+   - **Indirect / Leave / Unallowable** — pre-listed rows (Administrative, Sick/Personal, Vacation, etc.)
+   - **Holiday row** — auto-appears with 8h pre-filled if there's a holiday that week
+5. Enter hours for each day (Sun–Sat), then click **Save Draft** or **Submit Week**
+6. Submitted weeks can still be edited — click the week button again. Re-editing resets the week to Draft; click Submit again to resubmit
+
+**Carry-forward:** When opening a week that hasn't been touched yet, hours are pre-filled from the previous week. Holiday days are zeroed out automatically during carry-forward.
+
+#### Copying the Previous Period
+
+On the dashboard, each period card has a **"Copy Last Period"** button. This copies all 4 weeks from the prior 28-day window into the current one:
+- Holiday lines are skipped
+- Expired grants are skipped
+- Holiday days in the current period are zeroed out
+
+If the current period has holidays, a yellow warning appears on the card before you copy.
+
+#### Generating the Final Report
+
+Once all 4 weeks are submitted:
+
+1. Click **Period Summary →** on the dashboard card
+2. Click **Generate Final Report →**
+3. The describe page shows each rolled-up activity line with a **Duties Description** field. These auto-populate from the most recent prior period — edit as needed.
+4. Click **Generate PDF** — a combined PDF is created covering all 4 weeks plus a rollup table
+5. Download the PDF from Period Summary
+
+The PDF includes:
+- 4 weekly grids (non-zero rows only)
+- Rolled-up effort table (hours + % of time per activity)
+- Employee electronic signature (ORCID authentication)
+- Blank supervisor signature line
+
+Regenerating is always allowed — just revisit the describe page and submit again.
+
+---
+
+### Hourly Staff Workflow
+
+Same as salary but with 14-day periods (2 weeks). The final period report covers one 14-day period only.
+
+---
+
+### Director Workflow
+
+1. Director goes to **Staff Portal → Time & Effort**
+2. Each 28-day period card has an **Enter Report** button
+3. Enter percentages for each activity (main grant, up to 4 extra grants, indirect categories)
+4. Holiday percentages are automatically deducted from Administrative (5% per holiday)
+5. Click **Save Draft** or **Submit**
+6. After submission, **Download PDF** appears on the dashboard card
+
+**Setting default allocations:** Directors can click **Manage Default Allocations** at the bottom of their dashboard to save their standard split. This pre-fills every new period.
+
+---
+
+### Admin: Reviewing and Approving Reports
+
+**Location:** Admin → Timeeffort → Period Reports
+
+After a report is submitted (status = Submitted):
+
+1. Select the report(s) and choose **"Supervisor-approve selected submitted reports"** from Actions
+2. After supervisor approval (status = Supervisor Approved), choose **"Mark selected supervisor-approved reports as Processed"**
+
+To unlock a stuck report back to Draft: use **"Unlock selected reports back to Draft"** — use with care.
+
+---
+
+### Troubleshooting
+
+**Holiday not auto-filling on weekly form**
+- Check that an `Activity` with **Is Holiday Activity** checked exists and is active
+- Check that the holiday date is entered under Admin → Timeeffort → AIM Holidays
+
+**Indirect rows not appearing on salary form**
+- Make sure the activity's **Classification** is Indirect, Leave, or Unallowable (not Direct)
+- Make sure **Is Active** is checked
+
+**"All weeks must be submitted" error on final report page**
+- One or more weeks are in Draft. Go to Period Summary to see which weeks are outstanding.
+
+**PDF not reflecting latest timesheet edits**
+- Re-editing and resubmitting a week automatically invalidates the cached PDF. The next Generate Final Report rebuilds from the updated data.
+
+**Grant activity not appearing on salary form**
+- Check **Valid To** on the activity — if it's before the week's start date, it's hidden. Update or clear the date.
+
+**Staff member not seeing their dashboard**
+- Confirm a Staff Timesheet Profile exists for their user under Admin → Timeeffort → Staff Timesheet Profiles
 
 ---
 
