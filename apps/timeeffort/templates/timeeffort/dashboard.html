@@ -16,6 +16,17 @@
     {% endfor %}
   {% endif %}
 
+  {% if available_years %}
+  <div class="d-flex gap-2 flex-wrap mb-4">
+    {% for yr in available_years %}
+      <a href="?year={{ yr }}"
+         class="btn btn-sm {% if yr == selected_year %}btn-primary{% else %}btn-outline-secondary{% endif %}">
+        {{ yr }}
+      </a>
+    {% endfor %}
+  </div>
+  {% endif %}
+
   {% if is_director %}
     {# ── Director dashboard ── #}
     {% if not has_defaults %}
@@ -28,15 +39,19 @@
     {% for summary in period_summaries %}
     <div class="card mb-4">
       <div class="card-header d-flex justify-content-between align-items-center">
-        <strong>{{ summary.period.label }}</strong>
-        <span class="text-muted small">{{ summary.period.start_date|date:"M j, Y" }} – {{ summary.period.end_date|date:"M j, Y" }}</span>
+        <strong>{{ summary.period_label }}</strong>
+        <span class="text-muted small">{{ summary.period.start_date|date:"M j, Y" }} – {{ summary.period_end|date:"M j, Y" }}</span>
       </div>
       <div class="card-body">
-        {% if summary.submission %}
-          {% if summary.submission.status == "SUBMITTED" %}
-            <span class="badge bg-success mb-2">Submitted</span>
-          {% else %}
+        {% if summary.report %}
+          {% if summary.report.status == "DRAFT" %}
             <span class="badge bg-warning text-dark mb-2">Draft</span>
+          {% elif summary.report.status == "SUBMITTED" %}
+            <span class="badge bg-success mb-2">Submitted</span>
+          {% elif summary.report.status == "SUPV_APPR" %}
+            <span class="badge bg-primary mb-2">Supervisor Approved</span>
+          {% else %}
+            <span class="badge bg-purple mb-2">Processed</span>
           {% endif %}
         {% else %}
           <span class="badge bg-secondary mb-2">Not started</span>
@@ -51,11 +66,11 @@
 
         <div class="d-flex gap-2 flex-wrap">
           <a href="{% url 'timeeffort:director_period_entry' summary.period.id %}"
-             class="btn btn-sm {% if summary.submission and summary.submission.status == 'SUBMITTED' %}btn-outline-secondary{% else %}btn-primary{% endif %}">
-            {% if summary.submission and summary.submission.status == "SUBMITTED" %}Edit / View{% else %}Enter Report{% endif %}
+             class="btn btn-sm {% if summary.report and summary.report.status != 'DRAFT' %}btn-outline-secondary{% else %}btn-primary{% endif %}">
+            {% if summary.report and summary.report.status != "DRAFT" %}Edit / View{% else %}Enter Report{% endif %}
           </a>
-          {% if summary.submission and summary.submission.status == "SUBMITTED" %}
-            <a href="{% url 'timeeffort:download_director_pdf' summary.submission.id %}"
+          {% if summary.report and summary.report.status != "DRAFT" %}
+            <a href="{% url 'timeeffort:download_director_pdf' summary.report.id %}"
                class="btn btn-sm btn-outline-success">Download PDF ↓</a>
           {% endif %}
         </div>
@@ -65,16 +80,16 @@
       <div class="alert alert-info">No active reporting periods. Check back soon or contact your admin.</div>
     {% endfor %}
 
-    {% if recent_pdfs %}
-    <h5 class="mt-4">Recent PDFs</h5>
+    {% if recent_reports %}
+    <h5 class="mt-4">Recent Submitted Reports</h5>
     <table class="table table-sm table-hover">
-      <thead><tr><th>Period</th><th>Generated</th><th></th></tr></thead>
+      <thead><tr><th>Period</th><th>Status</th><th></th></tr></thead>
       <tbody>
-        {% for snap in recent_pdfs %}
+        {% for rpt in recent_reports %}
         <tr>
-          <td>{{ snap.director_submission.period.label }}</td>
-          <td>{{ snap.generated_at|date:"M j, Y" }}</td>
-          <td><a href="{% url 'timeeffort:download_director_pdf' snap.director_submission.id %}" class="btn btn-sm btn-outline-secondary">Download</a></td>
+          <td>{{ rpt.period.salary_month_label }}</td>
+          <td>{{ rpt.get_status_display }}</td>
+          <td><a href="{% url 'timeeffort:download_director_pdf' rpt.id %}" class="btn btn-sm btn-outline-secondary">Download PDF</a></td>
         </tr>
         {% endfor %}
       </tbody>
@@ -87,8 +102,110 @@
       </a>
     </div>
 
+  {% elif is_salary %}
+    {# ── Salary dashboard (28-day windows, 4 weekly slots) ── #}
+    {% for summary in period_summaries %}
+    <div class="card mb-4">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>{{ summary.period_label }}</strong>
+        <span class="text-muted small">{{ summary.period.start_date|date:"M j, Y" }} – {{ summary.period_end|date:"M j, Y" }}</span>
+      </div>
+      <div class="card-body">
+        {% if summary.report %}
+          {% if summary.report.status == "SUBMITTED" %}
+            <span class="badge bg-success mb-2">Report Submitted</span>
+          {% elif summary.report.status == "SUPV_APPR" %}
+            <span class="badge bg-primary mb-2">Supervisor Approved</span>
+          {% elif summary.report.status == "PROCESSED" %}
+            <span class="badge bg-purple mb-2">Processed</span>
+          {% endif %}
+        {% endif %}
+
+        <div class="mb-2">
+          <div class="progress" style="height: 8px;">
+            {% widthratio summary.submitted_count summary.total_weeks 100 as pct %}
+            <div class="progress-bar bg-success" style="width: {{ pct }}%"></div>
+          </div>
+          <small class="text-muted">{{ summary.submitted_count }} of {{ summary.total_weeks }} week(s) submitted</small>
+        </div>
+
+        {% if summary.holiday_count %}
+          <div class="alert alert-warning py-2 mb-2">
+            <small>
+              <strong>{{ summary.holiday_count }} holiday{{ summary.holiday_count|pluralize }} this period.</strong>
+              Holiday hours are auto-filled on the weekly form.
+              {% if summary.has_prev %}Copying from last period will zero out those days.{% endif %}
+            </small>
+          </div>
+        {% endif %}
+
+        {% if summary.outstanding_weeks %}
+          <div class="mb-3">
+            {% for week in summary.outstanding_weeks %}
+              <a href="{% url 'timeeffort:weekly_entry' week.id %}"
+                 class="btn btn-sm btn-danger me-2 mb-1">
+                ⚠ Enter Week {{ week.week_number }}
+                <small>({{ week.start_date|date:"M j" }} – {{ week.end_date|date:"M j" }})</small>
+              </a>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <div class="d-flex gap-2 flex-wrap">
+          {% for ws in summary.week_statuses %}
+            {% if ws.timesheet and ws.timesheet.status == "SUBMITTED" %}
+              <a href="{% url 'timeeffort:download_weekly_pdf' ws.timesheet.id %}"
+                 class="btn btn-sm btn-outline-success">
+                Wk {{ ws.week.week_number }} PDF ↓
+              </a>
+            {% else %}
+              <a href="{% url 'timeeffort:weekly_entry' ws.week.id %}"
+                 class="btn btn-sm btn-outline-secondary">
+                Wk {{ ws.week.week_number }}{% if ws.timesheet %} (Draft){% endif %}
+              </a>
+            {% endif %}
+          {% endfor %}
+
+          <a href="{% url 'timeeffort:period_summary' summary.period.id %}"
+             class="btn btn-sm btn-outline-primary ms-auto">
+            Period Summary →
+          </a>
+          {% if summary.has_prev %}
+          <form method="post" action="{% url 'timeeffort:copy_previous_period' summary.period.id %}" class="d-inline ms-1">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-outline-secondary"
+              onclick="return confirm('Copy all 4 weeks from the previous period? Existing drafts will be replaced.')">
+              Copy Last Period
+            </button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% empty %}
+      <div class="alert alert-info">No active reporting periods. Check back soon or contact your admin.</div>
+    {% endfor %}
+
+    {% if recent_reports %}
+    <h5 class="mt-4">Recent Final Reports</h5>
+    <table class="table table-sm table-hover">
+      <thead>
+        <tr><th>Period</th><th>Status</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for rpt in recent_reports %}
+        <tr>
+          <td>{{ rpt.period.salary_month_label }}</td>
+          <td>{{ rpt.get_status_display }}</td>
+          <td><a href="{% url 'timeeffort:download_final_pdf' rpt.id %}" class="btn btn-sm btn-outline-secondary">Download PDF</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+
   {% else %}
-    {# ── Salary / Hourly dashboard ── #}
+    {# ── Hourly dashboard ── #}
     {% for summary in period_summaries %}
     <div class="card mb-4">
       <div class="card-header d-flex justify-content-between align-items-center">

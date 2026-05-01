@@ -11,7 +11,6 @@ nav#navbar2 .dropdown-item { color: rgba(255,255,255,0.82); font-size: 0.865rem;
 nav#navbar2 .dropdown-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
 nav#navbar2 .dropdown-header { color: rgba(255,255,255,0.4); font-size: 0.68rem; letter-spacing: 1.2px; text-transform: uppercase; padding: 0.5rem 1.25rem 0.2rem; }
 nav#navbar2 .dropdown-divider { border-color: rgba(255,255,255,0.1); }
-nav#navbar2 .propose-link { color: #7ec8e3 !important; font-weight: 700; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 0.25rem; padding-top: 0.5rem !important; }
 nav#navbar2 .nav-item.dropdown:hover > .dropdown-menu { display: block; }
 </style>
 {% page_url 'collaborative' as collaborative_url %}
@@ -67,16 +66,24 @@ nav#navbar2 .nav-item.dropdown:hover > .dropdown-menu { display: block; }
                    href="{{ collaborative_url }}alexanderson-award/">Alexanderson Award</a>
               </li>
               <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li>
-                <a class="dropdown-item" href="{{ collaborative_url }}past-programs/">Past Programs</a>
+                <a class="dropdown-item" href="#">Propose a Research Program</a>
               </li>
               <li>
                 <hr class="dropdown-divider">
               </li>
               <li>
-                <a class="dropdown-item propose-link" href="#">Propose a Research Program →</a>
+                <h6 class="dropdown-header">Past Programs</h6>
+              </li>
+              <li>
+                <a class="dropdown-item ps-4" href="/frg/">FRG</a>
+              </li>
+              <li>
+                <a class="dropdown-item ps-4"
+                   href="{{ collaborative_url }}past-programs/">UTMOST</a>
+              </li>
+              <li>
+                <a class="dropdown-item ps-4"
+                   href="{{ collaborative_url }}past-programs/">5 Year Fellow</a>
               </li>
             </ul>
           </li>
@@ -105,7 +112,7 @@ nav#navbar2 .nav-item.dropdown:hover > .dropdown-menu { display: block; }
                 <hr class="dropdown-divider">
               </li>
               <li>
-                <a class="dropdown-item" href="{{ joyful_url }}affiliated-programs/">Past Programs</a>
+                <a class="dropdown-item" href="{{ joyful_url }}affiliated-programs/">Affiliated Programs</a>
               </li>
             </ul>
           </li>
@@ -198,7 +205,7 @@ nav#navbar2 .nav-item.dropdown:hover > .dropdown-menu { display: block; }
                 <a class="dropdown-item" href="{{ news_url }}">In the Media</a>
               </li>
               <li>
-                <a class="dropdown-item" href="{{ news_url }}newsletters/">The View from AIM Newsletter</a>
+                <a class="dropdown-item" href="{{ news_url }}newsletters/">Newsletter</a>
               </li>
             </ul>
           </li>
@@ -215,55 +222,22 @@ nav#navbar2 .nav-item.dropdown:hover > .dropdown-menu { display: block; }
                 <a class="dropdown-item" href="/mission/">Mission &amp; History</a>
               </li>
               <li>
-                <a class="dropdown-item" href="/staff/">People</a>
+                <a class="dropdown-item" href="/staff/">Staff</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="/governance/">Governance</a>
               </li>
               <li>
                 <a class="dropdown-item" href="/contact/">Contact</a>
               </li>
-              {% if donate_url %}
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li>
-                  <a class="dropdown-item" href="{{ donate_url }}">Support AIM</a>
-                </li>
-              {% endif %}
             </ul>
           </li>
         {% endif %}
+        {# Support AIM #}
+        <li class="nav-item">
+          <a class="nav-link" href="/donate/">Support AIM</a>
+        </li>
       </ul>
-      {# Auth #}
-      <div class="d-flex align-items-center ms-3">
-        {% if request.user.is_authenticated %}
-          <div class="dropdown">
-            <button class="btn btn-sm btn-outline-light dropdown-toggle"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false">{{ request.user.get_full_name|default:request.user.username }}</button>
-            <ul class="dropdown-menu dropdown-menu-xl-end">
-              <li>
-                <a class="dropdown-item" href="/accounts/dashboard">Dashboard</a>
-              </li>
-              {% if request.user.is_staff %}
-                <li>
-                  <a class="dropdown-item" href="/admin/">Admin</a>
-                </li>
-              {% endif %}
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li>
-                <form method="post" action="/accounts/logout/">
-                  {% csrf_token %}
-                  <button type="submit" class="dropdown-item">Sign Out</button>
-                </form>
-              </li>
-            </ul>
-          </div>
-        {% else %}
-          <a href="/accounts/login/" class="btn btn-sm btn-outline-light">Sign In</a>
-        {% endif %}
-      </div>
     </div>
   </div>
 </nav>

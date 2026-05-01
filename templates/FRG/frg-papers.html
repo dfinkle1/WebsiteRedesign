@@ -1,50 +1,35 @@
 {% extends "base.html" %}
 {% load cms_tags sekizai_tags %}
 {% load static %}
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-  <head>
-    <meta name="generator" content="jemdoc, see http://jemdoc.jaboc.net/" />
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-    <link rel="stylesheet" href="{% static 'css/jemdoc.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
-    <title>Papers</title>
-    <!-- MathJax -->
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML'
-            async></script>
-    <!-- End MathJax -->
-  </head>
-  {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/jemdoc.css' %}" />
-  {% endblock extra_css %}
-  {% block content %}
-    <body>
-      <table summary="Table for page layout." id="tlayout">
-        <tr valign="top">
-          <td id="layout-menu">
-            <div class="menu-category">AIM FRG</div>
-            <div class="menu-item">
-              <a href="{% page_url 'frg' %}">Home</a>
-            </div>
-            <div class="menu-item">
-              <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1854398">NSF&nbsp;Grant</a>
-            </div>
-            <div class="menu-item">
-              <a href="{% page_url 'frg' %}papers" class="current">Papers</a>
-            </div>
-            <div class="menu-item">
-              <a href="{% page_url 'frg' %}activities">Activities</a>
-            </div>
-            <div class="menu-item">
-              <a href="https://vimeo.com/showcase/7398886">Videos</a>
-            </div>
-            <div class="menu-item">
-              <a href="./references/">References</a>
-            </div>
-          </td>
-          <td id="layout-content">
-            <div id="toptitle">
-              <h1>Papers</h1>
-            </div>
+{% block title %}FRG Papers{% endblock %}
+{% block extra_css %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML" async></script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "AMS" } } });
+  </script>
+{% endblock extra_css %}
+{% block content %}
+  <div class="header-banner">
+    <div class="container py-3">
+      <p class="section-label mb-1">Past Programs</p>
+      <h1 class="h3 mb-0">FRG Papers</h1>
+    </div>
+  </div>
+  <div class="container py-4">
+    <div class="row g-4">
+      <div class="col-lg-3">
+        <nav class="section-sidebar">
+          <div class="section-nav">
+            <a href="{% page_url 'frg' %}">Home</a>
+            <a href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1854398" target="_blank" rel="noopener">NSF Grant</a>
+            <a href="{% page_url 'frg' %}papers" class="active">Papers</a>
+            <a href="{% page_url 'frg' %}activities">Activities</a>
+            <a href="https://vimeo.com/showcase/7398886" target="_blank" rel="noopener">Videos</a>
+          </div>
+        </nav>
+      </div>
+      <div class="col-lg-9">
+        <div class="section-content">
             <p>
               The following is a list of papers which were supported by the FRG Grant or were inspired by the conversations or events that were part of the FRG.
             </p>
@@ -802,15 +787,8 @@
                 </p>
               </li>
             </ol>
-            <div id="footer">
-              <div id="footer-text">
-                Page generated 2024-12-28 20:51:55 EST, by <a href="https://github.com/wsshin/jemdoc_mathjax" target="blank">jemdoc+MathJax</a>.
-                (<a href="papers.jemdoc">source</a>)
-              </div>
-            </div>
-          </td>
-        </tr>
-      </table>
-    </body>
-  {% endblock content %}
-</html>
+        </div>{# /section-content #}
+      </div>
+    </div>
+  </div>
+{% endblock content %}

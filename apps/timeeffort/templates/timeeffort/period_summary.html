@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{% block title %}Period Summary — {{ period.label }}{% endblock %}
+{% block title %}Period Summary — {{ period_label|default:period.label }}{% endblock %}
 {% block content %}
 <div class="container py-4">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-      <h4 class="mb-0">{{ period.label }}</h4>
-      <small class="text-muted">{{ period.start_date|date:"F j, Y" }} – {{ period.end_date|date:"F j, Y" }}</small>
+      <h4 class="mb-0">{{ period_label|default:period.label }}</h4>
+      <small class="text-muted">{{ period.start_date|date:"F j, Y" }} – {{ period_end|default:period.end_date|date:"F j, Y" }}</small>
     </div>
     <a href="{% url 'timeeffort:dashboard' %}" class="btn btn-sm btn-outline-secondary">← Dashboard</a>
   </div>
@@ -67,7 +67,7 @@
           Outstanding weeks are highlighted above.
         </div>
         <button class="btn btn-secondary" disabled>Generate Final Report</button>
-      {% elif report and report.status == "GENERATED" %}
+      {% elif report and report.generated_at %}
         <p class="text-success mb-2">✓ Final report generated on {{ report.generated_at|date:"F j, Y" }}.</p>
         {% if latest_pdf %}
           <a href="{% url 'timeeffort:download_final_pdf' report.id %}" class="btn btn-success me-2">Download PDF (v{{ latest_pdf.version }})</a>

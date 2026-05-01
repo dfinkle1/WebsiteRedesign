@@ -302,11 +302,11 @@
         {# News column — left, drives row height #}
         <div class="col-lg-8">
           <div class="news-block">
-            <p class="section-label">Latest News</p>
+            <p class="section-label">Latest Updates</p>
             <h2 class="section-heading"
                 style="font-size:1.35rem;
                        margin-bottom:1.25rem">From AIM</h2>
-            {% render_featured_article %}
+            {% render_homepage_feed limit=5 %}
             <div class="mt-3 pt-3 border-top">
               <a href="/news/"
                  class="text-decoration-none small fw-semibold"

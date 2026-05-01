@@ -17,8 +17,6 @@ from django.utils import timezone
 from .models import (
     Activity,
     AIMHoliday,
-    DirectorPeriodSubmission,
-    DirectorSubmissionLine,
     PDFSnapshot,
     PeriodReport,
     PeriodReportLine,
@@ -32,10 +30,13 @@ from .models import (
 # =============================================================================
 
 
-def get_period_rollup(staff_profile, period):
+def get_period_rollup(staff_profile, periods):
     """
     Compute rolled-up hours per (activity_name, grant_code, classification) across
-    all submitted weeks in the period.
+    all submitted timesheets in the given periods.
+
+    periods: a QuerySet or iterable of ReportingPeriod objects.
+             For hourly staff this is one period; for salary staff, two.
 
     Returns a list of dicts:
         {
@@ -50,20 +51,29 @@ def get_period_rollup(staff_profile, period):
     """
     timesheets = WeeklyTimesheet.objects.filter(
         staff=staff_profile,
-        week__period=period,
+        week__period__in=periods,
         status=WeeklyTimesheet.Status.SUBMITTED,
     ).prefetch_related("lines__activity")
 
-    # Aggregate: key = (activity_name, grant_code, classification)
+    # Aggregate: key = (activity_name, grant_code, classification, sort_order)
     aggregated = {}
     for ts in timesheets:
         for line in ts.lines.all():
-            key = (
-                str(line.activity),
-                line.grant_code or line.activity.default_grant_code,
-                line.activity.classification,
-                line.activity.sort_order,
-            )
+            if line.activity_id:
+                key = (
+                    str(line.activity),
+                    line.grant_code or line.activity.default_grant_code,
+                    line.activity.classification,
+                    line.activity.sort_order,
+                )
+            else:
+                # Custom free-text row (salary only)
+                key = (
+                    line.custom_activity_name or "Custom Activity",
+                    line.grant_code,
+                    Activity.Classification.DIRECT,
+                    999,
+                )
             aggregated[key] = aggregated.get(key, Decimal("0")) + line.total_hours
 
     if not aggregated:
@@ -110,26 +120,29 @@ def validate_period_percentages(rollup_rows):
 
 
 # =============================================================================
-# PERIOD REPORT CREATION
+# PERIOD REPORT CREATION / RE-INITIALIZATION
 # =============================================================================
 
 
-def initialize_period_report(staff_profile, period):
+def initialize_period_report(report):
     """
-    Create or retrieve a PeriodReport for the given staff/period.
-    Computes the rollup and creates PeriodReportLines in DESCRIBING status.
-    Caller must have verified all_weeks_submitted before calling.
-    """
-    report, created = PeriodReport.objects.get_or_create(
-        staff=staff_profile,
-        period=period,
-        defaults={"status": PeriodReport.Status.PENDING},
-    )
+    Create or refresh PeriodReportLines for a HOURS-based period report.
 
-    rollup = get_period_rollup(staff_profile, period)
+    Computes the rollup from all submitted WeeklyTimesheets across the report's
+    covered periods (1 for hourly, 2 for salary), then writes PeriodReportLines.
+
+    Snapshots employee/supervisor info at call time.
+    Report is left in DRAFT status — caller must call report.submit() when ready.
+
+    For PCT (director) reports use initialize_director_period_report() instead.
+    """
+    if report.submission_type != PeriodReport.SubmissionType.HOURS:
+        raise ValueError("initialize_period_report() is for HOURS-based reports only.")
+
+    rollup = get_period_rollup(report.staff, report.covered_periods)
     total_hours = sum(r["total_hours"] for r in rollup)
 
-    # Delete existing lines (re-initialization after admin unlock)
+    # Replace all existing lines
     report.lines.all().delete()
 
     for i, row in enumerate(rollup):
@@ -144,13 +157,102 @@ def initialize_period_report(staff_profile, period):
             sort_order=i,
         )
 
-    # Snapshot employee/supervisor info at this moment
     report.total_hours = total_hours
-    report.supervisor_name_snapshot = staff_profile.supervisor_name
-    report.employee_title_snapshot = staff_profile.title
-    report.employee_name_snapshot = staff_profile.user.get_full_name() or staff_profile.user.username
-    report.status = PeriodReport.Status.DESCRIBING
-    report.save()
+    report.supervisor_name_snapshot = report.staff.supervisor_name
+    report.employee_title_snapshot = report.staff.title
+    report.employee_name_snapshot = report.staff.user.get_full_name() or report.staff.user.username
+    report.save(update_fields=[
+        "total_hours",
+        "supervisor_name_snapshot",
+        "employee_title_snapshot",
+        "employee_name_snapshot",
+        "updated_at",
+    ])
+
+    return report
+
+
+def initialize_director_period_report(report, defaults=None, holiday_pct=Decimal("0")):
+    """
+    Create or refresh PeriodReportLines for a PCT-based (director) period report
+    using the director's DirectorDefaultAllocation as a starting template.
+
+    defaults: DirectorDefaultAllocation instance (fetched from DB if None).
+    holiday_pct: total holiday percentage (5% × holiday count) to subtract from
+                 Administrative. The reduction is baked into the Administrative line
+                 rather than stored as a separate Employer Holiday line.
+    Lines are pre-populated with default percentages; director adjusts before submitting.
+    Report is left in DRAFT status.
+    """
+    if report.submission_type != PeriodReport.SubmissionType.PCT:
+        raise ValueError("initialize_director_period_report() is for PCT-based reports only.")
+
+    if defaults is None:
+        try:
+            defaults = report.staff.director_defaults
+        except Exception:
+            defaults = None
+
+    report.lines.all().delete()
+
+    lines_to_create = []
+    if defaults:
+        sort = 0
+        if defaults.main_grant_code or defaults.main_grant_pct:
+            lines_to_create.append({
+                "activity_name_snapshot": f"Direct — {defaults.main_grant_code or 'Main Grant'}",
+                "grant_code_snapshot": defaults.main_grant_code,
+                "classification_snapshot": Activity.Classification.DIRECT,
+                "total_hours": None,
+                "percentage": defaults.main_grant_pct,
+                "sort_order": sort,
+            })
+            sort += 1
+        for n in range(1, 5):
+            code = getattr(defaults, f"extra_grant_code_{n}", "")
+            pct = getattr(defaults, f"extra_grant_pct_{n}", Decimal("0"))
+            if pct and pct > 0:
+                lines_to_create.append({
+                    "activity_name_snapshot": f"Direct — {code or f'Grant {n}'}",
+                    "grant_code_snapshot": code,
+                    "classification_snapshot": Activity.Classification.DIRECT,
+                    "total_hours": None,
+                    "percentage": pct,
+                    "sort_order": sort,
+                })
+                sort += 1
+        indirect_map = [
+            ("Administrative", max(Decimal("0"), defaults.pct_administrative - holiday_pct)),
+            ("Other Activity", defaults.pct_other_activity),
+            ("Sick / Personal Day", defaults.pct_sick_personal),
+            ("Vacation", defaults.pct_vacation),
+            ("Fundraising / PR", defaults.pct_fundraising_pr),
+            ("Other Unallowable", defaults.pct_other_unallowable),
+        ]
+        for label, pct in indirect_map:
+            if pct and pct > 0:
+                lines_to_create.append({
+                    "activity_name_snapshot": label,
+                    "grant_code_snapshot": "",
+                    "classification_snapshot": Activity.Classification.INDIRECT,
+                    "total_hours": None,
+                    "percentage": pct,
+                    "sort_order": sort,
+                })
+                sort += 1
+
+    for data in lines_to_create:
+        PeriodReportLine.objects.create(period_report=report, duties_description="", **data)
+
+    report.supervisor_name_snapshot = report.staff.supervisor_name
+    report.employee_title_snapshot = report.staff.title
+    report.employee_name_snapshot = report.staff.user.get_full_name() or report.staff.user.username
+    report.save(update_fields=[
+        "supervisor_name_snapshot",
+        "employee_title_snapshot",
+        "employee_name_snapshot",
+        "updated_at",
+    ])
 
     return report
 
@@ -165,8 +267,9 @@ def _render_pdf_bytes(template_name, context):
     try:
         from weasyprint import HTML
     except ImportError:
-        raise RuntimeError("WeasyPrint is required for PDF generation. Install it with: pip install weasyprint")
-
+        raise RuntimeError(
+            "WeasyPrint is required for PDF generation. Install it with: pip install weasyprint"
+        )
     html_string = render_to_string(template_name, context)
     pdf_bytes = HTML(string=html_string, base_url="/").write_pdf()
     return pdf_bytes
@@ -226,16 +329,26 @@ def generate_weekly_pdf(timesheet, generated_by=None):
 
 def generate_final_pdf(period_report, generated_by=None):
     """
-    Generate the final period PDF. PeriodReport must be in DESCRIBING or GENERATED status
-    with PeriodReportLines already saved (duties descriptions filled in).
-    """
-    lines = period_report.lines.order_by("sort_order", "activity_name_snapshot").all()
+    Generate the final period PDF for a HOURS or PCT report.
 
-    # Group lines by classification for template rendering
-    direct = [l for l in lines if l.classification_snapshot == Activity.Classification.DIRECT]
-    indirect = [l for l in lines if l.classification_snapshot == Activity.Classification.INDIRECT]
-    leave = [l for l in lines if l.classification_snapshot == Activity.Classification.LEAVE]
-    unallowable = [l for l in lines if l.classification_snapshot == Activity.Classification.UNALLOWABLE]
+    HOURS reports (salary/hourly) → combined_report.html with 4 weekly grids + rollup.
+    PCT reports (director)        → final_report.html with percentage table.
+
+    PeriodReportLines must already be saved with duties descriptions filled in.
+    Sets generated_at on the report. Returns the PDFSnapshot instance.
+    """
+    if period_report.submission_type == PeriodReport.SubmissionType.HOURS:
+        return _generate_combined_hours_pdf(period_report, generated_by)
+    return _generate_pct_pdf(period_report, generated_by)
+
+
+def _generate_pct_pdf(period_report, generated_by=None):
+    """Director PCT-based PDF using the existing final_report template."""
+    lines = period_report.lines.order_by("sort_order", "activity_name_snapshot").all()
+    direct = [ln for ln in lines if ln.classification_snapshot == Activity.Classification.DIRECT]
+    indirect = [ln for ln in lines if ln.classification_snapshot == Activity.Classification.INDIRECT]
+    leave = [ln for ln in lines if ln.classification_snapshot == Activity.Classification.LEAVE]
+    unallowable = [ln for ln in lines if ln.classification_snapshot == Activity.Classification.UNALLOWABLE]
 
     context = {
         "report": period_report,
@@ -246,10 +359,60 @@ def generate_final_pdf(period_report, generated_by=None):
         "leave_lines": leave,
         "unallowable_lines": unallowable,
         "total_hours": period_report.total_hours,
+        "is_pct_report": True,
         "generated_at": timezone.now(),
     }
+    return _save_final_snapshot(period_report, generated_by, "timeeffort/pdf/final_report.html", context, "final")
 
-    pdf_bytes = _render_pdf_bytes("timeeffort/pdf/final_report.html", context)
+
+def _generate_combined_hours_pdf(period_report, generated_by=None):
+    """Salary/hourly HOURS-based PDF: cover + 4 weekly grids + rollup table."""
+    from .models import ReportingWeek
+
+    lines = period_report.lines.order_by("sort_order", "activity_name_snapshot").all()
+    direct = [ln for ln in lines if ln.classification_snapshot == Activity.Classification.DIRECT]
+    indirect = [ln for ln in lines if ln.classification_snapshot == Activity.Classification.INDIRECT]
+    leave = [ln for ln in lines if ln.classification_snapshot == Activity.Classification.LEAVE]
+    unallowable = [ln for ln in lines if ln.classification_snapshot == Activity.Classification.UNALLOWABLE]
+
+    covered_weeks = ReportingWeek.objects.filter(
+        period__in=period_report.covered_periods
+    ).order_by("start_date")
+
+    weekly_data = []
+    for week in covered_weeks:
+        ts = (
+            WeeklyTimesheet.objects.filter(staff=period_report.staff, week=week)
+            .prefetch_related("lines__activity")
+            .first()
+        )
+        nonzero_lines = [ln for ln in ts.lines.all() if ln.total_hours > 0] if ts else []
+        weekly_data.append({
+            "week": week,
+            "timesheet": ts,
+            "lines": nonzero_lines,
+            "total": ts.total_hours if ts else Decimal("0"),
+        })
+
+    context = {
+        "report": period_report,
+        "staff": period_report.staff,
+        "period": period_report.period,
+        "direct_lines": direct,
+        "indirect_lines": indirect,
+        "leave_lines": leave,
+        "unallowable_lines": unallowable,
+        "weekly_data": weekly_data,
+        "total_hours": period_report.total_hours,
+        "is_pct_report": False,
+        "generated_at": timezone.now(),
+        "day_labels": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    }
+    return _save_final_snapshot(period_report, generated_by, "timeeffort/pdf/combined_report.html", context, "combined")
+
+
+def _save_final_snapshot(period_report, generated_by, template_name, context, prefix):
+    pdf_bytes = _render_pdf_bytes(template_name, context)
     checksum = _sha256(pdf_bytes)
 
     existing = PDFSnapshot.objects.filter(
@@ -259,7 +422,7 @@ def generate_final_pdf(period_report, generated_by=None):
     version = _next_version(existing)
 
     filename = (
-        f"final_{period_report.staff.user.username}"
+        f"{prefix}_{period_report.staff.user.username}"
         f"_{period_report.period.start_date}_{period_report.period.end_date}"
         f"_v{version}.pdf"
     )
@@ -272,9 +435,8 @@ def generate_final_pdf(period_report, generated_by=None):
     )
     snapshot.file.save(filename, ContentFile(pdf_bytes), save=True)
 
-    period_report.status = PeriodReport.Status.GENERATED
     period_report.generated_at = timezone.now()
-    period_report.save(update_fields=["status", "generated_at"])
+    period_report.save(update_fields=["generated_at", "updated_at"])
 
     return snapshot
 
@@ -286,61 +448,10 @@ def generate_final_pdf_async(period_report, generated_by=None):
 
 
 # =============================================================================
-# DIRECTOR PDF
+# HOLIDAY UTILITIES
 # =============================================================================
 
 
 def count_holidays_in_period(period):
     """Return the number of AIM holidays that fall within the period's date range."""
     return AIMHoliday.objects.filter(date__range=[period.start_date, period.end_date]).count()
-
-
-def generate_director_pdf(submission, generated_by=None):
-    """
-    Generate a director period effort PDF.
-    Stores the file as a PDFSnapshot and returns it.
-    """
-    lines = submission.lines.order_by("slot", "category").all()
-    direct_lines = [l for l in lines if l.category in (
-        DirectorSubmissionLine.Category.DIRECT_MAIN,
-        DirectorSubmissionLine.Category.DIRECT_EXTRA,
-    )]
-    indirect_lines = [l for l in lines if l.category not in (
-        DirectorSubmissionLine.Category.DIRECT_MAIN,
-        DirectorSubmissionLine.Category.DIRECT_EXTRA,
-    )]
-    total_pct = sum(l.percentage for l in lines)
-
-    context = {
-        "submission": submission,
-        "staff": submission.staff,
-        "period": submission.period,
-        "direct_lines": direct_lines,
-        "indirect_lines": indirect_lines,
-        "total_pct": total_pct,
-        "generated_at": timezone.now(),
-    }
-
-    pdf_bytes = _render_pdf_bytes("timeeffort/pdf/director_report.html", context)
-    checksum = _sha256(pdf_bytes)
-
-    existing = PDFSnapshot.objects.filter(
-        director_submission=submission,
-        pdf_type=PDFSnapshot.PDFType.DIRECTOR,
-    )
-    version = _next_version(existing)
-
-    filename = (
-        f"director_{submission.staff.user.username}"
-        f"_{submission.period.start_date}_{submission.period.end_date}"
-        f"_v{version}.pdf"
-    )
-    snapshot = PDFSnapshot(
-        director_submission=submission,
-        pdf_type=PDFSnapshot.PDFType.DIRECTOR,
-        version=version,
-        generated_by=generated_by,
-        checksum=checksum,
-    )
-    snapshot.file.save(filename, ContentFile(pdf_bytes), save=True)
-    return snapshot

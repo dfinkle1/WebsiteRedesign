@@ -129,11 +129,11 @@ footer#aim-footer .footer-copyright {
           <p class="footer-col-label">About AIM</p>
           <ul>
             <li><a href="/mission/">Mission &amp; History</a></li>
-            <li><a href="/staff/">People</a></li>
+            <li><a href="/staff/">Staff</a></li>
+            <li><a href="/governance/">Governance</a></li>
             <li><a href="/contact/">Contact</a></li>
             <li><a href="/news/">News</a></li>
             <li><a href="/news/newsletters/">Newsletter</a></li>
-            <li><a href="/donate/" style="color:#7ec8e3; font-weight:600;">Support AIM →</a></li>
           </ul>
         </div>
 
@@ -148,6 +148,34 @@ footer#aim-footer .footer-copyright {
            style="max-height:36px; filter:brightness(0) invert(1); opacity:0.5">
       <span class="footer-funding">Supported by the National Science Foundation and the Fry Foundation</span>
     </div>
-    <span class="footer-copyright">&copy; {% now "Y" %} American Institute of Mathematics</span>
+    <div class="d-flex align-items-center gap-3">
+      <span class="footer-copyright">&copy; {% now "Y" %} American Institute of Mathematics</span>
+      {% if request.user.is_authenticated %}
+        <div class="dropdown">
+          <button class="dropdown-toggle"
+                  style="background:none; border:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.45) !important; padding:0.2rem 0.6rem; font-size:0.72rem; border-radius:4px; cursor:pointer;"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false">{{ request.user.get_full_name|default:request.user.username }}</button>
+          <ul class="dropdown-menu dropdown-menu-end" style="background:#17324c; border:1px solid rgba(255,255,255,0.08);">
+            <li><a class="dropdown-item" href="/accounts/dashboard" style="color:rgba(255,255,255,0.82);">Dashboard</a></li>
+            {% if request.user.is_staff %}
+              <li><a class="dropdown-item" href="/admin/" style="color:rgba(255,255,255,0.82);">Admin</a></li>
+            {% endif %}
+            <li><hr class="dropdown-divider" style="border-color:rgba(255,255,255,0.1);"></li>
+            <li>
+              <form method="post" action="/accounts/logout/">
+                {% csrf_token %}
+                <button type="submit" class="dropdown-item" style="color:rgba(255,255,255,0.82);">Sign Out</button>
+              </form>
+            </li>
+          </ul>
+        </div>
+      {% else %}
+        <a href="/accounts/login/"
+           class="footer-copyright"
+           style="color:rgba(255,255,255,0.35); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2);">Sign In</a>
+      {% endif %}
+    </div>
   </div>
 </footer>

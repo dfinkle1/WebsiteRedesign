@@ -51,7 +51,7 @@ class NewsArticle(models.Model):
     is_featured = models.BooleanField(
         default=False,
         db_index=True,
-        help_text="Featured articles appear in the hero section on the news page.",
+        help_text="Featured articles automatically appear in the homepage news feed. No manual entry needed.",
     )
     published_at = models.DateTimeField(
         default=timezone.now,
@@ -131,6 +131,90 @@ class ArticleImage(models.Model):
 
     def __str__(self):
         return f"Image {self.order} for {self.article.title}"
+
+
+class HomepageFeedItem(models.Model):
+    """Flexible homepage news column entries — news, announcements, events, or milestones."""
+
+    class ItemType(models.TextChoices):
+        NEWS = "news", "News"
+        ANNOUNCEMENT = "announcement", "Announcement"
+        EVENT = "event", "Event"
+        MILESTONE = "milestone", "Milestone"
+
+    # Optional link to a real NewsArticle. When set, title/excerpt/image/url
+    # fields below fall back to the article's values if left blank.
+    article = models.ForeignKey(
+        "NewsArticle",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="feed_overrides",
+        help_text=(
+            "Link to an existing news article. "
+            "When set, title/excerpt/image/URL below can be left blank — "
+            "they will fall back to the article's own values."
+        ),
+    )
+    title = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="Leave blank when an article is linked to use that article's title.",
+    )
+    excerpt = models.CharField(
+        max_length=300,
+        blank=True,
+        help_text="Short summary shown on the homepage (max 300 chars). Falls back to linked article's excerpt.",
+    )
+    body = models.TextField(
+        blank=True,
+        help_text="Optional rich-text content displayed below the excerpt. Not inherited from the linked article.",
+    )
+    image = FilerImageField(
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="feed_items",
+        help_text="Hero image. Falls back to linked article's featured image if blank.",
+    )
+    item_type = models.CharField(
+        max_length=20,
+        choices=ItemType.choices,
+        default=ItemType.NEWS,
+        db_index=True,
+    )
+    url = models.CharField(
+        max_length=500,
+        blank=True,
+        help_text="Link for 'Read more'. Falls back to linked article's URL. Use /path/ for internal or https:// for external.",
+    )
+    published_at = models.DateTimeField(
+        default=timezone.now,
+        db_index=True,
+        help_text="Item won't appear until this date/time.",
+    )
+    pin_order = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        help_text="Pinned items appear first, sorted by this number lowest-first. Leave blank to sort chronologically.",
+    )
+    is_active = models.BooleanField(default=True, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Homepage Feed Item"
+        verbose_name_plural = "Homepage Feed Items"
+        indexes = [
+            models.Index(fields=["is_active", "-published_at"]),
+        ]
+
+    def __str__(self):
+        if self.title:
+            return self.title
+        if self.article_id:
+            return f"→ {self.article}"
+        return "(untitled feed item)"
 
 
 class Newsletter(models.Model):
